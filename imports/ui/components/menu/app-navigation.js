@@ -11,6 +11,10 @@ export class AppNavigation extends React.Component {
     this.state = { drawerOpen: false };
   }
 
+  renderNavBarRight() {
+    return this.props.hasUser ? <div>Logout</div> : <div>Login</div>;
+  }
+
   openDrawer() {
     this.setState({ drawerOpen: true });
   }
@@ -26,8 +30,8 @@ export class AppNavigation extends React.Component {
   render() {
     return (
       <div>
-        <AppBar title="Free4All" onLeftIconButtonTouchTap={ this.openDrawer.bind(this) } />
-        <DrawerNavigation hasUser={ !!this.props.hasUser } isOpen={ this.state.drawerOpen } closeDrawer={ this.closeDrawer.bind(this) } setDrawerOpen={ this.setDrawerOpen.bind(this) } />
+        <AppBar title="Free4All" onLeftIconButtonTouchTap={ this.openDrawer.bind(this) } iconElementRight={ this.renderNavBarRight() } />
+        <DrawerNavigation isOpen={ this.state.drawerOpen } closeDrawer={ this.closeDrawer.bind(this) } setDrawerOpen={ this.setDrawerOpen.bind(this) } />
       </div>
     );
   }

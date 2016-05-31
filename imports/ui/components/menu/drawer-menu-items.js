@@ -8,11 +8,9 @@ import MenuItem from 'material-ui/MenuItem';
 
 import { ActionHome, ActionExitToApp, ActionLock } from 'material-ui/svg-icons';
 
-export default class DrawerMenuItems extends React.Component {
+export class DrawerMenuItems extends React.Component {
   constructor(props) {
     super(props); 
-
-    this.constructMenuItems();
   }
 
   constructMenuItems() {
@@ -31,6 +29,8 @@ export default class DrawerMenuItems extends React.Component {
   }
 
   render() {
+    this.constructMenuItems();
+
     return (
       <div>
         { this.menuItems.map((item, index) => {
@@ -69,5 +69,5 @@ export default class DrawerMenuItems extends React.Component {
 
 DrawerMenuItems.propTypes = {
   closeDrawer: React.PropTypes.func,
-  hasUser: React.PropTypes.bool.isRequired,
+  hasUser: React.PropTypes.object,
 }
