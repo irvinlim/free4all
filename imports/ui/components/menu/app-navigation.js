@@ -5,14 +5,10 @@ import DrawerNavigation from './drawer-navigation';
 
 import AppBar from 'material-ui/AppBar';
 
-export class AppNavigation extends React.Component {
+export default class AppNavigation extends React.Component {
   constructor(props) {
     super(props);
     this.state = { drawerOpen: false };
-  }
-
-  renderNavBarRight() {
-    return this.props.hasUser ? <div>Logout</div> : <div>Login</div>;
   }
 
   openDrawer() {
@@ -30,13 +26,9 @@ export class AppNavigation extends React.Component {
   render() {
     return (
       <div>
-        <AppBar title="Free4All" onLeftIconButtonTouchTap={ this.openDrawer.bind(this) } iconElementRight={ this.renderNavBarRight() } />
+        <AppBar title="Free4All" onLeftIconButtonTouchTap={ this.openDrawer.bind(this) } />
         <DrawerNavigation isOpen={ this.state.drawerOpen } closeDrawer={ this.closeDrawer.bind(this) } setDrawerOpen={ this.setDrawerOpen.bind(this) } />
       </div>
     );
   }
 }
-
-AppNavigation.propTypes = {
-  hasUser: React.PropTypes.object,
-};
