@@ -3,6 +3,7 @@ import { render } from 'react-dom';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import { Meteor } from 'meteor/meteor';
 import { App } from '../../ui/layouts/app';
+
 import { Documents } from '../../ui/pages/documents';
 import { Index } from '../../ui/pages/index';
 import { Login } from '../../ui/pages/login';
@@ -23,8 +24,8 @@ const requireAuth = (nextState, replace) => {
 Meteor.startup(() => {
   render(
     <Router history={ browserHistory }>
-      <Route path="/" component={ App }>
-        <IndexRoute name="index" component={ Index } onEnter={ requireAuth } />
+      <Route path="/" component={ Index } onEnter={ requireAuth } />
+      <Route component={ App }>
         <Route name="documents" path="/documents" component={ Documents } onEnter={ requireAuth } />
         <Route name="login" path="/login" component={ Login } />
         <Route name="recover-password" path="/recover-password" component={ RecoverPassword } />

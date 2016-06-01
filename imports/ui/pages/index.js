@@ -1,11 +1,14 @@
 import React from 'react';
-import { Jumbotron } from 'react-bootstrap';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import AppNavigation from '../components/menu/app-navigation';
+import LeafletMap from '../components/map/leaflet-map';
 
 export const Index = () => (
-  <Jumbotron className="text-center">
-    <h2>Base</h2>
-    <p>A starting point for Meteor applications.</p>
-    <p><a className="btn btn-success" href="https://themeteorchef.com/base" role="button">Read the Documentation</a></p>
-    <p style={ { fontSize: '16px', color: '#aaa' } }>Currently at v4.2.0</p>
-  </Jumbotron>
+  <MuiThemeProvider muiTheme={getMuiTheme()}>
+    <div id="main">
+      <AppNavigation />
+      <LeafletMap />
+    </div>
+  </MuiThemeProvider>
 );

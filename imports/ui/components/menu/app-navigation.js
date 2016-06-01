@@ -25,7 +25,7 @@ export default class AppNavigation extends React.Component {
 
   render() {
     return (
-      <div>
+      <div id="app-navigation">
         <AppBar title="Free4All" onLeftIconButtonTouchTap={ this.openDrawer.bind(this) } />
         <DrawerNavigation isOpen={ this.state.drawerOpen } closeDrawer={ this.closeDrawer.bind(this) } setDrawerOpen={ this.setDrawerOpen.bind(this) } />
       </div>
