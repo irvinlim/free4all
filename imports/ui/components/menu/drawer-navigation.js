@@ -5,7 +5,7 @@ import DrawerMenuItems from '../../containers/drawer-menu-items.js';
 export default class DrawerNavigation extends React.Component {
   render() {
     return (
-      <Drawer docked={ false } width={ 300 } open={ this.props.isOpen } onRequestChange={ isOpen => this.props.setDrawerOpen(isOpen) }>
+      <Drawer docked={ false } width={ 250 } open={ this.props.isOpen } onRequestChange={ isOpen => this.props.setDrawerOpen(isOpen) }>
         <DrawerMenuItems closeDrawer={ this.props.closeDrawer } />
       </Drawer>
     );
