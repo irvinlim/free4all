@@ -1,0 +1,11 @@
+{
+ "public": {
+   "MapBox": {
+     "mapID": "mapbox.streets",
+     "accessToken": "INSERT YOURS",
+     "initialCoords": [1.2993826, 103.7760318],
+     "initialZoom": 16
+   }
+ },
+ "private": {}
+}
