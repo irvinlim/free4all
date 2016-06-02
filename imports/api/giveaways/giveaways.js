@@ -16,15 +16,15 @@ CategorySchema = new SimpleSchema({
     },
     icon: {
         type: String,
-        label: 'The icon of the category.',
+        label: 'The SVG icon name of the category (according to Material-UI).',
     },
 })
 
 StatusSchema = new SimpleSchema({
-    userId: { 
-        type: String, 
-        regEx: SimpleSchema.RegEx.Id, 
-        optional: true 
+    userId: {
+        type: String,
+        regEx: SimpleSchema.RegEx.Id,
+        optional: true
     },
     status: {
         type: String,
@@ -32,7 +32,7 @@ StatusSchema = new SimpleSchema({
     },
     dateSetOn:{
         type: Date,
-        label: 'The date that status was set'
+        label: 'The date that status was set.'
     },
 })
 
@@ -51,36 +51,27 @@ Giveaways.schema = new SimpleSchema({
     },
     dateStart: {
         type: Date,
-        label: "Last date this book was checked out",
+        label: "Start date/time of the giveaway.",
     },
     dateEnd: {
         type: Date,
-        label: "Last date this book was checked out",
+        label: "End date/time of the giveaway.",
     },
     location: {
-        type: Object,
-        index: '2dsphere',
-        label: 'MongoDB spesific coordinates field'
-    },
-    'location.type': {
         type: String,
-        allowedValues: ['Point'],
-        label: 'Typeof coordinates - Point'
+        label: 'Localized name of location (reverse geocoded)'
     },
-    'location.coordinates': {
+    'coordinates': {
         type: [Number],
         decimal: true,
         label: 'Array of coordinates in MongoDB style \[Lng, Lat\]'
     },
-    //   Markers.insert({ user: Session.get('user'), location: {"type": "Point", "coordinates": [event.latLng.lng(), event.latLng.lat()]}});
     'category' :{
-        type: [CategorySchema],
-        minCount: 1,
-        maxCount: 1
+        type: CategorySchema,
     },
     'hashtags': {
         type: [String],
-        label: 'The hashtags for users',
+        label: 'The hashtags of the giveaway.',
         optional: true
     },
     'status': {
