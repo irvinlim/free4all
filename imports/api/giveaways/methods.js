@@ -2,17 +2,17 @@ import { Giveaways } from './giveaways';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { ValidatedMethod } from 'meteor/mdg:validated-method';
 
-export const insertDocument = new ValidatedMethod({
+export const insertGiveaway = new ValidatedMethod({
   name: 'giveaways.insert',
   validate: new SimpleSchema({
     title: { type: String },
   }).validator(),
-  run(document) {
-    Giveaways.insert(document);
+  run(giveaway) {
+    Giveaways.insert(giveaway);
   },
 });
 
-export const updateDocument = new ValidatedMethod({
+export const updateGiveaway = new ValidatedMethod({
   name: 'giveaways.update',
   validate: new SimpleSchema({
     _id: { type: String },
@@ -23,7 +23,7 @@ export const updateDocument = new ValidatedMethod({
   },
 });
 
-export const removeDocument = new ValidatedMethod({
+export const removeGiveaway = new ValidatedMethod({
   name: 'giveaways.remove',
   validate: new SimpleSchema({
     _id: { type: String },
