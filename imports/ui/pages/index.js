@@ -7,8 +7,6 @@ import LeafletMap from '../components/map/leaflet-map';
 import MapInfoBox from '../components/map/map-info-box';
 import MapNearbyBox from '../components/map/map-nearby-box';
 
-import { StatusTypes } from "../../modules/status-types.js";
-
 export class Index extends React.Component {
   constructor(props) {
     super(props);
@@ -18,29 +16,7 @@ export class Index extends React.Component {
     };
   }
 
-  getGa(gaId) {
-    // Temp
-    return {
-      id:             gaId,
-      title:          "NUSSU Welfare Ice Cream Giveaway",
-      description:    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus efficitur semper ligula vitae finibus. Nam cursus scelerisque tincidunt.",
-      photoURL:       "http://placehold.it/64",
-      momentStart:    moment().subtract(1, 'd'),
-      momentEnd:      moment().add(1, 'd'),
-      location:       "Central Library",
-      coordinates:    [ 1.2967193, 103.7710143 ],
-      cat:            [
-        { _id: "ice-cream", name: "Ice Cream" }
-      ],
-      tags:           [ "nussu", "ice-cream" ],
-      statuses:       [ // Supposed to be a chronological list of status updates
-        { status: StatusTypes.Available, moment: moment() },
-      ],
-    }
-  }
-
-  selectGa(gaId) {
-    const ga = this.getGa(gaId);
+  selectGa(ga) {
     this.setState({ gaSelected: ga });
   }
 

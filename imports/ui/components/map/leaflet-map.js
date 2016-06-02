@@ -17,11 +17,11 @@ export default class LeafletMap extends React.Component {
 
     Giveaways.find().observe({
       added: ga => {
-        map.addMarker(ga.id, ga, () => this.props.onSelectGa(ga.id));
+        map.addMarker(ga.id, ga, () => this.props.onSelectGa(ga));
       },
       changed: ga => {
         map.removeMarker(ga.id);
-        map.addMarker(ga.id, ga, () => this.props.onSelectGa(ga.id));
+        map.addMarker(ga.id, ga, () => this.props.onSelectGa(ga));
       },
       removed: ga => {
         map.removeMarker(ga.id);
