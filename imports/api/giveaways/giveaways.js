@@ -3,38 +3,9 @@ import { Mongo } from 'meteor/mongo';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 // import { Factory } from 'meteor/dburles:factory';
 
+import { Categories } from '../categories/categories';
+
 export const Giveaways = new Mongo.Collection('Giveaways');
-
-CategorySchema = new SimpleSchema({
-    _id: {
-        type: String,
-        regEx: SimpleSchema.RegEx.Id
-    },
-    name: {
-        type: String,
-        label: 'The name of the category.',
-    },
-    icon: {
-        type: String,
-        label: 'The SVG icon name of the category (according to Material-UI).',
-    },
-})
-
-StatusSchema = new SimpleSchema({
-    userId: {
-        type: String,
-        regEx: SimpleSchema.RegEx.Id,
-        optional: true
-    },
-    status: {
-        type: String,
-        label: 'Status types: Available, Going, Gone.'
-    },
-    dateSetOn:{
-        type: Date,
-        label: 'The date that status was set.'
-    },
-})
 
 Giveaways.schema = new SimpleSchema({
     _id: {
@@ -67,19 +38,25 @@ Giveaways.schema = new SimpleSchema({
         label: 'Array of coordinates in MongoDB style \[Lng, Lat\]'
     },
     'category' :{
-        type: CategorySchema,
+        type: Category,
     },
-    'hashtags': {
+    'tags': {
         type: [String],
-        label: 'The hashtags of the giveaway.',
+        label: 'The tags/hashtags for the giveaway.',
         optional: true
     },
     'status': {
-        type: [StatusSchema],
-        minCount: 1,
-        maxCount: 1,
-        label: 'Current Status of the giveaway'
-    }
+        type: [Object],
+        label: 'All status updates for this giveaway.'
+    },
+    'status.type': {
+        type: Status,
+        label: 'Status type.'
+    },
+    'status.date': {
+        type: Date,
+        label: 'Date that the status was set.'
+    },
 
 });
 

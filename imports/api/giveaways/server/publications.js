@@ -1,4 +1,4 @@
 import { Meteor } from 'meteor/meteor';
-import { Documents } from '../documents';
+import { Giveaways } from '../categories';
 
 Meteor.publish('giveaways', () => Giveaways.find());
