@@ -1,69 +1,89 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
+import { Giveaways } from '../../../api/giveaways/giveaways';
+import { sanitizeHexColour, sanitizeStringSlug } from '../../../modules/string-helper';
 
 export default class LeafletMap extends React.Component {
   render() {
     return (
-      <div className="full-container">
-        <div id="main-map"></div>
-      </div>
+      <div id="main-map"></div>
     );
   }
 
-  setContainerSize() {
-    $(window).resize(function() {
-      $('.full-container').css('height', window.innerHeight - $("#app-navigation").outerHeight());
+  componentDidMount() {
+    const map = new LeafletMapObject('main-map');
+
+    Meteor.subscribe('giveaways');
+
+    Giveaways.find().observe({
+      added: ga => {
+        map.addMarker(ga.id, ga, () => this.props.onSelectGa(ga.id));
+      },
+      changed: ga => {
+        map.removeMarker(ga.id);
+        map.addMarker(ga.id, ga, () => this.props.onSelectGa(ga.id));
+      },
+      removed: ga => {
+        map.removeMarker(ga.id);
+      },
     });
-
-    $(window).resize();
   }
+}
 
-  makeMap() {
-    const map = L.map('main-map', {
-      doubleClickZoom: false
-    }).setView(Meteor.settings.public.MapBox.initialCoords, Meteor.settings.public.MapBox.initialZoom);
+class LeafletMapObject {
+  constructor(elemID) {
+    if (!Meteor.settings.public.MapBox)
+      throw Error("Mapbox settings not defined.");
+
+    let initialCoords = Meteor.settings.public.MapBox.initialCoords,
+        initialZoom = Meteor.settings.public.MapBox.initialZoom,
+        mapID = Meteor.settings.public.MapBox.mapID,
+        accessToken = Meteor.settings.public.MapBox.accessToken;
+
+    if (!accessToken)
+      throw Error("Mapbox access token not defined.");
+
+    if (!initialCoords)
+      initialCoords = [0, 0];
+
+    if (!initialZoom)
+      initialZoom = 1;
+
+    if (!mapID)
+      mapID = "mapbox.streets";
+
+    this.map = L.map(elemID, {}).setView(Meteor.settings.public.MapBox.initialCoords, Meteor.settings.public.MapBox.initialZoom);
+    this.markers = {};
 
     L.Icon.Default.imagePath = 'packages/bevanhunt_leaflet/images';
-
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
       attribution: 'Imagery from <a href="http://mapbox.com/about/maps/">MapBox</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       id: Meteor.settings.public.MapBox.mapID,
       accessToken: Meteor.settings.public.MapBox.accessToken
-    }).addTo(map);
-
-    return map;
+    }).addTo(this.map);
   }
 
-  componentDidMount() {
-    this.setContainerSize();
+  addMarker(id, props, clickHandler) {
+    const markerReact = (
+      <div id="map-marker" style={ { backgroundColor: sanitizeHexColour(props.status[0].hexColour) } }>
+        <FontIcon className="material-icons">{ sanitizeStringSlug(props.category.icon) }</FontIcon>
+      </div>
+    );
 
-    const map = this.makeMap();
+    const icon = L.divIcon({
+      html: React.renderToString(markerReact),
+    });
 
-    // map.on('dblclick', function(event) {
-    //   Markers.insert({latlng: event.latlng});
-    // });
+    if (this.markers[id])
+      console.warn("Notice: Duplicate marker IDs present.");
 
-    // var query = Markers.find();
-    // query.observe({
-    //   added: function (document) {
-    //     var marker = L.marker(document.latlng).addTo(map)
-    //       .on('click', function(event) {
-    //         map.removeLayer(marker);
-    //         Markers.remove({_id: document._id});
-    //       });
-    //   },
-    //   removed: function (oldDocument) {
-    //     layers = map._layers;
-    //     var key, val;
-    //     for (key in layers) {
-    //       val = layers[key];
-    //       if (val._latlng) {
-    //         if (val._latlng.lat === oldDocument.latlng.lat && val._latlng.lng === oldDocument.latlng.lng) {
-    //           map.removeLayer(val);
-    //         }
-    //       }
-    //     }
-    //   }
-    // });
+    this.markers[id] = L.marker(props.coordinates, {icon: icon});
+    this.markers[id].addTo(this.map).on('click', clickHandler);
+  }
+
+  removeMarker(id) {
+    this.markers[id].unbind('click');
+    this.map.removeLayer(this.markers[id]);
+    this.markers[id] = null;
   }
 }

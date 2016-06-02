@@ -39,7 +39,7 @@ Giveaways.schema = new SimpleSchema({
         label: 'Array of coordinates in MongoDB style \[Lng, Lat\]'
     },
     'category' :{
-        type: Category,
+        type: Categories.schema,
     },
     'tags': {
         type: [String],
@@ -51,7 +51,7 @@ Giveaways.schema = new SimpleSchema({
         label: 'All status updates for this giveaway.'
     },
     'status.type': {
-        type: Status,
+        type: Statuses.schema,
         label: 'Status type.'
     },
     'status.date': {
