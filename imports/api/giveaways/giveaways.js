@@ -4,6 +4,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 // import { Factory } from 'meteor/dburles:factory';
 
 import { Categories } from '../categories/categories';
+import { Statuses } from '../statuses/statuses';
 
 export const Giveaways = new Mongo.Collection('Giveaways');
 
