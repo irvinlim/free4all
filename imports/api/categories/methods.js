@@ -2,7 +2,7 @@ import { Categories } from './categories';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { ValidatedMethod } from 'meteor/mdg:validated-method';
 
-export const insertDocument = new ValidatedMethod({
+export const insertCategory = new ValidatedMethod({
   name: 'categories.insert',
   validate: new SimpleSchema({
     title: { type: String },
@@ -12,7 +12,7 @@ export const insertDocument = new ValidatedMethod({
   },
 });
 
-export const updateDocument = new ValidatedMethod({
+export const updateCategory = new ValidatedMethod({
   name: 'categories.update',
   validate: new SimpleSchema({
     _id: { type: String },
@@ -23,7 +23,7 @@ export const updateDocument = new ValidatedMethod({
   },
 });
 
-export const removeDocument = new ValidatedMethod({
+export const removeCategory = new ValidatedMethod({
   name: 'categories.remove',
   validate: new SimpleSchema({
     _id: { type: String },
