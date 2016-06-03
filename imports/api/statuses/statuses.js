@@ -12,13 +12,14 @@ Statuses.schema = new SimpleSchema({
   },
   hexColour:{
     type: String,
+    regEx: /^#([A-Fa-f0-9]{6})$/,
     label: 'Hex colour code that represents the status, on the map marker.'
   },
   relativeOrder: {
     type: Number,
     label: 'Relative order to display the statuses in. \
-    Smaller values appear at the top whilst larger ones appear at the bottom. \
-    Identical values will then be sorted by name in ascending order.'
+            Smaller values appear at the top whilst larger ones appear at the bottom. \
+            Identical values will then be sorted by name in ascending order.'
   },
 });
 

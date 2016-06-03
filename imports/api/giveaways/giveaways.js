@@ -32,36 +32,40 @@ Giveaways.schema = new SimpleSchema({
   'coordinates': {
     type: [Number],
     decimal: true,
+    minCount: 2,
+    maxCount: 2,
     label: 'Array of coordinates in MongoDB style \[Lng, Lat\].'
   },
   'category' :{
-    type: Categories.schema,
+    type: String,
   },
   'tags': {
     type: [String],
     label: 'The tags/hashtags for the giveaway.',
     optional: true
   },
-  'status': {
+  'statuses': {
     type: [Object],
     label: 'All status updates for this giveaway.'
   },
-  'status.type': {
-    type: Statuses.schema,
-    label: 'Status type.'
+  'statuses.type': {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id,
+    label: 'ID of Status.'
   },
-  'status.date': {
+  'statuses.date': {
     type: Date,
     label: 'Date that the status was set.'
   },
-  'status.userId': {
-    type: Date,
-    label: 'User ID of person who updated this status.'
+  'statuses.userId': {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id,
+    label: 'ID of User who updated this status.'
   },
   userId: {
     type: String,
     regEx: SimpleSchema.RegEx.Id,
-    label: 'User ID of user who posted this giveaway.'
+    label: 'ID of User who posted this giveaway.'
   },
 });
 

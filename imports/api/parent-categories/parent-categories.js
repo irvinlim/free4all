@@ -22,8 +22,8 @@ ParentCategories.schema = new SimpleSchema({
   relativeOrder: {
     type: Number,
     label: 'Relative order to display the statuses in. \
-    Smaller values appear at the top whilst larger ones appear at the bottom. \
-    Identical values will then be sorted by name in ascending order.'
+            Smaller values appear at the top whilst larger ones appear at the bottom. \
+            Identical values will then be sorted by name in ascending order.'
   },
 });
 

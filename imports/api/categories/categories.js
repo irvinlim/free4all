@@ -22,8 +22,9 @@ Categories.schema = new SimpleSchema({
     optional: true,
   },
   parent: {
-    type: ParentCategories.schema,
-    label: 'Parent category for this category.',
+    type: String,
+    regEx: SimpleSchema.RegEx.Id,
+    label: 'ID of ParentCategory.',
   },
   relativeOrder: {
     type: Number,
