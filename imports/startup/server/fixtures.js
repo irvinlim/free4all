@@ -36,7 +36,7 @@ const default_status_types = [
 ];
 
 default_status_types.forEach(statusType => {
-  if (!StatusTypes.findOne(statusType.label))
+  if (!StatusTypes.findOne({ label: statusType.label }))
     StatusTypes.insert(statusType);
 });
 

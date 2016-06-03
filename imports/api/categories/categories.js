@@ -12,14 +12,9 @@ Categories.schema = new SimpleSchema({
     type: String,
     label: 'The name of the category.',
   },
-  icon: {
+  iconClass: {
     type: String,
-    label: 'The font icon name/class of the category. For FontAwesome, must be preceded with "fa-".',
-  },
-  iconPackage: {
-    type: String,
-    label: 'The font icon package to be used. If empty, material-icons will be used.',
-    optional: true,
+    label: 'The icon class for the category. For FontAwesome: must start with "fa fa-".',
   },
   parent: {
     type: String,
