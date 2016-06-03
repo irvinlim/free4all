@@ -20,22 +20,23 @@ export default class LeafletMap extends React.Component {
 
   componentDidMount() {
     const map = new LeafletMapObject('main-map');
+    const clickHandler = this.props.clickHandler;
 
     Giveaways.find().observe({
       added: ga => {
         Meteor.subscribe('status-updates-for-giveaway', ga._id, function() {
-          map.addMarker(ga._id, ga, () => this.props.onSelectGa(ga));
+          map.addMarker(ga._id, ga, () => clickHandler(ga));
         });
       },
       changed: ga => {
         Meteor.subscribe('status-updates-for-giveaway', ga._id, function() {
           map.removeMarker(ga._id);
-          map.addMarker(ga._id, ga, () => this.props.onSelectGa(ga));
+          map.addMarker(ga._id, ga, () => clickHandler(ga));
         });
       },
       removed: ga => {
         Meteor.subscribe('status-updates-for-giveaway', ga._id, function() {
-        map.removeMarker(ga._id);
+          map.removeMarker(ga._id);
         });
       },
     });
