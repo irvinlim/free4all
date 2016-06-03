@@ -1,4 +1,4 @@
 import { Meteor } from 'meteor/meteor';
-import { Categories } from '../categories';
+import { Statuses } from '../statuses';
 
-Meteor.publish('categories', () => Categories.find());
+Meteor.publish('statuses', () => Statuses.find());
