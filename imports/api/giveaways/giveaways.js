@@ -31,12 +31,12 @@ Giveaways.schema = new SimpleSchema({
     },
     location: {
         type: String,
-        label: 'Localized name of location (reverse geocoded)'
+        label: 'Localized name of location (reverse geocoded).'
     },
     'coordinates': {
         type: [Number],
         decimal: true,
-        label: 'Array of coordinates in MongoDB style \[Lng, Lat\]'
+        label: 'Array of coordinates in MongoDB style \[Lng, Lat\].'
     },
     'category' :{
         type: Categories.schema,
@@ -58,7 +58,15 @@ Giveaways.schema = new SimpleSchema({
         type: Date,
         label: 'Date that the status was set.'
     },
-
+    'status.userId': {
+        type: Date,
+        label: 'User ID of person who updated this status.'
+    },
+    userId: {
+        type: String,
+        regEx: SimpleSchema.RegEx.Id,
+        label: 'User ID of user who posted this giveaway.'
+    },
 });
 
 Giveaways.attachSchema(Giveaways.schema);
