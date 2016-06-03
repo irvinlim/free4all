@@ -1,4 +1,4 @@
-import { StatusUpdates } from './status-update';
+import { StatusUpdates } from './status-updates';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { ValidatedMethod } from 'meteor/mdg:validated-method';
 

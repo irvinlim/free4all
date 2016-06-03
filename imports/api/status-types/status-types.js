@@ -6,7 +6,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 export const StatusTypes = new Mongo.Collection('StatusTypes');
 
 StatusTypes.schema = new SimpleSchema({
-  status: {
+  label: {
     type: String,
     label: 'Descriptive label for the status type.'
   },

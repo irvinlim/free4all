@@ -3,9 +3,11 @@ import { Roles } from 'meteor/alanning:roles';
 import { Accounts } from 'meteor/accounts-base';
 
 import { Giveaways } from '../../api/giveaways/giveaways';
-import { Statuses } from '../../api/statuses/statuses';
+import { StatusTypes } from '../../api/status-types/status-types';
 import { ParentCategories } from '../../api/parent-categories/parent-categories';
 import { Categories } from '../../api/categories/categories';
+
+import { StatusUpdates } from '../../api/status-updates/status-updates';
 
 // Default user account - delete before production
 const users = [{
@@ -26,16 +28,16 @@ users.forEach(({ email, password, profile, roles }) => {
   }
 });
 
-// Default statuses
-const default_statuses = [
-  { status: "Available", hexColour: "#57D224", relativeOrder: 10 },
-  { status: "Running Out", hexColour: "#FF9E30", relativeOrder: 20 },
-  { status: "Not Available", hexColour: "#DB184D", relativeOrder: 30 },
+// Default status types
+const default_status_types = [
+  { label: "Available", hexColour: "#57D224", relativeOrder: 10 },
+  { label: "Running Out", hexColour: "#FF9E30", relativeOrder: 20 },
+  { label: "Not Available", hexColour: "#DB184D", relativeOrder: 30 },
 ];
 
-default_statuses.forEach(status => {
-  if (!Statuses.findOne({ 'status': status.status }))
-    Statuses.insert(status);
+default_status_types.forEach(statusType => {
+  if (!StatusTypes.findOne(statusType.label))
+    StatusTypes.insert(statusType);
 });
 
 // Default parent categories
