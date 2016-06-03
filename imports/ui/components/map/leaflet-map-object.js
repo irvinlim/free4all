@@ -1,6 +1,13 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { sanitizeHexColour, sanitizeStringSlug } from '../../../modules/string-helper';
+import * as Helper from '../../../modules/helper';
+
+import FontIcon from 'material-ui/FontIcon';
+
+import { Categories } from '../../../api/categories/categories';
+import { StatusTypes } from '../../../api/status-types/status-types';
+import { StatusUpdates } from '../../../api/status-updates/status-updates';
 
 export default class LeafletMapObject {
   constructor(elemID) {
@@ -35,25 +42,32 @@ export default class LeafletMapObject {
     }).addTo(this.map);
   }
 
-  addMarker(id, props, clickHandler) {
-    const markerReact = (
-      <div id="map-marker" style={ { backgroundColor: sanitizeHexColour(props.status[0].hexColour) } }>
-        <FontIcon className="material-icons">{ sanitizeStringSlug(props.category.icon) }</FontIcon>
-      </div>
-    );
+  addMarker(id, ga, clickHandler) {
+    if (!id)
+      return Helper.error("addMarker: No id specified.");
+
+    Meteor.subscribe('status-updates-for-giveaway', id);
+
+    const status = StatusUpdates.findOne({ userId: ga.userId }, { sort: { date: "desc" } });
+    Helper.errorIf(!status, "Error: No status update for Giveaway #" + id);
+    const statusType = StatusTypes.findOne(status.statusTypeId);
+    Helper.errorIf(!statusType, "Error: No status type for Status Update #" + status._id);
+    const category = Categories.findOne(ga.category);
+    Helper.errorIf(!category, "Error: No category defined for Giveaway #" + id);
 
     const icon = L.divIcon({
-      html: React.renderToString(markerReact),
+      html: '<div class="map-marker" style="background-color: ' + sanitizeHexColour(statusType.hexColour) + '"><i class="' + category.iconClass + '"></i></div>',
     });
 
-    if (this.markers[id])
-      console.warn("Notice: Duplicate marker IDs present.");
+    Helper.warnIf(this.markers[id], "Notice: Duplicate marker IDs present.");
 
-    this.markers[id] = L.marker(props.coordinates, {icon: icon});
+    this.markers[id] = L.marker(ga.coordinates, {icon: icon});
     this.markers[id].addTo(this.map).on('click', clickHandler);
   }
 
   removeMarker(id) {
+    Helper.errorIf(!this.markers[id], "Error: No such marker for Giveaway #" + id);
+
     this.markers[id].unbind('click');
     this.map.removeLayer(this.markers[id]);
     this.markers[id] = null;

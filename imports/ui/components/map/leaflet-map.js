@@ -4,14 +4,12 @@ import { Giveaways } from '../../../api/giveaways/giveaways';
 import LeafletMapObject from './leaflet-map-object';
 
 export default class LeafletMap extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {};
-  }
-
   componentWillMount() {
-    this.subscription = Meteor.subscribe('giveaways');
+    this.subscriptions = [
+      Meteor.subscribe('categories'),
+      Meteor.subscribe('status-types'),
+      Meteor.subscribe('giveaways'),
+    ];
   }
 
   render() {
@@ -25,19 +23,25 @@ export default class LeafletMap extends React.Component {
 
     Giveaways.find().observe({
       added: ga => {
-        map.addMarker(ga.id, ga, () => this.props.onSelectGa(ga));
+        Meteor.subscribe('status-updates-for-giveaway', ga._id, function() {
+          map.addMarker(ga._id, ga, () => this.props.onSelectGa(ga));
+        });
       },
       changed: ga => {
-        map.removeMarker(ga.id);
-        map.addMarker(ga.id, ga, () => this.props.onSelectGa(ga));
+        Meteor.subscribe('status-updates-for-giveaway', ga._id, function() {
+          map.removeMarker(ga._id);
+          map.addMarker(ga._id, ga, () => this.props.onSelectGa(ga));
+        });
       },
       removed: ga => {
-        map.removeMarker(ga.id);
+        Meteor.subscribe('status-updates-for-giveaway', ga._id, function() {
+        map.removeMarker(ga._id);
+        });
       },
     });
   }
 
   componentWillUnmount() {
-    this.subscription.stop();
+    this.subscriptions.forEach(sub => sub.stop());
   }
 }
