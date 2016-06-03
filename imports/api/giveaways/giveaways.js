@@ -3,9 +3,6 @@ import { Mongo } from 'meteor/mongo';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 // import { Factory } from 'meteor/dburles:factory';
 
-import { Categories } from '../categories/categories';
-import { Statuses } from '../statuses/statuses';
-
 export const Giveaways = new Mongo.Collection('Giveaways');
 
 Giveaways.schema = new SimpleSchema({
@@ -43,24 +40,6 @@ Giveaways.schema = new SimpleSchema({
     type: [String],
     label: 'The tags/hashtags for the giveaway.',
     optional: true
-  },
-  'statuses': {
-    type: [Object],
-    label: 'All status updates for this giveaway.'
-  },
-  'statuses.type': {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id,
-    label: 'ID of Status.'
-  },
-  'statuses.date': {
-    type: Date,
-    label: 'Date that the status was set.'
-  },
-  'statuses.userId': {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id,
-    label: 'ID of User who updated this status.'
   },
   userId: {
     type: String,
