@@ -6,6 +6,7 @@ import AppNavigation from '../components/menu/app-navigation';
 import LeafletMap from '../components/map/leaflet-map';
 import MapInfoBox from '../components/map/map-info-box';
 import MapNearbyBox from '../components/map/map-nearby-box';
+import InsertBtnDialog from '../components/map/insert-button'
 
 export class Index extends React.Component {
   constructor(props) {
@@ -28,6 +29,7 @@ export class Index extends React.Component {
           <div className="full-container">
             <LeafletMap clickHandler={ this.selectGa.bind(this) } />
             <MapInfoBox ga={ this.state.gaSelected } />
+            <InsertBtnDialog />
             <MapNearbyBox />
           </div>
         </div>
