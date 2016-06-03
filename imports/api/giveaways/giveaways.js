@@ -44,24 +44,6 @@ Giveaways.schema = new SimpleSchema({
     label: 'The tags/hashtags for the giveaway.',
     optional: true
   },
-  'statuses': {
-    type: [Object],
-    label: 'All status updates for this giveaway.'
-  },
-  'statuses.type': {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id,
-    label: 'ID of Status.'
-  },
-  'statuses.date': {
-    type: Date,
-    label: 'Date that the status was set.'
-  },
-  'statuses.userId': {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id,
-    label: 'ID of User who updated this status.'
-  },
   userId: {
     type: String,
     regEx: SimpleSchema.RegEx.Id,

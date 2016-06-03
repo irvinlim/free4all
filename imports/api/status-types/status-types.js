@@ -3,9 +3,9 @@ import { Mongo } from 'meteor/mongo';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 // import { Factory } from 'meteor/dburles:factory';
 
-export const Statuses = new Mongo.Collection('Statuses');
+export const StatusTypes = new Mongo.Collection('StatusTypes');
 
-Statuses.schema = new SimpleSchema({
+StatusTypes.schema = new SimpleSchema({
   status: {
     type: String,
     label: 'Descriptive label for the status type.'
@@ -17,14 +17,14 @@ Statuses.schema = new SimpleSchema({
   },
   relativeOrder: {
     type: Number,
-    label: 'Relative order to display the statuses in. \
+    label: 'Relative order to display the StatusTypes in. \
             Smaller values appear at the top whilst larger ones appear at the bottom. \
             Identical values will then be sorted by name in ascending order.'
   },
 });
 
-Statuses.attachSchema(Statuses.schema);
+StatusTypes.attachSchema(StatusTypes.schema);
 
-// Factory.define('document', Statuses, {
+// Factory.define('document', StatusTypes, {
 //   title: () => faker.hacker.phrase(),
 // });
