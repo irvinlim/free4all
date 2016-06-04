@@ -53,10 +53,14 @@ export default class LeafletMapObject {
     const category = Categories.findOne(ga.categoryId);
     Helper.errorIf(!category, "Error: No category defined for Giveaway #" + id);
 
+    let bgStyle = "";
+    if (!Helper.is_over(ga.dateStart, ga.dateEnd))
+      bgStyle = ' style="background-color: ' + Helper.sanitizeHexColour(statusType.hexColour) + '"';
+
     const icon = L.divIcon({
-      iconSize: [62, 62],
-      iconAnchor: [31, 62],
-      html: '<div class="map-marker" ga-id="' + id + '" style="background-color: ' + Helper.sanitizeHexColour(statusType.hexColour) + '"><i class="' + category.iconClass + '"></i></div>',
+      iconSize: [40, 54],
+      iconAnchor: [20, 54],
+      html: '<div class="map-marker" ga-id="' + id + '"' + bgStyle + '><i class="' + category.iconClass + '"></i></div>',
     });
 
     Helper.warnIf(this.markers[id], "Notice: Duplicate marker IDs present.");

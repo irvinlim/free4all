@@ -47,3 +47,5 @@ export const compact_date_range = (start, end) => {
 }
 
 export const is_ongoing = (start, end) => moment(start).isBefore(moment()) && moment(end).isAfter(moment());
+export const is_havent_start = (start, end) => moment(start).isAfter(moment());
+export const is_over = (start, end) => moment(end).isBefore(moment());

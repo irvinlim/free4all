@@ -38,13 +38,13 @@ export default class MapInfoBoxTop extends React.Component {
       renderContent = (
         <div>
           <h3>{ ga.title }</h3>
-          <p className="category">{ parentCategory.name + ": " + category.name }</p>
+          <p className="category">{ parentCategory.name } &mdash; { category.name }</p>
           <p className="description">{ ga.description ? Helper.nl2br(ga.description) : (<em>No description</em>) }</p>
           { this.iconRow("date_range", Helper.compact_date_range(ga.dateStart, ga.dateEnd)) }
           { this.iconRow("location_on", ga.location ) }
           { Helper.is_ongoing(ga.dateStart, ga.dateEnd) ?
               this.iconRow("info_outline", "Status: " + latestStatusType.label ) :
-              null }
+              this.iconRow("info_outline", "Status: Ended" ) }
         </div>
       );
     }
