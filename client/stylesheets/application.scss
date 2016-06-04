@@ -1,7 +1,6 @@
-@import url(https://fonts.googleapis.com/css?family=Roboto:400,300,500);
-@import url(https://fonts.googleapis.com/icon?family=Material+Icons);
-
 @import "font/font-awesome-extension";
+@import "font/material-icons";
+@import "font/roboto";
 
 @import "base/extends";
 @import "base/animations";
@@ -10,8 +9,9 @@
 
 @import "module/loading";
 @import "module/login";
-@import "module/signup";
 @import "module/map";
+@import "module/menu";
 @import "module/misc";
+@import "module/signup";
 
 @import "state/navbar";

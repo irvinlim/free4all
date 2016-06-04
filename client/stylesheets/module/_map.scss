@@ -20,12 +20,17 @@
   h3 { margin: 0 0 10px; }
   .map-sidebar { height: 100%; padding: 0; pointer-events: auto; }
   .map-sidebar-box { padding: 20px; }
+
+  @media (min-width:768px) {
+    .map-sidebar { height: calc(100% - 40px); padding: 5px; margin: 20px 0; @include border-radius(5px); }
+    .map-sidebar-box { padding: 20px 10px 10px; }
+  }
 }
 
 #map-info-box {
-  background-color: rgba(#FFF, 0.8); max-width:400px;
+  background-color: rgba(#fcfcfc, 0.8); max-width: 350px;
 
-  p.category { color: #666; }
+  p.category { font-weight: 300; }
 
   .map-info-row {
     line-height: 25px;
@@ -36,6 +41,7 @@
     span.material-icons { font-size: 30px !important; color: #CCC !important; }
   }
 
+
   @media (max-width:767px) {
     max-width:none !important; background-color: #FFF; position: absolute; top: 100%; z-index: 1000; @include transition(top 0.3s);
     &.peek-at-title { top: calc(100% - 90px);
@@ -44,12 +50,10 @@
     &.show-full { top: 0; }
     .close-button { display: block; }
   }
-
-  #info-box-bot { margin-top: 20px; }
 }
 
 #map-nearby-box {
-  background-color: rgba(#EEE, 0.8); float: right; max-width:300px;
+  background-color: rgba(#dedede, 0.8); float: right; max-width:300px;
 }
 
 .floatingButton { position: fixed; right: 30px; bottom: 30px; }

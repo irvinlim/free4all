@@ -18,7 +18,7 @@ export default class MapInfoBoxBot extends React.Component {
     }
 
     return (
-      <div className="map-sidebar-box" id="info-box-top">
+      <div className="map-sidebar-box" id="info-box-bot">
         { renderContent }
       </div>
     );

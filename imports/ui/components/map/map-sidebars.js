@@ -46,7 +46,7 @@ export default class MapSideBars extends React.Component {
       <Grid id="map-boxes-container">
         <Row style={ { height: "100%"} }>
           <Col xs={12} sm={6} md={3} lg={3} className="map-sidebar" id="map-info-box">
-            <Scrollbars style={{ height: "100%" }}>
+            <Scrollbars autoHide style={{ height: "100%",  }}>
               <MapInfoBoxTop ga={ this.props.ga } setStateHandler={ this.props.setStateHandler } />
               <MapInfoBoxBot ga={ this.props.ga } />
               <div className="close-button">
