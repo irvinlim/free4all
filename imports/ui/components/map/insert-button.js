@@ -11,28 +11,22 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 * Dialog content can be scrollable.
 */
 export default class InsertBtnDialog extends React.Component {
-  
+
   constructor(props){
     super(props);
     this.state = {
-      open: false,       
+      open: false,
     };
-    this.style = {
-      marginRight: 20,
-      position: "fixed",
-      bottom: "5%",
-      left: "95%"
-    }
   }
   handleOpen() {
     this.setState({open: true});
   };
-  
+
   handleClose() {
     this.setState({open: false});
   };
-  
-  
+
+
   render() {
     const actions = [
       <FlatButton
@@ -44,11 +38,11 @@ export default class InsertBtnDialog extends React.Component {
         onRequestClose={this.handleClose.bind(this)}
         />,
     ];
-    
+
     return (
       <div>
 
-        <FloatingActionButton style={this.style} onTouchTap={this.handleOpen.bind(this)} >
+        <FloatingActionButton className="floatingButton" onTouchTap={this.handleOpen.bind(this)} >
           <ContentAdd />
         </FloatingActionButton>
 

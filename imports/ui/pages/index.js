@@ -4,8 +4,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import AppNavigation from '../components/menu/app-navigation';
 import LeafletMap from '../components/map/leaflet-map';
-import MapInfoBox from '../components/map/map-info-box';
-import MapNearbyBox from '../components/map/map-nearby-box';
+import MapSideBars from '../components/map/map-sidebars';
 import InsertBtnDialog from '../components/map/insert-button'
 
 export class Index extends React.Component {
@@ -14,11 +13,30 @@ export class Index extends React.Component {
 
     this.state = {
       gaSelected: null,   // Giveaway selected
+      infoBoxState: 0,
     };
+  }
+
+  componentWillMount() {
+    this.subscriptions = [
+      Meteor.subscribe('parent-categories'),
+      Meteor.subscribe('categories'),
+      Meteor.subscribe('status-types'),
+      Meteor.subscribe('giveaways'),
+    ];
+  }
+
+  componentWillUnmount() {
+    this.subscriptions.forEach(sub => sub.stop());
   }
 
   selectGa(ga) {
     this.setState({ gaSelected: ga });
+    this.setState({ infoBoxState: 1 });
+  }
+
+  setInfoBoxState(x) {
+    this.setState({ infoBoxState: x });
   }
 
   render() {
@@ -28,22 +46,12 @@ export class Index extends React.Component {
           <AppNavigation />
           <div className="full-container">
             <LeafletMap clickHandler={ this.selectGa.bind(this) } />
-            <MapInfoBox ga={ this.state.gaSelected } />
+            <MapSideBars ga={ this.state.gaSelected } infoBoxState={ this.state.infoBoxState } setStateHandler={ this.setInfoBoxState.bind(this) } />
             <InsertBtnDialog />
-            <MapNearbyBox />
           </div>
         </div>
       </MuiThemeProvider>
     );
-  }
-
-  componentDidMount() {
-    // Resize full-container to adjust for navigation bar
-    $(window).resize(function() {
-      $('.full-container').css('height', window.innerHeight - $("#app-navigation").outerHeight());
-    });
-
-    $(window).resize();
   }
 }
 

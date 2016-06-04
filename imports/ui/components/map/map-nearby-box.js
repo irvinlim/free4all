@@ -7,7 +7,10 @@ export default class MapNearbyBox extends React.Component {
 
   render() {
     return (
-      <div id="map-nearby-box"></div>
+      <div className="map-sidebar-box">
+        <h3>Nearby</h3>
+        <p>Hi</p>
+      </div>
     );
   }
 }

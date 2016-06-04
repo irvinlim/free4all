@@ -33,8 +33,10 @@ Giveaways.schema = new SimpleSchema({
     maxCount: 2,
     label: 'Array of coordinates in MongoDB style \[Lng, Lat\].'
   },
-  'category' :{
+  'categoryId' :{
     type: String,
+    regEx: SimpleSchema.RegEx.Id,
+    label: 'ID of User who posted this giveaway.'
   },
   'tags': {
     type: [String],
