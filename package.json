@@ -54,6 +54,7 @@
     "react": "^15.0.2",
     "react-addons-pure-render-mixin": "^15.0.2",
     "react-bootstrap": "^0.29.4",
+    "react-custom-scrollbars": "^4.0.0-beta.2",
     "react-dom": "^15.0.2",
     "react-komposer": "^1.8.0",
     "react-nl2br": "^0.1.1",

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
+import { Scrollbars } from 'react-custom-scrollbars';
 import FontIcon from 'material-ui/FontIcon';
 
 import MapInfoBoxTop from './map-info-box-top';
@@ -45,14 +46,18 @@ export default class MapSideBars extends React.Component {
       <Grid id="map-boxes-container">
         <Row style={ { height: "100%"} }>
           <Col xs={12} sm={6} md={3} lg={3} className="map-sidebar" id="map-info-box">
-            <MapInfoBoxTop ga={ this.props.ga } setStateHandler={ this.props.setStateHandler } />
-            <MapInfoBoxBot ga={ this.props.ga } />
-            <div className="close-button">
-              <FontIcon className="material-icons">close</FontIcon>
-            </div>
+            <Scrollbars style={{ height: "100%" }}>
+              <MapInfoBoxTop ga={ this.props.ga } setStateHandler={ this.props.setStateHandler } />
+              <MapInfoBoxBot ga={ this.props.ga } />
+              <div className="close-button">
+                <FontIcon className="material-icons">close</FontIcon>
+              </div>
+            </Scrollbars>
           </Col>
           <Col xsHidden smHidden md={3} mdOffset={6} lg={3} lgOffset={6} className="map-sidebar" id="map-nearby-box">
-            <MapNearbyBox ga={ this.props.ga } />
+            <Scrollbars>
+              <MapNearbyBox ga={ this.props.ga } />
+            </Scrollbars>
           </Col>
         </Row>
       </Grid>
