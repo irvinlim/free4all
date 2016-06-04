@@ -16,44 +16,33 @@ export default class LeafletMap extends React.Component {
     this.addingMarkers = {};
   }
 
-  render() {
-    return (
-      <div id="main-map"></div>
-    );
-  }
-
   componentDidMount() {
-    // Resize full-container to adjust for navigation bar
-    $(window).resize(function() {
-      $('.full-container').css('height', window.innerHeight - $("#app-navigation").outerHeight());
-    });
-    $(window).resize();
+    const self = this;
 
-    // Make map
+    this.resizeFullContainer();
     const map = new LeafletMapObject('main-map');
-    const clickHandler = (x) => () => this.props.clickHandler(x);
-    const addingMarkers = this.addingMarkers;
+    const clickHandler = (ga) => this.props.markerOnClick(ga);
 
     // Observe changes in giveaways
     Giveaways.find().observe({
       added: ga => {
         // Set temporary flag.
-        addingMarkers[ga._id] = true;
+        self.addingMarkers[ga._id] = true;
 
         Meteor.subscribe('status-updates-for-giveaway', ga._id, function() {
           // Unset flag once all StatusUpdates have been added.
-          delete addingMarkers[ga._id];
-          map.addMarker(ga._id, ga, clickHandler(ga));
+          delete self.addingMarkers[ga._id];
+          map.addMarker(ga._id, ga, clickHandler);
         });
       },
       changed: ga => {
         Meteor.subscribe('status-updates-for-giveaway', ga._id, function() {
-          map.updateMarker(ga._id, ga, clickHandler(ga));
+          map.updateMarker(ga._id, ga, clickHandler);
         });
       },
       removed: ga => {
         Meteor.subscribe('status-updates-for-giveaway', ga._id, function() {
-          map.removeMarker(ga._id, ga, clickHandler(ga));
+          map.removeMarker(ga._id, ga, clickHandler);
         });
       },
     });
@@ -63,12 +52,26 @@ export default class LeafletMap extends React.Component {
       added: statusUpdate => {
         const ga = Giveaways.findOne(statusUpdate.giveawayId);
 
-        // Only add markers if adding flag is not set.
+        // Only add markers if the adding flag is not set.
         // These markers are new since page load.
-        if (!(ga._id in addingMarkers)) {
-          map.updateMarker(ga._id, ga, clickHandler(ga));
+        if (!(ga._id in self.addingMarkers)) {
+          map.updateMarker(ga._id, ga, clickHandler);
         }
       },
     });
+  }
+
+  render() {
+    return (
+      <div id="main-map"></div>
+    );
+  }
+
+  resizeFullContainer() {
+    // Resize full-container to adjust for navigation bar
+    $(window).resize(function() {
+      $('.full-container').css('height', window.innerHeight - $("#app-navigation").outerHeight());
+    });
+    $(window).resize();
   }
 }

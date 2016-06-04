@@ -23,14 +23,6 @@ export default class MapInfoBoxTop extends React.Component {
       );
   }
 
-  componentDidMount() {
-    const setStateHandler = this.props.setStateHandler;
-    $("#info-box-top .close-button").click(event => {
-      event.stopPropagation();
-      setStateHandler(1);
-    });
-  }
-
   render() {
     const ga = this.props.ga;
     let renderContent = (
@@ -60,9 +52,6 @@ export default class MapInfoBoxTop extends React.Component {
     return (
       <div className="map-sidebar-box" id="info-box-top">
         { renderContent }
-        <div className="close-button">
-          <FontIcon className="material-icons">close</FontIcon>
-        </div>
       </div>
     );
   }

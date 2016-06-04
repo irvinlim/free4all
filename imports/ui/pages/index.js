@@ -45,7 +45,7 @@ export class Index extends React.Component {
         <div id="main">
           <AppNavigation />
           <div className="full-container">
-            <LeafletMap clickHandler={ this.selectGa.bind(this) } />
+            <LeafletMap infoBoxState={ this.state.infoBoxState } markerOnClick={ ga => this.selectGa(ga) } />
             <MapSideBars ga={ this.state.gaSelected } infoBoxState={ this.state.infoBoxState } setStateHandler={ this.setInfoBoxState.bind(this) } />
             <InsertBtnDialog />
           </div>

@@ -6,9 +6,11 @@
 }
 
 .map-marker {
-  width: 44px; height: 44px; @include border-radius(50% 50% 50% 0); border: 2px solid transparent; border-radius: 50% 50% 50% 0; background: #89849b;
-  position: absolute; left: 50%; top: 50%; margin: -20px 0 0 -20px; @include transform(rotate(-45deg)); @include transition(border-color 0.3s);
-  &:hover { border-color:#EEE; }
+  width: 44px; height: 44px; border: 2px solid transparent; border-radius: 50% 50% 50% 0; background: #89849b;
+  position: absolute; left: 50%; top: 50%; margin: -20px 0 0 -20px; @include border-radius(50% 50% 50% 0);
+  @include transform(rotate(-45deg) scale(0.8)); @include transform-origin(0% 100%); @include transition-all(0.3s);
+
+  &:hover, &.selected { border-color:#EEE; @include transform(rotate(-45deg) scale(1)) }
   i { transform: rotate(45deg); display: block; font-size: 25px; line-height: 40px; text-align: center; color: #FFF; }
 }
 
