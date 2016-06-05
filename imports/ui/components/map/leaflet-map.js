@@ -4,6 +4,8 @@ import { Giveaways } from '../../../api/giveaways/giveaways';
 import { StatusUpdates } from '../../../api/status-updates/status-updates';
 import LeafletMapObject from './leaflet-map-object';
 
+import * as Helper from '../../../modules/helper';
+
 export default class LeafletMap extends React.Component {
   constructor(props) {
     super(props);
@@ -26,7 +28,7 @@ export default class LeafletMap extends React.Component {
     // Observe changes in giveaways
     Giveaways.find().observe({
       added: ga => {
-        console.log("Adding");
+        Helper.log("Adding");
 
         // Set temporary flag.
         self.addingMarkers[ga._id] = true;
@@ -38,14 +40,14 @@ export default class LeafletMap extends React.Component {
         });
       },
       changed: ga => {
-        console.log("Changing");
+        Helper.log("Changing");
 
         Meteor.subscribe('status-updates-for-giveaway', ga._id, function() {
           map.updateMarker(ga._id, ga, clickHandler);
         });
       },
       removed: ga => {
-        console.log("Removing");
+        Helper.log("Removing");
 
         Meteor.subscribe('status-updates-for-giveaway', ga._id, function() {
           map.removeMarker(ga._id, ga, clickHandler);

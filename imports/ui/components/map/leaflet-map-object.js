@@ -73,12 +73,8 @@ export default class LeafletMapObject {
     Helper.errorIf(!this.markers[id], "Error: No such marker for Giveaway #" + id);
 
     this.markers[id].off('click');
-
-    const self = this;
-    $(this.markers[id]._icon).find(".map-marker").fadeOut(1000, function() {
-      self.map.removeLayer(self.markers[id]);
-      self.markers[id] = null;
-    });
+    this.map.removeLayer(this.markers[id]);
+    this.markers[id] = null;
   }
 
   updateMarker(id, ga, clickHandler) {

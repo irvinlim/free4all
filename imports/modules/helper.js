@@ -3,14 +3,12 @@ import { Meteor } from 'meteor/meteor';
 const nl2brReact = require('react-nl2br');
 
 // Console
+export const log = msg => process.env.NODE_ENV === "development" ? console.log(msg) : null;
+export const logIf = (x, msg) => x && process.env.NODE_ENV === "development" ? console.log(msg) : null;
 export const warn = msg => process.env.NODE_ENV === "development" ? console.warn(msg) : null;
 export const warnIf = (x, msg) => x && process.env.NODE_ENV === "development" ? console.warn(msg) : null;
-export const error = msg => {
-  if (process.env.NODE_ENV === "development") throw new Error(msg);
-};
-export const errorIf = (x, msg) => {
-  if (x && process.env.NODE_ENV === "development") throw new Error(msg);
-};
+export const error = msg => { if (process.env.NODE_ENV === "development") throw new Error(msg); };
+export const errorIf = (x, msg) => { if (x && process.env.NODE_ENV === "development") throw new Error(msg); };
 
 // Strings
 export const sanitizeStringSlug = (s) => s.replace(/[^a-zA-Z0-9 -_]/g, "");
