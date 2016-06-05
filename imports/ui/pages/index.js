@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -39,7 +40,7 @@ export class Index extends React.Component {
   componentWillMount() {
     Tracker.autorun(function () {
       // Re-subscribe every minute
-      Meteor.subscribe('giveaways-current-upcoming', Chronos.currentTime(60000));
+      Meteor.subscribe('giveaways-current-upcoming', Chronos.currentTime(Meteor.settings.public.refresh_interval || 60000));
     });
   }
 

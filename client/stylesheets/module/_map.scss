@@ -9,11 +9,19 @@
 .map-marker {
   width: 44px; height: 44px; border: 2px solid transparent; border-radius: 50% 50% 50% 0; background: #89849b;
   position: absolute; left: 50%; top: 50%; margin-top: -20px; @include border-radius(50% 50% 50% 0);
-  @include transform(rotate(-45deg) scale(0.8)); @include transform-origin(0% 100%); @include transition-all(0.3s);
+  @include transform(rotate(-45deg)); @include transform-origin(0% 100%); @include transition-all(0.3s);
+  animation-name: marker-bounce-in; animation-duration: 1s;
 
   &:hover, &.selected { border-color:#EEE; }
-  &.selected { @include transform(rotate(-45deg) scale(1)); }
+  &.selected { @include transform(rotate(-45deg) scale(1.15)); }
   i { transform: rotate(45deg); display: block; font-size: 25px; line-height: 40px; text-align: center; color: #FFF; }
+}
+
+@keyframes marker-bounce-in {
+  0% { opacity: 0; transform: translateY(-2000px) rotate(-45deg); }
+  60% { opacity: 1; transform: translateY(30px) rotate(-45deg); }
+  80% { transform: translateY(-10px) rotate(-45deg); }
+  100% { transform: translateY(0) rotate(-45deg); }
 }
 
 #map-boxes-container {
@@ -70,7 +78,7 @@
 }
 
 
-.close-button { 
+.close-button {
   position: absolute; top: 10px; right: 10px; cursor: pointer;
   span.material-icons { font-size: 30px !important; color: #CCC !important; }
 }
