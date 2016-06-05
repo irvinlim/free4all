@@ -48,6 +48,10 @@ Giveaways.schema = new SimpleSchema({
     regEx: SimpleSchema.RegEx.Id,
     label: 'ID of User who posted this giveaway.'
   },
+  deleted: {
+    type: Boolean,
+    label: 'Local deletion of giveaway.',
+  }
 });
 
 Giveaways.attachSchema(Giveaways.schema);
