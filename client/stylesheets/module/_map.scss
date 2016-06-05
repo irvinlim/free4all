@@ -19,18 +19,14 @@
 #map-boxes-container {
   position: absolute; top: 0; left: 0; height: 100%; width: 100%; pointer-events: none;
   h3 { margin: 0 0 10px; }
-  .map-sidebar { height: 100%; padding: 0; pointer-events: auto; }
-  .map-sidebar-box { padding: 20px 20px 0; }
 
-  @media (min-width:768px) {
-    .map-sidebar { height: calc(100% - 40px); padding: 5px; margin: 20px 0; @include border-radius(5px); }
-    .map-sidebar-box { padding: 20px 10px 10px; }
-  }
+  .map-sidebar { height: 100%; padding: 0; pointer-events: auto; position: absolute; @include transition(all 0.3s); }
+  .map-sidebar-box { padding: 20px 20px 0; }
 }
 
 // Sidebar boxes
 #map-info-box {
-  background-color: rgba(#fcfcfc, 0.8); max-width: 350px; position: absolute; @include transition(all 0.3s);
+  background-color: rgba(#fcfcfc, 0.8); max-width: 350px;
 
   p.category { font-weight: 300; }
 
@@ -40,43 +36,46 @@
   }
 }
 
+#map-nearby-box {
+  background-color: rgba(#dedede, 0.8); max-width:300px;
+}
+
 // Smaller-than-iPad devices
 @media (max-width:767px) {
   #map-info-box {
     max-width:none !important; background-color: #FFF; top: 100%; z-index: 1000;
 
+    // Close/expand behaviour
     &.state-1 { // Peek at title
       top: calc(100% - 90px);
       h3 { text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
       p.category { font-weight: 300; margin-bottom: 20px; }
     }
 
-    &.state-2 { // Show full
-      top: 0; 
-    }
-  }
-
-  .expand-button { display: none; }
-  .close-button { 
-    display: block; position: absolute; top: 10px; right: 10px; cursor: pointer;
-    span.material-icons { font-size: 30px !important; color: #CCC !important; }
+    &.state-2 { top: 0; } // Show full
   }
 }
 
 // iPad devices and up
 @media (min-width: 768px) {
-  #map-info-box.state-2 { // Hide to side
-    right: calc(100% - 40px) !important;
+  // Stylistic display for boxes
+  #map-boxes-container {
+    .map-sidebar { height: calc(100% - 40px); padding: 5px; margin: 20px 0; @include border-radius(5px); }
+    .map-sidebar-box { padding: 20px 10px 10px; }
   }
 
-  .close-button { display: none; }
-  .expand-button { 
-    display: block; position: absolute; right: -20px; top: 20px;
-  }
+  // Close/expand behaviour
+  #map-info-box.state-0 { right: calc(100% - 15px) !important; } // Hide to side
+  #map-nearby-box.state-0 { left: calc(100% - 15px) !important; } // Hide to side
 }
 
-#map-nearby-box {
-  background-color: rgba(#dedede, 0.8); float: right; max-width:300px;
+
+.close-button { 
+  position: absolute; top: 10px; right: 10px; cursor: pointer;
+  span.material-icons { font-size: 30px !important; color: #CCC !important; }
 }
+
+.expand-button-infobox { position: absolute; right: -20px; top: 50%; }
+.expand-button-nearbybox { position: absolute; left: -20px; top: 50%; }
 
 .floatingButton { position: fixed; right: 30px; bottom: 30px; }

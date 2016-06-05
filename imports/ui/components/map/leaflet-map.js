@@ -61,7 +61,14 @@ export default class LeafletMap extends React.Component {
     });
   }
 
+  monitorState() {
+    if (!this.props.gaSelected)
+      $(".map-marker").removeClass('selected');
+  }
+
   render() {
+    this.monitorState();
+
     return (
       <div id="main-map"></div>
     );

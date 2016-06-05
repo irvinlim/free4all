@@ -12,8 +12,9 @@ export class Index extends React.Component {
     super(props);
 
     this.state = {
-      gaSelected: null,   // Giveaway selected
+      gaSelected: null,
       infoBoxState: 0,
+      nearbyBoxState: 0,
     };
   }
 
@@ -31,12 +32,19 @@ export class Index extends React.Component {
   }
 
   selectGa(ga) {
-    this.setState({ gaSelected: ga });
-    this.setState({ infoBoxState: 1 });
+    this.setState({ 
+      gaSelected: ga, 
+      infoBoxState: 1,  // Bottom bar: peek title / Sidebar: show 
+    });
   }
 
   setInfoBoxState(x) {
     this.setState({ infoBoxState: x });
+    if (!x) this.setState({ gaSelected: null });
+  }
+
+  setNearbyBoxState(x) {
+    this.setState({ nearbyBoxState: x });
   }
 
   render() {
@@ -45,8 +53,17 @@ export class Index extends React.Component {
         <div id="main">
           <AppNavigation />
           <div className="full-container">
-            <LeafletMap infoBoxState={ this.state.infoBoxState } markerOnClick={ ga => this.selectGa(ga) } />
-            <MapSideBars ga={ this.state.gaSelected } infoBoxState={ this.state.infoBoxState } setStateHandler={ this.setInfoBoxState.bind(this) } />
+            <LeafletMap 
+              infoBoxState={ this.state.infoBoxState } 
+              markerOnClick={ ga => this.selectGa(ga) } 
+            />
+            <MapSideBars 
+              ga={ this.state.gaSelected } 
+              infoBoxState={ this.state.infoBoxState } 
+              nearbyBoxState={ this.state.nearbyBoxState } 
+              setInfoBoxState={ this.setInfoBoxState.bind(this) } 
+              setNearbyBoxState={ this.setNearbyBoxState.bind(this) } 
+            />
             <InsertBtnDialog />
           </div>
         </div>
