@@ -17,8 +17,6 @@ export class Index extends React.Component {
       infoBoxState: 0,
       nearbyBoxState: 0,
     };
-
-    this.subscription = null;
   }
 
   selectGa(ga) {

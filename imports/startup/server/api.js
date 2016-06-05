@@ -1,17 +1,20 @@
-import '../../api/documents/methods.js';
-import '../../api/documents/server/publications.js';
+import '../../api/documents/methods';
+import '../../api/documents/server/publications';
 
-import '../../api/parent-categories/methods.js';
-import '../../api/parent-categories/server/publications.js';
+import '../../api/parent-categories/methods';
+import '../../api/parent-categories/server/publications';
 
-import '../../api/categories/methods.js';
-import '../../api/categories/server/publications.js';
+import '../../api/categories/methods';
+import '../../api/categories/server/publications';
 
-import '../../api/status-types/methods.js';
-import '../../api/status-types/server/publications.js';
+import '../../api/status-types/methods';
+import '../../api/status-types/server/publications';
 
-import '../../api/status-updates/methods.js';
-import '../../api/status-updates/server/publications.js';
+import '../../api/status-updates/methods';
+import '../../api/status-updates/server/publications';
 
-import '../../api/giveaways/methods.js';
-import '../../api/giveaways/server/publications.js';
+import '../../api/giveaways/methods';
+import '../../api/giveaways/server/publications';
+
+import '../../api/ratings/methods';
+import '../../api/ratings/server/publications';

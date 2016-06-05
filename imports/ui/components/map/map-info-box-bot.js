@@ -1,4 +1,5 @@
 import React from 'react';
+import GiveawayRatings from '../../containers/giveaways/giveaway-ratings';
 
 export default class MapInfoBoxBot extends React.Component {
   constructor(props) {
@@ -13,6 +14,7 @@ export default class MapInfoBoxBot extends React.Component {
       renderContent = (
         <div>
           <h3>User Reviews</h3>
+          <GiveawayRatings ga={ this.props.ga } />
         </div>
       );
     }
