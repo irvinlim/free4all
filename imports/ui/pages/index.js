@@ -5,7 +5,10 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import AppNavigation from '../components/menu/app-navigation';
 import LeafletMap from '../components/map/leaflet-map';
-import MapSideBars from '../components/map/map-sidebars';
+
+import MapInfoBox from '../components/map/map-info-box';
+import MapNearbyBox from '../components/map/map-nearby-box';
+
 import InsertBtnDialog from '../components/map/insert-button'
 
 export class Index extends React.Component {
@@ -19,9 +22,9 @@ export class Index extends React.Component {
     };
   }
 
-  selectGa(ga) {
+  selectGa(gaId) {
     this.setState({
-      gaSelected: ga,
+      gaSelected: gaId,
       infoBoxState: 1,  // Bottom bar: peek title / Sidebar: show
     });
   }
@@ -48,17 +51,13 @@ export class Index extends React.Component {
         <div id="main">
           <AppNavigation />
           <div className="full-container">
-            <LeafletMap
-              infoBoxState={ this.state.infoBoxState }
-              markerOnClick={ ga => this.selectGa(ga) }
-            />
-            <MapSideBars
-              ga={ this.state.gaSelected }
-              infoBoxState={ this.state.infoBoxState }
-              nearbyBoxState={ this.state.nearbyBoxState }
-              setInfoBoxState={ this.setInfoBoxState.bind(this) }
-              setNearbyBoxState={ this.setNearbyBoxState.bind(this) }
-            />
+            <LeafletMap infoBoxState={ this.state.infoBoxState } markerOnClick={ gaId => this.selectGa(gaId) } />
+
+            <div id="map-boxes-container">
+              <MapInfoBox gaId={ this.state.gaSelected } boxState={ this.state.infoBoxState } setBoxState={ this.setInfoBoxState.bind(this) } />
+              <MapNearbyBox gaId={ this.state.gaSelected } boxState={ this.state.nearbyBoxState } setBoxState={ this.setNearbyBoxState.bind(this) } />
+            </div>
+
             <InsertBtnDialog />
           </div>
         </div>

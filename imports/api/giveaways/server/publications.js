@@ -10,3 +10,8 @@ Meteor.publish('giveaways-current-upcoming', function(date) {
     deleted:    { $ne: true },
   });
 });
+
+Meteor.publish('giveaway-by-id', function(gaId) {
+  check(gaId, Match._id);
+  return Giveaways.find(gaId);
+});

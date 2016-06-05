@@ -21,11 +21,13 @@ export default class LeafletMap extends React.Component {
 
     this.resizeFullContainer();
     const map = new LeafletMapObject('main-map');
-    const clickHandler = (ga) => this.props.markerOnClick(ga);
+    const clickHandler = (gaId) => this.props.markerOnClick(gaId);
 
     // Observe changes in giveaways
     Giveaways.find().observe({
       added: ga => {
+        console.log("Adding");
+
         // Set temporary flag.
         self.addingMarkers[ga._id] = true;
 
@@ -36,11 +38,15 @@ export default class LeafletMap extends React.Component {
         });
       },
       changed: ga => {
+        console.log("Changing");
+
         Meteor.subscribe('status-updates-for-giveaway', ga._id, function() {
           map.updateMarker(ga._id, ga, clickHandler);
         });
       },
       removed: ga => {
+        console.log("Removing");
+
         Meteor.subscribe('status-updates-for-giveaway', ga._id, function() {
           map.removeMarker(ga._id, ga, clickHandler);
         });

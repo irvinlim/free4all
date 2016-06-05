@@ -89,7 +89,7 @@ export default class LeafletMapObject {
   markerOnClick(ga, callback) {
     return (event) => {
       if (callback)
-        callback(ga);
+        callback(ga._id);
 
       $(".map-marker").removeClass("selected");
 
