@@ -37,7 +37,7 @@ export default class MapInfoBox extends React.Component {
     $(".expand-button-infobox").click(event => {
       event.stopPropagation();
 
-      if (self.props.boxState == 0 || this.props.gaId)
+      if (self.props.boxState == 0 && this.props.gaId)
         self.props.setBoxState(2);
       else
         self.props.setBoxState(0);

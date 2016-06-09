@@ -90,7 +90,6 @@ export default class InsertBtnDialog extends React.Component {
           <TimePicker pedantic={true} format="ampm" hintText="Start Time" onChange={this.handleChangeStartTimePicker12.bind(this)} value={this.state.startTime}/>
           <TimePicker pedantic={true} format="ampm" hintText="End Time" onChange={this.handleChangeEndTimePicker12.bind(this)} value={this.state.endTime}/>
 
-{/*hintText="Pick End Date"*/}
         </Dialog>
       </div>
     );
