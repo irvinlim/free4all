@@ -73,8 +73,8 @@
   }
 
   // Close/expand behaviour
-  #map-info-box.state-0 { right: calc(100% - 15px) !important; } // Hide to side
-  #map-nearby-box.state-0 { left: calc(100% - 15px) !important; } // Hide to side
+  #map-info-box.state-0 { right: calc(100% + 50px) !important; } // Hide to left, hide all the way
+  #map-nearby-box.state-0 { left: calc(100% - 15px) !important; } // Hide to right, show a little of the edge
 }
 
 
