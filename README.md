@@ -1,4 +1,6 @@
 # Free4All 
+
+[![Join the chat at https://gitter.im/irvinlim/free4all](https://badges.gitter.im/irvinlim/free4all.svg)](https://gitter.im/irvinlim/free4all?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 *(pronounced free-fall)*
 
 A web app that allows users to view and share locations in NUS with freebie giveaways, on a real-time map view.
