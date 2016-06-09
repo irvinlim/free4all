@@ -14,11 +14,11 @@ Giveaways.schema = new SimpleSchema({
     type: String,
     label: 'The description of the giveaway.',
   },
-  dateStart: {
+  startDateTime: {
     type: Date,
     label: "Start date/time of the giveaway.",
   },
-  dateEnd: {
+  endDateTime: {
     type: Date,
     label: "End date/time of the giveaway.",
   },
@@ -35,8 +35,7 @@ Giveaways.schema = new SimpleSchema({
   },
   'categoryId' :{
     type: String,
-    regEx: SimpleSchema.RegEx.Id,
-    label: 'ID of User who posted this giveaway.'
+    label: 'ID of giveaway\'s category.'
   },
   'tags': {
     type: [String],
