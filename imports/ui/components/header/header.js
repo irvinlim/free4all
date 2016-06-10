@@ -26,7 +26,7 @@ export default class Header extends React.Component {
 
   appBarRight() {
     return (
-      <div id="header-right-buttons">
+      <div id="header-right-buttons" style={{ position:'absolute', top:8, right:8}}>
         <HeaderNotifications />
       </div>
     );
