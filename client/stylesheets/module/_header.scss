@@ -1,0 +1,9 @@
+#header-bar {
+  h1 {
+    text-align: center !important; font-size: 20px !important; font-weight: 400; letter-spacing: 4px !important; text-transform: uppercase;
+    @media (max-width:767px) { font-size: 16px !important; }
+  }
+
+  button { position: absolute !important; }
+}
+#drawer-menu-items { font-weight: 300; }
