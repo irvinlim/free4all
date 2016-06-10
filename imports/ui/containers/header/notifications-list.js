@@ -6,7 +6,8 @@ import { Loading } from '../../components/loading';
 const composer = (props, onData) => {
   if (Meteor.subscribe('notifications').ready()) {
     onData(null, {
-      notifications: Herald.getNotifications({ user: Meteor.userId(), medium: 'onsite' }).fetch()
+      notifications: Herald.getNotifications({ user: Meteor.userId(), medium: 'onsite' }).fetch(),
+      handleNotificationTouchTap: props.handleNotificationTouchTap,
     });
   }
 };

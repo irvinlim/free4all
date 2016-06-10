@@ -6,13 +6,13 @@ import * as Colors from 'material-ui/styles/colors';
 
 import * as NotificationsHelper from '../../../modules/notifications';
 
-const listItems = (items) => {
-  if (!items || !items.length)
+const listItems = ({ notifications, handleNotificationTouchTap }) => {
+  if (!notifications || !notifications.length)
     return (
       <ListItem disabled={true} primaryText="No new notifications." />
     );
 
-  const listItems = items.map(item => {
+  const listItems = notifications.map(item => {
     const notif = item.message();
 
     return (
@@ -29,6 +29,7 @@ const listItems = (items) => {
         }
         secondaryTextLines={2}
         leftAvatar={ NotificationsHelper.makeNotifAvatar(notif.avatar) }
+        onTouchTap={ handleNotificationTouchTap(item._id, notif.url) }
       />
     );
   });
@@ -43,8 +44,8 @@ const listItems = (items) => {
   return returnItems;
 }
 
-export default NotificationsList = ({ notifications }) => (
+export default NotificationsList = (props) => (
   <List>
-    { listItems(notifications) }
+    { listItems(props) }
   </List>
 );
