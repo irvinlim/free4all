@@ -43,7 +43,7 @@ const listItems = (items) => {
   return returnItems;
 }
 
-export const NotificationsList = ({ notifications }) => (
+export default NotificationsList = ({ notifications }) => (
   <List>
     { listItems(notifications) }
   </List>

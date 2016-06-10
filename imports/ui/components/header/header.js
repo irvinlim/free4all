@@ -2,7 +2,7 @@ import React from 'react';
 import { Navbar } from 'react-bootstrap';
 import { Link } from 'react-router';
 import DrawerNavigation from './drawer-navigation';
-import HeaderNotifications from './header-notifications';
+import HeaderNotifications from '../../containers/header/header-notifications';
 
 import AppBar from 'material-ui/AppBar';
 
@@ -26,7 +26,7 @@ export default class Header extends React.Component {
 
   appBarRight() {
     return (
-      <div>
+      <div id="header-right-buttons">
         <HeaderNotifications />
       </div>
     );
