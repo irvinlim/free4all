@@ -22,7 +22,7 @@ export default class InsertBtnDialog extends React.Component {
       endTime: null,
       title: "",
       description: "",
-      
+
     };
   }
   handleOpen() {
@@ -36,7 +36,7 @@ export default class InsertBtnDialog extends React.Component {
   formatDate(date){
     return moment(date).format("dddd, Do MMM YYYY");
   };
-  
+
   handleTitle(e) {
     this.setState({title: e.target.value});
   };

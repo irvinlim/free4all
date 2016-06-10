@@ -18,3 +18,5 @@ import '../../api/giveaways/server/publications';
 
 import '../../api/ratings/methods';
 import '../../api/ratings/server/publications';
+
+import './publications';
