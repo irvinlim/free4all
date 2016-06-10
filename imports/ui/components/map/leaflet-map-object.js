@@ -11,6 +11,7 @@ import { StatusUpdates } from '../../../api/status-updates/status-updates';
 export default class LeafletMapObject {
   constructor(elemId) {
     this.markers = {};
+    this.markerClusterGroup = new L.markerClusterGroup();
 
     this.makeMap(elemId);
   }
@@ -40,6 +41,8 @@ export default class LeafletMapObject {
       id: Meteor.settings.public.MapBox.mapID,
       accessToken: Meteor.settings.public.MapBox.accessToken
     }).addTo(this.map);
+
+    this.map.addLayer(this.markerClusterGroup);
   }
 
   addMarker(id, ga, clickHandler) {
@@ -64,9 +67,9 @@ export default class LeafletMapObject {
     });
 
     Helper.warnIf(this.markers[id], "Notice: Duplicate marker IDs present.");
+    this.markers[id] = L.marker(ga.coordinates, {icon: icon}).on('click', this.markerOnClick(ga, clickHandler));
 
-    this.markers[id] = L.marker(ga.coordinates, {icon: icon});
-    this.markers[id].addTo(this.map).on('click', this.markerOnClick(ga, clickHandler));
+    this.markerClusterGroup.addLayer(this.markers[id]);
   }
 
   removeMarker(id, ga, clickHandler) {

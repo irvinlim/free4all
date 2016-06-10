@@ -42,6 +42,7 @@ fastclick@1.0.11
 fortawesome:fontawesome@4.5.0
 fourseven:scss@3.4.3
 geojson-utils@1.0.8
+herrhelms:meteor-leaflet-markercluster@0.0.2
 hot-code-push@1.0.4
 html-tools@1.0.9
 htmljs@1.0.9
