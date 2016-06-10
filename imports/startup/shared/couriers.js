@@ -7,7 +7,7 @@ Herald.addCourier('serviceAnnouncement', {
     return {
       title:      this.data.title,
       body:       this.data.body,
-      timestamp:  Chronos.liveMoment(this.timestamp).fromNow(),
+      timestamp:  this.timestamp,
       avatar:     this.data.avatar,
       url:        this.data.url,
     }

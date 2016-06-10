@@ -6,7 +6,7 @@ import * as Colors from 'material-ui/styles/colors';
 
 import * as NotificationsHelper from '../../../modules/notifications';
 
-const listItems = ({ notifications, handleNotificationTouchTap }) => {
+const makeNotificationList = ({ notifications, handleNotificationTouchTap }) => {
   if (!notifications || !notifications.length)
     return (
       <ListItem disabled={true} primaryText="No new notifications." />
@@ -24,7 +24,7 @@ const listItems = ({ notifications, handleNotificationTouchTap }) => {
         secondaryText={
           <p>
             <span className="notification-body" style={{ height:18, display:'block' }}>{ notif.body }</span>
-            <span className="timestamp" style={{ display:'block', textAlign:'right', fontSize:10, marginTop:2 }}>{ notif.timestamp }</span>
+            <span className="timestamp" style={{ display:'block', textAlign:'right', fontSize:10, marginTop:2 }}>{ moment(notif.timestamp).fromNow() }</span>
           </p>
         }
         secondaryTextLines={2}
@@ -42,10 +42,10 @@ const listItems = ({ notifications, handleNotificationTouchTap }) => {
   });
 
   return returnItems;
-}
+};
 
 export default NotificationsList = (props) => (
   <List>
-    { listItems(props) }
+    { makeNotificationList(props) }
   </List>
 );
