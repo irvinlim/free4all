@@ -84,7 +84,6 @@ export default class LeafletMapObject {
 
   markerIcon(className, css, attr, content) {
     const $icon = $('<div />').addClass(className).css(css).attr(attr).html(content);
-    console.log(attr);
     return L.divIcon({
       iconSize: [40, 54],
       iconAnchor: [20, 54],

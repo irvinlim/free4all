@@ -28,8 +28,6 @@ export default class LeafletMap extends React.Component {
     // Observe changes in giveaways
     Giveaways.find().observe({
       added: ga => {
-        Helper.log("Adding");
-
         // Set temporary flag.
         self.addingMarkers[ga._id] = true;
 
@@ -40,15 +38,11 @@ export default class LeafletMap extends React.Component {
         });
       },
       changed: ga => {
-        Helper.log("Changing");
-
         Meteor.subscribe('status-updates-for-giveaway', ga._id, function() {
           map.updateMarker(ga._id, ga, clickHandler);
         });
       },
       removed: ga => {
-        Helper.log("Removing");
-
         Meteor.subscribe('status-updates-for-giveaway', ga._id, function() {
           map.removeMarker(ga._id, ga, clickHandler);
         });
