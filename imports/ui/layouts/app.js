@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid } from 'react-bootstrap';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import Header from '../components/menu/header';
+import Header from '../components/header/header';
 
 export const App = React.createClass({
   propTypes: {

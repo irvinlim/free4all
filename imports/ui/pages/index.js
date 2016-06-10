@@ -3,7 +3,7 @@ import React from 'react';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
-import Header from '../components/menu/header';
+import Header from '../components/header/header';
 import LeafletMap from '../components/map/leaflet-map';
 
 import MapInfoBox from '../components/map/map-info-box';

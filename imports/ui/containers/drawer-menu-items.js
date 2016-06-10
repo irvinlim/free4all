@@ -1,6 +1,6 @@
 import { composeWithTracker } from 'react-komposer';
 import { Meteor } from 'meteor/meteor';
-import { DrawerMenuItems } from '../components/menu/drawer-menu-items';
+import { DrawerMenuItems } from '../components/header/drawer-menu-items';
 
 const composer = (props, onData) => {
   onData(null, { hasUser: Meteor.user() });
