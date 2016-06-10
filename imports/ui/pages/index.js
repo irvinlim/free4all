@@ -3,7 +3,7 @@ import React from 'react';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
-import AppNavigation from '../components/menu/app-navigation';
+import Header from '../components/menu/header';
 import LeafletMap from '../components/map/leaflet-map';
 
 import MapInfoBox from '../components/map/map-info-box';
@@ -49,7 +49,7 @@ export class Index extends React.Component {
     return (
       <MuiThemeProvider muiTheme={getMuiTheme()}>
         <div id="main">
-          <AppNavigation />
+          <Header />
           <div className="full-container">
             <LeafletMap infoBoxState={ this.state.infoBoxState } markerOnClick={ gaId => this.selectGa(gaId) } />
 

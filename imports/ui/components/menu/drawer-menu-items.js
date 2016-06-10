@@ -10,7 +10,7 @@ import { ActionHome, ActionExitToApp, ActionLock } from 'material-ui/svg-icons';
 
 export class DrawerMenuItems extends React.Component {
   constructor(props) {
-    super(props); 
+    super(props);
   }
 
   constructMenuItems() {
@@ -32,12 +32,12 @@ export class DrawerMenuItems extends React.Component {
     this.constructMenuItems();
 
     return (
-      <div>
+      <div id="drawer-menu-items">
         { this.menuItems.map((item, index) => {
           if (item.divider) {
             return (
-              <Divider 
-                key={ 'menudivider'+index } 
+              <Divider
+                key={ 'menudivider'+index }
               />);
           } else {
             const onClick = () => {
@@ -47,11 +47,11 @@ export class DrawerMenuItems extends React.Component {
             };
 
             const menuItem = (
-              <MenuItem 
-                key={ 'menuitem'+index } 
-                onTouchTap={ onClick } 
-                primaryText={ item.title } 
-                leftIcon={ item.icon } 
+              <MenuItem
+                key={ 'menuitem'+index }
+                onTouchTap={ onClick }
+                primaryText={ item.title }
+                leftIcon={ item.icon }
               />);
 
             if (!item.href)

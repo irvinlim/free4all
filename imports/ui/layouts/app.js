@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid } from 'react-bootstrap';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import AppNavigation from '../components/menu/app-navigation';
+import Header from '../components/menu/header';
 
 export const App = React.createClass({
   propTypes: {
@@ -12,7 +12,7 @@ export const App = React.createClass({
     return (
       <MuiThemeProvider muiTheme={getMuiTheme()}>
         <div id="main">
-          <AppNavigation />
+          <Header />
           <Grid>
             { this.props.children }
           </Grid>

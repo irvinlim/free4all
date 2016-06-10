@@ -85,7 +85,7 @@ export default class LeafletMap extends React.Component {
   resizeFullContainer() {
     // Resize full-container to adjust for navigation bar
     $(window).resize(function() {
-      $('.full-container').css('height', window.innerHeight - $("#app-navigation").outerHeight());
+      $('.full-container').css('height', window.innerHeight - $("#header").outerHeight());
     });
     $(window).resize();
   }
