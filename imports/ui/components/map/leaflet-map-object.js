@@ -1,8 +1,4 @@
-import React from 'react';
-import { Meteor } from 'meteor/meteor';
 import * as Helper from '../../../modules/helper';
-
-import FontIcon from 'material-ui/FontIcon';
 
 import { Categories } from '../../../api/categories/categories';
 import { StatusTypes } from '../../../api/status-types/status-types';
@@ -10,8 +6,14 @@ import { StatusUpdates } from '../../../api/status-updates/status-updates';
 
 export default class LeafletMapObject {
   constructor(elemId) {
+    const self = this;
+
     this.markers = {};
-    this.markerClusterGroup = new L.markerClusterGroup();
+    this.markerClusterGroup = new L.markerClusterGroup({
+      iconCreateFunction: function(cluster) {
+        return self.markerIcon("map-marker cluster-marker", {}, {}, $("<span />").html(cluster.getChildCount()));
+      }
+    });
 
     this.makeMap(elemId);
   }
@@ -56,15 +58,10 @@ export default class LeafletMapObject {
     const category = Categories.findOne(ga.categoryId);
     Helper.errorIf(!category, "Error: No category defined for Giveaway #" + id);
 
-    let bgStyle = "";
-    if (!Helper.is_over(ga.dateStart, ga.dateEnd))
-      bgStyle = ' style="background-color: ' + Helper.sanitizeHexColour(statusType.hexColour) + '"';
+    let css = {};
+    if (!Helper.is_over(ga.dateStart, ga.dateEnd)) css = { 'background-color': Helper.sanitizeHexColour(statusType.hexColour) };
 
-    const icon = L.divIcon({
-      iconSize: [40, 54],
-      iconAnchor: [20, 54],
-      html: '<div class="map-marker" ga-id="' + id + '"' + bgStyle + '><i class="' + category.iconClass + '"></i></div>',
-    });
+    const icon = this.markerIcon("map-marker", css, { "ga-id": id }, '<i class="' + category.iconClass + '"></i>');
 
     Helper.warnIf(this.markers[id], "Notice: Duplicate marker IDs present.");
     this.markers[id] = L.marker(ga.coordinates, {icon: icon}).on('click', this.markerOnClick(ga, clickHandler));
@@ -83,6 +80,16 @@ export default class LeafletMapObject {
   updateMarker(id, ga, clickHandler) {
     if (id in this.markers) this.removeMarker(id, ga, clickHandler);
     this.addMarker(id, ga, clickHandler);
+  }
+
+  markerIcon(className, css, attr, content) {
+    const $icon = $('<div />').addClass(className).css(css).attr(attr).html(content);
+    console.log(attr);
+    return L.divIcon({
+      iconSize: [40, 54],
+      iconAnchor: [20, 54],
+      html: $icon[0].outerHTML,
+    });
   }
 
   markerOnClick(ga, callback) {
