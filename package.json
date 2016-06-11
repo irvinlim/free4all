@@ -48,6 +48,8 @@
   },
   "dependencies": {
     "bootstrap": "^3.3.6",
+    "formsy-material-ui": "^0.4.3",
+    "formsy-react": "^0.18.0",
     "jquery": "^2.2.3",
     "jquery-validation": "^1.15.0",
     "material-ui": "^0.15.0",

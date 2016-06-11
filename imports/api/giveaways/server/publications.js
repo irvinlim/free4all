@@ -15,3 +15,14 @@ Meteor.publish('giveaway-by-id', function(gaId) {
   check(gaId, Match._id);
   return Giveaways.find(gaId);
 });
+
+Meteor.publish('giveaway-on-screen', function(bottomLeft, topRight) {
+  if (!bottomLeft && !topRight) {
+    return [];
+  }
+  return Giveaways.find({
+    coordinates : { 
+      $geoWithin : { $box : [bottomLeft, topRight]} 
+    } 
+  })
+});
