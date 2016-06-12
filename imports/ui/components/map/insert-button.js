@@ -13,7 +13,17 @@ import Paper from 'material-ui/Paper';
 import MenuItem from 'material-ui/MenuItem';
 import { FormsyCheckbox, FormsyDate, FormsyRadio, FormsyRadioGroup, FormsySelect, FormsyText, FormsyTime, FormsyToggle } from 'formsy-material-ui/lib';
 import { Grid, Row, Col } from 'react-bootstrap';
-    
+import IconMenu from 'material-ui/IconMenu';
+import IconButton from 'material-ui/IconButton';
+import Divider from 'material-ui/Divider';
+import Download from 'material-ui/svg-icons/file/file-download';
+import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+
+import AllCats from '../../containers/all-categories-list.js' 
+import TagsInput from 'react-tagsinput';
+
+
 /**
 * Dialog content can be scrollable.
 */
@@ -24,11 +34,12 @@ export default class InsertBtnDialog extends React.Component {
     this.state = {
       canSubmit: false,
       open: false,
-      
+      tags: [],
       title: "",
       description: "",
       
     };
+
     this.errorMessages ={
       wordsError: "Please only use letters",
       numericError: "Please provide a number",
@@ -36,8 +47,14 @@ export default class InsertBtnDialog extends React.Component {
     };
 
     this.styles = {
+      dialogStyle:{
+        backgroundColor: "rgb(224, 224, 224)",
+      },
+      actionsContainerStyle:{
+        backgroundColor: "rgb(224, 224, 224)",
+      },
       paperStyle: {
-        width: "80%",
+        width: "95%",
         margin: 'auto',
         padding: 20,
       },
@@ -47,7 +64,8 @@ export default class InsertBtnDialog extends React.Component {
       titleStyle: {
         fontWeight: 100,
         textTransform: "uppercase",
-        textAlign: "center"
+        textAlign: "center",
+        backgroundColor: "rgb(224, 224, 224)",
       },
       switchStyle: {
         marginBottom: 16,
@@ -56,6 +74,10 @@ export default class InsertBtnDialog extends React.Component {
         marginTop: 32,
       },
     };
+    
+    this.handleTagsChange = (tags) => {
+      this.setState({tags})
+    }
     
     this.handleOpen = () => {
       this.setState({open: true});
@@ -66,6 +88,7 @@ export default class InsertBtnDialog extends React.Component {
     };
     
     this.enableButton = () => {
+      console.log("enable");
       this.setState({ canSubmit: true });
     }
 
@@ -75,7 +98,17 @@ export default class InsertBtnDialog extends React.Component {
 
     this.submitForm = (data) => {
       console.log(data);
-      
+      // TODO: add submit fn
+      // event.preventDefault();
+        var text = this.refs.resolution.value.trim();
+        
+        Resolutions.insert({
+            text: text,
+            complete: false,
+            createdAt: new Date()
+        });
+        
+        this.refs.resolution.value = "";
       alert(JSON.stringify(data, null, 4));
     }
 
@@ -104,21 +137,20 @@ export default class InsertBtnDialog extends React.Component {
   }
 
 render() {
-  let { paperStyle, switchStyle, submitStyle, gridStyle, titleStyle } = this.styles;
+  let { paperStyle, switchStyle, submitStyle, gridStyle, titleStyle, dialogStyle, actionsContainerStyle } = this.styles;
   let { wordsError, numericError, urlError } = this.errorMessages;
-  const actions = [
+  const actionBtns = [
     // Submit Button 
     <FlatButton
       label="Submit"
       primary={true}
-      keyboardFocused={!this.state.canSubmit}
       disabled={!this.state.canSubmit}
-      onTouchTap={this.handleClose}
+      onTouchTap={this.submitForm}
       autoScrollBodyContent={true}
-      onRequestClose={this.submitForm}
       />,
     <FlatButton
       label="Cancel"
+      primary={true}
       onTouchTap={this.handleClose}
       />,
   ];
@@ -134,7 +166,9 @@ render() {
       <Dialog
         title="Add a new Giveaway"
         titleStyle={titleStyle}
-        actions={actions}
+        bodyStyle={dialogStyle}
+        actions={actionBtns}
+        actionsContainerStyle={actionsContainerStyle}
         modal={false}
         open={this.state.open}
         onRequestClose={this.handleClose}
@@ -149,14 +183,12 @@ render() {
             onInvalidSubmit={this.notifyFormError}
             >
             <Grid style={gridStyle}>
-              <Row >
-                <Col xs={12} md={12}>
-                <FormsyText 
+              <Row>
+                <Col >
+                  <FormsyText 
                   name="title"
                   floatingLabelText="Title" 
                   onChange={this.handleTitle} 
-                  validations="isWords"
-                  validationError={wordsError}
                   fullWidth={true} 
                   required
                   hintText="What is title of the giveaway?"
@@ -164,7 +196,7 @@ render() {
                 </Col>
               </Row>
               <Row>
-                <Col xs={12} md={12}>
+                <Col >
                 <FormsyText 
                   name="description"
                   floatingLabelText="Description" 
@@ -173,23 +205,22 @@ render() {
                   rows={3} 
                   required
                   onChange={this.handleDescription.bind(this)} 
-                  validations="isWords"
-                  validationError={wordsError}
                   hintText="What is the giveaway about?"
                   />
                 </Col>
               </Row>
               <Row>
-                <Col md={6}>
+                <Col xs={12} md={6}>
                   <FormsyDate 
-                    id="datepick" 
                     required
                     name="date"
                     formatDate={this.formatDate} 
                     floatingLabelText="Date" 
-                    mode="landscape" />
+                    autoOk={true}
+                    minDate={new Date()}
+                    />
                 </Col>
-                <Col md={6} >
+                <Col xs={12} md={6} >
                 <FormsyText
                   name="url"
                   validations="isUrl"
@@ -200,7 +231,7 @@ render() {
                 </Col>
               </Row>
               <Row>
-                <Col md={6} >
+                <Col xs={12} md={6} >
                   <FormsyTime 
                     required
                     name="startTime"
@@ -209,7 +240,7 @@ render() {
                     floatingLabelText="Start Time"
                     />
                 </Col>
-                <Col md={6} >
+                <Col xs={12} md={6} >
                   <FormsyTime 
                     name="endTime"
                     required
@@ -219,7 +250,42 @@ render() {
                     />
                 </Col>
               </Row>
-            
+              <Row>
+                <Col>
+                <FormsyText
+                  name="location"
+                  hintText="Where is it?"
+                  fullWidth={true} 
+                  floatingLabelText="Location"
+                  />
+                </Col>
+              </Row>
+              <Row>
+                <Col xs={12} md={6} >
+                  <FormsyText
+                    name="lat"
+                    validations="isNumeric"
+                    validationError={numericError}
+                    hintText="Latitude"
+                    floatingLabelText="Latitude"
+                    />
+                </Col>
+                <Col xs={12} md={6} >
+                  <FormsyText
+                    name="lat"
+                    validations="isNumeric"
+                    validationError={numericError}
+                    hintText="Longitude"
+                    floatingLabelText="Longitude"
+                    />
+                </Col>
+              </Row>
+              <Row>
+                <AllCats />
+              </Row>  
+              <Row>
+                <TagsInput value={this.state.tags} onChange={this.handleTagsChange} />
+              </Row>
             {/* 
               <RaisedButton
               style={submitStyle}

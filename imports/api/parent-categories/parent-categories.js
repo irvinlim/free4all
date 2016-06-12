@@ -5,6 +5,28 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 export const ParentCategories = new Mongo.Collection('ParentCategories');
 
+// Denorm childCat, reduce subscriptions
+ChildCategory = new SimpleSchema({
+  name: {
+    type: String,
+    label: 'The name of the category.',
+  },
+  iconClass: {
+    type: String,
+    label: 'The icon class for the category. For FontAwesome: must start with "fa fa-".',
+  },
+  parent: {
+    type: String,
+    label: 'Name of ParentCategory.',
+  },
+  relativeOrder: {
+    type: Number,
+    label: 'Relative order to display the statuses in. \
+            Smaller values appear at the top whilst larger ones appear at the bottom. \
+            Identical values will then be sorted by name in ascending order.'
+  },
+});
+
 ParentCategories.schema = new SimpleSchema({
   name: {
     type: String,
@@ -20,7 +42,11 @@ ParentCategories.schema = new SimpleSchema({
             Smaller values appear at the top whilst larger ones appear at the bottom. \
             Identical values will then be sorted by name in ascending order.'
   },
+  childCategories: {
+    type: [ChildCategory]
+  }
 });
+
 
 ParentCategories.attachSchema(ParentCategories.schema);
 
