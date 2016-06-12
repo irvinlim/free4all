@@ -23,6 +23,10 @@ export const AllCategoriesList = ({ allCategories }) => (
               parentCat.childCategories.map((cat) => (
                   <MenuItem 
                     key={cat.name}
+                    value={{
+                      parentId: parentCat._id,
+                      child: cat.name
+                    }}
                     primaryText={cat.name} 
                     leftIcon={<Download />} 
                     />

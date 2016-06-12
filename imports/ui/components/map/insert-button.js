@@ -20,7 +20,7 @@ import Download from 'material-ui/svg-icons/file/file-download';
 import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 
-import AllCats from '../../containers/all-categories-list.js' 
+import AllCategoriesList from '../../containers/all-categories-list.js' 
 import TagsInput from 'react-tagsinput';
 
 
@@ -281,7 +281,7 @@ render() {
                 </Col>
               </Row>
               <Row>
-                <AllCats />
+                <AllCategoriesList />
               </Row>  
               <Row>
                 <TagsInput value={this.state.tags} onChange={this.handleTagsChange} />

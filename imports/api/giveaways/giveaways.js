@@ -33,9 +33,13 @@ Giveaways.schema = new SimpleSchema({
     maxCount: 2,
     label: 'Array of coordinates in MongoDB style \[Lng, Lat\].'
   },
-  'categoryId' :{
+  'parentCategoryId' :{
     type: String,
-    label: 'ID of giveaway\'s category.'
+    label: 'ID of parent giveaway\'s category.'
+  },
+  'childCategory' :{
+    type: String,
+    label: 'Name of giveaway\'s category.'
   },
   'tags': {
     type: [String],
