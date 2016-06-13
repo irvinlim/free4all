@@ -4,7 +4,9 @@ import { HeaderNotifications } from '../../components/header/header-notification
 import { Loading } from '../../components/loading';
 
 const composer = (props, onData) => {
-  if (Meteor.subscribe('notifications').ready()) {
+  if (!Meteor.userId()) {
+    onData(null, {});
+  } else if (Meteor.subscribe('notifications').ready()) {
     onData(null, {
       notifications: Herald.getNotifications({ user: Meteor.userId(), medium: 'onsite' }, { sort: { timestamp: -1 }, limit: 10 }).fetch(),
       notificationCount: Herald.getNotifications({ user: Meteor.userId(), medium: 'onsite' }).count(),

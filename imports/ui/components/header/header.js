@@ -27,7 +27,7 @@ export default class Header extends React.Component {
   appBarRight() {
     return (
       <div id="header-right-buttons" style={{ position:'absolute', top:8, right:8}}>
-        <HeaderNotifications />
+        { Meteor.userId() ? <HeaderNotifications /> : <div /> }
       </div>
     );
   }
