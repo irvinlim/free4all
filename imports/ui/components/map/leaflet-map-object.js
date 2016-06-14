@@ -66,7 +66,7 @@ export default class LeafletMapObject {
 
     Helper.warnIf(this.markers[id], "Notice: Duplicate marker IDs present.");
 
-    this.markers[id] = L.marker(ga.coordinates, {icon: icon}).on('click', this.markerOnClick(ga, clickHandler));
+    this.markers[id] = L.marker(this.latlng(ga.coordinates), {icon: icon}).on('click', this.markerOnClick(ga, clickHandler));
 
     this.markerClusterGroup.addLayer(this.markers[id]);
   }
@@ -103,5 +103,9 @@ export default class LeafletMapObject {
       if (ga)
         $(".map-marker[ga-id="+ga._id+"]").addClass('selected');
     };
+  }
+
+  latlng(lnglat) {
+    return [lnglat[1], lnglat[0]];
   }
 }
