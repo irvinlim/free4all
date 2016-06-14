@@ -54,6 +54,7 @@ launch-screen@1.0.11
 livedata@1.0.18
 localstorage@1.0.9
 logging@1.0.12
+mdg:geolocation@1.3.0
 mdg:validated-method@1.1.0
 mdg:validation-error@0.5.1
 meteor@1.1.14
