@@ -16,6 +16,7 @@ export default class LeafletMapObject {
     });
 
     this.makeMap(elemId);
+    this.initializeGeolocation();
   }
 
   makeMap(elemId) {
@@ -103,6 +104,28 @@ export default class LeafletMapObject {
       if (ga)
         $(".map-marker[ga-id="+ga._id+"]").addClass('selected');
     };
+  }
+
+  initializeGeolocation() {
+    const self = this;
+
+    // Make custom marker
+    const $icon = $('<div class="current-location-marker"><div class="pulse"></div></div>');
+    const divIcon = L.divIcon({
+      iconSize: [22, 22],
+      html: $icon[0].outerHTML,
+    });
+    this.geolocatedMarker = L.marker([0, 0], {icon: divIcon}).addTo(this.map);
+
+    // Autorun for reactive geolocation
+    Tracker.autorun(function () {
+      const latlng = Geolocation.latLng();
+
+      if (!latlng)
+        return;
+      else
+        self.geolocatedMarker.setLatLng([latlng.lat, latlng.lng]);
+    });
   }
 
   latlng(lnglat) {
