@@ -47,3 +47,6 @@ export const compact_date_range = (start, end) => {
 export const is_ongoing = (start, end) => moment(start).isBefore(moment()) && moment(end).isAfter(moment());
 export const is_havent_start = (start, end) => moment(start).isAfter(moment());
 export const is_over = (start, end) => moment(end).isBefore(moment());
+
+// LatLng
+export const is_equal_latlng = (latlng1, latlng2) => latlng1 && latlng2 && latlng1.lat && latlng1.lng && latlng2.lat && latlng2.lng && latlng1.lat == latlng2.lat && latlng1.lng == latlng2.lng;

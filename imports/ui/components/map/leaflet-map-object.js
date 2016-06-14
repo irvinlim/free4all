@@ -128,6 +128,14 @@ export default class LeafletMapObject {
     });
   }
 
+  registerEventHandler(event, callback) {
+    this.map.on(event, callback.bind(this.map));
+  }
+
+  panTo(latlng) {
+    this.map.panTo(latlng);
+  }
+
   latlng(lnglat) {
     return [lnglat[1], lnglat[0]];
   }

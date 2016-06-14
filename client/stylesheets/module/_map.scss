@@ -81,7 +81,15 @@
 .expand-button-infobox { position: absolute; right: -20px; top: 50%; }
 .expand-button-nearbybox { position: absolute; left: -20px; top: 50%; }
 
-.floatingButton { position: fixed; right: 30px; bottom: 30px; }
+// Floating action buttons
+#map-floating-buttons {
+  position: fixed; right: 30px; bottom: 30px;
+
+  & > div { margin-top: 15px; }
+
+  .geolocation-button button { background-color: #f5f5f5 !important; }
+  .geolocation-button .material-icons { color: #424242 !important; }
+}
 
 // Current location marker
 @include keyframes(pulse) {
