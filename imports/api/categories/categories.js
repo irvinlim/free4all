@@ -16,6 +16,11 @@ Categories.schema = new SimpleSchema({
     type: String,
     label: 'The icon class for the category. For FontAwesome: must start with "fa fa-".',
   },
+  parent: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id,
+    label: 'ID of ParentCategory.',
+  },
   relativeOrder: {
     type: Number,
     label: 'Relative order to display the statuses in. \
