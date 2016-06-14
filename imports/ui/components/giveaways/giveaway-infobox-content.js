@@ -25,9 +25,9 @@ const getContent = ({ giveaway, latestStatus, latestStatusType, category, parent
         <h3>{ giveaway.title }</h3>
         <p className="category">{ parentCategory.name } &mdash; { category.name }</p>
         <p className="description">{ giveaway.description ? Helper.nl2br(giveaway.description) : (<em>No description</em>) }</p>
-        { iconRow("date_range", Helper.compact_date_range(giveaway.dateStart, giveaway.dateEnd)) }
+        { iconRow("date_range", Helper.compact_date_range(giveaway.startDateTime, giveaway.endDateTime)) }
         { iconRow("location_on", giveaway.location ) }
-        { Helper.is_ongoing(giveaway.dateStart, giveaway.dateEnd) ?
+        { Helper.is_ongoing(giveaway.startDateTime, giveaway.endDateTime) ?
             iconRow("info_outline", "Status: " + latestStatusType.label ) :
             iconRow("info_outline", "Status: Ended" ) }
       </div>

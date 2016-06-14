@@ -59,11 +59,13 @@ export default class LeafletMapObject {
     Helper.errorIf(!category, "Error: No category defined for Giveaway #" + id);
 
     let css = {};
-    if (!Helper.is_over(ga.dateStart, ga.dateEnd)) css = { 'background-color': Helper.sanitizeHexColour(statusType.hexColour) };
+    if (!Helper.is_over(ga.startDateTime, ga.endDateTime))
+      css = { 'background-color': Helper.sanitizeHexColour(statusType.hexColour) };
 
     const icon = this.markerIcon("map-marker", css, { "ga-id": id }, '<i class="' + category.iconClass + '"></i>');
 
     Helper.warnIf(this.markers[id], "Notice: Duplicate marker IDs present.");
+
     this.markers[id] = L.marker(ga.coordinates, {icon: icon}).on('click', this.markerOnClick(ga, clickHandler));
 
     this.markerClusterGroup.addLayer(this.markers[id]);
