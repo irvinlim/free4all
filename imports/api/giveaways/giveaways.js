@@ -1,18 +1,16 @@
-// import faker from 'faker';
 import { Mongo } from 'meteor/mongo';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-// import { Factory } from 'meteor/dburles:factory';
 
 export const Giveaways = new Mongo.Collection('Giveaways');
 
 Giveaways.schema = new SimpleSchema({
   title: {
     type: String,
-    label: 'The title of the giveaway.',
+    label: 'The title of the giveaway',
   },
   description: {
     type: String,
-    label: 'The description of the giveaway.',
+    label: 'The description of the giveaway',
   },
   startDateTime: {
     type: Date,
@@ -24,41 +22,38 @@ Giveaways.schema = new SimpleSchema({
   },
   location: {
     type: String,
-    label: 'Localized name of location (reverse geocoded).'
+    label: 'Localized name of location (reverse geocoded/user input)'
   },
   'coordinates': {
     type: [Number],
     decimal: true,
     minCount: 2,
     maxCount: 2,
-    label: 'Array of coordinates in MongoDB style \[Lng, Lat\].'
+    label: 'Array of coordinates in MongoDB style \[Lng, Lat\]'
   },
-  'parentCategoryId' :{
+  'categoryId' :{
     type: String,
-    label: 'ID of giveaway\'s parent category.'
-  },
-  'childCategoryId' :{
-    type: String,
-    label: 'ID of giveaway\'s child category.'
+    label: 'ID of giveaway\'s category'
   },
   'tags': {
     type: [String],
-    label: 'The tags/hashtags for the giveaway.',
+    label: 'The tags/hashtags for the giveaway',
     optional: true
   },
   userId: {
     type: String,
     regEx: SimpleSchema.RegEx.Id,
-    label: 'ID of User who posted this giveaway.'
+    label: 'ID of User who posted this giveaway'
   },
   deleted: {
     type: Boolean,
-    label: 'Local deletion of giveaway.',
+    label: 'Local deletion of giveaway',
+    optional: true
   }
 });
 
 Giveaways.attachSchema(Giveaways.schema);
 
-// Factory.define('document', Giveaways, {
-//   title: () => faker.hacker.phrase(),
-// });
+if (Meteor.isServer) {
+  Giveaways._ensureIndex({'coordinates':'2dsphere'});
+}
