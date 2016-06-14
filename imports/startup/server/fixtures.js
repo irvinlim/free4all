@@ -52,3 +52,16 @@ default_parent_categories.forEach(parentCat => {
   if (!ParentCategories.findOne({ 'name': parentCat.name }))
     ParentCategories.insert(parentCat);
 });
+
+// Default categories
+const default_categories = [
+  { name: "Pizza", iconClass: 'fa fae-pizza', relativeOrder: 10, parent: ParentCategories.findOne({ name: "Food & Drink" })._id },
+  { name: "Buffet", iconClass: 'restaurant', relativeOrder: 11, parent: ParentCategories.findOne({ name: "Food & Drink" })._id },
+  { name: "Ice Cream", iconClass: 'fa fae-popsicle', relativeOrder: 12, parent: ParentCategories.findOne({ name: "Food & Drink" })._id },
+  { name: "Coffee", iconClass: 'fa fa-coffee', relativeOrder: 13, parent: ParentCategories.findOne({ name: "Food & Drink" })._id },
+];
+
+default_categories.forEach(cat => {
+  if (!Categories.findOne({ 'name': cat.name }))
+    Categories.insert(cat);
+});
