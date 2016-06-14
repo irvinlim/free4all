@@ -79,7 +79,7 @@ export default class LeafletMap extends React.Component {
 
   registerEventHandlers() {
     const self = this;
-    this.map.registerEventHandler('dragend', function(event) {
+    this.map.registerEventHandler('moveend', function(event) {
       self.props.setMapCenter(this.getCenter());
     });
   }
