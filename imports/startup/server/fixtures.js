@@ -42,28 +42,10 @@ default_status_types.forEach(statusType => {
 
 // Default parent categories
 const default_parent_categories = [
-  { name: "Food & Drink", iconClass: 'local_dining', relativeOrder: 10, 
-    childCategories: [
-      { name: "Pizza", iconClass: 'fa fa-z', relativeOrder: 10, parent: "Food & Drink", }
-    ]
-  },
-  { name: "Coupons/Vouchers", iconClass: 'local_offer', relativeOrder: 20, 
-    childCategories: [
-      { name: "Concert", iconClass: 'fa fa-asd', relativeOrder: 10, parent: "Coupons/Vouchers", },
-    ]
-   },
-  { name: "Goodie Bags", iconClass: 'local_mall', relativeOrder: 30, 
-    childCategories: [
-      { name: "Exam", iconClass: 'fa fa-asd', relativeOrder: 10, parent: "Goodie Bags", },
-      { name: "Recruitment", iconClass: 'fa fa-asd', relativeOrder: 20, parent: "Goodie Bags", },
-    ] 
-   },
-  { name: "Everything Else", iconClass: 'thumb_up', relativeOrder: 99,
-     childCategories:[
-       { name: "Recruitment", iconClass: 'fa fa-asd', relativeOrder: 20, parent: "Goodie Bags", },
-       { name: "Recruixtment", iconClass: 'fa fa-asd', relativeOrder: 30, parent: "Goodie Bags", },
-     ]
-   },
+  { name: "Food & Drink", iconClass: 'local_dining', relativeOrder: 10 },
+  { name: "Coupons/Vouchers", iconClass: 'local_offer', relativeOrder: 20 },
+  { name: "Goodie Bags", iconClass: 'local_mall', relativeOrder: 30 },
+  { name: "Everything Else", iconClass: 'thumb_up', relativeOrder: 99 },
 ];
 
 default_parent_categories.forEach(parentCat => {

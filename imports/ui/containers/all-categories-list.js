@@ -7,7 +7,7 @@ import { Meteor } from 'meteor/meteor';
 const composer = (params, onData) => {
   const subscription = Meteor.subscribe('parent-categories');
   if (subscription.ready()) {
-    const allCategories = ParentCategories.find().fetch();
+    const allCategories = AllCategoriesList.find().fetch();
     onData(null, { allCategories });
   }
 };

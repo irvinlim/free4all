@@ -35,11 +35,11 @@ Giveaways.schema = new SimpleSchema({
   },
   'parentCategoryId' :{
     type: String,
-    label: 'ID of parent giveaway\'s category.'
+    label: 'ID of giveaway\'s parent category.'
   },
-  'childCategory' :{
+  'childCategoryId' :{
     type: String,
-    label: 'Name of giveaway\'s category.'
+    label: 'ID of giveaway\'s child category.'
   },
   'tags': {
     type: [String],

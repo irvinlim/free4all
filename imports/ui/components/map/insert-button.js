@@ -281,7 +281,7 @@ render() {
                 </Col>
               </Row>
               <Row>
-                <AllCategoriesList />
+                 
               </Row>  
               <Row>
                 <TagsInput value={this.state.tags} onChange={this.handleTagsChange} />
