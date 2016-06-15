@@ -1,5 +1,4 @@
 import React from 'react';
-import { browserHistory } from 'react-router';
 import { List, ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import Subheader from 'material-ui/Subheader';
@@ -8,7 +7,7 @@ import Avatar from 'material-ui/Avatar';
 import * as Helper from '../../../modules/helper';
 import * as Colors from 'material-ui/styles/colors';
 
-const giveawayRow = (ga) => (
+const giveawayRow = (touchTapHandler) => (ga) => (
   <ListItem
     key={ ga._id }
     primaryText={
@@ -20,7 +19,7 @@ const giveawayRow = (ga) => (
       </p>
     }
     secondaryTextLines={2}
-    onTouchTap={ () => browserHistory.push("/giveaway/" + ga._id) }
+    onTouchTap={ touchTapHandler(ga) }
   />
 );
 
@@ -29,6 +28,6 @@ export const NearbyGiveaways = (props) => (
     <Subheader>
       <h3 style={{ margin:"20px 0px 10px" }}>Nearby Giveaways</h3>
     </Subheader>
-    { Helper.insertDividers(props.giveaways.map(giveawayRow)) }
+    { Helper.insertDividers(props.giveaways.map(giveawayRow(props.nearbyOnClick))) }
   </List>
 );

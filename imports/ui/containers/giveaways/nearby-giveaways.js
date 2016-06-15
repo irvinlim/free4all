@@ -14,6 +14,7 @@ const composer = (props, onData) => {
 
   onData(null, {
     giveaways: giveaways,
+    nearbyOnClick: props.nearbyOnClick,
   });
 };
 

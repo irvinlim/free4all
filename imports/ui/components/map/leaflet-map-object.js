@@ -67,7 +67,7 @@ export default class LeafletMapObject {
 
     Helper.warnIf(this.markers[id], "Notice: Duplicate marker IDs present.");
 
-    this.markers[id] = L.marker(this.latlng(ga.coordinates), {icon: icon}).on('click', this.markerOnClick(ga, clickHandler));
+    this.markers[id] = L.marker(Helper.lnglat2latlng(ga.coordinates), {icon: icon}).on('click', this.markerOnClick(ga, clickHandler));
 
     this.markerClusterGroup.addLayer(this.markers[id]);
   }
@@ -98,11 +98,6 @@ export default class LeafletMapObject {
     return (event) => {
       if (callback)
         callback(ga._id);
-
-      $(".map-marker").removeClass("selected");
-
-      if (ga)
-        $(".map-marker[ga-id="+ga._id+"]").addClass('selected');
     };
   }
 
@@ -134,13 +129,5 @@ export default class LeafletMapObject {
     return {
       trigger: () => this.map.fire(event),
     };
-  }
-
-  panTo(latlng) {
-    this.map.panTo(latlng);
-  }
-
-  latlng(lnglat) {
-    return [lnglat[1], lnglat[0]];
   }
 }

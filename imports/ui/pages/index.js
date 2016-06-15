@@ -25,6 +25,8 @@ export class Index extends React.Component {
       nearbyBoxState: 1,
       geolocation: null,
       mapCenter: null,
+      mapZoom: null,
+      mapMaxZoom: null,
     };
 
     this.mapBounds = new ReactiveVar( null );
@@ -75,6 +77,12 @@ export class Index extends React.Component {
   }
 
   render() {
+    const clickNearbyGa = ga => event => {
+      this.selectGa(ga._id);
+      this.setState({ mapCenter: Helper.lnglat2latlng(ga.coordinates) });
+      this.setState({ mapZoom: this.state.mapMaxZoom });
+    };
+
     return (
       <MuiThemeProvider muiTheme={ getMuiTheme() }>
         <div id="main">
@@ -83,9 +91,12 @@ export class Index extends React.Component {
             <LeafletMap
               gaId={ this.state.gaSelected }
               infoBoxState={ this.state.infoBoxState }
-              mapCenter={ this.state.mapCenter }
               markerOnClick={ gaId => this.selectGa(gaId) }
-              setMapCenter={ mapCenter => this.state.mapCenter }
+              mapCenter={ this.state.mapCenter }
+              setMapCenter={ mapCenter => this.setState({ mapCenter: mapCenter }) }
+              mapZoom={ this.state.mapZoom }
+              setMapZoom={ mapZoom => this.setState({ mapZoom: mapZoom })}
+              setMapMaxZoom={ mapMaxZoom => this.setState({ mapMaxZoom: mapMaxZoom })}
               setBounds={ bounds => this.mapBounds.set(bounds) }
             />
 
@@ -100,6 +111,7 @@ export class Index extends React.Component {
                 boxState={ this.state.nearbyBoxState }
                 setBoxState={ this.setNearbyBoxState.bind(this) }
                 mapBounds={ this.mapBounds.get() }
+                nearbyOnClick={ clickNearbyGa }
               />
             </div>
 

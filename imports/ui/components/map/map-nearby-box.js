@@ -32,7 +32,7 @@ export default class MapNearbyBox extends React.Component {
     return (
       <div id="map-nearby-box" className={ "map-sidebar hidden-xs hidden-sm col-md-3 col-lg-3 state-" + this.props.boxState }>
         <Scrollbars autoHide style={{ height: "100%" }}>
-          <NearbyGiveaways mapBounds={ this.props.mapBounds } />
+          <NearbyGiveaways mapBounds={ this.props.mapBounds } nearbyOnClick={ this.props.nearbyOnClick } />
         </Scrollbars>
 
         <div className="expand-button-nearbybox hidden-xs hidden-sm">

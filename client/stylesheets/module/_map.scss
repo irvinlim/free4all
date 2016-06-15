@@ -40,7 +40,7 @@
 }
 
 #map-nearby-box {
-  max-width:350px;
+  max-width:350px; z-index: 1000;
   > div:not(.expand-button-nearbybox) { background-color: #fcfcfc; @include transition(opacity 0.3s ease-out); }
 }
 
