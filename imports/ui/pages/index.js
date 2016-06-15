@@ -71,6 +71,7 @@ export class Index extends React.Component {
           <Header />
           <div className="full-container">
             <LeafletMap
+              gaId={ this.state.gaSelected }
               infoBoxState={ this.state.infoBoxState }
               mapCenter={ this.state.mapCenter }
               geolocation={ this.state.geolocation }

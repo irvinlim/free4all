@@ -91,7 +91,7 @@ export default class LeafletMap extends React.Component {
     }
 
     // Update selected map marker
-    if (!this.props.gaSelected)
+    if (!this.props.gaId)
       $(".map-marker").removeClass('selected');
   }
 
