@@ -4,10 +4,12 @@ import { Giveaways } from '../giveaways';
 
 Meteor.publish('giveaways-current-upcoming', function(date) {
   check(date, Date);
+  const tomorrow = moment(date).add(1, 'd').toDate();
+
   return Giveaways.find({
-    endDateTime:    { $gte: date, },                                    // Must not be over
-    startDateTime:  { $lte: moment(date).subtract(1, 'd').toDate(), },  // Must be ongoing/starting in the next 24 hours
-    deleted:        { $ne: true },
+    startDateTime:  { $lte: tomorrow, },    // Must be ongoing/starting in the next 24 hours
+    endDateTime:    { $gt:  date, },        // Must not be over
+    deleted:        { $ne:  true },         // Must not be deleted (local deletion)
   });
 });
 
