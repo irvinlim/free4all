@@ -1,26 +1,24 @@
-// import faker from 'faker';
 import { Mongo } from 'meteor/mongo';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-// import { Factory } from 'meteor/dburles:factory';
 
 export const StatusUpdates = new Mongo.Collection('StatusUpdates');
 
 StatusUpdates.schema = new SimpleSchema({
-  'giveawayId': {
+  giveawayId: {
     type: String,
     regEx: SimpleSchema.RegEx.Id,
-    label: 'ID of Giveaway associated with this status update.'
+    label: 'Giveaway ID associated with this status update'
   },
-  'statusTypeId': {
+  statusTypeId: {
     type: String,
     regEx: SimpleSchema.RegEx.Id,
-    label: 'ID of Status.'
+    label: 'StatusType ID'
   },
-  'date': {
+  date: {
     type: Date,
-    label: 'Date that the status was set.'
+    label: 'Date that the status was set'
   },
-  'userId': {
+  userId: {
     type: String,
     regEx: SimpleSchema.RegEx.Id,
     label: 'ID of User who updated this status.'
@@ -28,7 +26,3 @@ StatusUpdates.schema = new SimpleSchema({
 });
 
 StatusUpdates.attachSchema(StatusUpdates.schema);
-
-// Factory.define('document', StatusUpdates, {
-//   title: () => faker.hacker.phrase(),
-// });

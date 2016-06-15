@@ -1,19 +1,17 @@
-// import faker from 'faker';
 import { Mongo } from 'meteor/mongo';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-// import { Factory } from 'meteor/dburles:factory';
 
 export const StatusTypes = new Mongo.Collection('StatusTypes');
 
 StatusTypes.schema = new SimpleSchema({
   label: {
     type: String,
-    label: 'Descriptive label for the status type.'
+    label: 'StatusType description'
   },
   hexColour:{
     type: String,
     regEx: /^#([A-Fa-f0-9]{6})$/,
-    label: 'Hex colour code that represents the status, on the map marker.'
+    label: 'Hex colour code that represents the status shown on the map marker'
   },
   relativeOrder: {
     type: Number,
@@ -24,7 +22,3 @@ StatusTypes.schema = new SimpleSchema({
 });
 
 StatusTypes.attachSchema(StatusTypes.schema);
-
-// Factory.define('document', StatusTypes, {
-//   title: () => faker.hacker.phrase(),
-// });

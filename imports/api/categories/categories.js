@@ -1,16 +1,12 @@
-// import faker from 'faker';
 import { Mongo } from 'meteor/mongo';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-// import { Factory } from 'meteor/dburles:factory';
-//
-import { ParentCategories } from '../parent-categories/parent-categories';
 
 export const Categories = new Mongo.Collection('Categories');
 
 Categories.schema = new SimpleSchema({
   name: {
     type: String,
-    label: 'The name of the category.',
+    label: 'Category name',
   },
   iconClass: {
     type: String,
@@ -19,7 +15,7 @@ Categories.schema = new SimpleSchema({
   parent: {
     type: String,
     regEx: SimpleSchema.RegEx.Id,
-    label: 'ID of ParentCategory.',
+    label: 'ParentCategory ID',
   },
   relativeOrder: {
     type: Number,
@@ -30,7 +26,3 @@ Categories.schema = new SimpleSchema({
 });
 
 Categories.attachSchema(Categories.schema);
-
-// Factory.define('document', Categories, {
-//   title: () => faker.hacker.phrase(),
-// });

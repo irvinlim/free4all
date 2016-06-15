@@ -4,42 +4,45 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 export const Giveaways = new Mongo.Collection('Giveaways');
 
 Giveaways.schema = new SimpleSchema({
+  // Data fields
   title: {
     type: String,
-    label: 'The title of the giveaway',
+    label: 'Giveaway title',
   },
   description: {
     type: String,
-    label: 'The description of the giveaway',
+    label: 'Giveaway description',
   },
   startDateTime: {
     type: Date,
-    label: "Start date/time of the giveaway.",
+    label: 'Giveaway start date/time',
   },
   endDateTime: {
     type: Date,
-    label: "End date/time of the giveaway.",
+    label: 'Giveaway end date/time',
   },
   location: {
     type: String,
-    label: 'Localized name of location (reverse geocoded/user input)'
+    label: 'English name of giveaway location'
   },
-  'coordinates': {
+  coordinates: {
     type: [Number],
     decimal: true,
     minCount: 2,
     maxCount: 2,
     label: 'Array of coordinates in MongoDB style \[Lng, Lat\]'
   },
-  'categoryId' :{
+  categoryId :{
     type: String,
-    label: 'ID of giveaway\'s category'
+    label: 'Category ID'
   },
-  'tags': {
+  tags: {
     type: [String],
-    label: 'The tags/hashtags for the giveaway',
+    label: 'Giveaway tags',
     optional: true
   },
+
+  // Meta fields
   userId: {
     type: String,
     regEx: SimpleSchema.RegEx.Id,
@@ -47,9 +50,33 @@ Giveaways.schema = new SimpleSchema({
   },
   deleted: {
     type: Boolean,
-    label: 'Local deletion of giveaway',
+    label: 'Locally deleted?',
     optional: true
-  }
+  },
+  createdAt: {
+    type: Date,
+    label: 'Published date/time',
+    autoValue: function() {
+      if (this.isInsert) {
+        return new Date();
+      } else if (this.isUpsert) {
+        return { $setOnInsert: new Date() };
+      } else {
+        this.unset();
+      }
+    }
+  },
+  updatedAt: {
+    type: Date,
+    label: 'Last edit date/time',
+    autoValue: function() {
+      if (this.isUpdate) {
+        return new Date();
+      }
+    },
+    denyInsert: true,
+    optional: true,
+  },
 });
 
 Giveaways.attachSchema(Giveaways.schema);
