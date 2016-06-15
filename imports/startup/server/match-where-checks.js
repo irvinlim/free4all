@@ -7,4 +7,3 @@ Match._id = Match.Where(function (id) {
   check(id, String);
   return /[a-zA-Z0-9]{17,17}/.test(id);
 });
-

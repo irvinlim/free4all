@@ -70,7 +70,7 @@ export default class LeafletMap extends React.Component {
 
         // Only add markers if the adding flag is not set.
         // These markers are new since page load.
-        if (!(ga._id in self.addingMarkers)) {
+        if (ga && !(ga._id in self.addingMarkers)) {
           self.map.updateMarker(ga._id, ga, clickHandler);
         }
       },
@@ -81,7 +81,8 @@ export default class LeafletMap extends React.Component {
     const self = this;
     this.map.registerEventHandler('moveend', function(event) {
       self.props.setMapCenter(this.getCenter());
-    });
+      self.props.setBounds(this.getBounds());
+    }).trigger();
   }
 
   componentDidUpdate(prevProps, prevState) {

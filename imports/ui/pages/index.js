@@ -12,6 +12,8 @@ import MapNearbyBox from '../components/map/map-nearby-box';
 import { GoToGeolocationButton } from '../components/map/go-to-geolocation-button'
 import InsertBtnDialog from '../components/map/insert-button'
 
+import * as Helper from '../../modules/helper';
+
 export class Index extends React.Component {
   constructor(props) {
     super(props);
@@ -21,9 +23,11 @@ export class Index extends React.Component {
       gaSelected: null,
       infoBoxState: 0,
       nearbyBoxState: 1,
-      mapCenter: { lat: 0, lng: 0 },
-      geolocation: { lat: 0, lng: 0 },
+      geolocation: null,
     };
+
+    this.mapCenter = new ReactiveVar( null );
+    this.mapBounds = new ReactiveVar( null );
   }
 
   selectGa(gaId) {
@@ -45,23 +49,29 @@ export class Index extends React.Component {
   componentWillMount() {
     const self = this;
     Tracker.autorun(function () {
-      // Re-subscribe every minute
-      Meteor.subscribe('giveaways-current-upcoming', Chronos.currentTime(Meteor.settings.public.refresh_interval || 60000));
+      const reactiveDateTime = Chronos.currentTime(Meteor.settings.public.refresh_interval || 60000);
+      const reactiveMapBounds = self.mapBounds.get();
+
+      // Re-subscribe every minute or if map center changed
+      if (reactiveDateTime && reactiveMapBounds) {
+        Meteor.subscribe('giveaways-on-screen', reactiveDateTime, Helper.mongoBounds(reactiveMapBounds));
+      }
     });
 
-    Tracker.autorun(function () {
-      // Get reactive geolocation
-      const latlng = Geolocation.latLng();
-      self.setState({ geolocation: latlng });
+    Tracker.autorun(function() {
+      const reactiveLatLng = Geolocation.latLng();
 
-      // Set initial map center, if empty
-      if (!self.state.mapCenter || !self.state.mapCenter.lat || !self.state.mapCenter.lng)
-        self.setState({ mapCenter: latlng });
-    });
+      // Set initial map center, if not geolocated yet
+      if (!self.state.geolocation)
+        self.mapCenter.set(reactiveLatLng);
+
+      // Set current location
+      self.setState({ geolocation: reactiveLatLng });
+    })
   }
 
   goToGeolocation() {
-    this.setState({ mapCenter: this.state.geolocation });
+    this.mapCenter.set(this.state.geolocation);
   }
 
   render() {
@@ -73,15 +83,24 @@ export class Index extends React.Component {
             <LeafletMap
               gaId={ this.state.gaSelected }
               infoBoxState={ this.state.infoBoxState }
-              mapCenter={ this.state.mapCenter }
-              geolocation={ this.state.geolocation }
+              mapCenter={ this.mapCenter.get() }
               markerOnClick={ gaId => this.selectGa(gaId) }
-              setMapCenter={ mapCenter => this.setState({ mapCenter: mapCenter }) }
+              setMapCenter={ mapCenter => this.mapCenter.set(mapCenter) }
+              setBounds={ bounds => this.mapBounds.set(bounds) }
             />
 
             <div id="map-boxes-container">
-              <MapInfoBox gaId={ this.state.gaSelected } boxState={ this.state.infoBoxState } setBoxState={ this.setInfoBoxState.bind(this) } />
-              <MapNearbyBox gaId={ this.state.gaSelected } boxState={ this.state.nearbyBoxState } setBoxState={ this.setNearbyBoxState.bind(this) } />
+              <MapInfoBox
+                gaId={ this.state.gaSelected }
+                boxState={ this.state.infoBoxState }
+                setBoxState={ this.setInfoBoxState.bind(this) }
+              />
+              <MapNearbyBox
+                gaId={ this.state.gaSelected }
+                boxState={ this.state.nearbyBoxState }
+                setBoxState={ this.setNearbyBoxState.bind(this) }
+                mapBounds={ this.mapBounds.get() }
+              />
             </div>
 
             <div id="map-floating-buttons" style={{ right: 20 + (this.state.nearbyBoxState > 0 ? $("#map-nearby-box").outerWidth() : 0) }}>

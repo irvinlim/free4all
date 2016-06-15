@@ -3,8 +3,9 @@ import FontIcon from 'material-ui/FontIcon';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import { Scrollbars } from 'react-custom-scrollbars';
 
-export default class MapNearbyBox extends React.Component {
+import NearbyGiveaways from '../../containers/giveaways/nearby-giveaways';
 
+export default class MapNearbyBox extends React.Component {
   positionBoxes() {
     $(window).resize(function() {
       $("#map-nearby-box").css('left', window.innerWidth - $("#map-nearby-box").outerWidth());
@@ -33,7 +34,7 @@ export default class MapNearbyBox extends React.Component {
         <Scrollbars autoHide style={{ height: "100%",  }}>
           <div className="map-sidebar-box">
             <h3>Nearby Giveaways</h3>
-            <p>Hi</p>
+            <NearbyGiveaways mapBounds={ this.props.mapBounds } />
           </div>
         </Scrollbars>
 

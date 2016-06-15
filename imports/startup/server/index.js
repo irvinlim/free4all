@@ -5,4 +5,5 @@ import './fixtures';
 import './match-where-checks';
 import './api';
 
-import './data-generate';
+// Uncomment to generate random data (disable for production)
+// import './data-generate';

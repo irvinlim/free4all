@@ -129,7 +129,11 @@ export default class LeafletMapObject {
   }
 
   registerEventHandler(event, callback) {
-    this.map.on(event, callback.bind(this.map));
+    const handler = this.map.on(event, callback.bind(this.map));
+
+    return {
+      trigger: () => this.map.fire(event),
+    };
   }
 
   panTo(latlng) {
