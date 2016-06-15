@@ -41,6 +41,11 @@ Giveaways.schema = new SimpleSchema({
     label: 'Giveaway tags',
     optional: true
   },
+  cloudinaryId: {
+    type: String,
+    label: 'Cloudinary public ID of image avatar',
+    optional: true,
+  },
 
   // Meta fields
   userId: {

@@ -1,11 +1,20 @@
 {
- "public": {
-   "MapBox": {
-     "mapID": "mapbox.streets",
-     "accessToken": "INSERT YOURS",
-     "initialCoords": [1.2993826, 103.7760318],
-     "initialZoom": 16
-   }
- },
- "private": {}
+  "public": {
+    "Cloudinary": {
+      "cloudName": "<CLOUD_NAME>"
+    },
+    "MapBox": {
+      "mapID": "mapbox.streets",
+      "accessToken": "<ACCESS_TOKEN>",
+      "initialCoords": [ 1.2993826, 103.7760318 ],
+      "initialZoom": 16
+    },
+    "refresh_interval": 60000
+  },
+  "private": {
+    "Cloudinary": {
+      "apiKey": "<API_KEY>",
+      "apiSecret": "<API_SECRET>"
+    }
+  }
 }

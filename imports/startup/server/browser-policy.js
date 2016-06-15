@@ -12,3 +12,6 @@ BrowserPolicy.content.allowImageOrigin( 'api.tiles.mapbox.com' );
 BrowserPolicy.content.allowStyleOrigin( 'fonts.googleapis.com' );
 BrowserPolicy.content.allowFontOrigin( 'fonts.gstatic.com' );
 BrowserPolicy.content.allowFontDataUrl();
+
+// Image CDN
+BrowserPolicy.content.allowImageOrigin( 'res.cloudinary.com' );
