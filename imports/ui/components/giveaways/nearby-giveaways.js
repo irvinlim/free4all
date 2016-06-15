@@ -27,7 +27,7 @@ const giveawayRow = (ga) => (
 export const NearbyGiveaways = (props) => (
   <List>
     <Subheader>
-      <h3 style={{ margin:"10px 0" }}>Nearby Giveaways</h3>
+      <h3 style={{ margin:"20px 0px 10px" }}>Nearby Giveaways</h3>
     </Subheader>
     { Helper.insertDividers(props.giveaways.map(giveawayRow)) }
   </List>
