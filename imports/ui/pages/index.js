@@ -20,7 +20,7 @@ export class Index extends React.Component {
       // Properties
       gaSelected: null,
       infoBoxState: 0,
-      nearbyBoxState: 0,
+      nearbyBoxState: 1,
       mapCenter: { lat: 0, lng: 0 },
       geolocation: { lat: 0, lng: 0 },
     };
