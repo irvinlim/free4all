@@ -24,9 +24,9 @@ export class Index extends React.Component {
       infoBoxState: 0,
       nearbyBoxState: 1,
       geolocation: null,
+      mapCenter: null,
     };
 
-    this.mapCenter = new ReactiveVar( null );
     this.mapBounds = new ReactiveVar( null );
   }
 
@@ -63,7 +63,7 @@ export class Index extends React.Component {
 
       // Set initial map center, if not geolocated yet
       if (!self.state.geolocation)
-        self.mapCenter.set(reactiveLatLng);
+        self.setState({ mapCenter: reactiveLatLng });
 
       // Set current location
       self.setState({ geolocation: reactiveLatLng });
@@ -71,7 +71,7 @@ export class Index extends React.Component {
   }
 
   goToGeolocation() {
-    this.mapCenter.set(this.state.geolocation);
+    this.setState({ mapCenter: this.state.geolocation });
   }
 
   render() {
@@ -83,9 +83,9 @@ export class Index extends React.Component {
             <LeafletMap
               gaId={ this.state.gaSelected }
               infoBoxState={ this.state.infoBoxState }
-              mapCenter={ this.mapCenter.get() }
+              mapCenter={ this.state.mapCenter }
               markerOnClick={ gaId => this.selectGa(gaId) }
-              setMapCenter={ mapCenter => this.mapCenter.set(mapCenter) }
+              setMapCenter={ mapCenter => this.state.mapCenter }
               setBounds={ bounds => this.mapBounds.set(bounds) }
             />
 
