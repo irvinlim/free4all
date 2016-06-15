@@ -4,6 +4,7 @@ import Divider from 'material-ui/Divider';
 import Avatar from 'material-ui/Avatar';
 import * as Colors from 'material-ui/styles/colors';
 
+import * as Helper from '../../../modules/helper';
 import * as NotificationsHelper from '../../../modules/notifications';
 
 const makeNotificationList = ({ notifications, handleNotificationTouchTap }) => {
@@ -34,14 +35,7 @@ const makeNotificationList = ({ notifications, handleNotificationTouchTap }) => 
     );
   });
 
-  const returnItems = [];
-  listItems.forEach((x,i,a) => {
-    returnItems.push(x);
-    if (i < a.length - 1)
-      returnItems.push(<Divider key={ "divider_" + i } insert={true} />);
-  });
-
-  return returnItems;
+  return Helper.insertDividers(listItems);
 };
 
 export default NotificationsList = (props) => (

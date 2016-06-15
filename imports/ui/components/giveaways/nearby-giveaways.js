@@ -2,7 +2,10 @@ import React from 'react';
 import { browserHistory } from 'react-router';
 import { List, ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
+import Subheader from 'material-ui/Subheader';
 import Avatar from 'material-ui/Avatar';
+
+import * as Helper from '../../../modules/helper';
 import * as Colors from 'material-ui/styles/colors';
 
 const giveawayRow = (ga) => (
@@ -23,6 +26,9 @@ const giveawayRow = (ga) => (
 
 export const NearbyGiveaways = (props) => (
   <List>
-    { props.giveaways.map(giveawayRow) }
+    <Subheader>
+      <h3 style={{ margin:"10px 0" }}>Nearby Giveaways</h3>
+    </Subheader>
+    { Helper.insertDividers(props.giveaways.map(giveawayRow)) }
   </List>
 );

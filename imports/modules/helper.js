@@ -1,5 +1,6 @@
 import React from 'react/react';
 import { Meteor } from 'meteor/meteor';
+import Divider from 'material-ui/Divider';
 const nl2brReact = require('react-nl2br');
 
 // Console
@@ -52,3 +53,15 @@ export const is_over = (start, end) => moment(end).isBefore(moment());
 export const is_equal_latlng = (latlng1, latlng2) => latlng1 && latlng2 && latlng1.lat && latlng1.lng && latlng2.lat && latlng2.lng && latlng1.lat == latlng2.lat && latlng1.lng == latlng2.lng;
 export const mongoCoords = (coords) => [coords.lng, coords.lat];
 export const mongoBounds = (mapBounds) => [mongoCoords(mapBounds._southWest), mongoCoords(mapBounds._northEast)];
+
+// ListItems
+export const insertDividers = (listItems) => {
+  const returnItems = [];
+  listItems.forEach((x,i,a) => {
+    returnItems.push(x);
+    if (i < a.length - 1)
+      returnItems.push(<Divider key={ "divider_" + i } insert={true} />);
+  });
+
+  return returnItems;
+}
