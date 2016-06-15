@@ -84,7 +84,7 @@ export class Index extends React.Component {
               <MapNearbyBox gaId={ this.state.gaSelected } boxState={ this.state.nearbyBoxState } setBoxState={ this.setNearbyBoxState.bind(this) } />
             </div>
 
-            <div id="map-floating-buttons">
+            <div id="map-floating-buttons" style={{ right: 30 + (this.state.nearbyBoxState > 0 ? 350 : 0) }}>
               <GoToGeolocationButton geolocationOnClick={ this.goToGeolocation.bind(this) } />
               <InsertBtnDialog />
             </div>
