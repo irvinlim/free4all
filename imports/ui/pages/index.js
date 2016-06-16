@@ -10,7 +10,7 @@ import MapInfoBox from '../components/map/map-info-box';
 import MapNearbyBox from '../components/map/map-nearby-box';
 
 import { GoToGeolocationButton } from '../components/map/go-to-geolocation-button'
-import InsertBtnDialog from '../components/map/insert-button'
+import InsertBtnDialog from '../components/map/insert-button-dialog'
 
 import * as Helper from '../../modules/helper';
 

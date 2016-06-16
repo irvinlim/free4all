@@ -23,22 +23,37 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import AllCategoriesList from '../../containers/all-categories-list.js' 
 import TagsInput from 'react-tagsinput';
 
-
+import { insertGiveaway } from '../../../api/giveaways/methods.js';
+import { insertStatus } from '../../../api/status-updates/methods.js';
+import { StatusTypes } from '../../../api/status-types/status-types.js'
 /**
 * Dialog content can be scrollable.
-*/
+*/  
 export default class InsertBtnDialog extends React.Component {
 
   constructor(props){
+
     super(props);
-    this.state = {
+    this.initialState = {
       canSubmit: false,
       open: false,
       tags: [],
-      title: "",
-      description: "",
-      
+      parentCatId: "",
+      childCatId: "",
+      childCatName:"",
+      title:"",
+      description:"",
+      startDate: null,
+      endDate: null,
+      startTime: null,
+      endTime: null,
+      lat:"",
+      lng:"",
+      location:"",
+      recurring: false,
     };
+
+    this.state=this.initialState;
 
     this.errorMessages ={
       wordsError: "Please only use letters",
@@ -63,6 +78,7 @@ export default class InsertBtnDialog extends React.Component {
       },
       titleStyle: {
         fontWeight: 100,
+        fontSize: "18px",
         textTransform: "uppercase",
         textAlign: "center",
         backgroundColor: "rgb(224, 224, 224)",
@@ -73,11 +89,15 @@ export default class InsertBtnDialog extends React.Component {
       submitStyle: {
         marginTop: 32,
       },
+      toggle: {
+        marginBottom: 16,
+      },
+
     };
     
     this.handleTagsChange = (tags) => {
       this.setState({tags})
-    }
+    };
     
     this.handleOpen = () => {
       this.setState({open: true});
@@ -88,44 +108,40 @@ export default class InsertBtnDialog extends React.Component {
     };
     
     this.enableButton = () => {
-      console.log("enable");
       this.setState({ canSubmit: true });
-    }
+    };
 
     this.disableButton = () => {
       this.setState({ canSubmit: false });
-    }
+    };
 
-    this.submitForm = (data) => {
-      console.log(data);
-      // TODO: add submit fn
-      // event.preventDefault();
-        var text = this.refs.resolution.value.trim();
-        
-        Resolutions.insert({
-            text: text,
-            complete: false,
-            createdAt: new Date()
-        });
-        
-        this.refs.resolution.value = "";
-      alert(JSON.stringify(data, null, 4));
-    }
-
-    this.notifyFormError = (data) => {
-      console.error('Form error:', data);
-    }
+    this.notifyFormError = (model) => {
+      console.error('Form error:', model);
+    };
     this.formatDate = (date) => {
       return moment(date).format("dddd, Do MMM YYYY");
     };
+
     this.handleTitle = (e)  => {
       this.setState({title: e.target.value});
     };
     this.handleDescription = (e)  => {
       this.setState({description: e.target.value});
     };
-    this.handleDatePicker = (e, date) => {
-      this.setState({date: date});
+    this.handleLocation = (e)  => {
+      this.setState({location: e.target.value});
+    };
+    this.handleLat = (e)  => {
+      this.setState({lat: e.target.value});
+    };
+    this.handleLng = (e)  => {
+      this.setState({lng: e.target.value});
+    };
+    this.handleStartDatePicker = (e, date) => {
+      this.setState({startDate: date});
+    };
+    this.handleEndDatePicker = (e, date) => {
+      this.setState({endDate: date});
     };
     this.handleChangeStartTimePicker12 = (e, date) => {
       this.setState({startTime: date});
@@ -133,11 +149,133 @@ export default class InsertBtnDialog extends React.Component {
     this.handleChangeEndTimePicker12 = (e, date) => {
       this.setState({endTime: date});
     };
-    
-  }
+    this.handleRecurring = (e,val) => {
+      this.setState({recurring: val});
+    }
 
+    this.setParentCat = (e, val) => {
+      this.setState({parentCatId: val.key});
+    };
+    this.setChildCat = (e,val) => {
+      this.setState({childCatId: e.currentTarget.getAttribute("id")});
+      this.setState({childCatName: e.currentTarget.getAttribute("name")});
+    };
+
+    this.submitForm = () => {
+      event.preventDefault();
+      this.setState({open: false});
+      console.log("state", this.state);
+      let data = this.state;
+      data.title = String(data.title);
+      data.description = String(data.description);
+      data.location = String(data.location);
+      data.lng = parseFloat(data.lng);
+      data.lat = parseFloat(data.lat);
+      data.userId = String(Meteor.userId());
+      console.log("state", data);
+
+      let startHr= data.startTime.getHours();
+      let startMin= data.startTime.getMinutes();
+      let startDateTime = moment(data.startDate).set('hour', startHr).set('minute',startMin).toDate();
+      let endHr= data.endTime.getHours();
+      let endMin= data.endTime.getMinutes();
+      // check if no end date or earlier than start datetime
+      let endDateTime = null;
+      if(data.endDate === null){
+        endDateTime = startDateTime;
+      } else {
+        endDateTime = moment(data.endDate).set('hour', endHr).set('minute',endMin).toDate();
+        endDateTime = endDateTime > startDateTime ? endDateTime : startDateTime;
+      } 
+      if(!data.recurring){
+        console.log("one giveaway")
+        const ga = {
+          title: data.title,
+          description: data.description,
+          startDateTime: startDateTime,
+          endDateTime: endDateTime,
+          location: data.location,
+          coordinates: [data.lng, data.lat],
+          categoryId: data.childCatId,
+          tags: data.tags,
+          userId: data.userId,
+        }
+
+        const gaId = insertGiveaway.call(ga, (error)=>{
+          if (error) {
+            Bert.alert(error.reason, 'Error adding Giveaway');
+          } else {
+            this.setState(this.initialState);
+            Bert.alert('Giveaway Added!', 'success');
+          }
+        })
+
+        let availableStatus = StatusTypes.findOne({relativeOrder: 10});
+        insertStatus.call({
+          giveawayId:   gaId,
+          statusTypeId: availableStatus._id,
+          date:         new Date(),
+          userId:       data.userId,
+        },(error)=>{
+          if (error) {
+            Bert.alert(error.reason, 'Error adding Giveaway');
+          } else {
+            this.state = this.initialState;
+            Bert.alert('Giveaway Added!', 'success');
+          }
+        })
+
+      }else{
+        // how many days recurring
+        let numberOfDays = moment(data.endDate).diff(moment(data.startDate),'days')+1;
+        console.log("Recurring", numberOfDays, "days");
+
+        for(let i = 0; i<numberOfDays; i++){
+
+          let newStartDateTime = moment(startDateTime).add(i, 'days').toDate();
+          let newEndDateTime = moment(data.startDate).set('hour', endHr).set('minute',endMin).add(i, 'days').toDate();
+
+          const ga = {
+            title: data.title,
+            description: data.description,
+            startDateTime: newStartDateTime,
+            endDateTime: newEndDateTime,
+            location: data.location,
+            coordinates: [data.lng, data.lat],
+            categoryId: data.childCatId,
+            tags: data.tags,
+            userId: data.userId,
+          }
+
+          const gaId = insertGiveaway.call(ga, (error)=>{
+            if (error) {
+              Bert.alert(error.reason, 'Error adding Giveaway');
+            } else {
+              this.setState(this.initialState);
+              Bert.alert('Giveaway Added!', 'success');
+            }
+          })
+
+          let availableStatus = StatusTypes.findOne({relativeOrder: 10});
+          insertStatus.call({
+            giveawayId:   gaId,
+            statusTypeId: availableStatus._id,
+            date:         new Date(),
+            userId:       data.userId,
+          },(error)=>{
+            if (error) {
+              Bert.alert(error.reason, 'Error adding Giveaway');
+            } else {
+              Bert.alert('Giveaway Added!', 'success');
+            }
+          })
+
+        }
+      } 
+    }
+}
 render() {
-  let { paperStyle, switchStyle, submitStyle, gridStyle, titleStyle, dialogStyle, actionsContainerStyle } = this.styles;
+  let { paperStyle, switchStyle, submitStyle, gridStyle, titleStyle, dialogStyle, actionsContainerStyle, toggle } = this.styles;
   let { wordsError, numericError, urlError } = this.errorMessages;
   const actionBtns = [
     // Submit Button 
@@ -188,10 +326,10 @@ render() {
                   <FormsyText 
                   name="title"
                   floatingLabelText="Title" 
-                  onChange={this.handleTitle} 
                   fullWidth={true} 
                   required
                   hintText="What is title of the giveaway?"
+                  onChange={this.handleTitle}
                   />
                 </Col>
               </Row>
@@ -204,32 +342,46 @@ render() {
                   fullWidth={true} 
                   rows={3} 
                   required
-                  onChange={this.handleDescription.bind(this)} 
                   hintText="What is the giveaway about?"
+                  onChange={this.handleDescription}
                   />
                 </Col>
               </Row>
+
               <Row>
                 <Col xs={12} md={6}>
                   <FormsyDate 
                     required
-                    name="date"
+                    name="dateStart"
                     formatDate={this.formatDate} 
-                    floatingLabelText="Date" 
+                    floatingLabelText="Start Date" 
                     autoOk={true}
                     minDate={new Date()}
+                    onChange={this.handleStartDatePicker}
+
                     />
                 </Col>
-                <Col xs={12} md={6} >
-                <FormsyText
-                  name="url"
-                  validations="isUrl"
-                  validationError={urlError}
-                  hintText="http://www.example.com"
-                  floatingLabelText="Link (Optional)"
-                  />
+                <Col xs={12} md={6}>
+                  <FormsyDate 
+                  name="dateEnd"
+                  formatDate={this.formatDate} 
+                  floatingLabelText="End Date (Optional)" 
+                  autoOk={true}
+                  minDate={new Date()}
+                  onChange={this.handleEndDatePicker}
+                  />                
                 </Col>
               </Row>
+              <Row>
+                <FormsyToggle
+                label="Recurring"
+                name= "Recurring"
+                style={this.toggle}
+                onChange={this.handleRecurring}
+                toggled={this.state.recurring}
+                />
+              </Row>
+
               <Row>
                 <Col xs={12} md={6} >
                   <FormsyTime 
@@ -238,6 +390,7 @@ render() {
                     pedantic={true} 
                     format="ampm" 
                     floatingLabelText="Start Time"
+                    onChange={this.handleChangeStartTimePicker12}
                     />
                 </Col>
                 <Col xs={12} md={6} >
@@ -247,6 +400,7 @@ render() {
                     pedantic={true} 
                     format="ampm" 
                     floatingLabelText="End Time"
+                    onChange={this.handleChangeEndTimePicker12}
                     />
                 </Col>
               </Row>
@@ -257,6 +411,8 @@ render() {
                   hintText="Where is it?"
                   fullWidth={true} 
                   floatingLabelText="Location"
+                  onChange={this.handleLocation}
+
                   />
                 </Col>
               </Row>
@@ -268,20 +424,26 @@ render() {
                     validationError={numericError}
                     hintText="Latitude"
                     floatingLabelText="Latitude"
+                  onChange={this.handleLat}
+
                     />
                 </Col>
                 <Col xs={12} md={6} >
                   <FormsyText
-                    name="lat"
+                    name="lng"
                     validations="isNumeric"
                     validationError={numericError}
                     hintText="Longitude"
                     floatingLabelText="Longitude"
+                  onChange={this.handleLng}
+
                     />
                 </Col>
               </Row>
               <Row>
-                 
+                <br />
+                Select Category {this.state.childCatName}<AllCategoriesList setParentCat={this.setParentCat} setChildCat={this.setChildCat}/>
+                <br />
               </Row>  
               <Row>
                 <TagsInput value={this.state.tags} onChange={this.handleTagsChange} />
@@ -294,7 +456,18 @@ render() {
               disabled={!this.state.canSubmit}
               />
               
-              
+              <Row>
+                <Col >
+                <FormsyText
+                name="url"
+                validations="isUrl"
+                validationError={urlError}
+                hintText="http://www.example.com"
+                floatingLabelText="Link (Optional)"
+                onChange={this.handleURL}
+                />
+                </Col>
+              </Row>
               
               
               
