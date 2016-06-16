@@ -13,30 +13,30 @@ const latMin = NUSLngLatBounds[1][1];
 const latMax = NUSLngLatBounds[0][1];
 let gaId, randomLng, randomLat, randomCat;
 
-// for (let i = 0; i < 10; i++) {
-//   randomLng = Math.random() * (lngMax - lngMin) + lngMin;
-//   randomLat = Math.random() * (latMax - latMin) + latMin;
-//   randomIDOffset = Math.floor(Math.random() * 500);
-//   randomCat = Categories.findOne({}, { skip: Math.floor(Math.random() * Categories.find().count()) })._id;
-//   randomStatus = StatusTypes.findOne({}, { skip: Math.floor(Math.random() * StatusTypes.find().count()) })._id;
-//   randomUser = Meteor.users.findOne({}, { skip: Math.floor(Math.random() * Meteor.users.find().count()) })._id;
+for (let i = 0; i < 10; i++) {
+  randomLng = Math.random() * (lngMax - lngMin) + lngMin;
+  randomLat = Math.random() * (latMax - latMin) + latMin;
+  randomIDOffset = Math.floor(Math.random() * 500);
+  randomCat = Categories.findOne({}, { skip: Math.floor(Math.random() * Categories.find().count()) })._id;
+  randomStatus = StatusTypes.findOne({}, { skip: Math.floor(Math.random() * StatusTypes.find().count()) })._id;
+  randomUser = Meteor.users.findOne({}, { skip: Math.floor(Math.random() * Meteor.users.find().count()) })._id;
 
-//   gaId = Giveaways.insert({
-//     title:          "Giveaway #" + parseInt(i + randomIDOffset),
-//     description:    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus efficitur semper ligula vitae finibus. Nam cursus scelerisque tincidunt.",
-//     startDateTime:  new Date(),
-//     endDateTime:    new Date(new Date().getTime() + 30 * 24 * 60 * 60 * 1000),
-//     location:       "Random Location",
-//     coordinates:    [ randomLng, randomLat ],
-//     categoryId:     randomCat,
-//     tags:           [ ],
-//     userId:         randomUser,
-//   });
+  gaId = Giveaways.insert({
+    title:          "Giveaway #" + parseInt(i + randomIDOffset),
+    description:    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus efficitur semper ligula vitae finibus. Nam cursus scelerisque tincidunt.",
+    startDateTime:  new Date(),
+    endDateTime:    new Date(new Date().getTime() + 30 * 24 * 60 * 60 * 1000),
+    location:       "Random Location",
+    coordinates:    [ randomLng, randomLat ],
+    categoryId:     randomCat,
+    tags:           [ ],
+    userId:         randomUser,
+  });
 
-//   StatusUpdates.insert({
-//     giveawayId:   gaId,
-//     statusTypeId: randomStatus,
-//     date:         new Date(),
-//     userId:       randomUser,
-//   });
-// }
+  StatusUpdates.insert({
+    giveawayId:   gaId,
+    statusTypeId: randomStatus,
+    date:         new Date(),
+    userId:       randomUser,
+  });
+}
