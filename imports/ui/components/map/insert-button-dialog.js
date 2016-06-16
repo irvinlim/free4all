@@ -23,15 +23,18 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import AllCategoriesList from '../../containers/all-categories-list.js' 
 import TagsInput from 'react-tagsinput';
 
+import { insertGiveaway } from '../../../api/giveaways/methods.js';
+import { insertStatus } from '../../../api/status-updates/methods.js';
 
 /**
 * Dialog content can be scrollable.
-*/
+*/  
 export default class InsertBtnDialog extends React.Component {
 
   constructor(props){
+
     super(props);
-    this.state = {
+    this.initialState = {
       canSubmit: false,
       open: false,
       tags: [],
@@ -48,6 +51,8 @@ export default class InsertBtnDialog extends React.Component {
       lng:"",
       location:"",
     };
+
+    this.state=this.initialState;
 
     this.errorMessages ={
       wordsError: "Please only use letters",
@@ -72,6 +77,7 @@ export default class InsertBtnDialog extends React.Component {
       },
       titleStyle: {
         fontWeight: 100,
+        fontSize: "18px",
         textTransform: "uppercase",
         textAlign: "center",
         backgroundColor: "rgb(224, 224, 224)",
@@ -86,7 +92,7 @@ export default class InsertBtnDialog extends React.Component {
     
     this.handleTagsChange = (tags) => {
       this.setState({tags})
-    }
+    };
     
     this.handleOpen = () => {
       this.setState({open: true});
@@ -98,21 +104,15 @@ export default class InsertBtnDialog extends React.Component {
     
     this.enableButton = () => {
       this.setState({ canSubmit: true });
-    }
+    };
 
     this.disableButton = () => {
       this.setState({ canSubmit: false });
-    }
+    };
 
-    this.submitForm = (model) => {
-      event.preventDefault();
-      console.log("state", this.state);
-
-      // Meteor.call("Add Giveaway", giveaway);
-    }
     this.notifyFormError = (model) => {
       console.error('Form error:', model);
-    }
+    };
     this.formatDate = (date) => {
       return moment(date).format("dddd, Do MMM YYYY");
     };
@@ -154,8 +154,101 @@ export default class InsertBtnDialog extends React.Component {
       this.setState({childCatName: e.currentTarget.getAttribute("name")});
     };
 
-  }
+    this.submitForm = () => {
+      event.preventDefault();
+      this.setState({open: false});
+      console.log("state", this.state);
+      let data = this.state;
+      data.title = String(data.title);
+      data.description = String(data.description);
+      data.location = String(data.location);
+      data.lng = parseFloat(data.lng);
+      data.lat = parseFloat(data.lat);
+      data.userId = String(Meteor.userId());
+      console.log("state", this.state);
 
+      if(data.endDate===null){
+        const startHr= data.startTime.getHours();
+        const startMin= data.startTime.getMinutes();
+        const startDateTime = moment(data.startDate).set('hour', startHr).set('minute',startMin).toDate();
+        const endHr= data.endTime.getHours();
+        const endMin= data.endTime.getMinutes();
+        let endDateTime = moment(data.startDate).set('hour', endHr).set('minute',endMin).toDate();
+        endDateTime = endDateTime > startDateTime ? endDateTime : startDateTime;
+
+        const ga = {
+          title: data.title,
+          description: data.description,
+          startDateTime: startDateTime,
+          endDateTime: endDateTime,
+          location: data.location,
+          coordinates: [data.lng, data.lat],
+          categoryId: data.childCatId,
+          tags: data.tags,
+          userId: data.userId,
+        }
+        console.log("ga", ga);
+
+        const gaId = insertGiveaway.call(ga, (error)=>{
+          if (error) {
+            Bert.alert(error.reason, 'Error adding Giveaway');
+          } else {
+            this.state = this.initialState;
+            Bert.alert('Document added!', 'Added Giveaway');
+          }
+        })
+
+        console.log("gaId", gaId);
+        insertStatus.call({
+          giveawayId:   gaId,
+          statusTypeId: "AwfAiiyjeJPHXorz5",
+          date:         new Date(),
+          userId:       data.userId,
+        },(error)=>{
+          if (error) {
+            Bert.alert(error.reason, 'Error adding Giveaway');
+          } else {
+            this.state = this.initialState;
+            Bert.alert('Document added!', 'Added Giveaway');
+          }
+        })
+
+      }else{
+        // let numberOfDays = moment(data.endDate).diff(moment(data.startDate),'days')+1;
+        // for(let i = 0; i<numberOfDays; i++){
+        //   const startHr= data.startTime.getHours();
+        // const startMin= data.startTime.getMinutes();
+        // const startDateTime = moment(data.startDate).set('hour', startHr).set('minute',startMin).toDate();
+        // const endHr= data.endTime.getHours();
+        // const endMin= data.endTime.getMinutes();
+        // const endDateTime = moment(data.startDate).set('hour', endHr).set('minute',endMin).toDate();
+
+        // const ga = {
+        //   title: String(data.title),
+        //   description: String(data.description),
+        //   startDateTime: startDateTime,
+        //   endDateTime: endDateTime,
+        //   location: data.location,
+        //   coordinates: [parseFloat(data.lng),parseFloat(data.lat)],
+        //   categoryId: data.childCatId,
+        //   tags: data.tags,
+        //   userId: String(Meteor.userId)
+        // }
+
+        // const gaId = insertGiveaway.call(ga, (error)=>{
+        //   if (error) {
+        //     Bert.alert(error.reason, 'Error adding Giveaway');
+        //   } else {
+        //     this.state = this.initialState;
+        //     Bert.alert('Document added!', 'Added Giveaway');
+        //   }
+
+        // })
+
+      } 
+      
+    }
+  }
 render() {
   let { paperStyle, switchStyle, submitStyle, gridStyle, titleStyle, dialogStyle, actionsContainerStyle } = this.styles;
   let { wordsError, numericError, urlError } = this.errorMessages;
