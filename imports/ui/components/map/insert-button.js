@@ -35,9 +35,18 @@ export default class InsertBtnDialog extends React.Component {
       canSubmit: false,
       open: false,
       tags: [],
-      title: "",
-      description: "",
-      
+      parentCatId: "",
+      childCatId: "",
+      childCatName:"",
+      title:"",
+      description:"",
+      startDate: null,
+      endDate: null,
+      startTime: null,
+      endTime: null,
+      lat:"",
+      lng:"",
+      location:"",
     };
 
     this.errorMessages ={
@@ -88,7 +97,6 @@ export default class InsertBtnDialog extends React.Component {
     };
     
     this.enableButton = () => {
-      console.log("enable");
       this.setState({ canSubmit: true });
     }
 
@@ -96,36 +104,39 @@ export default class InsertBtnDialog extends React.Component {
       this.setState({ canSubmit: false });
     }
 
-    this.submitForm = (data) => {
-      console.log(data);
-      // TODO: add submit fn
-      // event.preventDefault();
-        var text = this.refs.resolution.value.trim();
-        
-        Resolutions.insert({
-            text: text,
-            complete: false,
-            createdAt: new Date()
-        });
-        
-        this.refs.resolution.value = "";
-      alert(JSON.stringify(data, null, 4));
-    }
+    this.submitForm = (model) => {
+      event.preventDefault();
+      console.log("state", this.state);
 
-    this.notifyFormError = (data) => {
-      console.error('Form error:', data);
+      // Meteor.call("Add Giveaway", giveaway);
+    }
+    this.notifyFormError = (model) => {
+      console.error('Form error:', model);
     }
     this.formatDate = (date) => {
       return moment(date).format("dddd, Do MMM YYYY");
     };
+
     this.handleTitle = (e)  => {
       this.setState({title: e.target.value});
     };
     this.handleDescription = (e)  => {
       this.setState({description: e.target.value});
     };
-    this.handleDatePicker = (e, date) => {
-      this.setState({date: date});
+    this.handleLocation = (e)  => {
+      this.setState({location: e.target.value});
+    };
+    this.handleLat = (e)  => {
+      this.setState({lat: e.target.value});
+    };
+    this.handleLng = (e)  => {
+      this.setState({lng: e.target.value});
+    };
+    this.handleStartDatePicker = (e, date) => {
+      this.setState({startDate: date});
+    };
+    this.handleEndDatePicker = (e, date) => {
+      this.setState({endDate: date});
     };
     this.handleChangeStartTimePicker12 = (e, date) => {
       this.setState({startTime: date});
@@ -133,7 +144,16 @@ export default class InsertBtnDialog extends React.Component {
     this.handleChangeEndTimePicker12 = (e, date) => {
       this.setState({endTime: date});
     };
-    
+
+
+    this.setParentCat = (e, val) => {
+      this.setState({parentCatId: val.key});
+    };
+    this.setChildCat = (e,val) => {
+      this.setState({childCatId: e.currentTarget.getAttribute("id")});
+      this.setState({childCatName: e.currentTarget.getAttribute("name")});
+    };
+
   }
 
 render() {
@@ -188,10 +208,10 @@ render() {
                   <FormsyText 
                   name="title"
                   floatingLabelText="Title" 
-                  onChange={this.handleTitle} 
                   fullWidth={true} 
                   required
                   hintText="What is title of the giveaway?"
+                  onChange={this.handleTitle}
                   />
                 </Col>
               </Row>
@@ -204,30 +224,34 @@ render() {
                   fullWidth={true} 
                   rows={3} 
                   required
-                  onChange={this.handleDescription.bind(this)} 
                   hintText="What is the giveaway about?"
+                  onChange={this.handleDescription}
                   />
                 </Col>
               </Row>
+
               <Row>
                 <Col xs={12} md={6}>
                   <FormsyDate 
                     required
-                    name="date"
+                    name="dateStart"
                     formatDate={this.formatDate} 
-                    floatingLabelText="Date" 
+                    floatingLabelText="Start Date" 
                     autoOk={true}
                     minDate={new Date()}
+                    onChange={this.handleStartDatePicker}
+
                     />
                 </Col>
-                <Col xs={12} md={6} >
-                <FormsyText
-                  name="url"
-                  validations="isUrl"
-                  validationError={urlError}
-                  hintText="http://www.example.com"
-                  floatingLabelText="Link (Optional)"
-                  />
+                <Col xs={12} md={6}>
+                  <FormsyDate 
+                  name="dateEnd"
+                  formatDate={this.formatDate} 
+                  floatingLabelText="End Date (Optional - Recurring)" 
+                  autoOk={true}
+                  minDate={new Date()}
+                  onChange={this.handleEndDatePicker}
+                  />                
                 </Col>
               </Row>
               <Row>
@@ -238,6 +262,7 @@ render() {
                     pedantic={true} 
                     format="ampm" 
                     floatingLabelText="Start Time"
+                    onChange={this.handleChangeStartTimePicker12}
                     />
                 </Col>
                 <Col xs={12} md={6} >
@@ -247,6 +272,7 @@ render() {
                     pedantic={true} 
                     format="ampm" 
                     floatingLabelText="End Time"
+                    onChange={this.handleChangeEndTimePicker12}
                     />
                 </Col>
               </Row>
@@ -257,6 +283,8 @@ render() {
                   hintText="Where is it?"
                   fullWidth={true} 
                   floatingLabelText="Location"
+                  onChange={this.handleLocation}
+
                   />
                 </Col>
               </Row>
@@ -268,20 +296,26 @@ render() {
                     validationError={numericError}
                     hintText="Latitude"
                     floatingLabelText="Latitude"
+                  onChange={this.handleLat}
+
                     />
                 </Col>
                 <Col xs={12} md={6} >
                   <FormsyText
-                    name="lat"
+                    name="lng"
                     validations="isNumeric"
                     validationError={numericError}
                     hintText="Longitude"
                     floatingLabelText="Longitude"
+                  onChange={this.handleLng}
+
                     />
                 </Col>
               </Row>
               <Row>
-                 
+                <br />
+                Select Category {this.state.childCatName}<AllCategoriesList setParentCat={this.setParentCat} setChildCat={this.setChildCat}/>
+                <br />
               </Row>  
               <Row>
                 <TagsInput value={this.state.tags} onChange={this.handleTagsChange} />
@@ -294,7 +328,18 @@ render() {
               disabled={!this.state.canSubmit}
               />
               
-              
+              <Row>
+                <Col >
+                <FormsyText
+                name="url"
+                validations="isUrl"
+                validationError={urlError}
+                hintText="http://www.example.com"
+                floatingLabelText="Link (Optional)"
+                onChange={this.handleURL}
+                />
+                </Col>
+              </Row>
               
               
               

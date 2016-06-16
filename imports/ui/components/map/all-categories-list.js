@@ -1,5 +1,6 @@
 import React from 'react';
 import { ListGroup, Alert } from 'react-bootstrap';
+import Menu from 'material-ui/Menu';
 import IconMenu from 'material-ui/IconMenu';
 import IconButton from 'material-ui/IconButton';
 import MenuItem from 'material-ui/MenuItem';
@@ -7,28 +8,34 @@ import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import Download from 'material-ui/svg-icons/file/file-download';
 
-export const AllCategoriesList = ({ allCategories }) => (  
-  allCategories.length > 0 ?
+export const AllCategoriesList = ({ allCategories, props}) => (  
+  allCategories[0].length > 0 ?
+  
     <IconMenu
-      iconButtonElement={<IconButton>Select Category<MoreVertIcon /></IconButton>}
+      iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
       anchorOrigin={{horizontal: 'left', vertical: 'top'}}
       targetOrigin={{horizontal: 'left', vertical: 'top'}}
+      onItemTouchTap={props.setParentCat}
       >
-       {allCategories.map((parentCat) => (
+
+      {/* allCat[0] - parent, allCat[1] - child*/}
+       {allCategories[0].map((parentCat) => (
             <MenuItem
             key={parentCat._id}
             primaryText={parentCat.name}
             rightIcon={<ArrowDropRight />}
             menuItems={
-              parentCat.childCategories.map((cat) => (
+              allCategories[1]
+              .filter((child)=>{return child.parent === parentCat._id})
+              .map((cat) => (
                   <MenuItem 
-                    key={cat.name}
-                    value={{
-                      parentId: parentCat._id,
-                      child: cat.name
-                    }}
+                    name={cat.name}
+                    value={cat._id}
                     primaryText={cat.name} 
-                    leftIcon={<Download />} 
+                    leftIcon={<Download />}
+                    onClick={props.setChildCat}
+                    id={cat._id}
+
                     />
                 ))
             }
@@ -36,7 +43,7 @@ export const AllCategoriesList = ({ allCategories }) => (
         ))}
       </IconMenu> :
       <IconMenu
-        iconButtonElement={<IconButton><MoreVertIcon />Select Category</IconButton>}
+        iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
         anchorOrigin={{horizontal: 'left', vertical: 'top'}}
         targetOrigin={{horizontal: 'left', vertical: 'top'}}
         >

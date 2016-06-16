@@ -5,5 +5,5 @@ import { Categories } from '../../categories/categories';
 Meteor.publish('parent-categories', () => ParentCategories.find());
 
 Meteor.publish('all-categories', () => {
-  return [ParentCategories.find(), Categories.find()];
+	return [ParentCategories.find(), Categories.find()];
 })
