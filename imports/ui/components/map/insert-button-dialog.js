@@ -25,7 +25,7 @@ import TagsInput from 'react-tagsinput';
 
 import { insertGiveaway } from '../../../api/giveaways/methods.js';
 import { insertStatus } from '../../../api/status-updates/methods.js';
-
+import { StatusTypes } from '../../../api/status-types/status-types.js'
 /**
 * Dialog content can be scrollable.
 */  
@@ -50,6 +50,7 @@ export default class InsertBtnDialog extends React.Component {
       lat:"",
       lng:"",
       location:"",
+      recurring: false,
     };
 
     this.state=this.initialState;
@@ -88,6 +89,10 @@ export default class InsertBtnDialog extends React.Component {
       submitStyle: {
         marginTop: 32,
       },
+      toggle: {
+        marginBottom: 16,
+      },
+
     };
     
     this.handleTagsChange = (tags) => {
@@ -144,7 +149,9 @@ export default class InsertBtnDialog extends React.Component {
     this.handleChangeEndTimePicker12 = (e, date) => {
       this.setState({endTime: date});
     };
-
+    this.handleRecurring = (e,val) => {
+      this.setState({recurring: val});
+    }
 
     this.setParentCat = (e, val) => {
       this.setState({parentCatId: val.key});
@@ -165,17 +172,23 @@ export default class InsertBtnDialog extends React.Component {
       data.lng = parseFloat(data.lng);
       data.lat = parseFloat(data.lat);
       data.userId = String(Meteor.userId());
-      console.log("state", this.state);
+      console.log("state", data);
 
-      if(data.endDate===null){
-        const startHr= data.startTime.getHours();
-        const startMin= data.startTime.getMinutes();
-        const startDateTime = moment(data.startDate).set('hour', startHr).set('minute',startMin).toDate();
-        const endHr= data.endTime.getHours();
-        const endMin= data.endTime.getMinutes();
-        let endDateTime = moment(data.startDate).set('hour', endHr).set('minute',endMin).toDate();
+      let startHr= data.startTime.getHours();
+      let startMin= data.startTime.getMinutes();
+      let startDateTime = moment(data.startDate).set('hour', startHr).set('minute',startMin).toDate();
+      let endHr= data.endTime.getHours();
+      let endMin= data.endTime.getMinutes();
+      // check if no end date or earlier than start datetime
+      let endDateTime = null;
+      if(data.endDate === null){
+        endDateTime = startDateTime;
+      } else {
+        endDateTime = moment(data.endDate).set('hour', endHr).set('minute',endMin).toDate();
         endDateTime = endDateTime > startDateTime ? endDateTime : startDateTime;
-
+      } 
+      if(!data.recurring){
+        console.log("one giveaway")
         const ga = {
           title: data.title,
           description: data.description,
@@ -187,21 +200,20 @@ export default class InsertBtnDialog extends React.Component {
           tags: data.tags,
           userId: data.userId,
         }
-        console.log("ga", ga);
 
         const gaId = insertGiveaway.call(ga, (error)=>{
           if (error) {
             Bert.alert(error.reason, 'Error adding Giveaway');
           } else {
-            this.state = this.initialState;
-            Bert.alert('Document added!', 'Added Giveaway');
+            this.setState(this.initialState);
+            Bert.alert('Giveaway Added!', 'success');
           }
         })
 
-        console.log("gaId", gaId);
+        let availableStatus = StatusTypes.findOne({relativeOrder: 10});
         insertStatus.call({
           giveawayId:   gaId,
-          statusTypeId: "AwfAiiyjeJPHXorz5",
+          statusTypeId: availableStatus._id,
           date:         new Date(),
           userId:       data.userId,
         },(error)=>{
@@ -209,48 +221,61 @@ export default class InsertBtnDialog extends React.Component {
             Bert.alert(error.reason, 'Error adding Giveaway');
           } else {
             this.state = this.initialState;
-            Bert.alert('Document added!', 'Added Giveaway');
+            Bert.alert('Giveaway Added!', 'success');
           }
         })
 
       }else{
-        // let numberOfDays = moment(data.endDate).diff(moment(data.startDate),'days')+1;
-        // for(let i = 0; i<numberOfDays; i++){
-        //   const startHr= data.startTime.getHours();
-        // const startMin= data.startTime.getMinutes();
-        // const startDateTime = moment(data.startDate).set('hour', startHr).set('minute',startMin).toDate();
-        // const endHr= data.endTime.getHours();
-        // const endMin= data.endTime.getMinutes();
-        // const endDateTime = moment(data.startDate).set('hour', endHr).set('minute',endMin).toDate();
+        // how many days recurring
+        let numberOfDays = moment(data.endDate).diff(moment(data.startDate),'days')+1;
+        console.log("Recurring", numberOfDays, "days");
 
-        // const ga = {
-        //   title: String(data.title),
-        //   description: String(data.description),
-        //   startDateTime: startDateTime,
-        //   endDateTime: endDateTime,
-        //   location: data.location,
-        //   coordinates: [parseFloat(data.lng),parseFloat(data.lat)],
-        //   categoryId: data.childCatId,
-        //   tags: data.tags,
-        //   userId: String(Meteor.userId)
-        // }
+        for(let i = 0; i<numberOfDays; i++){
 
-        // const gaId = insertGiveaway.call(ga, (error)=>{
-        //   if (error) {
-        //     Bert.alert(error.reason, 'Error adding Giveaway');
-        //   } else {
-        //     this.state = this.initialState;
-        //     Bert.alert('Document added!', 'Added Giveaway');
-        //   }
+          let newStartDateTime = moment(startDateTime).add(i, 'days').toDate();
+          let newEndDateTime = moment(data.startDate).set('hour', endHr).set('minute',endMin).add(i, 'days').toDate();
 
-        // })
+          const ga = {
+            title: data.title,
+            description: data.description,
+            startDateTime: newStartDateTime,
+            endDateTime: newEndDateTime,
+            location: data.location,
+            coordinates: [data.lng, data.lat],
+            categoryId: data.childCatId,
+            tags: data.tags,
+            userId: data.userId,
+          }
 
+          const gaId = insertGiveaway.call(ga, (error)=>{
+            if (error) {
+              Bert.alert(error.reason, 'Error adding Giveaway');
+            } else {
+              this.setState(this.initialState);
+              Bert.alert('Giveaway Added!', 'success');
+            }
+          })
+
+          let availableStatus = StatusTypes.findOne({relativeOrder: 10});
+          insertStatus.call({
+            giveawayId:   gaId,
+            statusTypeId: availableStatus._id,
+            date:         new Date(),
+            userId:       data.userId,
+          },(error)=>{
+            if (error) {
+              Bert.alert(error.reason, 'Error adding Giveaway');
+            } else {
+              Bert.alert('Giveaway Added!', 'success');
+            }
+          })
+
+        }
       } 
-      
     }
-  }
+}
 render() {
-  let { paperStyle, switchStyle, submitStyle, gridStyle, titleStyle, dialogStyle, actionsContainerStyle } = this.styles;
+  let { paperStyle, switchStyle, submitStyle, gridStyle, titleStyle, dialogStyle, actionsContainerStyle, toggle } = this.styles;
   let { wordsError, numericError, urlError } = this.errorMessages;
   const actionBtns = [
     // Submit Button 
@@ -340,13 +365,23 @@ render() {
                   <FormsyDate 
                   name="dateEnd"
                   formatDate={this.formatDate} 
-                  floatingLabelText="End Date (Optional - Recurring)" 
+                  floatingLabelText="End Date (Optional)" 
                   autoOk={true}
                   minDate={new Date()}
                   onChange={this.handleEndDatePicker}
                   />                
                 </Col>
               </Row>
+              <Row>
+                <FormsyToggle
+                label="Recurring"
+                name= "Recurring"
+                style={this.toggle}
+                onChange={this.handleRecurring}
+                toggled={this.state.recurring}
+                />
+              </Row>
+
               <Row>
                 <Col xs={12} md={6} >
                   <FormsyTime 
