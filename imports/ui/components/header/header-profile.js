@@ -54,7 +54,7 @@ export class HeaderProfile extends React.Component {
     return (
       <div id="header-profile">
         <IconButton onTouchTap={ this.openPopover.bind(this) }>
-          <Avatar src={ $.cloudinary.url("sample", { width: 64, height: 64, crop: 'fill' }) } />
+          <Avatar src={ $.cloudinary.url("sample", { width: 64, height: 64, crop: 'fill', fetch_format: "auto" }) } />
         </IconButton>
 
         <Popover

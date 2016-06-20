@@ -68,7 +68,7 @@
   }
 
   // Close/expand behaviour
-  #map-info-box.state-0 { right: calc(100% + 50px) !important; } // Hide to left, hide all the way
+  #map-info-box.state-0 { right: calc(100% + 50px) !important; opacity: 0; } // Hide to left, hide all the way
   #map-nearby-box.state-0 { // Hide to right
     left: calc(100% - 25px) !important;
     > div:not(.expand-button-nearbybox) { opacity: 0; }
