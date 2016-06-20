@@ -22,7 +22,7 @@ const getContent = ({ giveaway, latestStatus, latestStatusType, category, parent
   } else {
     return (
       <div>
-        <h3>{ giveaway.title }</h3>
+        <h3 className="single-line">{ giveaway.title }</h3>
         <p className="category">{ parentCategory.name } &mdash; { category.name }</p>
         <p className="description">{ giveaway.description ? Helper.nl2br(giveaway.description) : (<em>No description</em>) }</p>
         { iconRow("date_range", Helper.compact_date_range(giveaway.startDateTime, giveaway.endDateTime)) }
