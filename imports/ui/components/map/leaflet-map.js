@@ -4,7 +4,7 @@ import { Giveaways } from '../../../api/giveaways/giveaways';
 import { StatusUpdates } from '../../../api/status-updates/status-updates';
 import LeafletMapObject from './leaflet-map-object';
 
-import * as Helper from '../../../modules/helper';
+import * as LatLngHelper from '../../../util/latlng';
 
 export default class LeafletMap extends React.Component {
   constructor(props) {
@@ -94,11 +94,11 @@ export default class LeafletMap extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     // Set new zoom level & map center, if either is changed.
     if (this.props.mapZoom && this.props.mapCenter) {
-      if (this.props.mapZoom != prevProps.mapZoom && !Helper.is_equal_latlng(this.props.mapCenter, prevProps.mapCenter))
+      if (this.props.mapZoom != prevProps.mapZoom && !LatLngHelper.is_equal_latlng(this.props.mapCenter, prevProps.mapCenter))
         this.mapObject.map.setView(this.props.mapCenter, this.props.mapZoom);
       else if (this.props.mapZoom != prevProps.mapZoom)
         this.mapObject.map.setZoom(this.props.mapZoom);
-      else if (!Helper.is_equal_latlng(this.props.mapCenter, prevProps.mapCenter))
+      else if (!LatLngHelper.is_equal_latlng(this.props.mapCenter, prevProps.mapCenter))
         this.mapObject.map.panTo(this.props.mapCenter);
     }
 

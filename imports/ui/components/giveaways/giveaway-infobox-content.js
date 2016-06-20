@@ -1,7 +1,7 @@
 import React from 'react';
 import FontIcon from 'material-ui/FontIcon';
 
-import * as Helper from '../../../modules/helper';
+import * as Helper from '../../../util/helper';
 
 const iconRow = (icon, content) => {
   if (content && content.length)

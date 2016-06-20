@@ -4,8 +4,8 @@ import Divider from 'material-ui/Divider';
 import Avatar from 'material-ui/Avatar';
 import * as Colors from 'material-ui/styles/colors';
 
-import * as Helper from '../../../modules/helper';
-import * as NotificationsHelper from '../../../modules/notifications';
+import * as Helper from '../../../util/helper';
+import * as NotificationsHelper from '../../../util/notifications';
 
 const makeNotificationList = ({ notifications, handleNotificationTouchTap }) => {
   if (!notifications || !notifications.length)

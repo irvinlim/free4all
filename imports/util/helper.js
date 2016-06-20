@@ -16,6 +16,33 @@ export const sanitizeStringSlug = (s) => s.replace(/[^a-zA-Z0-9 -_]/g, "");
 export const sanitizeHexColour = (s) => s.replace(/[^a-fA-F0-9#]/g, "");
 export const nl2br = s => nl2brReact(s);
 
+// Objects
+
+/**
+ * Checks if a deeply nested property exists.
+ * Takes in an array of properties, where each subsequent element is a property of the previous element.
+ *
+ * For example,
+ *     propExistsDeep(object, ['property', 'really', 'deep', 'inside'])
+ * returns true if
+ *     object.property.really.deep.inside exists.
+ */
+export const propExistsDeep = function(parent, arrayOfChildProps) {
+  if (!parent)
+    return false;
+
+  if (!arrayOfChildProps)
+    return true;
+
+  let object = parent;
+  return arrayOfChildProps.every(function(prop) {
+    if (!object.hasOwnProperty(prop))
+      return false;
+    object = object[prop];
+    return true;
+  });
+}
+
 // Dates
 export const compact_date_range = (start, end) => {
   moment.updateLocale('en', {
@@ -48,12 +75,6 @@ export const compact_date_range = (start, end) => {
 export const is_ongoing = (start, end) => moment(start).isBefore(moment()) && moment(end).isAfter(moment());
 export const is_havent_start = (start, end) => moment(start).isAfter(moment());
 export const is_over = (start, end) => moment(end).isBefore(moment());
-
-// LatLng
-export const is_equal_latlng = (latlng1, latlng2) => latlng1 && latlng2 && latlng1.lat && latlng1.lng && latlng2.lat && latlng2.lng && latlng1.lat == latlng2.lat && latlng1.lng == latlng2.lng;
-export const mongoCoords = (coords) => [coords.lng, coords.lat];
-export const mongoBounds = (mapBounds) => [mongoCoords(mapBounds._southWest), mongoCoords(mapBounds._northEast)];
-export const lnglat2latlng = (lnglat) => [lnglat[1], lnglat[0]];
 
 // ListItems
 export const insertDividers = (listItems) => {

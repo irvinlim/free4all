@@ -7,6 +7,8 @@ import Popover from 'material-ui/Popover';
 import { List, ListItem } from 'material-ui/List';
 import * as Colors from 'material-ui/styles/colors';
 
+import * as Helper from '../../../util/helper';
+import * as UsersHelper from '../../../util/users';
 import { getHandleLogout } from '../../../modules/logout';
 
 export class HeaderProfile extends React.Component {
@@ -50,11 +52,13 @@ export class HeaderProfile extends React.Component {
 
   showProfileButton(user) {
     const gotourl = (url) => () => browserHistory.push(url);
+    const avatarId = Helper.propExistsDeep(this.props.user, ['profile', 'avatarId']) ? this.props.user.profile.avatarId : null;
 
     return (
       <div id="header-profile">
         <IconButton onTouchTap={ this.openPopover.bind(this) }>
-          <Avatar src={ $.cloudinary.url("sample", { width: 64, height: 64, crop: 'fill', fetch_format: "auto" }) } />
+          { avatarId ? <Avatar src={ $.cloudinary.url(avatarId, { width: 64, height: 64, crop: 'fill', fetch_format: "auto" }) } />
+                     : <Avatar backgroundColor="#097381">{ UsersHelper.getFirstInitial(this.props.user) }</Avatar> }
         </IconButton>
 
         <Popover

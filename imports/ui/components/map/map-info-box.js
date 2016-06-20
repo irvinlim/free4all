@@ -2,7 +2,6 @@ import React from 'react';
 import FontIcon from 'material-ui/FontIcon';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import { Scrollbars } from 'react-custom-scrollbars';
-import * as Helper from '../../../modules/helper';
 
 import GiveawayInfoboxContent from '../../containers/giveaways/giveaway-infobox-content';
 import GiveawayRatings from '../../containers/giveaways/giveaway-ratings';

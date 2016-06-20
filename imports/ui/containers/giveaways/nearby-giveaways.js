@@ -4,7 +4,6 @@ import { NearbyGiveaways } from '../../components/giveaways/nearby-giveaways';
 import { Loading } from '../../components/loading';
 
 import { Giveaways } from '../../../api/giveaways/giveaways';
-import * as Helper from '../../../modules/helper';
 
 const composer = (props, onData) => {
   const giveaways = Giveaways.find({}, {

@@ -4,7 +4,7 @@ import Divider from 'material-ui/Divider';
 import Subheader from 'material-ui/Subheader';
 import Avatar from 'material-ui/Avatar';
 
-import * as Helper from '../../../modules/helper';
+import * as Helper from '../../../util/helper';
 import * as Colors from 'material-ui/styles/colors';
 
 const giveawayRow = (touchTapHandler) => (ga) => (

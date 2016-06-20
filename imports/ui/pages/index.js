@@ -12,7 +12,7 @@ import MapNearbyBox from '../components/map/map-nearby-box';
 import { GoToGeolocationButton } from '../components/map/go-to-geolocation-button'
 import InsertBtnDialog from '../components/map/insert-button-dialog'
 
-import * as Helper from '../../modules/helper';
+import * as LatLngHelper from '../../util/latlng';
 
 export class Index extends React.Component {
   constructor(props) {
@@ -56,7 +56,7 @@ export class Index extends React.Component {
 
       // Re-subscribe every minute or if map center changed
       if (reactiveDateTime && reactiveMapBounds) {
-        Meteor.subscribe('giveaways-on-screen', reactiveDateTime, Helper.mongoBounds(reactiveMapBounds));
+        Meteor.subscribe('giveaways-on-screen', reactiveDateTime, LatLngHelper.mongoBounds(reactiveMapBounds));
       }
     });
 
@@ -79,7 +79,7 @@ export class Index extends React.Component {
   render() {
     const clickNearbyGa = ga => event => {
       this.selectGa(ga._id);
-      this.setState({ mapCenter: Helper.lnglat2latlng(ga.coordinates) });
+      this.setState({ mapCenter: LatLngHelper.lnglat2latlng(ga.coordinates) });
       this.setState({ mapZoom: this.state.mapMaxZoom });
     };
 

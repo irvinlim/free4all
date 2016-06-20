@@ -1,4 +1,5 @@
-import * as Helper from '../../../modules/helper';
+import * as Helper from '../../../util/helper';
+import * as LatLngHelper from '../../../util/latlng';
 
 import { Categories } from '../../../api/categories/categories';
 import { StatusTypes } from '../../../api/status-types/status-types';
@@ -67,7 +68,7 @@ export default class LeafletMapObject {
 
     Helper.warnIf(this.markers[id], "Notice: Duplicate marker IDs present.");
 
-    this.markers[id] = L.marker(Helper.lnglat2latlng(ga.coordinates), {icon: icon}).on('click', this.markerOnClick(ga, clickHandler));
+    this.markers[id] = L.marker(LatLngHelper.lnglat2latlng(ga.coordinates), {icon: icon}).on('click', this.markerOnClick(ga, clickHandler));
 
     this.markerClusterGroup.addLayer(this.markers[id]);
   }

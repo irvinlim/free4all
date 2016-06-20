@@ -2,8 +2,6 @@ import React from 'react';
 import Avatar from 'material-ui/Avatar';
 import FontIcon from 'material-ui/FontIcon';
 
-import * as Helper from './helper';
-
 export const makeNotifAvatar = (avatar) => {
   const defaultAvatar = <Avatar icon={ <FontIcon className="material-icons">priority_high</FontIcon> } />
 
