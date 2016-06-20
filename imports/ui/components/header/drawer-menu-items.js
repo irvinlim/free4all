@@ -5,8 +5,10 @@ import { browserHistory } from 'react-router';
 
 import Divider from 'material-ui/Divider';
 import MenuItem from 'material-ui/MenuItem';
-
 import { ActionHome, ActionExitToApp, ActionLock } from 'material-ui/svg-icons';
+
+import Login from '../auth/login';
+import { getHandleLogout } from '../../../modules/logout';
 
 export class DrawerMenuItems extends React.Component {
   constructor(props) {
@@ -14,17 +16,15 @@ export class DrawerMenuItems extends React.Component {
   }
 
   constructMenuItems() {
-    const handleLogout = () => Meteor.logout(() => browserHistory.push('/login'));
-
     this.menuItems = [
       { title: "Home", href: "/", icon: (<ActionHome />) },
       { divider: true },
     ];
 
     if (this.props.hasUser) {
-      this.menuItems.push({ title: "Log Out", onClick: handleLogout, icon: (<ActionExitToApp />) });
+      this.menuItems.push({ title: "Log Out", onClick: getHandleLogout(), icon: (<ActionExitToApp />) });
     } else {
-      this.menuItems.push({ title: "Log In", href: "/login", icon: (<ActionLock />) });
+      this.menuItems.push({ title: "Log In", onClick: this.props.openLogin.bind(this), icon: (<ActionLock />) });
     }
   }
 

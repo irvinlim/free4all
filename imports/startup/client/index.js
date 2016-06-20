@@ -6,4 +6,9 @@ import './routes.js';
 import './subscriptions.js';
 import './cloudinary-config.js';
 
-Bert.defaults.style = 'growl-top-right';
+// Bert Notifications
+Bert.defaults = {
+  hideDelay: 2000,
+  style: 'growl-bottom-right',
+  type: 'default',
+};

@@ -8,7 +8,7 @@ const composer = (props, onData) => {
   const subscription = Meteor.subscribe('status-types');
   if (subscription.ready()) {
     const StatusTypes = StatusTypes.find().fetch();
-    onData(null, { StatusTypes});
+    onData(null, { StatusTypes });
   }
 };
 

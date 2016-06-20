@@ -5,5 +5,15 @@
   }
 
   > button, > #header-right-buttons { position: absolute !important; }
+  #header-right-buttons > div { float: right; margin-left: 10px; }
+
+  #header-profile {
+    button { padding: 0 !important; }
+  }
 }
 #drawer-menu-items { font-weight: 300; }
+#header-profile-popover {
+  padding: 0 !important;
+  span { font-size: 13px !important; }
+  span > div > div { padding: 5px 12px !important; }
+}

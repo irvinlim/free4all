@@ -6,7 +6,7 @@ export default class DrawerNavigation extends React.Component {
   render() {
     return (
       <Drawer docked={ false } width={ 250 } open={ this.props.isOpen } onRequestChange={ isOpen => this.props.setDrawerOpen(isOpen) }>
-        <DrawerMenuItems closeDrawer={ this.props.closeDrawer } />
+        <DrawerMenuItems closeDrawer={ this.props.closeDrawer } openLogin={ this.props.openLogin } />
       </Drawer>
     );
   }

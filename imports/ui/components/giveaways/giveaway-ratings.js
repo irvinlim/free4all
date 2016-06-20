@@ -20,7 +20,11 @@ export const GiveawayRatings = ({ gaId, upvotes, downvotes, ownVote }) => (
     <Grid>
       <Row>
         <Col xs={3}>
-          <IconButton className="button-upvote" className={ ownVote === true ? "voted" : "" } onTouchTap={ makeVoteClickHandler(true, ownVote, gaId) }>
+          <IconButton
+            className="button-upvote"
+            className={ ownVote === true ? "voted" : "" }
+            onTouchTap={ makeVoteClickHandler(true, ownVote, gaId) }
+          >
             <FontIcon className="material-icons">thumb_up</FontIcon>
           </IconButton>
         </Col>
@@ -28,7 +32,11 @@ export const GiveawayRatings = ({ gaId, upvotes, downvotes, ownVote }) => (
           <span className="num_ratings">{ upvotes }</span>
         </Col>
         <Col xs={3}>
-          <IconButton className="button-downvote" className={ ownVote === false ? "voted" : "" } onTouchTap={ makeVoteClickHandler(false, ownVote, gaId) }>
+          <IconButton
+            className="button-downvote"
+            className={ ownVote === false ? "voted" : "" }
+            onTouchTap={ makeVoteClickHandler(false, ownVote, gaId) }
+          >
             <FontIcon className="material-icons">thumb_down</FontIcon>
           </IconButton>
         </Col>
