@@ -5,18 +5,24 @@ import Subheader from 'material-ui/Subheader';
 import Avatar from 'material-ui/Avatar';
 
 import * as Helper from '../../../util/helper';
+import * as AvatarHelper from '../../../util/avatar';
+import * as GiveawaysHelper from '../../../util/giveaways';
 import * as Colors from 'material-ui/styles/colors';
 
 const giveawayRow = (touchTapHandler) => (ga) => (
   <ListItem
     key={ ga._id }
     primaryText={
-      <span style={{ color: Colors.grey700 }}>{ ga.title }</span>
+      <span className="single-line" style={{ color: Colors.grey700 }}>{ ga.title }</span>
     }
     secondaryText={
       <p>
         <span className="location">{ ga.location }</span>
       </p>
+    }
+    leftAvatar={
+      ga.avatarId ? <Avatar src={ AvatarHelper.getAvatar(ga.avatarId, 64) } />
+                  : <Avatar icon={ GiveawaysHelper.getCategoryIcon(ga) } backgroundColor={ GiveawaysHelper.getStatusColor(ga) } />
     }
     secondaryTextLines={2}
     onTouchTap={ touchTapHandler(ga) }
