@@ -9,6 +9,8 @@ import * as Colors from 'material-ui/styles/colors';
 
 import * as Helper from '../../../util/helper';
 import * as UsersHelper from '../../../util/users';
+import * as AvatarHelper from '../../../util/avatar';
+
 import { getHandleLogout } from '../../../modules/logout';
 
 export class HeaderProfile extends React.Component {
@@ -57,7 +59,7 @@ export class HeaderProfile extends React.Component {
     return (
       <div id="header-profile">
         <IconButton onTouchTap={ this.openPopover.bind(this) }>
-          { avatarId ? <Avatar src={ $.cloudinary.url(avatarId, { width: 64, height: 64, crop: 'fill', fetch_format: "auto" }) } />
+          { avatarId ? <Avatar src={ AvatarHelper.getAvatar(avatarId, 64) } />
                      : <Avatar backgroundColor="#097381">{ UsersHelper.getFirstInitial(this.props.user) }</Avatar> }
         </IconButton>
 

@@ -1,9 +1,6 @@
 import * as Helper from '../../../util/helper';
 import * as LatLngHelper from '../../../util/latlng';
-
-import { Categories } from '../../../api/categories/categories';
-import { StatusTypes } from '../../../api/status-types/status-types';
-import { StatusUpdates } from '../../../api/status-updates/status-updates';
+import * as GiveawaysHelper from '../../../util/giveaways';
 
 export default class LeafletMapObject {
   constructor(elemId) {
@@ -53,18 +50,11 @@ export default class LeafletMapObject {
     if (!id)
       return Helper.error("addMarker: No id specified.");
 
-    const status = StatusUpdates.findOne({ userId: ga.userId, giveawayId: ga._id }, { sort: { date: "desc" } });
-    Helper.errorIf(!status, "Error: No status update for Giveaway #" + id);
-    const statusType = StatusTypes.findOne(status.statusTypeId);
-    Helper.errorIf(!statusType, "Error: No status type for Status Update #" + status._id);
-    const category = Categories.findOne(ga.categoryId);
-    Helper.errorIf(!category, "Error: No category defined for Giveaway #" + id);
-
     let css = {};
     if (!Helper.is_over(ga.startDateTime, ga.endDateTime))
-      css = { 'background-color': Helper.sanitizeHexColour(statusType.hexColour) };
+      css = { 'background-color': GiveawaysHelper.getStatusColor(ga) };
 
-    const icon = this.markerIcon("map-marker", css, { "ga-id": id }, '<i class="' + category.iconClass + '"></i>');
+    const icon = this.markerIcon("map-marker", css, { "ga-id": id }, Helper.react2html(GiveawaysHelper.getCategoryIcon(ga)));
 
     Helper.warnIf(this.markers[id], "Notice: Duplicate marker IDs present.");
 
@@ -91,7 +81,7 @@ export default class LeafletMapObject {
     return L.divIcon({
       iconSize: [40, 54],
       iconAnchor: [20, 54],
-      html: $icon[0].outerHTML,
+      html: Helper.jquery2html($icon),
     });
   }
 
@@ -106,10 +96,9 @@ export default class LeafletMapObject {
     const self = this;
 
     // Make custom marker
-    const $icon = $('<div class="current-location-marker"><div class="pulse"></div></div>');
     const divIcon = L.divIcon({
       iconSize: [22, 22],
-      html: $icon[0].outerHTML,
+      html: '<div class="current-location-marker"><div class="pulse"></div></div>',
     });
     this.geolocatedMarker = L.marker([0, 0], {icon: divIcon}).addTo(this.map);
 

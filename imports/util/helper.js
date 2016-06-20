@@ -1,4 +1,5 @@
 import React from 'react/react';
+import ReactDOMServer from 'react-dom/server';
 import { Meteor } from 'meteor/meteor';
 import Divider from 'material-ui/Divider';
 const nl2brReact = require('react-nl2br');
@@ -87,3 +88,7 @@ export const insertDividers = (listItems) => {
 
   return returnItems;
 }
+
+// React
+export const react2html = (reactElement) => ReactDOMServer.renderToString(reactElement);
+export const jquery2html = (jQueryObject) => jQueryObject[0].outerHTML;
