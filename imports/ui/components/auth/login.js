@@ -60,7 +60,7 @@ export default class Login extends React.Component {
                 <h3 style={{ textAlign: 'center' }}>Login to Free4All</h3>
               </Col>
             </Row>
-            <Row className="openid">
+            <Row className="openid" style={{ marginBottom: 20 }}>
               <Col xs={12} sm={4}>
                 <FlatButton style={{ width: "100%", backgroundColor: "#ff8c00" }} labelColor="#ffffff" label="NUS OpenID" />
               </Col>
