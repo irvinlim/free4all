@@ -12,5 +12,5 @@ const maybeGetUser = (userOrId) => {
 
 export const getFirstInitial = (user) => {
   user = maybeGetUser(user);
-  return propExistsDeep(user, ['profile', 'name', 'first']) ? user.profile.name.first.charAt(0) : null;
+  return Helper.propExistsDeep(user, ['profile', 'name', 'first']) ? user.profile.name.first.charAt(0) : null;
 }
