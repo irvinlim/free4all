@@ -7,6 +7,8 @@ import MenuItem from 'material-ui/MenuItem';
 import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import Download from 'material-ui/svg-icons/file/file-download';
+import {Popover, PopoverAnimationVertical} from 'material-ui/Popover';
+import RaisedButton from 'material-ui/RaisedButton';
 
 export const AllCategoriesList = ({ allCategories, props}) => (  
   allCategories[0].length > 0 ?

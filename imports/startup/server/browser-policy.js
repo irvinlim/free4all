@@ -8,6 +8,9 @@ BrowserPolicy.content.allowSameOriginForAll();
 // Maps
 BrowserPolicy.content.allowImageOrigin( 'api.tiles.mapbox.com' );
 
+// Mapbox Geocoding
+BrowserPolicy.content.allowOriginForAll( 'api.tiles.mapbox.com' );
+
 // Fonts
 BrowserPolicy.content.allowStyleOrigin( 'fonts.googleapis.com' );
 BrowserPolicy.content.allowFontOrigin( 'fonts.gstatic.com' );

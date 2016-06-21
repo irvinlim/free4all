@@ -7,6 +7,8 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import TextField from 'material-ui/TextField';
 import TimePicker from 'material-ui/TimePicker';
+import AutoComplete from 'material-ui/AutoComplete';
+
 
 import Formsy from 'formsy-react';
 import Paper from 'material-ui/Paper';
@@ -26,6 +28,9 @@ import TagsInput from 'react-tagsinput';
 import { insertGiveaway } from '../../../api/giveaways/methods.js';
 import { insertStatus } from '../../../api/status-updates/methods.js';
 import { StatusTypes } from '../../../api/status-types/status-types.js'
+
+import { geocode } from '../../../api/geocode/methods.js';
+
 /**
 * Dialog content can be scrollable.
 */  
@@ -40,7 +45,7 @@ export default class InsertBtnDialog extends React.Component {
       tags: [],
       parentCatId: "",
       childCatId: "",
-      childCatName:"",
+      childCatName:"Select Category",
       title:"",
       description:"",
       startDate: null,
@@ -51,9 +56,34 @@ export default class InsertBtnDialog extends React.Component {
       lng:"",
       location:"",
       recurring: false,
+      dataSource: [],
     };
 
     this.state=this.initialState;
+
+    this.geocodeInputLoc = (value) => {
+      if(value.length > 5){
+        geocode(Meteor.settings.public.MapBox.accessToken, value, (locObjs) => {
+          let locArr = locObjs.map((loc)=> {
+            loc.text = loc.place_name;
+            loc.value = loc.place_name;
+            return loc;
+          });
+          this.setState({ 
+            dataSource: locArr 
+          });
+        })
+      }
+      this.setState({location: value})
+    }
+
+    this.handleLocationSelect = (loc, idx) => {
+      this.setState({
+        lat: loc.center[1],
+        lng: loc.center[0],
+        location: loc.place_name
+      })
+    };
 
     this.errorMessages ={
       wordsError: "Please only use letters",
@@ -90,8 +120,14 @@ export default class InsertBtnDialog extends React.Component {
         marginTop: 32,
       },
       toggle: {
-        marginBottom: 16,
+        margin: "16px 0px 16px 16px !important",
+        width: "50% !important",
+        maxWidth: "250 !important",
+
       },
+      labelStyle: {
+        fontWeight: 200,
+      }
 
     };
     
@@ -124,6 +160,7 @@ export default class InsertBtnDialog extends React.Component {
 
     this.handleTitle = (e)  => {
       this.setState({title: e.target.value});
+      console.log(state)
     };
     this.handleDescription = (e)  => {
       this.setState({description: e.target.value});
@@ -138,13 +175,13 @@ export default class InsertBtnDialog extends React.Component {
       this.setState({lng: e.target.value});
     };
     this.handleStartDatePicker = (e, date) => {
-      this.setState({startDate: date});
+      this.setState({startDate: date, endDate: date});
     };
     this.handleEndDatePicker = (e, date) => {
       this.setState({endDate: date});
     };
     this.handleChangeStartTimePicker12 = (e, date) => {
-      this.setState({startTime: date});
+      this.setState({startTime: date, endTime: date});
     };
     this.handleChangeEndTimePicker12 = (e, date) => {
       this.setState({endTime: date});
@@ -275,7 +312,7 @@ export default class InsertBtnDialog extends React.Component {
     }
 }
 render() {
-  let { paperStyle, switchStyle, submitStyle, gridStyle, titleStyle, dialogStyle, actionsContainerStyle, toggle } = this.styles;
+  let { paperStyle, switchStyle, submitStyle, gridStyle, titleStyle, dialogStyle, actionsContainerStyle, toggle, labelStyle } = this.styles;
   let { wordsError, numericError, urlError } = this.errorMessages;
   const actionBtns = [
     // Submit Button 
@@ -322,13 +359,13 @@ render() {
             >
             <Grid style={gridStyle}>
               <Row>
+                <h2>What</h2>
                 <Col >
                   <FormsyText 
                   name="title"
-                  floatingLabelText="Title" 
                   fullWidth={true} 
                   required
-                  hintText="What is title of the giveaway?"
+                  hintText="What is name of the event?"
                   onChange={this.handleTitle}
                   />
                 </Col>
@@ -342,13 +379,21 @@ render() {
                   fullWidth={true} 
                   rows={3} 
                   required
-                  hintText="What is the giveaway about?"
+                  hintText="What is the event about?"
                   onChange={this.handleDescription}
                   />
                 </Col>
+                <Col xs={12} md={4} >
+                  <span style={{"fontSize":"18px"}}>{this.state.childCatName}</span>
+                  <AllCategoriesList setParentCat={this.setParentCat} setChildCat={this.setChildCat}/>
+                </Col>
+                <Col xs={12} md={8} >
+                  <TagsInput value={this.state.tags} onChange={this.handleTagsChange} />
+                </Col>
               </Row>
-
+              <br />
               <Row>
+                <h2>When</h2>
                 <Col xs={12} md={6}>
                   <FormsyDate 
                     required
@@ -358,31 +403,10 @@ render() {
                     autoOk={true}
                     minDate={new Date()}
                     onChange={this.handleStartDatePicker}
+                    value ={this.state.startDate}
 
                     />
                 </Col>
-                <Col xs={12} md={6}>
-                  <FormsyDate 
-                  name="dateEnd"
-                  formatDate={this.formatDate} 
-                  floatingLabelText="End Date (Optional)" 
-                  autoOk={true}
-                  minDate={new Date()}
-                  onChange={this.handleEndDatePicker}
-                  />                
-                </Col>
-              </Row>
-              <Row>
-                <FormsyToggle
-                label="Recurring"
-                name= "Recurring"
-                style={this.toggle}
-                onChange={this.handleRecurring}
-                toggled={this.state.recurring}
-                />
-              </Row>
-
-              <Row>
                 <Col xs={12} md={6} >
                   <FormsyTime 
                     required
@@ -391,29 +415,62 @@ render() {
                     format="ampm" 
                     floatingLabelText="Start Time"
                     onChange={this.handleChangeStartTimePicker12}
-                    />
-                </Col>
-                <Col xs={12} md={6} >
-                  <FormsyTime 
-                    name="endTime"
-                    required
-                    pedantic={true} 
-                    format="ampm" 
-                    floatingLabelText="End Time"
-                    onChange={this.handleChangeEndTimePicker12}
+                    value ={this.state.startTime}
                     />
                 </Col>
               </Row>
               <Row>
-                <Col>
-                <FormsyText
-                  name="location"
-                  hintText="Where is it?"
-                  fullWidth={true} 
-                  floatingLabelText="Location"
-                  onChange={this.handleLocation}
-
+                <Col xs={12} md={6}>
+                  <FormsyDate 
+                  name="dateEnd"
+                  formatDate={this.formatDate} 
+                  floatingLabelText="End Date" 
+                  autoOk={true}
+                  minDate={new Date()}
+                  onChange={this.handleEndDatePicker}
+                  value ={this.state.endDate}
+                  />                
+                </Col>
+                <Col xs={12} md={6} >
+                  <FormsyTime 
+                  name="endTime"
+                  required
+                  pedantic={true} 
+                  format="ampm" 
+                  floatingLabelText="End Time"
+                  onChange={this.handleChangeEndTimePicker12}
+                  value ={this.state.endTime}
                   />
+                </Col>
+              </Row>
+              <Row>
+                <Col xs={12} md={6} style={this.toggle}>
+                <FormsyToggle
+                label="Recurring from start to end date"
+                name= "Recurring"
+                labelStyle={this.labelStyle}
+                onChange={this.handleRecurring}
+                toggled={this.state.recurring}
+                />
+                </Col>
+              </Row>
+              <br />
+
+              <Row>
+                <h2>Where</h2>
+
+                <Col>
+                <AutoComplete
+                name="location"
+                hintText="Location of event"
+                dataSource={this.state.dataSource}
+                onUpdateInput={this.geocodeInputLoc}
+                onNewRequest={this.handleLocationSelect}
+                floatingLabelText="Location"
+                fullWidth={true}
+                openOnFocus={true}
+                filter={AutoComplete.noFilter}
+                />
                 </Col>
               </Row>
               <Row>
@@ -424,8 +481,8 @@ render() {
                     validationError={numericError}
                     hintText="Latitude"
                     floatingLabelText="Latitude"
-                  onChange={this.handleLat}
-
+                    value={this.state.lat}
+                    onChange={this.handleLat}
                     />
                 </Col>
                 <Col xs={12} md={6} >
@@ -435,125 +492,12 @@ render() {
                     validationError={numericError}
                     hintText="Longitude"
                     floatingLabelText="Longitude"
-                  onChange={this.handleLng}
-
+                    value={this.state.lng}
+                    onChange={this.handleLng}
                     />
                 </Col>
               </Row>
-              <Row>
-                <br />
-                Select Category {this.state.childCatName}<AllCategoriesList setParentCat={this.setParentCat} setChildCat={this.setChildCat}/>
-                <br />
-              </Row>  
-              <Row>
-                <TagsInput value={this.state.tags} onChange={this.handleTagsChange} />
-              </Row>
-            {/* 
-              <RaisedButton
-              style={submitStyle}
-              type="submit"
-              label="Submit"
-              disabled={!this.state.canSubmit}
-              />
-              
-              <Row>
-                <Col >
-                <FormsyText
-                name="url"
-                validations="isUrl"
-                validationError={urlError}
-                hintText="http://www.example.com"
-                floatingLabelText="Link (Optional)"
-                onChange={this.handleURL}
-                />
-                </Col>
-              </Row>
-              
-              
-              
-              <FormsySelect
-                name="frequency"
-                required
-                floatingLabelText="How often do you?"
-                menuItems={this.selectFieldItems}
-                >
-                <MenuItem value={'never'} primaryText="Never" />
-                <MenuItem value={'nightly'} primaryText="Every Night" />
-                <MenuItem value={'weeknights'} primaryText="Weeknights" />
-              </FormsySelect>
-              <FormsyText
-                name="name"
-                validations="isWords"
-                validationError={wordsError}
-                required
-                hintText="What is your name?"
-                floatingLabelText="Name"
-                />
-              <FormsyText
-                name="age"
-                validations="isNumeric"
-                validationError={numericError}
-                hintText="Are you a wrinkly?"
-                floatingLabelText="Age (optional)"
-                />
-              <FormsyText
-                name="url"
-                validations="isUrl"
-                validationError={urlError}
-                required
-                hintText="http://www.example.com"
-                floatingLabelText="URL"
-                />
-              <FormsySelect
-                name="frequency"
-                required
-                floatingLabelText="How often do you?"
-                menuItems={this.selectFieldItems}
-                >
-                <MenuItem value={'never'} primaryText="Never" />
-                <MenuItem value={'nightly'} primaryText="Every Night" />
-                <MenuItem value={'weeknights'} primaryText="Weeknights" />
-              </FormsySelect>
-              <FormsyDate
-                name="date"
-                required
-                floatingLabelText="Date"
-                />
-              <FormsyTime
-                name="time"
-                required
-                floatingLabelText="Time"
-                />
-              <FormsyCheckbox
-                name="agree"
-                label="Do you agree to disagree?"
-                style={switchStyle}
-                />
-              <FormsyToggle
-                name="toggle"
-                label="Toggle"
-                style={switchStyle}
-                />
-              <FormsyRadioGroup name="shipSpeed" defaultSelected="not_light">
-                <FormsyRadio
-                  value="light"
-                  label="prepare for light speed"
-                  style={switchStyle}
-                  />
-                <FormsyRadio
-                  value="not_light"
-                  label="light speed too slow"
-                  style={switchStyle}
-                  />
-                <FormsyRadio
-                  value="ludicrous"
-                  label="go to ludicrous speed"
-                  style={switchStyle}
-                  disabled={true}
-                  />
-              </FormsyRadioGroup>
-              
-              */}
+
             </Grid>
             
           </Formsy.Form>

@@ -92,3 +92,6 @@ export const insertDividers = (listItems) => {
 // React
 export const react2html = (reactElement) => ReactDOMServer.renderToString(reactElement);
 export const jquery2html = (jQueryObject) => jQueryObject[0].outerHTML;
+
+// Generate shortId
+export const shortid = require('shortid');
