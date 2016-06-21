@@ -82,6 +82,10 @@ Giveaways.schema = new SimpleSchema({
     denyInsert: true,
     optional: true,
   },
+  batchId: {
+    type: String,
+    label: 'Batch Id of recurring group'
+  }
 });
 
 Giveaways.attachSchema(Giveaways.schema);

@@ -94,4 +94,4 @@ export const react2html = (reactElement) => ReactDOMServer.renderToString(reactE
 export const jquery2html = (jQueryObject) => jQueryObject[0].outerHTML;
 
 // Generate shortId
-export const shortid = require('shortid');
+export const shortId = require('shortid');

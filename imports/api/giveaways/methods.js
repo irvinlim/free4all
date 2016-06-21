@@ -49,6 +49,10 @@ export const insertGiveaway = new ValidatedMethod({
       type: Boolean,
       label: 'Local deletion of giveaway',
       optional: true
+    },
+    batchId: {
+      type: String,
+      label: 'Batch ID when adding'
     }
   }).validator(),
   run(giveaway) {

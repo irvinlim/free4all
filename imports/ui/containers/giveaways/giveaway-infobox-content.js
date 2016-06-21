@@ -20,6 +20,7 @@ const composer = (props, onData) => {
     giveaway = Giveaways.findOne(props.gaId);
 
     if (giveaway) {
+      console.log(giveaway)
       latestStatus = StatusUpdates.findOne({ userId: giveaway.userId, giveawayId: giveaway._id }, { sort: { date: "desc" } });
       latestStatusType = StatusTypes.findOne(latestStatus.statusTypeId);
       category = Categories.findOne(giveaway.categoryId);

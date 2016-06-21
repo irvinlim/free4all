@@ -30,6 +30,7 @@ import { insertStatus } from '../../../api/status-updates/methods.js';
 import { StatusTypes } from '../../../api/status-types/status-types.js'
 
 import { geocode } from '../../../api/geocode/methods.js';
+import { shortId } from '../../../util/helper.js'
 
 /**
 * Dialog content can be scrollable.
@@ -127,6 +128,9 @@ export default class InsertBtnDialog extends React.Component {
       },
       labelStyle: {
         fontWeight: 200,
+      },
+      textFieldStyle: {
+          pointerEvents: "none",
       }
 
     };
@@ -160,7 +164,6 @@ export default class InsertBtnDialog extends React.Component {
 
     this.handleTitle = (e)  => {
       this.setState({title: e.target.value});
-      console.log(state)
     };
     this.handleDescription = (e)  => {
       this.setState({description: e.target.value});
@@ -209,7 +212,9 @@ export default class InsertBtnDialog extends React.Component {
       data.lng = parseFloat(data.lng);
       data.lat = parseFloat(data.lat);
       data.userId = String(Meteor.userId());
+      data.batchId = shortId.generate();
       console.log("state", data);
+
 
       let startHr= data.startTime.getHours();
       let startMin= data.startTime.getMinutes();
@@ -236,6 +241,7 @@ export default class InsertBtnDialog extends React.Component {
           categoryId: data.childCatId,
           tags: data.tags,
           userId: data.userId,
+          batchId: data.batchId
         }
 
         const gaId = insertGiveaway.call(ga, (error)=>{
@@ -282,6 +288,7 @@ export default class InsertBtnDialog extends React.Component {
             categoryId: data.childCatId,
             tags: data.tags,
             userId: data.userId,
+            batchId: data.batchId
           }
 
           const gaId = insertGiveaway.call(ga, (error)=>{
@@ -312,7 +319,7 @@ export default class InsertBtnDialog extends React.Component {
     }
 }
 render() {
-  let { paperStyle, switchStyle, submitStyle, gridStyle, titleStyle, dialogStyle, actionsContainerStyle, toggle, labelStyle } = this.styles;
+  let { paperStyle, switchStyle, submitStyle, gridStyle, titleStyle, dialogStyle, actionsContainerStyle, toggle, labelStyle, textFieldStyle } = this.styles;
   let { wordsError, numericError, urlError } = this.errorMessages;
   const actionBtns = [
     // Submit Button 
@@ -401,6 +408,7 @@ render() {
                     formatDate={this.formatDate} 
                     floatingLabelText="Start Date" 
                     autoOk={true}
+                    textFieldStyle={this.dateTimeTextStyle}
                     minDate={new Date()}
                     onChange={this.handleStartDatePicker}
                     value ={this.state.startDate}
@@ -414,6 +422,7 @@ render() {
                     pedantic={true} 
                     format="ampm" 
                     floatingLabelText="Start Time"
+                    textFieldStyle={this.dateTimeTextStyle}
                     onChange={this.handleChangeStartTimePicker12}
                     value ={this.state.startTime}
                     />
@@ -427,6 +436,7 @@ render() {
                   floatingLabelText="End Date" 
                   autoOk={true}
                   minDate={new Date()}
+                  textFieldStyle={this.dateTimeTextStyle}
                   onChange={this.handleEndDatePicker}
                   value ={this.state.endDate}
                   />                
@@ -438,6 +448,7 @@ render() {
                   pedantic={true} 
                   format="ampm" 
                   floatingLabelText="End Time"
+                  textFieldStyle={this.dateTimeTextStyle}
                   onChange={this.handleChangeEndTimePicker12}
                   value ={this.state.endTime}
                   />

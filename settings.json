@@ -3,6 +3,9 @@
     "Cloudinary": {
       "cloudName": "<CLOUD_NAME>"
     },
+    "Facebook":{
+      "appId": "<API_KEY>",
+    },
     "MapBox": {
       "mapID": "mapbox.streets",
       "accessToken": "<ACCESS_TOKEN>",
@@ -15,6 +18,10 @@
     "Cloudinary": {
       "apiKey": "<API_KEY>",
       "apiSecret": "<API_SECRET>"
+    },
+    "Facebook":{
+      "appSecret": "<API_SECRET>"
     }
+
   }
 }
