@@ -5,6 +5,8 @@ import { Meteor } from 'meteor/meteor';
 import { Bert } from 'meteor/themeteorchef:bert';
 import { getInputValue } from './get-input-value';
 
+import { addEmailFromFacebook } from '../api/users/methods';
+
 const login = (options) => {
   const email = getInputValue(options.component.refs.emailAddress);
   const password = getInputValue(options.component.refs.password);
@@ -30,6 +32,9 @@ const facebookLogin = (options) => {
       Bert.alert("Could not login to Facebook", 'warning');
     else
       Bert.alert('Logged in!', 'success');
+
+    // Add email field to top-level if doesn't exist
+    addEmailFromFacebook.call({ userId: Meteor.userId() });
 
     if (options.afterLogin)
       options.afterLogin();
