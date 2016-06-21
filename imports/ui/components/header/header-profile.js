@@ -59,8 +59,11 @@ export class HeaderProfile extends React.Component {
     return (
       <div id="header-profile">
         <IconButton onTouchTap={ this.openPopover.bind(this) }>
-          { avatarId ? <Avatar src={ AvatarHelper.getAvatar(avatarId, 64) } />
-                     : <Avatar backgroundColor="#097381">{ UsersHelper.getFirstInitial(this.props.user) }</Avatar> }
+          { avatarId ?  <Avatar src={ AvatarHelper.getAvatar(avatarId, 64) } /> :
+                          UsersHelper.getFirstInitial(this.props.user) ?
+                            <Avatar backgroundColor="#097381">{ UsersHelper.getFirstInitial(this.props.user) }</Avatar> :
+                              <FontIcon className="material-icons" color={ Colors.grey50 }>person</FontIcon>
+          }
         </IconButton>
 
         <Popover

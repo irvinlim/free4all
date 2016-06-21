@@ -11,5 +11,7 @@ const maybeGetUser = (userOrId) => {
 
 export const getFirstInitial = (user) => {
   user = maybeGetUser(user);
-  return user.profile.name.first.charAt(0);
+  const firstName = user.profile.name.first;
+
+  return firstName ? firstName.charAt(0) : null;
 }
