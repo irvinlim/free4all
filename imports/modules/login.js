@@ -24,6 +24,18 @@ const login = (options) => {
   });
 };
 
+const facebookLogin = (options) => {
+  Meteor.loginWithFacebook({}, function(err){
+    if (err)
+      Bert.alert("Could not login to Facebook", 'warning');
+    else
+      Bert.alert('Logged in!', 'success');
+
+    if (options.afterLogin)
+      options.afterLogin();
+  });
+};
+
 const validate = (options) => {
   let hasAttemptSubmit = false;
 
@@ -93,4 +105,8 @@ const validate = (options) => {
  */
 export const handleLogin = (options) => {
   validate(options);
+};
+
+export const handleFacebookLogin = (options) => {
+  facebookLogin(options);
 };

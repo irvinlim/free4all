@@ -6,7 +6,7 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 
-import { handleLogin } from '../../../modules/login';
+import { handleLogin, handleFacebookLogin } from '../../../modules/login';
 
 export default class Login extends React.Component {
   constructor(props) {
@@ -47,6 +47,16 @@ export default class Login extends React.Component {
       });
   }
 
+  socialLoginHandler(handler) {
+    const self = this;
+
+    return (event) => handler({
+        afterLogin() {
+          self.props.closeLogin();
+        }
+      });
+  }
+
   render() {
     return (
       <Dialog
@@ -62,13 +72,25 @@ export default class Login extends React.Component {
             </Row>
             <Row className="openid" style={{ marginBottom: 20 }}>
               <Col xs={12} sm={4}>
-                <FlatButton style={{ width: "100%", backgroundColor: "#ff8c00" }} labelColor="#ffffff" label="NUS OpenID" />
+                <FlatButton
+                  style={{ width: "100%", backgroundColor: "#ff8c00" }}
+                  labelColor="#ffffff"
+                  label="NUS OpenID" />
               </Col>
               <Col xs={12} sm={4}>
-                <FlatButton style={{ width: "100%", backgroundColor: "#395697" }} labelColor="#ffffff" label="Facebook" icon={ <i className="fa fa-facebook-f"></i> } />
+                <FlatButton
+                  style={{ width: "100%", backgroundColor: "#395697" }} l
+                  abelColor="#ffffff"
+                  label="Facebook"
+                  icon={ <i className="fa fa-facebook-f"></i> }
+                  onTouchTap={ this.socialLoginHandler(handleFacebookLogin) } />
               </Col>
               <Col xs={12} sm={4}>
-                <FlatButton style={{ width: "100%", backgroundColor: "#e0492f" }} labelColor="#ffffff" label="Google" icon={ <i className="fa fa-google"></i> } />
+                <FlatButton
+                  style={{ width: "100%", backgroundColor: "#e0492f" }}
+                  labelColor="#ffffff"
+                  label="Google"
+                  icon={ <i className="fa fa-google"></i> } />
               </Col>
             </Row>
             <Row>

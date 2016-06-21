@@ -1,5 +1,7 @@
 import '../shared/index.js';
 import './cloudinary-config';
+import './service-config';
+
 import './accounts/email-templates';
 import './browser-policy';
 import './fixtures';
