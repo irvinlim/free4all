@@ -1,4 +1,5 @@
 import { Meteor } from 'meteor/meteor';
+import * as Helper from './helper';
 
 const maybeGetUser = (userOrId) => {
   if (!userOrId)
@@ -11,7 +12,5 @@ const maybeGetUser = (userOrId) => {
 
 export const getFirstInitial = (user) => {
   user = maybeGetUser(user);
-  const firstName = user.profile.name.first;
-
-  return firstName ? firstName.charAt(0) : null;
+  return propExistsDeep(user, ['profile', 'name', 'first']) ? user.profile.name.first.charAt(0) : null;
 }
