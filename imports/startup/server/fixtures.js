@@ -11,7 +11,8 @@ const users = [{
   email: 'admin@admin.com',
   password: 'password',
   profile: {
-    name: { first: 'Carl', last: 'Winslow' },
+    firstName: "Admin",
+    lastName: "User"
   },
   roles: ['admin'],
 }];
