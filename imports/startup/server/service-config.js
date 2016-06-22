@@ -21,3 +21,14 @@ ServiceConfiguration.configurations.insert({
   clientId: Meteor.settings.public.Google.clientId,
   secret: Meteor.settings.private.Google.clientSecret
 });
+
+// IVLE
+ServiceConfiguration.configurations.remove({
+  service: 'ivle'
+});
+
+ServiceConfiguration.configurations.insert({
+  service: 'ivle',
+  apiKey: Meteor.settings.public.IVLE.apiKey
+});
+

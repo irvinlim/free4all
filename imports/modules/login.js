@@ -5,7 +5,7 @@ import { Meteor } from 'meteor/meteor';
 import { Bert } from 'meteor/themeteorchef:bert';
 import { getInputValue } from './get-input-value';
 
-import { updateProfileFacebook, updateProfileGoogle } from '../api/users/methods';
+import { updateProfileFacebook, updateProfileGoogle, updateProfileIVLE } from '../api/users/methods';
 
 const login = (options) => {
   const email = getInputValue(options.component.refs.emailAddress);
@@ -55,6 +55,24 @@ const googleLogin = (options) => {
       Bert.alert('Logged in!', 'success');
 
       updateProfileGoogle.call({ userId: Meteor.userId() });
+
+      if (options.afterLogin)
+        options.afterLogin();
+    }
+  });
+};
+
+const ivleLogin = (options) => {
+  Meteor.loginWithIVLE({}, function(err){
+    if (err) {
+      Bert.alert("Could not login with IVLE", 'warning');
+
+      if (options.failedLogin)
+        options.failedLogin();
+    } else {
+      Bert.alert('Logged in!', 'success');
+
+      updateProfileIVLE.call({ userId: Meteor.userId() });
 
       if (options.afterLogin)
         options.afterLogin();
@@ -139,4 +157,8 @@ export const handleFacebookLogin = (options) => {
 
 export const handleGoogleLogin = (options) => {
   googleLogin(options);
+};
+
+export const handleIVLELogin = (options) => {
+  ivleLogin(options);
 };

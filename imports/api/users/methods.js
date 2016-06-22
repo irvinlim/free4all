@@ -54,3 +54,20 @@ export const updateProfileGoogle = new ValidatedMethod({
         Meteor.users.update( { _id: user._id }, { $set: { 'profile.gender': UsersHelper.resolveGender(user.services.google.gender) } });
   },
 });
+
+export const updateProfileIVLE = new ValidatedMethod({
+  name: 'users.updateProfileIVLE',
+  validate: new SimpleSchema({
+    userId: { type: String }
+  }).validator(),
+  run({ userId }) {
+    const user = Meteor.users.findOne(userId);
+
+    if (!user)
+      return;
+
+    if (!propExistsDeep(user, ['profile', 'firstName']))
+      if (propExistsDeep(user, ['services', 'ivle', 'name']))
+        Meteor.users.update( { _id: user._id }, { $set: { 'profile.firstName': user.services.ivle.name } });
+  },
+});

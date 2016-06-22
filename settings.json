@@ -9,6 +9,9 @@
     "Google":{
       "clientId": "<CLIENT_ID>"
     },
+    "IVLE": {
+      "apiKey": "<API_KEY>"
+    },
     "MapBox": {
       "mapID": "mapbox.streets",
       "accessToken": "<ACCESS_TOKEN>",

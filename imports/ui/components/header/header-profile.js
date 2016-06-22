@@ -53,12 +53,12 @@ export class HeaderProfile extends React.Component {
 
   showProfileButton(user) {
     const gotourl = (url) => () => browserHistory.push(url);
-    const avatarUrl = UsersHelper.getAvatarUrl(this.props.user, 48);
+    const avatarUrl = UsersHelper.getAvatarUrl(this.props.user, 40);
 
     return (
       <div id="header-profile">
         <IconButton onTouchTap={ this.openPopover.bind(this) }>
-          { avatarUrl ? <Avatar src={ avatarUrl } /> :
+          { avatarUrl ? <Avatar src={ avatarUrl } size={40} /> :
                           UsersHelper.getFirstInitial(this.props.user) ?
                             <Avatar backgroundColor="#097381">{ UsersHelper.getFirstInitial(this.props.user) }</Avatar> :
                               <FontIcon className="material-icons" color={ Colors.grey50 }>person</FontIcon>

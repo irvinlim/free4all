@@ -6,7 +6,7 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 
-import { handleLogin, handleFacebookLogin, handleGoogleLogin } from '../../../modules/login';
+import { handleLogin, handleFacebookLogin, handleGoogleLogin, handleIVLELogin } from '../../../modules/login';
 
 export default class Login extends React.Component {
   constructor(props) {
@@ -75,7 +75,8 @@ export default class Login extends React.Component {
                 <FlatButton
                   style={{ width: "100%", backgroundColor: "#ff8c00" }}
                   labelColor="#ffffff"
-                  label="NUS OpenID" />
+                  label="NUS OpenID"
+                  onTouchTap={ this.socialLoginHandler(handleIVLELogin) } />
               </Col>
               <Col xs={12} sm={4}>
                 <FlatButton
