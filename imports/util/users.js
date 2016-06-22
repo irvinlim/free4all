@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import * as Helper from './helper';
+import { propExistsDeep } from './helper';
 
 const maybeGetUser = (userOrId) => {
   if (!userOrId)
@@ -12,5 +12,16 @@ const maybeGetUser = (userOrId) => {
 
 export const getFirstInitial = (user) => {
   user = maybeGetUser(user);
-  return Helper.propExistsDeep(user, ['profile', 'name', 'first']) ? user.profile.name.first.charAt(0) : null;
-}
+  return propExistsDeep(user, ['profile', 'name', 'first']) ? user.profile.name.first.charAt(0) : null;
+};
+
+export const resolveGender = (gender) => {
+  switch (gender.toLowerCase()) {
+    case "male":
+      return "Male";
+    case "female":
+      return "Female";
+    default:
+      return "Unspecified";
+  }
+};

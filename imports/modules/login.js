@@ -5,7 +5,7 @@ import { Meteor } from 'meteor/meteor';
 import { Bert } from 'meteor/themeteorchef:bert';
 import { getInputValue } from './get-input-value';
 
-import { addEmailFromFacebook } from '../api/users/methods';
+import { updateProfileFacebook, updateProfileGoogle } from '../api/users/methods';
 
 const login = (options) => {
   const email = getInputValue(options.component.refs.emailAddress);
@@ -36,6 +36,8 @@ const facebookLogin = (options) => {
     } else {
       Bert.alert('Logged in!', 'success');
 
+      updateProfileFacebook.call({ userId: Meteor.userId() });
+
       if (options.afterLogin)
         options.afterLogin();
     }
@@ -51,6 +53,8 @@ const googleLogin = (options) => {
         options.failedLogin();
     } else {
       Bert.alert('Logged in!', 'success');
+
+      updateProfileGoogle.call({ userId: Meteor.userId() });
 
       if (options.afterLogin)
         options.afterLogin();
