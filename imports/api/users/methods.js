@@ -51,6 +51,6 @@ export const updateProfileGoogle = new ValidatedMethod({
 
     if (!propExistsDeep(user, ['profile', 'gender']))
       if (propExistsDeep(user, ['services', 'google', 'gender']))
-        Meteor.users.update( { _id: user._id }, { $set: { 'profile.gender': user.services.google.gender } });
+        Meteor.users.update( { _id: user._id }, { $set: { 'profile.gender': UsersHelper.resolveGender(user.services.google.gender) } });
   },
 });
