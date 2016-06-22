@@ -7,7 +7,7 @@
       "appId": "<APP_ID>",
     },
     "Google":{
-      "clientId": "<CLIENT_ID>",
+      "clientId": "<CLIENT_ID>"
     },
     "MapBox": {
       "mapID": "mapbox.streets",

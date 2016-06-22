@@ -18,3 +18,9 @@ BrowserPolicy.content.allowFontDataUrl();
 
 // Image CDN
 BrowserPolicy.content.allowImageOrigin( 'res.cloudinary.com' );
+
+// Avatars
+BrowserPolicy.content.allowImageOrigin( 'secure.gravatar.com' );
+BrowserPolicy.content.allowImageOrigin( 'graph.facebook.com' );
+BrowserPolicy.content.allowImageOrigin( '*.fbcdn.net' );
+BrowserPolicy.content.allowImageOrigin( '*.googleusercontent.com' );

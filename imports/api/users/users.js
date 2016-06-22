@@ -47,7 +47,11 @@ Schema.UserProfile = new SimpleSchema({
   country: {
     type: Schema.UserCountry,
     optional: true
-  }
+  },
+  avatarId: {
+    type: String,
+    optional: true
+  },
 });
 
 Schema.User = new SimpleSchema({

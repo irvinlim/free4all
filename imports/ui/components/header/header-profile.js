@@ -9,7 +9,6 @@ import * as Colors from 'material-ui/styles/colors';
 
 import * as Helper from '../../../util/helper';
 import * as UsersHelper from '../../../util/users';
-import * as AvatarHelper from '../../../util/avatar';
 
 import { getHandleLogout } from '../../../modules/logout';
 
@@ -54,12 +53,12 @@ export class HeaderProfile extends React.Component {
 
   showProfileButton(user) {
     const gotourl = (url) => () => browserHistory.push(url);
-    const avatarId = Helper.propExistsDeep(this.props.user, ['profile', 'avatarId']) ? this.props.user.profile.avatarId : null;
+    const avatarUrl = UsersHelper.getAvatarUrl(this.props.user, 48);
 
     return (
       <div id="header-profile">
         <IconButton onTouchTap={ this.openPopover.bind(this) }>
-          { avatarId ?  <Avatar src={ AvatarHelper.getAvatar(avatarId, 64) } /> :
+          { avatarUrl ? <Avatar src={ avatarUrl } /> :
                           UsersHelper.getFirstInitial(this.props.user) ?
                             <Avatar backgroundColor="#097381">{ UsersHelper.getFirstInitial(this.props.user) }</Avatar> :
                               <FontIcon className="material-icons" color={ Colors.grey50 }>person</FontIcon>
