@@ -6,7 +6,7 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 
-import { handleLogin, handleFacebookLogin } from '../../../modules/login';
+import { handleLogin, handleFacebookLogin, handleGoogleLogin } from '../../../modules/login';
 
 export default class Login extends React.Component {
   constructor(props) {
@@ -90,7 +90,8 @@ export default class Login extends React.Component {
                   style={{ width: "100%", backgroundColor: "#e0492f" }}
                   labelColor="#ffffff"
                   label="Google"
-                  icon={ <i className="fa fa-google"></i> } />
+                  icon={ <i className="fa fa-google"></i> }
+                  onTouchTap={ this.socialLoginHandler(handleGoogleLogin) } />
               </Col>
             </Row>
             <Row>

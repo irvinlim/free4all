@@ -4,7 +4,10 @@
       "cloudName": "<CLOUD_NAME>"
     },
     "Facebook":{
-      "appId": "<API_KEY>",
+      "appId": "<APP_ID>",
+    },
+    "Google":{
+      "clientId": "<CLIENT_ID>",
     },
     "MapBox": {
       "mapID": "mapbox.streets",
@@ -21,7 +24,9 @@
     },
     "Facebook":{
       "appSecret": "<API_SECRET>"
+    },
+    "Facebook":{
+      "clientSecret": "<CLIENT_SECRET>"
     }
-
   }
 }

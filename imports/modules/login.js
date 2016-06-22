@@ -28,16 +28,33 @@ const login = (options) => {
 
 const facebookLogin = (options) => {
   Meteor.loginWithFacebook({}, function(err){
-    if (err)
-      Bert.alert("Could not login to Facebook", 'warning');
-    else
+    if (err) {
+      Bert.alert("Could not login with Facebook", 'warning');
+
+      if (options.failedLogin)
+        options.failedLogin();
+    } else {
       Bert.alert('Logged in!', 'success');
 
-    // Add email field to top-level if doesn't exist
-    addEmailFromFacebook.call({ userId: Meteor.userId() });
+      if (options.afterLogin)
+        options.afterLogin();
+    }
+  });
+};
 
-    if (options.afterLogin)
-      options.afterLogin();
+const googleLogin = (options) => {
+  Meteor.loginWithGoogle({}, function(err){
+    if (err) {
+      Bert.alert("Could not login with Google", 'warning');
+
+      if (options.failedLogin)
+        options.failedLogin();
+    } else {
+      Bert.alert('Logged in!', 'success');
+
+      if (options.afterLogin)
+        options.afterLogin();
+    }
   });
 };
 
@@ -114,4 +131,8 @@ export const handleLogin = (options) => {
 
 export const handleFacebookLogin = (options) => {
   facebookLogin(options);
+};
+
+export const handleGoogleLogin = (options) => {
+  googleLogin(options);
 };
