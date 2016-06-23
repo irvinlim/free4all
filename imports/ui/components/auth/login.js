@@ -62,7 +62,8 @@ export default class Login extends React.Component {
       <Dialog
         open={ this.props.open }
         onRequestClose={ this.props.closeLogin }
-        contentStyle={{ maxWidth: 550 }}>
+        contentStyle={{ maxWidth: 550 }}
+        autoScrollBodyContent={true}>
         <form ref="login" className="login" onSubmit={ this.handleSubmit }>
           <Grid fluid={true}>
             <Row>
@@ -70,25 +71,25 @@ export default class Login extends React.Component {
                 <h3 style={{ textAlign: 'center' }}>Login to Free4All</h3>
               </Col>
             </Row>
-            <Row className="openid" style={{ marginBottom: 20 }}>
-              <Col xs={12} sm={4}>
+            <Row className="openid" style={{ marginBottom: 10 }}>
+              <Col xs={12} sm={4} smOffset={0}>
                 <FlatButton
-                  style={{ width: "100%", backgroundColor: "#ff8c00" }}
+                  style={{ width: "100%", backgroundColor: "#ff8c00", marginBottom: 10 }}
                   labelColor="#ffffff"
                   label="NUS OpenID"
                   onTouchTap={ this.socialLoginHandler(handleIVLELogin) } />
               </Col>
-              <Col xs={12} sm={4}>
+              <Col xs={12} sm={4} smOffset={0}>
                 <FlatButton
-                  style={{ width: "100%", backgroundColor: "#395697" }} l
-                  abelColor="#ffffff"
+                  style={{ width: "100%", backgroundColor: "#395697", marginBottom: 10 }}
+                  labelColor="#ffffff"
                   label="Facebook"
                   icon={ <i className="fa fa-facebook-f"></i> }
                   onTouchTap={ this.socialLoginHandler(handleFacebookLogin) } />
               </Col>
-              <Col xs={12} sm={4}>
+              <Col xs={12} sm={4} smOffset={0}>
                 <FlatButton
-                  style={{ width: "100%", backgroundColor: "#e0492f" }}
+                  style={{ width: "100%", backgroundColor: "#e0492f", marginBottom: 10 }}
                   labelColor="#ffffff"
                   label="Google"
                   icon={ <i className="fa fa-google"></i> }
@@ -104,40 +105,32 @@ export default class Login extends React.Component {
               </Col>
             </Row>
             <Row>
-              <Col xs={ 6 }>
+              <Col xs={12} sm={6}>
                 <TextField
                   type="email"
                   ref="emailAddress"
                   name="emailAddress"
                   hintText="Email Address"
                   errorText={ this.state.errors.emailAddress }
+                  fullWidth={true}
                 />
-              </Col>
-              <Col xs={ 6 }>
-                <p style={{ fontSize: 13, lineHeight: "48px", textAlign: 'right' }}>Not yet a member? <Link to="/signup">Sign up</Link></p>
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={ 6 }>
                 <TextField
                   type="password"
                   ref="password"
                   name="password"
                   hintText="Password"
                   errorText={ this.state.errors.password }
+                  fullWidth={true}
                 />
               </Col>
-              <Col xs={ 6 }>
-                <p style={{ fontSize: 13, lineHeight: "48px", textAlign: 'right' }}><Link to="/recover-password">Forgot Password?</Link></p>
+              <Col xs={12} sm={6}>
+                <p style={{ fontSize: 13, textAlign: 'right', marginTop: 20 }}>Not yet a member? <Link to="/signup">Sign up</Link></p>
+                <p style={{ fontSize: 13, textAlign: 'right' }}><Link to="/recover-password">Forgot Password?</Link></p>
               </Col>
             </Row>
-            <Row>
-              <Col xs={ 12 }>
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={6}>
-                <RaisedButton type="submit" fullWidth={true} primary={true} label="Login" />
+            <Row style={{ marginTop: 20 }}>
+              <Col xs={6} xsOffset={3} sm={3} smOffset={9}>
+                <RaisedButton type="submit" style={{ width: "100%" }} primary={true} label="Login" />
               </Col>
             </Row>
           </Grid>
