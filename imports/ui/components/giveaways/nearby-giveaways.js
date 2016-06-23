@@ -34,6 +34,6 @@ export const NearbyGiveaways = (props) => (
     <Subheader>
       <h3 style={{ margin:"20px 0px 10px" }}>Nearby Giveaways</h3>
     </Subheader>
-    { Helper.insertDividers(props.giveaways.map(giveawayRow(props.nearbyOnClick))) }
+    { props.giveaways ? Helper.insertDividers(props.giveaways.map(giveawayRow(props.nearbyOnClick))) : <div /> }
   </List>
 );
