@@ -13,6 +13,7 @@ import { GoToGeolocationButton } from '../components/map/go-to-geolocation-butto
 import InsertBtnDialog from '../components/map/insert-button-dialog'
 
 import * as LatLngHelper from '../../util/latlng';
+import { Bert } from 'meteor/themeteorchef:bert';
 
 export class Index extends React.Component {
   constructor(props) {
@@ -27,7 +28,10 @@ export class Index extends React.Component {
       mapCenter: null,
       mapZoom: null,
       mapMaxZoom: null,
-      openModal: true,
+      openModal: false,
+      latLngClicked: {lat:"",lng:""},
+      locName: "",
+      locArr: [],
     };
 
     this.mapBounds = new ReactiveVar( null );
@@ -77,6 +81,32 @@ export class Index extends React.Component {
     this.setState({ mapCenter: this.state.geolocation });
   }
 
+  openInsertDialog(features, coords) {
+    this.setState({ openModal: true });
+    this.setState({ latLngClicked: coords });
+    let featuresArr = features.map((loc)=> {
+      loc.text = loc.place_name;
+      loc.value = loc.place_name;
+      return loc;
+    });
+    const selectedLocName = featuresArr[0].text;
+    this.setState({ locArr: featuresArr });
+    this.setState({ locName: selectedLocName });
+    Bert.alert({
+      hideDelay: 6000,
+      title: 'Location Selected',
+      message: selectedLocName,
+      type: 'info',
+      style: 'growl-top-right',
+      icon: 'fa-music'
+    });
+
+  }
+
+  closeInsertDialog(){
+    this.setState({ openModal: false });
+  }
+
   render() {
     const clickNearbyGa = ga => event => {
       this.selectGa(ga._id);
@@ -99,6 +129,7 @@ export class Index extends React.Component {
               setMapZoom={ mapZoom => this.setState({ mapZoom: mapZoom })}
               setMapMaxZoom={ mapMaxZoom => this.setState({ mapMaxZoom: mapMaxZoom })}
               setBounds={ bounds => this.mapBounds.set(bounds) }
+              openInsertDialog={ this.openInsertDialog.bind(this) }
             />
 
             <div id="map-boxes-container">
@@ -118,7 +149,13 @@ export class Index extends React.Component {
 
             <div id="map-floating-buttons" style={{ right: 20 + (this.state.nearbyBoxState > 0 ? $("#map-nearby-box").outerWidth() : 0) }}>
               <GoToGeolocationButton geolocationOnClick={ this.goToGeolocation.bind(this) } />
-              <InsertBtnDialog openModal = {this.state.openModal} />
+              <InsertBtnDialog
+                openModal={this.state.openModal} 
+                closeModal={this.closeInsertDialog.bind(this)}
+                latLng={this.state.latLngClicked} 
+                locArr={this.state.locArr}
+                locName={this.state.locName}
+              />
             </div>
           </div>
         </div>

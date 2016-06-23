@@ -8,6 +8,8 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import TextField from 'material-ui/TextField';
 import TimePicker from 'material-ui/TimePicker';
 import AutoComplete from 'material-ui/AutoComplete';
+import LocationAdd from 'material-ui/svg-icons/maps/add-location';
+import { Bert } from 'meteor/themeteorchef:bert';
 
 
 import Formsy from 'formsy-react';
@@ -32,6 +34,8 @@ import { StatusTypes } from '../../../api/status-types/status-types.js'
 import { geocode } from '../../../api/geocode/methods.js';
 import { shortId } from '../../../util/helper.js'
 
+
+
 /**
 * Dialog content can be scrollable.
 */  
@@ -42,7 +46,7 @@ export default class InsertBtnDialog extends React.Component {
     super(props);
     this.initialState = {
       canSubmit: false,
-      open: props.openModal,
+      open: false,
       tags: [],
       parentCatId: "",
       childCatId: "",
@@ -53,8 +57,8 @@ export default class InsertBtnDialog extends React.Component {
       endDate: null,
       startTime: null,
       endTime: null,
-      lat:"",
-      lng:"",
+      lat: "",
+      lng: "",
       location:"",
       recurring: false,
       dataSource: [],
@@ -62,9 +66,22 @@ export default class InsertBtnDialog extends React.Component {
 
     this.state=this.initialState;
 
+    this.handleAddLocation = () => {
+      this.setState({open: false});
+      Bert.alert({
+        hideDelay: 8000,
+        title: 'Add Location',
+        message: 'Double Click on the location to select it!',
+        type: 'info',
+        style: 'fixed-top',
+        icon: 'fa-map-marker'
+      });
+    }
+
     this.geocodeInputLoc = (value) => {
       if(value.length > 5){
-        geocode(Meteor.settings.public.MapBox.accessToken, value, (locObjs) => {
+        geocode(Meteor.settings.public.MapBox.accessToken, value, 
+        (locObjs) => {
           let locArr = locObjs.map((loc)=> {
             loc.text = loc.place_name;
             loc.value = loc.place_name;
@@ -136,6 +153,7 @@ export default class InsertBtnDialog extends React.Component {
     
     this.handleClose = () => {
       this.setState({open: false});
+      props.closeModal();
     };
     
     this.enableButton = () => {
@@ -308,7 +326,18 @@ export default class InsertBtnDialog extends React.Component {
         }
       } 
     }
+  }
+
+componentWillReceiveProps(nextProps){
+  this.setState({
+    open: nextProps.openModal,
+    lat: nextProps.latLng.lat,
+    lng: nextProps.latLng.lng,
+    location: nextProps.locName,
+    dataSource: nextProps.locArr,
+  })
 }
+
 render() {
   let { paperStyle, switchStyle, submitStyle, gridStyle, titleStyle, dialogStyle, actionsContainerStyle, toggle, labelStyle, textFieldStyle } = this.styles;
   let { wordsError, numericError, urlError } = this.errorMessages;
@@ -479,8 +508,20 @@ render() {
               <br />
 
               <Row>
+                <Col xs={2} md={2}>
                 <h2>Where</h2>
+                </Col>
+                <Col xs={2} md={2} style={{"paddingTop": "16px"}}>
+                <FloatingActionButton mini={true} secondary={true} 
+                onTouchTap = {this.handleAddLocation}
+                >
+                <LocationAdd />
+                </FloatingActionButton>
 
+                </Col>
+              </Row>
+
+              <Row>
                 <Col xs={12} md={8}>
                 <AutoComplete
                 name="location"
@@ -491,6 +532,7 @@ render() {
                 floatingLabelText="Location"
                 fullWidth={true}
                 openOnFocus={true}
+                searchText={this.state.location}
                 filter={AutoComplete.noFilter}
                 />
                 </Col>

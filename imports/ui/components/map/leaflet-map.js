@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { Giveaways } from '../../../api/giveaways/giveaways';
 import { StatusUpdates } from '../../../api/status-updates/status-updates';
 import LeafletMapObject from './leaflet-map-object';
+import { rgeocode } from '../../../api/geocode/methods.js';
 
 import * as LatLngHelper from '../../../util/latlng';
 
@@ -89,6 +90,11 @@ export default class LeafletMap extends React.Component {
       if (self.props.gaId)
         $(".map-marker").removeClass('selected').filter("[ga-id="+self.props.gaId+"]").addClass('selected');
     }).trigger();
+
+    this.mapObject.registerEventHandler('dblclick', function(event){
+      rgeocode(Meteor.settings.public.MapBox.accessToken, event.latlng, self.props.openInsertDialog);
+    })
+
   }
 
   componentDidUpdate(prevProps, prevState) {
