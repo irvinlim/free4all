@@ -24,3 +24,7 @@ form label.error {
   font-weight: normal;
   color: lighten( red, 20% );
 }
+
+.add-giveaway-form .react-tagsinput, .add-giveaway-form .react-tagsinput--focused {
+  position: static;
+}

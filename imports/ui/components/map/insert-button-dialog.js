@@ -33,7 +33,7 @@ export default class InsertBtnDialog extends React.Component {
       tags: [],
       parentCatId: "",
       childCatId: "",
-      childCatName:"Select Category",
+      childCat: null,
       title:"",
       description:"",
       startDate: null,
@@ -186,12 +186,13 @@ export default class InsertBtnDialog extends React.Component {
       this.setState({recurring: val});
     };
 
-    this.setParentCat = (e, val) => {
-      this.setState({parentCatId: val.key});
+    this.setParentCat = (parentCat) => {
+      this.setState({ parentCatId: parentCat._id });
     };
-    this.setChildCat = (e,val) => {
-      this.setState({childCatId: e.currentTarget.getAttribute("id")});
-      this.setState({childCatName: e.currentTarget.getAttribute("name")});
+
+    this.setChildCat = (childCat) => {
+      this.setState({ childCatId: childCat._id });
+      this.setState({ childCat: childCat });
     };
 
     this.submitForm = () => {
@@ -360,15 +361,16 @@ render() {
 
         <Paper style={paperStyle}>
           <Formsy.Form
+            className="add-giveaway-form"
             onValid={this.enableButton}
             onInvalid={this.disableButton}
             onValidSubmit={this.submitForm}
             onInvalidSubmit={this.notifyFormError}>
-            <Grid style={gridStyle}>
-
               <Row>
-                <h2>What</h2>
-                <Col >
+                <Col xs={12}>
+                  <h2>What</h2>
+                </Col>
+                <Col xs={12}>
                   <FormsyText
                     name="title"
                     fullWidth={true}
@@ -379,7 +381,7 @@ render() {
               </Row>
 
               <Row>
-                <Col >
+                <Col xs={12}>
                   <FormsyText
                     name="description"
                     floatingLabelText="Description"
@@ -390,31 +392,26 @@ render() {
                     hintText="What is the event about?"
                     onChange={this.handleDescription} />
                 </Col>
-                <Col xs={12} md={4} >
-                  <p style={{"fontSize":"18px", "position":"relative","display": "inlineBlock"}}>{this.state.childCatName}</p>
-                  <AllCategoriesList setParentCat={this.setParentCat} setChildCat={this.setChildCat}/>
-                </Col>
-                <Col xs={12} md={8} style={{"paddingBottom":"10px"}}>
-                  <TagsInput value={this.state.tags} onChange={this.handleTagsChange} />
-                </Col>
               </Row>
 
               <Row>
-                <h2>When</h2>
-                <Col xs={12} md={8}>
+                <Col xs={12}>
+                  <h2>When</h2>
+                </Col>
+                <Col xs={12} sm={6}>
                   <FormsyDate
                     required
                     className="DatePicker"
                     name="dateStart"
                     formatDate={this.formatDate}
-                    floatingLabelText="Start Date"
+                    floatingLabelText={ this.state.recurring ? "Start Date" : "Date" }
                     autoOk={true}
                     textFieldStyle={this.dateTimeTextStyle}
                     minDate={new Date()}
                     onChange={this.handleStartDatePicker}
-                    value ={this.state.startDate} />
+                    value={this.state.startDate} />
                 </Col>
-                <Col xs={6} md={2} >
+                <Col xs={6} sm={3}>
                   <FormsyTime
                     required
                     className="TimePicker"
@@ -424,9 +421,9 @@ render() {
                     floatingLabelText="Start Time"
                     textFieldStyle={this.dateTimeTextStyle}
                     onChange={this.handleChangeStartTimePicker12}
-                    value ={this.state.startTime} />
+                    value={this.state.startTime} />
                 </Col>
-                <Col xs={6} md={2} className={!this.state.recurring? "" : "displayNone"}>
+                <Col xs={6} sm={3} className={ this.state.recurring ? "displayNone" : "" }>
                   <FormsyTime
                     className="TimePicker"
                     name="endTime"
@@ -436,13 +433,13 @@ render() {
                     floatingLabelText="End Time"
                     textFieldStyle={this.dateTimeTextStyle}
                     onChange={this.handleChangeEndTimePicker12}
-                    value ={this.state.endTime}
-                    defaultTime = { moment().set('minute',0).toDate() } />
+                    value={this.state.endTime}
+                    defaultTime={ moment().set('minute', 0).toDate() } />
                 </Col>
               </Row>
 
-              <Row className={this.state.recurring? "" : "displayNone"}>
-                <Col xs={12} md={8} >
+              <Row className={ this.state.recurring ? "" : "displayNone" }>
+                <Col xs={12} sm={6}>
                   <FormsyDate
                     className="DatePicker"
                     name="dateEnd"
@@ -452,9 +449,9 @@ render() {
                     minDate={new Date()}
                     textFieldStyle={this.dateTimeTextStyle}
                     onChange={this.handleEndDatePicker}
-                    value ={this.state.endDate} />
+                    value={this.state.endDate} />
                 </Col>
-                <Col xs={6} md={2} >
+                <Col xs={6} sm={2}>
                   <FormsyTime
                     className="TimePicker"
                     name="endTime"
@@ -464,17 +461,17 @@ render() {
                     floatingLabelText="End Time"
                     textFieldStyle={this.dateTimeTextStyle}
                     onChange={this.handleChangeEndTimePicker12}
-                    value ={this.state.endTime}
-                    defaultTime = { moment().set('minute',0).toDate() } />
+                    value={this.state.endTime}
+                    defaultTime={ moment().set('minute', 0).toDate() } />
                 </Col>
               </Row>
 
               <Row>
-                <Col xs={12} md={6} >
+                <Col xs={12}>
                   <FormsyToggle
                     className="toggle"
-                    label="Repeated Event?"
-                    name= "Recurring"
+                    label="Repeating event?"
+                    name="Recurring"
                     labelStyle={this.labelStyle}
                     onChange={this.handleRecurring}
                     toggled={this.state.recurring} />
@@ -482,18 +479,20 @@ render() {
               </Row>
 
               <Row>
-                <Col xs={2} md={2}>
+                <Col xs={12} sm={6}>
                   <h2>Where</h2>
                 </Col>
-                <Col xs={2} md={2} style={{"paddingTop": "16px"}}>
-                  <FloatingActionButton mini={true} secondary={true} onTouchTap = {this.handleAddLocation} >
-                    <FontIcon className="material-icons">add_location</FontIcon>
-                  </FloatingActionButton>
+                <Col xs={12} sm={6} style={{ paddingTop: 16, textAlign: 'center' }}>
+                  <RaisedButton
+                    secondary={true}
+                    onTouchTap={this.handleAddLocation}
+                    label="Choose on Map"
+                    icon={<FontIcon className="material-icons">add_location</FontIcon>} />
                 </Col>
               </Row>
 
               <Row>
-                <Col xs={12} md={8}>
+                <Col xs={12}>
                   <AutoComplete
                     name="location"
                     hintText="Location of event"
@@ -506,7 +505,7 @@ render() {
                     searchText={this.state.location}
                     filter={AutoComplete.noFilter}/>
                 </Col>
-                <Col xs={12} md={2} >
+                <Col className="displayNone">
                   <FormsyText
                     name="lat"
                     validations="isNumeric"
@@ -517,7 +516,7 @@ render() {
                     onChange={this.handleLat}
                     disabled={true} />
                 </Col>
-                <Col xs={12} md={2} >
+                <Col className="displayNone">
                   <FormsyText
                     name="lng"
                     validations="isNumeric"
@@ -530,7 +529,21 @@ render() {
                 </Col>
               </Row>
 
-            </Grid>
+              <Row>
+                <Col xs={12}>
+                  <h2>Categories</h2>
+                </Col>
+                <Col xs={12} sm={4}>
+                  <p style={{ lineHeight: "36px", fontWeight: 300 }}>Category:</p>
+                </Col>
+                <Col xs={12} sm={8}>
+                  <AllCategoriesList catSelected={this.state.childCat} setParentCat={this.setParentCat} setChildCat={this.setChildCat} />
+                </Col>
+                <Col xs={12}>
+                  <TagsInput value={this.state.tags} onChange={this.handleTagsChange} />
+                </Col>
+              </Row>
+
           </Formsy.Form>
         </Paper>
 

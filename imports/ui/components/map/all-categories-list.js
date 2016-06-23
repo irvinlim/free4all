@@ -1,54 +1,46 @@
 import React from 'react';
 import IconMenu from 'material-ui/IconMenu';
-import IconButton from 'material-ui/IconButton';
+import FlatButton from 'material-ui/FlatButton';
 import MenuItem from 'material-ui/MenuItem';
 import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import Download from 'material-ui/svg-icons/file/file-download';
-import { Popover, PopoverAnimationVertical } from 'material-ui/Popover';
 
-const categoriesList = ({ parentCategories, categories, props }) => (
-  <IconMenu
-    iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
-    anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
-    targetOrigin={{ horizontal: 'left', vertical: 'top' }}
-    onItemTouchTap={ props.setParentCat }>
+import * as IconsHelper from '../../../util/icons.js';
 
-    { parentCategories.map(parentCat =>
-      <MenuItem
-        key={ parentCat._id }
-        primaryText={ parentCat.name }
-        rightIcon={ <ArrowDropRight /> }
-        menuItems={
-          categories
-          .filter(child => child.parent === parentCat._id)
-          .map(cat =>
-            <MenuItem
-              name={ cat.name }
-              value={ cat._id }
-              primaryText={ cat.name }
-              leftIcon={ <Download /> }
-              onClick={ props.setChildCat }
-              id={ cat._id } />
-          )
-        } />
-    ) }
-
-  </IconMenu>
-);
-
-const noCategories = () => (
-  <IconMenu
-    iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
-    anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
-    targetOrigin={{ horizontal: 'left', vertical: 'top' }}>
-  </IconMenu>
+const categoriesList = ({ parentCategories, categories, props }) => parentCategories.map(parentCat =>
+  <MenuItem
+    key={ parentCat._id }
+    primaryText={ parentCat.name }
+    leftIcon={ IconsHelper.makeIcon(parentCat) }
+    rightIcon={ <ArrowDropRight /> }
+    onTouchTap={ () => props.setParentCat(parentCat) }
+    menuItems={
+      categories
+      .filter(child => child.parent === parentCat._id)
+      .map(cat =>
+        <MenuItem
+          name={ cat.name }
+          value={ cat._id }
+          primaryText={ cat.name }
+          leftIcon={ IconsHelper.makeIcon(cat) }
+          onClick={ () => props.setChildCat(cat) }
+          id={ cat._id } />
+      )
+    } />
 );
 
 export const AllCategoriesList = ({ parentCategories, categories, props }) => (
-  <div id="all-categories-list">
-    { parentCategories.length > 0 ? categoriesList({ parentCategories, categories, props }) : noCategories() }
-  </div>
+  <IconMenu
+    iconButtonElement={(
+      <FlatButton
+        label={ props.catSelected ? props.catSelected.name : "Choose a category" }
+        icon={ props.catSelected ? IconsHelper.makeIcon(props.catSelected) : IconsHelper.materialIcon("arrow_drop_down") }
+        labelStyle={{ textTransform: "none", fontWeight: 400,  }} />
+    )}
+    anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
+    targetOrigin={{ horizontal: 'left', vertical: 'top' }}>
+
+    { parentCategories.length > 0 ? categoriesList({ parentCategories, categories, props }) : <div /> }
+  </IconMenu>
 );
 
 AllCategoriesList.propTypes = {
