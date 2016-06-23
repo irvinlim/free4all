@@ -98,7 +98,7 @@ export class Index extends React.Component {
       message: selectedLocName,
       type: 'info',
       style: 'growl-top-right',
-      icon: 'fa-music'
+      icon: 'fa-map-marker'
     });
 
   }
