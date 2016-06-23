@@ -27,6 +27,7 @@ export class Index extends React.Component {
       mapCenter: null,
       mapZoom: null,
       mapMaxZoom: null,
+      openModal: true,
     };
 
     this.mapBounds = new ReactiveVar( null );
@@ -117,7 +118,7 @@ export class Index extends React.Component {
 
             <div id="map-floating-buttons" style={{ right: 20 + (this.state.nearbyBoxState > 0 ? $("#map-nearby-box").outerWidth() : 0) }}>
               <GoToGeolocationButton geolocationOnClick={ this.goToGeolocation.bind(this) } />
-              <InsertBtnDialog />
+              <InsertBtnDialog openModal = {this.state.openModal} />
             </div>
           </div>
         </div>

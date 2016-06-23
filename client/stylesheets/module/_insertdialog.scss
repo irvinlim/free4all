@@ -1,20 +1,58 @@
+.toggle {
+    margin-top: 20px;
+    width: 70% !important;
+}
+.toggle>div>label {
+    font-weight: 100;
+}
+.TimePicker>label {
+    pointer-events: none !important;
+}
+.DatePicker>label {
+    pointer-events: none !important;
+}
+.displayNone{
+  display: none;
+}
+.col-md-2.col-xs-12 > div {
+    width: 100% !important;
+}
+
+.DatePicker {
+    width: 100% !important;
+}
+
+.TimePicker {
+    width: 99px !important;
+}
+
 .react-tagsinput {
-  background-color: #fff;
-  border: 1px solid #ccc;
-  overflow: hidden;
-  padding-left: 5px;
-  padding-top: 5px;
+  padding-top: 12px;
+  border-bottom-width: 1px;
+  border-style: none none solid;
+  border-color: rgb(224, 224, 224);
+  box-sizing: content-box;
+  margin: 0px;
+  position: absolute;
+  width: 100%;
 }
 
 .react-tagsinput--focused {
-  border-color: #a5d24a;
+    border-bottom-width: 2px;
+    border-style: none none solid;
+    border-color: rgb(0, 188, 212);
+    box-sizing: content-box;
+    margin: 0px;
+    position: absolute;
+    width: 100%;
+    transition: all 150ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
 }
 
 .react-tagsinput-tag {
-  background-color: #cde69c;
+  background-color: #e4e4e4;
   border-radius: 2px;
-  border: 1px solid #a5d24a;
-  color: #638421;
+  border: 1px solid #c0cad0;
+  color: #535e61;
   display: inline-block;
   font-family: sans-serif;
   font-size: 13px;
@@ -26,7 +64,7 @@
 
 .react-tagsinput-remove {
   cursor: pointer;
-  font-weight: bold;
+  color: grey
 }
 
 .react-tagsinput-tag a::before {

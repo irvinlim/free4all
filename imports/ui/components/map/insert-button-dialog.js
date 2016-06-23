@@ -42,7 +42,7 @@ export default class InsertBtnDialog extends React.Component {
     super(props);
     this.initialState = {
       canSubmit: false,
-      open: false,
+      open: props.openModal,
       tags: [],
       parentCatId: "",
       childCatId: "",
@@ -115,22 +115,13 @@ export default class InsertBtnDialog extends React.Component {
         backgroundColor: "rgb(224, 224, 224)",
       },
       switchStyle: {
-        marginBottom: 16,
+        "marginBottom": "16",
       },
       submitStyle: {
-        marginTop: 32,
-      },
-      toggle: {
-        margin: "16px 0px 16px 16px !important",
-        width: "50% !important",
-        maxWidth: "250 !important",
-
-      },
-      labelStyle: {
-        fontWeight: 200,
+        "marginTop": "32",
       },
       textFieldStyle: {
-          pointerEvents: "none",
+        pointerEvents: "none",
       }
 
     };
@@ -391,19 +382,20 @@ render() {
                   />
                 </Col>
                 <Col xs={12} md={4} >
-                  <span style={{"fontSize":"18px"}}>{this.state.childCatName}</span>
+                  <p style={{"fontSize":"18px", "position":"relative","display": "inlineBlock"}}>{this.state.childCatName}</p>
                   <AllCategoriesList setParentCat={this.setParentCat} setChildCat={this.setChildCat}/>
                 </Col>
-                <Col xs={12} md={8} >
+                <Col xs={12} md={8} style={{"paddingBottom":"10px"}}>
                   <TagsInput value={this.state.tags} onChange={this.handleTagsChange} />
                 </Col>
               </Row>
               <br />
               <Row>
                 <h2>When</h2>
-                <Col xs={12} md={6}>
+                <Col xs={12} md={8}>
                   <FormsyDate 
                     required
+                    className="DatePicker"
                     name="dateStart"
                     formatDate={this.formatDate} 
                     floatingLabelText="Start Date" 
@@ -415,9 +407,10 @@ render() {
 
                     />
                 </Col>
-                <Col xs={12} md={6} >
+                <Col xs={6} md={2} >
                   <FormsyTime 
                     required
+                    className="TimePicker"
                     name="startTime"
                     pedantic={true} 
                     format="ampm" 
@@ -427,10 +420,25 @@ render() {
                     value ={this.state.startTime}
                     />
                 </Col>
+                <Col xs={6} md={2} className={!this.state.recurring? "" : "displayNone"}>
+                  <FormsyTime 
+                  className="TimePicker"
+                  name="endTime"
+                  required
+                  pedantic={true} 
+                  format="ampm" 
+                  floatingLabelText="End Time"
+                  textFieldStyle={this.dateTimeTextStyle}
+                  onChange={this.handleChangeEndTimePicker12}
+                  value ={this.state.endTime}
+                  defaultTime = { moment().set('minute',0).toDate() }
+                  />
+                </Col>
               </Row>
-              <Row>
-                <Col xs={12} md={6}>
+              <Row className={this.state.recurring? "" : "displayNone"}>
+                <Col xs={12} md={8} >
                   <FormsyDate 
+                  className="DatePicker"
                   name="dateEnd"
                   formatDate={this.formatDate} 
                   floatingLabelText="End Date" 
@@ -441,8 +449,9 @@ render() {
                   value ={this.state.endDate}
                   />                
                 </Col>
-                <Col xs={12} md={6} >
+                <Col xs={6} md={2} >
                   <FormsyTime 
+                  className="TimePicker"
                   name="endTime"
                   required
                   pedantic={true} 
@@ -451,13 +460,15 @@ render() {
                   textFieldStyle={this.dateTimeTextStyle}
                   onChange={this.handleChangeEndTimePicker12}
                   value ={this.state.endTime}
+                  defaultTime = { moment().set('minute',0).toDate() }
                   />
                 </Col>
               </Row>
               <Row>
-                <Col xs={12} md={6} style={this.toggle}>
+                <Col xs={12} md={6} >
                 <FormsyToggle
-                label="Recurring from start to end date"
+                className="toggle"
+                label="Repeated Event?"
                 name= "Recurring"
                 labelStyle={this.labelStyle}
                 onChange={this.handleRecurring}
@@ -470,7 +481,7 @@ render() {
               <Row>
                 <h2>Where</h2>
 
-                <Col>
+                <Col xs={12} md={8}>
                 <AutoComplete
                 name="location"
                 hintText="Location of event"
@@ -483,29 +494,29 @@ render() {
                 filter={AutoComplete.noFilter}
                 />
                 </Col>
-              </Row>
-              <Row>
-                <Col xs={12} md={6} >
-                  <FormsyText
-                    name="lat"
-                    validations="isNumeric"
-                    validationError={numericError}
-                    hintText="Latitude"
-                    floatingLabelText="Latitude"
-                    value={this.state.lat}
-                    onChange={this.handleLat}
-                    />
+                <Col xs={12} md={2} >
+                <FormsyText
+                name="lat"
+                validations="isNumeric"
+                validationError={numericError}
+                hintText="Latitude"
+                floatingLabelText="Latitude"
+                value={this.state.lat}
+                onChange={this.handleLat}
+                disabled={true}
+                />
                 </Col>
-                <Col xs={12} md={6} >
-                  <FormsyText
-                    name="lng"
-                    validations="isNumeric"
-                    validationError={numericError}
-                    hintText="Longitude"
-                    floatingLabelText="Longitude"
-                    value={this.state.lng}
-                    onChange={this.handleLng}
-                    />
+                <Col xs={12} md={2} >
+                <FormsyText
+                name="lng"
+                validations="isNumeric"
+                validationError={numericError}
+                hintText="Longitude"
+                floatingLabelText="Longitude"
+                value={this.state.lng}
+                onChange={this.handleLng}
+                disabled={true}
+                />
                 </Col>
               </Row>
 
