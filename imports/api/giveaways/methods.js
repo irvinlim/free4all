@@ -33,6 +33,32 @@ export const removeGiveaway = new ValidatedMethod({
   },
 });
 
+// StatusUpdates
+
+export const pushStatusUpdate = new ValidatedMethod({
+  name: 'giveaways.pushStatusUpdate',
+  validate: new SimpleSchema({
+    giveawayId: { type: String },
+    statusTypeId: { type: String },
+    date: { type: Date },
+    userId: { type: String },
+  }).validator(),
+  run({ giveawayId, statusTypeId, date, userId }) {
+    const giveaway = Giveaways.findOne(giveawayId);
+
+    if (!this.userId)
+      throw new Meteor.Error("giveaways.pushStatusUpdate.notLoggedIn", "Must be logged in to update status.");
+    else if (this.userId != userId)
+      throw new Meteor.Error("giveaways.pushStatusUpdate.notAuthenticated", "User ID does not match.");
+    else if (!giveaway)
+      throw new Meteor.Error("giveaways.pushStatusUpdate.undefinedGiveaway", "No such Giveaway found.");
+
+    Giveaways.update(giveawayId, {
+      $push: { statusUpdates: { statusTypeId, date, userId } }
+    });
+  },
+});
+
 // Ratings
 
 export const voteUp = new ValidatedMethod({
@@ -54,7 +80,7 @@ export const voteUp = new ValidatedMethod({
     let ratings = giveaway.ratings ? giveaway.ratings.filter(rating => rating.userId != userId) : [];
     ratings.push({ userId, isUpvote: true });
 
-    Giveaways.update({ _id: giveawayId }, {
+    Giveaways.update(giveawayId, {
       $set: { ratings },
     });
   },
@@ -79,7 +105,7 @@ export const voteDown = new ValidatedMethod({
     let ratings = giveaway.ratings ? giveaway.ratings.filter(rating => rating.userId != userId) : [];
     ratings.push({ userId, isUpvote: false });
 
-    Giveaways.update({ _id: giveawayId }, {
+    Giveaways.update(giveawayId, {
       $set: { ratings },
     });
   },
@@ -103,7 +129,7 @@ export const unvote = new ValidatedMethod({
 
     let ratings = giveaway.ratings ? giveaway.ratings.filter(rating => rating.userId != userId) : [];
 
-    Giveaways.update({ _id: giveawayId }, {
+    Giveaways.update(giveawayId, {
       $set: { ratings },
     });
   },

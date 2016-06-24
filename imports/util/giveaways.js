@@ -1,10 +1,12 @@
 import React from 'react';
-import * as Helper from './helper';
-import * as IconsHelper from './icons';
+import { Meteor } from 'meteor/meteor';
 
 import { ParentCategories } from '../api/parent-categories/parent-categories';
 import { Categories } from '../api/categories/categories';
 import { StatusTypes } from '../api/status-types/status-types';
+
+import * as Helper from './helper';
+import * as IconsHelper from './icons';
 
 // Category
 export const getCategory = (ga) => Categories.findOne(ga.categoryId);
@@ -35,6 +37,25 @@ export const getStatusColor = (ga) => {
   const lastOwnerStatusType = getLastOwnerStatusType(ga);
   if (!lastOwnerStatusType) return null;
   return Helper.sanitizeHexColour(lastOwnerStatusType.hexColour);
+};
+
+// Ratings
+export const countUpvotes = (ga) => ga.ratings ? ga.ratings.reduce((sum, rating) => rating.isUpvote ? sum + 1 : sum, 0) : 0;
+export const countDownvotes = (ga) => ga.ratings ? ga.ratings.reduce((sum, rating) => !rating.isUpvote ? sum + 1 : sum, 0) : 0;
+export const getCurrentUserVote = (ga) => {
+  if (!Meteor.userId() || !ga.ratings)
+    return null;
+
+  const ownVotes = ga.ratings.filter(rating => Meteor.userId() == rating.userId);
+  return ownVotes.length ? ownVotes[0] : null;
+};
+export const currentUserUpvoted = (ga) => {
+  const currentUserVote = getCurrentUserVote(ga);
+  return currentUserVote && currentUserVote.isUpvote === true;
+};
+export const currentUserDownvoted = (ga) => {
+  const currentUserVote = getCurrentUserVote(ga);
+  return currentUserVote && currentUserVote.isUpvote === false;
 };
 
 // Dates

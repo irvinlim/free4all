@@ -5,40 +5,41 @@ import IconButton from 'material-ui/IconButton';
 
 import { voteUp, voteDown, unvote } from '../../../api/giveaways/methods';
 
+import * as GiveawaysHelper from '../../../util/giveaways';
 import * as IconsHelper from '../../../util/icons';
 
-const makeVoteClickHandler = (isUpvote, ownVote, gaId) => {
+const makeVoteClickHandler = (isUpvote, voted, gaId) => {
   return event => {
     if (!Meteor.userId()) return;
 
-    let method = ownVote === isUpvote ? unvote : isUpvote ? voteUp : voteDown;
+    let method = voted ? unvote : isUpvote ? voteUp : voteDown;
     method.call({ userId: Meteor.userId(), giveawayId: gaId });
   };
 };
 
-export const GiveawayRatings = ({ gaId, upvotes, downvotes, ownVote }) => (
+export const GiveawayRatings = ({ giveaway }) => (
   <div className="giveaway-ratings">
     <Grid>
       <Row>
         <Col xs={3}>
           <IconButton
             className="button-upvote"
-            className={ ownVote === true ? "voted" : "" }
-            onTouchTap={ makeVoteClickHandler(true, ownVote, gaId) }
+            className={ GiveawaysHelper.currentUserUpvoted(giveaway) ? "voted" : "" }
+            onTouchTap={ makeVoteClickHandler(true, GiveawaysHelper.currentUserUpvoted(giveaway), giveaway._id) }
             children={ IconsHelper.materialIcon("thumb_up") } />
         </Col>
         <Col xs={3}>
-          <span className="num_ratings">{ upvotes }</span>
+          <span className="num_ratings">{ GiveawaysHelper.countUpvotes(giveaway) }</span>
         </Col>
         <Col xs={3}>
           <IconButton
             className="button-downvote"
-            className={ ownVote === false ? "voted" : "" }
-            onTouchTap={ makeVoteClickHandler(false, ownVote, gaId) }
+            className={ GiveawaysHelper.currentUserDownvoted(giveaway) ? "voted" : "" }
+            onTouchTap={ makeVoteClickHandler(false, GiveawaysHelper.currentUserDownvoted(giveaway), giveaway._id) }
             children={ IconsHelper.materialIcon("thumb_down") } />
         </Col>
         <Col xs={3}>
-          <span className="num_ratings">{ downvotes }</span>
+          <span className="num_ratings">{ GiveawaysHelper.countDownvotes(giveaway) }</span>
         </Col>
       </Row>
     </Grid>

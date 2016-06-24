@@ -4,6 +4,8 @@ import { GiveawayRatings } from '../../components/giveaways/giveaway-ratings';
 import { Loading } from '../../components/loading';
 import { Giveaways } from '../../../api/giveaways/giveaways';
 
+import * as GiveawaysHelper from '../../../api/giveaways/giveaways';
+
 const composer = (props, onData) => {
   if (!props.gaId)
     return;
@@ -14,16 +16,7 @@ const composer = (props, onData) => {
     if (!giveaway)
       return;
 
-    const findOwnVotes = giveaway.ratings ? giveaway.ratings.filter(rating => Meteor.userId() == rating.userId) : [];
-    const numUpvotes = giveaway.ratings ? giveaway.ratings.reduce((sum, rating) => rating.isUpvote ? sum + 1 : sum, 0) : 0;
-    const numDownvotes = giveaway.ratings ? giveaway.ratings.length - numUpvotes : 0;
-
-    onData(null, {
-      gaId: props.gaId,
-      upvotes: numUpvotes,
-      downvotes: numDownvotes,
-      ownVote: findOwnVotes.length ? findOwnVotes[0].isUpvote : null,
-    });
+    onData(null, { giveaway });
   }
 };
 
