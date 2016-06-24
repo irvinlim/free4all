@@ -44,7 +44,7 @@ export class HeaderProfile extends React.Component {
   noUser() {
     return (
       <div id="header-profile">
-        <IconButton onTouchTap={ this.props.openLogin } children={ IconsHelper.materialIcon("person", Colors.grey50) } />
+        <IconButton onTouchTap={ this.props.openLogin } children={ IconsHelper.materialIcon("person", { color: Colors.grey50 }) } />
       </div>
     );
   }
@@ -59,7 +59,7 @@ export class HeaderProfile extends React.Component {
           { avatarUrl ? <Avatar src={ avatarUrl } size={40} /> :
                           UsersHelper.getFirstInitial(this.props.user) ?
                             <Avatar backgroundColor="#097381">{ UsersHelper.getFirstInitial(this.props.user) }</Avatar> :
-                              IconsHelper.materialIcon("person", Colors.grey50)
+                              IconsHelper.materialIcon("person", { color: Colors.grey50 })
           }
         </IconButton>
 

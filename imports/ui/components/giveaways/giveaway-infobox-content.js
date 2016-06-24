@@ -1,4 +1,5 @@
 import React from 'react';
+import { Row, Col } from 'react-bootstrap';
 
 import * as Helper from '../../../util/helper';
 import * as IconsHelper from '../../../util/icons';
@@ -7,8 +8,12 @@ const iconRow = (icon, content) => {
   if (content && content.length)
     return (
       <div className="map-info-row">
-        { IconsHelper.icon(icon) }
-        <p>{ content }</p>
+        <div className="info-row-icon">
+          { IconsHelper.icon(icon, { fontSize: 18, lineHeight: "25px" }) }
+        </div>
+        <div className="info-row-text">
+          <p>{ content }</p>
+        </div>
       </div>
     );
 };

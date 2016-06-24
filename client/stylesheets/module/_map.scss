@@ -35,7 +35,8 @@
 
   .map-info-row {
     line-height: 25px;
-    span.material-icons { float: left; font-size: 18px !important; line-height: 25px; margin-right: 10px; }
+    .info-row-icon { width: 20px; display: inline-block; margin-right: 10px; vertical-align: top; }
+    .info-row-text { width: calc(100% - 30px); display: inline-block; }
   }
 }
 

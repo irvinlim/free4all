@@ -3,17 +3,18 @@ import FontIcon from 'material-ui/FontIcon';
 
 export const catIcon = (cat) => icon(cat.iconClass);
 
-export const icon = (className, color="") => {
+export const icon = (className, style={}) => {
   if (className.substr(0,3) == "fa ")
-    return <i className={ className } style={{ color: color }}></i>;
+    return <i className={ className } style={ style }></i>;
   else
-    return materialIcon(className, color);
+    return materialIcon(className, style);
 };
 
-export const materialIcon = (name, color="") => (
+export const materialIcon = (name, style={}) => (
   <FontIcon
     className="material-icons"
-    color={ color }>
+    color={ style.color }
+    style={ style }>
     { name }
   </FontIcon>
 );

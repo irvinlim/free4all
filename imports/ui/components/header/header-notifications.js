@@ -63,7 +63,7 @@ export class HeaderNotifications extends React.Component {
             style={{ padding:0 }}
             badgeStyle={{ height:20, width:20, backgroundColor: 'rgba(255, 255, 255, 0.65)', color:'#045d68' }}
             badgeContent={ this.props.notificationCount }>
-            <IconButton onTouchTap={ this.handleOnTouchTap.bind(this) } children={ IconsHelper.icon("notifications", Colors.grey50) } />
+            <IconButton onTouchTap={ this.handleOnTouchTap.bind(this) } children={ IconsHelper.icon("notifications", { color: Colors.grey50 }) } />
           </Badge>
 
           <Popover
