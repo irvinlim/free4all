@@ -33,6 +33,7 @@ export class Index extends React.Component {
       locName: "",
       locArr: [],
       isDraggableAdded: false,
+      showMarkers: true,
     };
 
     this.mapBounds = new ReactiveVar( null );
@@ -104,20 +105,26 @@ export class Index extends React.Component {
     if(removeDraggable){
       removeDraggable();
     }
+
+    this.toggleMarkers();
   }
 
-  closeModal(){
+  closeModal() {
     this.setState({ isModalOpen: false });
   }
-  openModal(){
+  openModal() {
     this.setState({ isModalOpen: true });
   }
 
-  addDraggable(){
+  addDraggable() {
     this.setState({ isDraggableAdded: true });
   }
-  noAddDraggable(){
+  noAddDraggable() {
     this.setState({ isDraggableAdded: false });
+  }
+
+  toggleMarkers() {
+    this.setState({ showMarkers: !this.state.showMarkers });
   }
 
   render() {
@@ -145,6 +152,7 @@ export class Index extends React.Component {
               openInsertDialog={ this.openInsertDialog.bind(this) }
               isDraggableAdded={ this.state.isDraggableAdded }
               stopDraggableAdded={ this.noAddDraggable.bind(this) }
+              showMarkers={ this.state.showMarkers }
             />
 
             <div id="map-boxes-container">
@@ -165,13 +173,14 @@ export class Index extends React.Component {
             <div id="map-floating-buttons" style={{ right: 20 + (this.state.nearbyBoxState > 0 ? $("#map-nearby-box").outerWidth() : 0) }}>
               <GoToGeolocationButton geolocationOnClick={ this.goToGeolocation.bind(this) } />
               <InsertBtnDialog
-                isModalOpen={this.state.isModalOpen} 
+                isModalOpen={this.state.isModalOpen}
                 openModal={this.openModal.bind(this)}
                 closeModal={this.closeModal.bind(this)}
-                latLng={this.state.latLngClicked} 
+                latLng={this.state.latLngClicked}
                 locArr={this.state.locArr}
                 locName={this.state.locName}
                 addDraggable={this.addDraggable.bind(this)}
+                toggleMarkers={ this.toggleMarkers.bind(this) }
               />
             </div>
           </div>

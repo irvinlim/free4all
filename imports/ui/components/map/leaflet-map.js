@@ -65,7 +65,7 @@ export default class LeafletMap extends React.Component {
       rgeocode(Meteor.settings.public.MapBox.accessToken, event.latlng, self.props.openInsertDialog);
     })
   }
-  
+
   removeDraggable() {
     this.mapObject.map.removeLayer(this.draggableMarker);
   }
@@ -98,6 +98,13 @@ export default class LeafletMap extends React.Component {
       this.draggableMarker = marker;
       marker.bindPopup(popup).openPopup();
 
+    }
+
+    if (this.mapObject && this.mapObject.map) {
+      if (nextProps.showMarkers)
+        this.mapObject.map.addLayer(this.mapObject.markerClusterGroup);
+      else
+        this.mapObject.map.removeLayer(this.mapObject.markerClusterGroup);
     }
   }
 

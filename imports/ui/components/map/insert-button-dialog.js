@@ -56,6 +56,8 @@ export default class InsertBtnDialog extends React.Component {
       props.closeModal();
       props.addDraggable();
 
+      props.toggleMarkers();
+
       Bert.alert({
         hideDelay: 8000,
         title: 'Add Location',
@@ -370,30 +372,30 @@ render() {
 
               <Row>
                 <Col >
-                <FormsyText 
+                <FormsyText
                   name="description"
-                  floatingLabelText="Description" 
-                  multiLine={true} 
-                  fullWidth={true} 
-                  rows={3} 
+                  floatingLabelText="Description"
+                  multiLine={true}
+                  fullWidth={true}
+                  rows={3}
                   required
                   hintText="What is the event about?"
                   onChange={this.handleDescription}
                   />
                 </Col>
                 <Col xs={12} md={4} >
-                  <RaisedButton 
-                  label={this.state.childCatName} 
-                  secondary={true} 
-                  style={{"margin":"14px"}} 
+                  <RaisedButton
+                  label={this.state.childCatName}
+                  secondary={true}
+                  style={{"margin":"14px"}}
                   onTouchTap={this.handleOpenCatMenu}
                   icon={<FontIcon className={this.state.childCatIcon} />}
                 />
-                <AllCategoriesList 
-                  setParentCat={this.setParentCat} 
+                <AllCategoriesList
+                  setParentCat={this.setParentCat}
                   setChildCat={this.setChildCat}
                   isCatMenuOpen={this.state.isCatMenuOpen}
-                  anchorEl={this.state.anchorEl} 
+                  anchorEl={this.state.anchorEl}
                 />
                 </Col>
                 <Col xs={12} md={8} style={{"paddingBottom":"10px"}}>
