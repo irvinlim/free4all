@@ -8,6 +8,8 @@ import TextField from 'material-ui/TextField';
 
 import { handleLogin, handleFacebookLogin, handleGoogleLogin, handleIVLELogin } from '../../../modules/login';
 
+import * as IconsHelper from '../../../util/icons';
+
 export default class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -84,7 +86,7 @@ export default class Login extends React.Component {
                   style={{ width: "100%", backgroundColor: "#395697", marginBottom: 10 }}
                   labelColor="#ffffff"
                   label="Facebook"
-                  icon={ <i className="fa fa-facebook-f"></i> }
+                  icon={ IconsHelper.icon("fa fa-facebook-f") }
                   onTouchTap={ this.socialLoginHandler(handleFacebookLogin) } />
               </Col>
               <Col xs={12} sm={4} smOffset={0}>
@@ -92,7 +94,7 @@ export default class Login extends React.Component {
                   style={{ width: "100%", backgroundColor: "#e0492f", marginBottom: 10 }}
                   labelColor="#ffffff"
                   label="Google"
-                  icon={ <i className="fa fa-google"></i> }
+                  icon={ IconsHelper.icon("fa fa-google") }
                   onTouchTap={ this.socialLoginHandler(handleGoogleLogin) } />
               </Col>
             </Row>

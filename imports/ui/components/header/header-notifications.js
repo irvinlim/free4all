@@ -3,9 +3,10 @@ import { browserHistory } from 'react-router';
 import * as Colors from 'material-ui/styles/colors';
 import Badge from 'material-ui/Badge';
 import IconButton from 'material-ui/IconButton';
-import FontIcon from 'material-ui/FontIcon';
 import Popover from 'material-ui/Popover';
 import NotificationsList from './notifications-list';
+
+import * as IconsHelper from '../../../util/icons';
 
 export class HeaderNotifications extends React.Component {
   constructor(props) {
@@ -62,9 +63,7 @@ export class HeaderNotifications extends React.Component {
             style={{ padding:0 }}
             badgeStyle={{ height:20, width:20, backgroundColor: 'rgba(255, 255, 255, 0.65)', color:'#045d68' }}
             badgeContent={ this.props.notificationCount }>
-            <IconButton onTouchTap={ this.handleOnTouchTap.bind(this) }>
-              <FontIcon className="material-icons" color={ Colors.grey50 }>notifications</FontIcon>
-            </IconButton>
+            <IconButton onTouchTap={ this.handleOnTouchTap.bind(this) } children={ IconsHelper.icon("notifications", Colors.grey50) } />
           </Badge>
 
           <Popover

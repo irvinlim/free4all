@@ -1,9 +1,10 @@
 import React from 'react';
-import FontIcon from 'material-ui/FontIcon';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import { Scrollbars } from 'react-custom-scrollbars';
 
 import NearbyGiveaways from '../../containers/giveaways/nearby-giveaways';
+
+import * as IconsHelper from '../../../util/icons';
 
 export default class MapNearbyBox extends React.Component {
   positionBoxes() {
@@ -37,7 +38,7 @@ export default class MapNearbyBox extends React.Component {
 
         <div className="expand-button-nearbybox hidden-xs hidden-sm">
           <FloatingActionButton mini={true} backgroundColor="#647577" zDepth={ 0 }>
-            <FontIcon className="material-icons">{ this.props.boxState == 0 ? "keyboard_arrow_left" : "keyboard_arrow_right" }</FontIcon>
+            { IconsHelper.materialIcon(this.props.boxState == 0 ? "keyboard_arrow_left" : "keyboard_arrow_right") }
           </FloatingActionButton>
         </div>
       </div>

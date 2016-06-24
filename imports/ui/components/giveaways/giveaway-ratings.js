@@ -1,10 +1,11 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
-import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
 
 import { voteUp, voteDown, unvote } from '../../../api/ratings/methods';
+
+import * as IconsHelper from '../../../util/icons';
 
 const makeVoteClickHandler = (isUpvote, ownVote, gaId) => {
   return event => {
@@ -24,9 +25,7 @@ export const GiveawayRatings = ({ gaId, upvotes, downvotes, ownVote }) => (
             className="button-upvote"
             className={ ownVote === true ? "voted" : "" }
             onTouchTap={ makeVoteClickHandler(true, ownVote, gaId) }
-          >
-            <FontIcon className="material-icons">thumb_up</FontIcon>
-          </IconButton>
+            children={ IconsHelper.materialIcon("thumb_up") } />
         </Col>
         <Col xs={3}>
           <span className="num_ratings">{ upvotes }</span>
@@ -36,9 +35,7 @@ export const GiveawayRatings = ({ gaId, upvotes, downvotes, ownVote }) => (
             className="button-downvote"
             className={ ownVote === false ? "voted" : "" }
             onTouchTap={ makeVoteClickHandler(false, ownVote, gaId) }
-          >
-            <FontIcon className="material-icons">thumb_down</FontIcon>
-          </IconButton>
+            children={ IconsHelper.materialIcon("thumb_down") } />
         </Col>
         <Col xs={3}>
           <span className="num_ratings">{ downvotes }</span>

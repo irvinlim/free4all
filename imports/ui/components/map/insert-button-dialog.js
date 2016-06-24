@@ -3,7 +3,6 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
-import FontIcon from 'material-ui/FontIcon';
 import AutoComplete from 'material-ui/AutoComplete';
 import { Bert } from 'meteor/themeteorchef:bert';
 
@@ -21,6 +20,8 @@ import { StatusTypes } from '../../../api/status-types/status-types.js'
 
 import { geocode } from '../../../api/geocode/methods.js';
 import { shortId } from '../../../util/helper.js'
+
+import * as IconsHelper from '../../../util/icons';
 
 export default class InsertBtnDialog extends React.Component {
 
@@ -345,7 +346,7 @@ render() {
     <div>
       {/* + Button */}
       <FloatingActionButton className="floatingButton" onTouchTap={this.handleOpen}>
-        <FontIcon className="material-icons">add</FontIcon>
+        { IconsHelper.materialIcon("add") }
       </FloatingActionButton>
 
       <Dialog
@@ -487,7 +488,7 @@ render() {
                     secondary={true}
                     onTouchTap={this.handleAddLocation}
                     label="Choose on Map"
-                    icon={<FontIcon className="material-icons">add_location</FontIcon>} />
+                    icon={ IconsHelper.materialIcon("add_location") } />
                 </Col>
               </Row>
 

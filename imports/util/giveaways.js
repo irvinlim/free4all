@@ -1,5 +1,6 @@
 import React from 'react';
 import * as Helper from './helper';
+import * as IconsHelper from './icons';
 
 import { Categories } from '../api/categories/categories';
 import { StatusTypes } from '../api/status-types/status-types';
@@ -12,7 +13,7 @@ export const getCategoryIconClass = (ga) => {
   return cat ? cat.iconClass : null;
 };
 
-export const getCategoryIcon = (ga) => ( <i className={ getCategoryIconClass(ga) }></i> );
+export const getCategoryIcon = (ga) => IconsHelper.catIcon(getCategory(ga));
 
 export const getStatusColor = (ga) => {
   const status = StatusUpdates.findOne({ userId: ga.userId, giveawayId: ga._id }, { sort: { date: "desc" } });

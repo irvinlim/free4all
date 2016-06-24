@@ -54,14 +54,12 @@ export default class Header extends React.Component {
           id="header-bar"
           title="Free4All"
           onLeftIconButtonTouchTap={ this.openDrawer.bind(this) }
-          iconElementRight={ this.appBarRight() }
-        />
+          iconElementRight={ this.appBarRight() } />
         <DrawerNavigation
           isOpen={ this.state.drawerOpen }
           closeDrawer={ this.closeDrawer.bind(this) }
           setDrawerOpen={ this.setDrawerOpen.bind(this) }
-          openLogin={ this.openLogin.bind(this) }
-        />
+          openLogin={ this.openLogin.bind(this) } />
       </div>
     );
   }

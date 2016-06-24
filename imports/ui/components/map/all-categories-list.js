@@ -10,7 +10,7 @@ const categoriesList = ({ parentCategories, categories, props }) => parentCatego
   <MenuItem
     key={ parentCat._id }
     primaryText={ parentCat.name }
-    leftIcon={ IconsHelper.makeIcon(parentCat) }
+    leftIcon={ IconsHelper.catIcon(parentCat) }
     rightIcon={ <ArrowDropRight /> }
     onTouchTap={ () => props.setParentCat(parentCat) }
     menuItems={
@@ -21,7 +21,7 @@ const categoriesList = ({ parentCategories, categories, props }) => parentCatego
           name={ cat.name }
           value={ cat._id }
           primaryText={ cat.name }
-          leftIcon={ IconsHelper.makeIcon(cat) }
+          leftIcon={ IconsHelper.catIcon(cat) }
           onClick={ () => props.setChildCat(cat) }
           id={ cat._id } />
       )
@@ -33,7 +33,7 @@ export const AllCategoriesList = ({ parentCategories, categories, props }) => (
     iconButtonElement={(
       <FlatButton
         label={ props.catSelected ? props.catSelected.name : "Choose a category" }
-        icon={ props.catSelected ? IconsHelper.makeIcon(props.catSelected) : IconsHelper.materialIcon("arrow_drop_down") }
+        icon={ props.catSelected ? IconsHelper.catIcon(props.catSelected) : IconsHelper.materialIcon("arrow_drop_down") }
         labelStyle={{ textTransform: "none", fontWeight: 400,  }} />
     )}
     anchorOrigin={{ horizontal: 'left', vertical: 'top' }}

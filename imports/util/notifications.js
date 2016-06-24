@@ -1,9 +1,10 @@
 import React from 'react';
 import Avatar from 'material-ui/Avatar';
-import FontIcon from 'material-ui/FontIcon';
+
+import * as IconsHelper from './icons';
 
 export const makeNotifAvatar = (avatar) => {
-  const defaultAvatar = <Avatar icon={ <FontIcon className="material-icons">priority_high</FontIcon> } />
+  const defaultAvatar = <Avatar icon={ IconsHelper.icon("priority_high") } />
 
   if (!avatar || !avatar.type || !avatar.val)
     return defaultAvatar;
@@ -20,7 +21,7 @@ export const makeNotifAvatar = (avatar) => {
         <Avatar src={ user.avatar.url } /> :
         defaultAvatar;
     case "announcement":
-      return <Avatar icon={ <FontIcon className="material-icons">star_rate</FontIcon> } />;
+      return <Avatar icon={ IconsHelper.icon("star_rate") } />;
     case "url":
       return <Avatar src={ avatar.val } />;
     default:

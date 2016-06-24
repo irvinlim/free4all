@@ -1,13 +1,13 @@
 import React from 'react';
-import FontIcon from 'material-ui/FontIcon';
 
 import * as Helper from '../../../util/helper';
+import * as IconsHelper from '../../../util/icons';
 
 const iconRow = (icon, content) => {
   if (content && content.length)
     return (
       <div className="map-info-row">
-        <FontIcon className="material-icons">{ icon }</FontIcon>
+        { IconsHelper.icon(icon) }
         <p>{ content }</p>
       </div>
     );

@@ -1,10 +1,11 @@
 import React from 'react';
-import FontIcon from 'material-ui/FontIcon';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import { Scrollbars } from 'react-custom-scrollbars';
 
 import GiveawayInfoboxContent from '../../containers/giveaways/giveaway-infobox-content';
 import GiveawayRatings from '../../containers/giveaways/giveaway-ratings';
+
+import * as IconsHelper from '../../../util/icons';
 
 export default class MapInfoBox extends React.Component {
 
@@ -60,12 +61,12 @@ export default class MapInfoBox extends React.Component {
         </Scrollbars>
 
         <div className="close-button hidden-sm hidden-md hidden-lg">
-          <FontIcon className="material-icons">close</FontIcon>
+          { IconsHelper.icon("close") }
         </div>
 
         <div className="expand-button-infobox hidden-xs">
           <FloatingActionButton mini={true} backgroundColor="#647577" zDepth={ 0 }>
-            <FontIcon className="material-icons">{ this.props.boxState == 0 ? "keyboard_arrow_right" : "keyboard_arrow_left" }</FontIcon>
+            { IconsHelper.icon(this.props.boxState == 0 ? "keyboard_arrow_right" : "keyboard_arrow_left") }
           </FloatingActionButton>
         </div>
       </div>
