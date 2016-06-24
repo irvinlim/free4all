@@ -20,6 +20,18 @@ export const StatusUpdatesSchema = new SimpleSchema({
   },
 });
 
+export const RatingsSchema = new SimpleSchema({
+  userId: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id,
+    label: 'ID of user who gave this rating.',
+  },
+  isUpvote: {
+    type: Boolean,
+    label: 'True if rating is an upvote, false if it is a downvote'
+  }
+});
+
 export const GiveawaysDataSchema = new SimpleSchema({
   // Data fields
   title: {
@@ -70,6 +82,11 @@ export const GiveawaysDataSchema = new SimpleSchema({
   statusUpdates: {
     type: [StatusUpdatesSchema],
     label: 'Status updates for giveaway',
+    optional: true,
+  },
+  ratings: {
+    type: [RatingsSchema],
+    label: 'User ratings for giveaway',
     optional: true,
   },
   userId: {

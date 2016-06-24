@@ -3,7 +3,7 @@ import React from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
 import IconButton from 'material-ui/IconButton';
 
-import { voteUp, voteDown, unvote } from '../../../api/ratings/methods';
+import { voteUp, voteDown, unvote } from '../../../api/giveaways/methods';
 
 import * as IconsHelper from '../../../util/icons';
 
