@@ -126,8 +126,12 @@ export default class Login extends React.Component {
                 />
               </Col>
               <Col xs={12} sm={6}>
-                <p style={{ fontSize: 13, textAlign: 'right', marginTop: 20 }}>Not yet a member? <Link to="/signup">Sign up</Link></p>
-                <p style={{ fontSize: 13, textAlign: 'right' }}><Link to="/recover-password">Forgot Password?</Link></p>
+                <p style={{ fontSize: 13, textAlign: 'right', marginTop: 20 }}>
+                  Not yet a member? <Link to="/signup" onTouchTap={ this.props.closeLogin }>Sign up</Link>
+                </p>
+                <p style={{ fontSize: 13, textAlign: 'right' }}>
+                  <Link to="/recover-password" onTouchTap={ this.props.closeLogin }>Forgot Password?</Link>
+                </p>
               </Col>
             </Row>
             <Row style={{ marginTop: 20 }}>
