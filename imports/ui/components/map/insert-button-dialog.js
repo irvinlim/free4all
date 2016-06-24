@@ -5,6 +5,10 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import AutoComplete from 'material-ui/AutoComplete';
 import { Bert } from 'meteor/themeteorchef:bert';
+<<<<<<< e7b35557e00ebebbbdb2ebaf729cc660a9493c5f
+=======
+import FontIcon from 'material-ui/FontIcon';
+>>>>>>> Added the category popover instead of iconMenu
 
 import Formsy from 'formsy-react';
 import Paper from 'material-ui/Paper';
@@ -29,11 +33,12 @@ export default class InsertBtnDialog extends React.Component {
 
     this.initialState = {
       canSubmit: false,
-      isOpen: false,
+      isOpen: props.isModalOpen,
       tags: [],
       parentCatId: "",
       childCatId: "",
-      childCat: null,
+      childCatName:"Select Category",
+      childCatIcon: "",
       title:"",
       description:"",
       startDate: null,
@@ -45,6 +50,7 @@ export default class InsertBtnDialog extends React.Component {
       location:"",
       recurring: false,
       dataSource: [],
+      isCatMenuOpen: false,
     };
 
     this.state = this.initialState;
@@ -137,6 +143,7 @@ export default class InsertBtnDialog extends React.Component {
 
     this.handleClose = () => {
       props.closeModal();
+      this.setState({ isCatMenuOpen: false });
     };
 
     this.enableButton = () => {
@@ -189,11 +196,27 @@ export default class InsertBtnDialog extends React.Component {
     this.setParentCat = (parentCat) => {
       this.setState({ parentCatId: parentCat._id });
     };
+<<<<<<< e7b35557e00ebebbbdb2ebaf729cc660a9493c5f
 
     this.setChildCat = (childCat) => {
       this.setState({ childCatId: childCat._id });
       this.setState({ childCat: childCat });
+=======
+    this.setChildCat = (e) => {
+      this.setState({childCatId: e.currentTarget.getAttribute("id")});
+      this.setState({childCatName: e.currentTarget.getAttribute("name")});
+      this.setState({childCatIcon: e.currentTarget.getAttribute("alt")});
+      this.setState({ isCatMenuOpen: false });
+>>>>>>> Added the category popover instead of iconMenu
     };
+
+    this.handleOpenCatMenu = (e) => {
+      e.preventDefault();
+      this.setState({
+        isCatMenuOpen: true,
+        anchorEl: e.currentTarget
+      });
+    }
 
     this.submitForm = () => {
       event.preventDefault();
@@ -291,7 +314,7 @@ export default class InsertBtnDialog extends React.Component {
 
 componentWillReceiveProps(nextProps){
   this.setState({
-    isOpen: nextProps.modalIsOpen,
+    isOpen: nextProps.isModalOpen,
     lat: nextProps.latLng.lat,
     lng: nextProps.latLng.lng,
     location: nextProps.locName,
@@ -356,6 +379,7 @@ render() {
               </Row>
 
               <Row>
+<<<<<<< e7b35557e00ebebbbdb2ebaf729cc660a9493c5f
                 <Col xs={12}>
                   <FormsyText
                     name="description"
@@ -366,6 +390,37 @@ render() {
                     required
                     hintText="What is the event about?"
                     onChange={this.handleDescription} />
+=======
+                <Col >
+                <FormsyText 
+                  name="description"
+                  floatingLabelText="Description" 
+                  multiLine={true} 
+                  fullWidth={true} 
+                  rows={3} 
+                  required
+                  hintText="What is the event about?"
+                  onChange={this.handleDescription}
+                  />
+                </Col>
+                <Col xs={12} md={4} >
+                  <RaisedButton 
+                  label={this.state.childCatName} 
+                  secondary={true} 
+                  style={{"margin":"14px"}} 
+                  onTouchTap={this.handleOpenCatMenu}
+                  icon={<FontIcon className={this.state.childCatIcon} />}
+                />
+                <AllCategoriesList 
+                  setParentCat={this.setParentCat} 
+                  setChildCat={this.setChildCat}
+                  isCatMenuOpen={this.state.isCatMenuOpen}
+                  anchorEl={this.state.anchorEl} 
+                />
+                </Col>
+                <Col xs={12} md={8} style={{"paddingBottom":"10px"}}>
+                  <TagsInput value={this.state.tags} onChange={this.handleTagsChange} />
+>>>>>>> Added the category popover instead of iconMenu
                 </Col>
               </Row>
 

@@ -28,7 +28,7 @@ export class Index extends React.Component {
       mapCenter: null,
       mapZoom: null,
       mapMaxZoom: null,
-      modalIsOpen: false,
+      isModalOpen: false,
       latLngClicked: {lat:"",lng:""},
       locName: "",
       locArr: [],
@@ -83,7 +83,7 @@ export class Index extends React.Component {
   }
 
   openInsertDialog(features, coords, removeDraggable) {
-    this.setState({ modalIsOpen: true });
+    this.setState({ isModalOpen: true });
     this.setState({ latLngClicked: coords });
     let featuresArr = features.map((loc)=> {
       loc.text = loc.place_name;
@@ -107,10 +107,10 @@ export class Index extends React.Component {
   }
 
   closeModal(){
-    this.setState({ modalIsOpen: false });
+    this.setState({ isModalOpen: false });
   }
   openModal(){
-    this.setState({ modalIsOpen: true });
+    this.setState({ isModalOpen: true });
   }
 
   addDraggable(){
@@ -165,7 +165,7 @@ export class Index extends React.Component {
             <div id="map-floating-buttons" style={{ right: 20 + (this.state.nearbyBoxState > 0 ? $("#map-nearby-box").outerWidth() : 0) }}>
               <GoToGeolocationButton geolocationOnClick={ this.goToGeolocation.bind(this) } />
               <InsertBtnDialog
-                modalIsOpen={this.state.modalIsOpen} 
+                isModalOpen={this.state.isModalOpen} 
                 openModal={this.openModal.bind(this)}
                 closeModal={this.closeModal.bind(this)}
                 latLng={this.state.latLngClicked} 
