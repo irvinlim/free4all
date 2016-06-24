@@ -14,7 +14,7 @@ const listItemRow = (ga) => (
       <Col xs={4} sm={3} style={{ padding: 0 }}>
         <CardMedia>
           { ga.avatarId ?
-              ImagesHelper.make(ga.avatarId) :
+              ImagesHelper.make(ga.avatarId, 200, 200, { height: 200, objectFit: "cover" }) :
                 <div className="icon-avatar" style={{ backgroundColor: GiveawaysHelper.getStatusColor(ga) }}>
                   { GiveawaysHelper.getCategoryIcon(ga, { fontSize: 64, lineHeight: "200px", color: Colors.grey50 }) }
                 </div>
