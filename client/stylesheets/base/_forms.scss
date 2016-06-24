@@ -1,6 +1,7 @@
 form>.container>.row>{
 	.col-md-8{
     	padding-left: 0;
+      padding-right: 0;
 	}
 	.col-md-6{
     	padding-left: 0;
@@ -11,6 +12,12 @@ form>.container>.row>{
 	.col-md-2{
     	padding-left: 0;
 	}
+  .col-md-4.col-xs-12{
+      padding-left: 0;
+  }
+  .col-md-2.col-sm-3.col-xs-6 {
+      padding-left: 0;
+  }
 }
 
 form label {

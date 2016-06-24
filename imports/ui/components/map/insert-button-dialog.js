@@ -368,11 +368,8 @@ render() {
                     hintText="What is name of the event?"
                     onChange={this.handleTitle} />
                 </Col>
-              </Row>
-
-              <Row>
-                <Col >
-                <FormsyText
+                <Col xs={12}>
+                <FormsyText 
                   name="description"
                   floatingLabelText="Description"
                   multiLine={true}
@@ -403,11 +400,21 @@ render() {
                 </Col>
               </Row>
 
-              <Row>
-                <Col xs={12}>
+              <Row style={{ paddingTop: 16 }}>
+                <Col xs={12} md={8}>
                   <h2>When</h2>
                 </Col>
-                <Col xs={12} sm={6}>
+                <Col xs={12} md={4}>
+                  <FormsyToggle
+                  className="toggle"
+                  label="Repeating event?"
+                  name="Recurring"
+                  labelStyle={this.labelStyle}
+                  onChange={this.handleRecurring}
+                  toggled={this.state.recurring} />
+                </Col>
+
+                <Col xs={12} md={8} sm={6}>
                   <FormsyDate
                     required
                     className="DatePicker"
@@ -420,7 +427,7 @@ render() {
                     onChange={this.handleStartDatePicker}
                     value={this.state.startDate} />
                 </Col>
-                <Col xs={6} sm={3}>
+                <Col xs={6} md={2} sm={3}>
                   <FormsyTime
                     required
                     className="TimePicker"
@@ -432,13 +439,13 @@ render() {
                     onChange={this.handleChangeStartTimePicker12}
                     value={this.state.startTime} />
                 </Col>
-                <Col xs={6} sm={3} className={ this.state.recurring ? "displayNone" : "" }>
+                <Col xs={6} md={2} sm={3} className={ this.state.recurring ? "displayNone" : "" }>
                   <FormsyTime
                     className="TimePicker"
                     name="endTime"
                     required
                     pedantic={true}
-                    format="ampm"
+                    format="ampm" 
                     floatingLabelText="End Time"
                     textFieldStyle={this.dateTimeTextStyle}
                     onChange={this.handleChangeEndTimePicker12}
@@ -448,7 +455,7 @@ render() {
               </Row>
 
               <Row className={ this.state.recurring ? "" : "displayNone" }>
-                <Col xs={12} sm={6}>
+                <Col xs={12} md={8} sm={6}>
                   <FormsyDate
                     className="DatePicker"
                     name="dateEnd"
@@ -460,7 +467,7 @@ render() {
                     onChange={this.handleEndDatePicker}
                     value={this.state.endDate} />
                 </Col>
-                <Col xs={6} sm={2}>
+                <Col xs={6} md={2} sm={3}>
                   <FormsyTime
                     className="TimePicker"
                     name="endTime"
@@ -475,23 +482,12 @@ render() {
                 </Col>
               </Row>
 
-              <Row>
-                <Col xs={12}>
-                  <FormsyToggle
-                    className="toggle"
-                    label="Repeating event?"
-                    name="Recurring"
-                    labelStyle={this.labelStyle}
-                    onChange={this.handleRecurring}
-                    toggled={this.state.recurring} />
-                </Col>
-              </Row>
-
-              <Row>
-                <Col xs={12} sm={6}>
+              <Row style={{ paddingTop: 16 }}>
+                <Col xs={12} sm={6} md={8}>
                   <h2>Where</h2>
                 </Col>
-                <Col xs={12} sm={6} style={{ paddingTop: 16, textAlign: 'center' }}>
+
+                <Col xs={12} sm={6} md={4} style={{ paddingTop: 16 }}>
                   <RaisedButton
                     secondary={true}
                     onTouchTap={this.handleAddLocation}
@@ -538,17 +534,25 @@ render() {
                 </Col>
               </Row>
 
-              <Row>
-                <Col xs={12}>
+              <Row style={{ paddingTop: 16 }}>
+                <Col xs={12} md={8} >
                   <h2>Categories</h2>
                 </Col>
-                <Col xs={12} sm={4}>
-                  <p style={{ lineHeight: "36px", fontWeight: 300 }}>Category:</p>
-                </Col>
-                <Col xs={12} sm={8}>
-                  <AllCategoriesList catSelected={this.state.childCat} setParentCat={this.setParentCat} setChildCat={this.setChildCat} />
-                </Col>
-                <Col xs={12}>
+                <Col xs={12} md={4} style={{ paddingTop: 16 }}>
+                  <RaisedButton 
+                  label={this.state.childCatName} 
+                  secondary={true} 
+                  onTouchTap={this.handleOpenCatMenu}
+                  icon={<FontIcon className={this.state.childCatIcon} />}
+                />
+                <AllCategoriesList 
+                  setParentCat={this.setParentCat} 
+                  setChildCat={this.setChildCat}
+                  isCatMenuOpen={this.state.isCatMenuOpen}
+                  anchorEl={this.state.anchorEl} 
+                />
+                </Col>                
+                <Col xs={12} md={12}>
                   <TagsInput value={this.state.tags} onChange={this.handleTagsChange} />
                 </Col>
               </Row>
