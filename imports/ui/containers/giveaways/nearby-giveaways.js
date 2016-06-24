@@ -5,16 +5,20 @@ import { Loading } from '../../components/loading';
 
 import { Giveaways } from '../../../api/giveaways/giveaways';
 
-const composer = (props, onData) => {
-  const giveaways = Giveaways.find({}, {
-    sort: { startDateTime: -1 }, // Show more recent ones first
-    limit: 10,
-  });
+import * as LatLngHelper from '../../../util/latlng';
 
-  onData(null, {
-    giveaways: giveaways,
-    nearbyOnClick: props.nearbyOnClick,
-  });
+const composer = (props, onData) => {
+  setTimeout(function() {
+    const giveaways = Giveaways.find({}, {
+      sort: { startDateTime: -1 }, // Show more recent ones first
+      limit: 10,
+    });
+
+    onData(null, {
+      giveaways: giveaways,
+      nearbyOnClick: props.nearbyOnClick,
+    });
+  }, 500);
 };
 
 export default composeWithTracker(composer, Loading)(NearbyGiveaways);

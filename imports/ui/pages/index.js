@@ -150,9 +150,9 @@ export class Index extends React.Component {
             <div id="map-floating-buttons" style={{ right: 20 + (this.state.nearbyBoxState > 0 ? $("#map-nearby-box").outerWidth() : 0) }}>
               <GoToGeolocationButton geolocationOnClick={ this.goToGeolocation.bind(this) } />
               <InsertBtnDialog
-                openModal={this.state.openModal} 
+                openModal={this.state.openModal}
                 closeModal={this.closeInsertDialog.bind(this)}
-                latLng={this.state.latLngClicked} 
+                latLng={this.state.latLngClicked}
                 locArr={this.state.locArr}
                 locName={this.state.locName}
               />
