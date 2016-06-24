@@ -28,10 +28,11 @@ export class Index extends React.Component {
       mapCenter: null,
       mapZoom: null,
       mapMaxZoom: null,
-      openModal: false,
+      isModalOpen: false,
       latLngClicked: {lat:"",lng:""},
       locName: "",
       locArr: [],
+      isDraggableAdded: false,
     };
 
     this.mapBounds = new ReactiveVar( null );
@@ -81,8 +82,8 @@ export class Index extends React.Component {
     this.setState({ mapCenter: this.state.geolocation });
   }
 
-  openInsertDialog(features, coords) {
-    this.setState({ openModal: true });
+  openInsertDialog(features, coords, removeDraggable) {
+    this.setState({ isModalOpen: true });
     this.setState({ latLngClicked: coords });
     let featuresArr = features.map((loc)=> {
       loc.text = loc.place_name;
@@ -98,13 +99,25 @@ export class Index extends React.Component {
       message: selectedLocName,
       type: 'info',
       style: 'growl-top-right',
-      icon: 'fa-music'
+      icon: 'fa-map-marker'
     });
-
+    if(removeDraggable){
+      removeDraggable();
+    }
   }
 
-  closeInsertDialog(){
-    this.setState({ openModal: false });
+  closeModal(){
+    this.setState({ isModalOpen: false });
+  }
+  openModal(){
+    this.setState({ isModalOpen: true });
+  }
+
+  addDraggable(){
+    this.setState({ isDraggableAdded: true });
+  }
+  noAddDraggable(){
+    this.setState({ isDraggableAdded: false });
   }
 
   render() {
@@ -130,6 +143,8 @@ export class Index extends React.Component {
               setMapMaxZoom={ mapMaxZoom => this.setState({ mapMaxZoom: mapMaxZoom })}
               setBounds={ bounds => this.mapBounds.set(bounds) }
               openInsertDialog={ this.openInsertDialog.bind(this) }
+              isDraggableAdded={ this.state.isDraggableAdded }
+              stopDraggableAdded={ this.noAddDraggable.bind(this) }
             />
 
             <div id="map-boxes-container">
@@ -150,11 +165,13 @@ export class Index extends React.Component {
             <div id="map-floating-buttons" style={{ right: 20 + (this.state.nearbyBoxState > 0 ? $("#map-nearby-box").outerWidth() : 0) }}>
               <GoToGeolocationButton geolocationOnClick={ this.goToGeolocation.bind(this) } />
               <InsertBtnDialog
-                openModal={this.state.openModal}
-                closeModal={this.closeInsertDialog.bind(this)}
-                latLng={this.state.latLngClicked}
+                isModalOpen={this.state.isModalOpen} 
+                openModal={this.openModal.bind(this)}
+                closeModal={this.closeModal.bind(this)}
+                latLng={this.state.latLngClicked} 
                 locArr={this.state.locArr}
                 locName={this.state.locName}
+                addDraggable={this.addDraggable.bind(this)}
               />
             </div>
           </div>

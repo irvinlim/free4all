@@ -11,6 +11,8 @@ export default class LeafletMap extends React.Component {
     super(props);
 
     this.mapObject = null;
+
+    this.draggableMarker = null;
   }
 
   componentDidMount() {
@@ -62,7 +64,41 @@ export default class LeafletMap extends React.Component {
     this.mapObject.registerEventHandler('dblclick', function(event){
       rgeocode(Meteor.settings.public.MapBox.accessToken, event.latlng, self.props.openInsertDialog);
     })
+  }
+  
+  removeDraggable() {
+    this.mapObject.map.removeLayer(this.draggableMarker);
+  }
 
+  componentWillReceiveProps(nextProps){
+    const self = this;
+    if(nextProps.isDraggableAdded){
+
+      const css = { 'background-color': "#00bcd4", "font-size": "30px" };
+      const iconHTML = '<i class="material-icons">add_location</i>'
+      const icon = this.mapObject.markerIcon("map-marker", css, {}, iconHTML);
+
+      const marker = L.marker(nextProps.mapCenter, {icon:icon, draggable:'true', opacity:0.75});
+      const popup = L.popup({closeOnClick: true, className:'dPopup'}).setContent('<p>Drag to select location!</p>')
+
+      marker.on('dragstart',function(event){
+        const marker = event.target;
+        marker.setOpacity(1);
+      })
+
+      marker.on('dragend', function(event){
+        const marker = event.target;
+        const position = marker.getLatLng();
+        rgeocode(Meteor.settings.public.MapBox.accessToken, position, self.props.openInsertDialog, self.removeDraggable.bind(self));
+        marker.setLatLng(position,{draggable:'true'}).update();
+      });
+
+      this.props.stopDraggableAdded();
+      this.mapObject.map.addLayer(marker);
+      this.draggableMarker = marker;
+      marker.bindPopup(popup).openPopup();
+
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
