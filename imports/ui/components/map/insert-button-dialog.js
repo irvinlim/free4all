@@ -5,10 +5,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import AutoComplete from 'material-ui/AutoComplete';
 import { Bert } from 'meteor/themeteorchef:bert';
-<<<<<<< e7b35557e00ebebbbdb2ebaf729cc660a9493c5f
-=======
 import FontIcon from 'material-ui/FontIcon';
->>>>>>> Added the category popover instead of iconMenu
 
 import Formsy from 'formsy-react';
 import Paper from 'material-ui/Paper';
@@ -196,18 +193,11 @@ export default class InsertBtnDialog extends React.Component {
     this.setParentCat = (parentCat) => {
       this.setState({ parentCatId: parentCat._id });
     };
-<<<<<<< e7b35557e00ebebbbdb2ebaf729cc660a9493c5f
-
-    this.setChildCat = (childCat) => {
-      this.setState({ childCatId: childCat._id });
-      this.setState({ childCat: childCat });
-=======
     this.setChildCat = (e) => {
       this.setState({childCatId: e.currentTarget.getAttribute("id")});
       this.setState({childCatName: e.currentTarget.getAttribute("name")});
       this.setState({childCatIcon: e.currentTarget.getAttribute("alt")});
       this.setState({ isCatMenuOpen: false });
->>>>>>> Added the category popover instead of iconMenu
     };
 
     this.handleOpenCatMenu = (e) => {
@@ -379,18 +369,6 @@ render() {
               </Row>
 
               <Row>
-<<<<<<< e7b35557e00ebebbbdb2ebaf729cc660a9493c5f
-                <Col xs={12}>
-                  <FormsyText
-                    name="description"
-                    floatingLabelText="Description"
-                    multiLine={true}
-                    fullWidth={true}
-                    rows={3}
-                    required
-                    hintText="What is the event about?"
-                    onChange={this.handleDescription} />
-=======
                 <Col >
                 <FormsyText 
                   name="description"
@@ -420,7 +398,6 @@ render() {
                 </Col>
                 <Col xs={12} md={8} style={{"paddingBottom":"10px"}}>
                   <TagsInput value={this.state.tags} onChange={this.handleTagsChange} />
->>>>>>> Added the category popover instead of iconMenu
                 </Col>
               </Row>
 
