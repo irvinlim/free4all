@@ -22,7 +22,7 @@ export const categoryBreadcrumbs = (ga) => getParentCategory(ga).name + " — " 
 export const getLastOwnerStatus = (ga) => {
   const ownerStatuses = ga.statusUpdates.filter(su => su.userId == ga.userId);
   if (!ownerStatuses.length) return null;
-  return ownerStatuses.sort((a,b) => b.date - a.date)[0];
+  return ownerStatuses.reduce((p,x) => x.date > p.date ? x : p);
 };
 
 export const getLastOwnerStatusType = (ga) => {
