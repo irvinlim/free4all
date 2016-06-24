@@ -51,12 +51,13 @@ export default class InsertBtnDialog extends React.Component {
 
     this.handleAddLocation = () => {
       props.closeModal();
+      props.addDraggable();
+
       Bert.alert({
         hideDelay: 8000,
         title: 'Add Location',
-        message: 'Double click on the location to select it!',
+        message: 'Drag marker to select location!',
         type: 'info',
-        style: 'fixed-top',
         icon: 'fa-map-marker'
       });
     }

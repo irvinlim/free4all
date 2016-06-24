@@ -32,6 +32,7 @@ export class Index extends React.Component {
       latLngClicked: {lat:"",lng:""},
       locName: "",
       locArr: [],
+      isDraggableAdded: false,
     };
 
     this.mapBounds = new ReactiveVar( null );
@@ -81,7 +82,7 @@ export class Index extends React.Component {
     this.setState({ mapCenter: this.state.geolocation });
   }
 
-  openInsertDialog(features, coords) {
+  openInsertDialog(features, coords, removeDraggable) {
     this.setState({ modalIsOpen: true });
     this.setState({ latLngClicked: coords });
     let featuresArr = features.map((loc)=> {
@@ -100,7 +101,9 @@ export class Index extends React.Component {
       style: 'growl-top-right',
       icon: 'fa-map-marker'
     });
-
+    if(removeDraggable){
+      removeDraggable();
+    }
   }
 
   closeModal(){
@@ -108,6 +111,13 @@ export class Index extends React.Component {
   }
   openModal(){
     this.setState({ modalIsOpen: true });
+  }
+
+  addDraggable(){
+    this.setState({ isDraggableAdded: true });
+  }
+  noAddDraggable(){
+    this.setState({ isDraggableAdded: false });
   }
 
   render() {
@@ -133,6 +143,8 @@ export class Index extends React.Component {
               setMapMaxZoom={ mapMaxZoom => this.setState({ mapMaxZoom: mapMaxZoom })}
               setBounds={ bounds => this.mapBounds.set(bounds) }
               openInsertDialog={ this.openInsertDialog.bind(this) }
+              isDraggableAdded={ this.state.isDraggableAdded }
+              stopDraggableAdded={ this.noAddDraggable.bind(this) }
             />
 
             <div id="map-boxes-container">
@@ -159,6 +171,7 @@ export class Index extends React.Component {
                 latLng={this.state.latLngClicked} 
                 locArr={this.state.locArr}
                 locName={this.state.locName}
+                addDraggable={this.addDraggable.bind(this)}
               />
             </div>
           </div>

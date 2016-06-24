@@ -113,3 +113,7 @@
     @include animation(pulse 2s ease-in-out infinite); @include border-radius(14px);
   }
 }
+
+.dPopup{
+  bottom: 49px !important;
+}

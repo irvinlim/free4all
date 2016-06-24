@@ -16,7 +16,7 @@ export const geocode = (mapboxAccessToken, query, addState) => {
 }
 // https://api.mapbox.com/geocoding/v5/mapbox.places/-73.989,40.733.json
 // Mapbox Reverse Geocoding
-export const rgeocode = (mapboxAccessToken, latLng, openInsertDialog) => {
+export const rgeocode = (mapboxAccessToken, latLng, openInsertDialog, removeDraggable) => {
 	let url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + latLng.lng +','+ latLng.lat + '.json?access_token=' + mapboxAccessToken;
 	console.log(url);
 	HTTP.get(url,{},function( error, response ) {
@@ -24,7 +24,7 @@ export const rgeocode = (mapboxAccessToken, latLng, openInsertDialog) => {
 			console.log( error );
 		} else {
 			let result = JSON.parse(response.content);
-			openInsertDialog(result.features, latLng);
+			openInsertDialog(result.features, latLng, removeDraggable);
 		}
 	})
 }
