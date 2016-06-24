@@ -3,7 +3,24 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 export const Giveaways = new Mongo.Collection('Giveaways');
 
-Giveaways.schema = new SimpleSchema({
+export const StatusUpdatesSchema = new SimpleSchema({
+  statusTypeId: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id,
+    label: 'StatusType ID'
+  },
+  date: {
+    type: Date,
+    label: 'Date that the status was set'
+  },
+  userId: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id,
+    label: 'ID of User who updated this status.'
+  },
+});
+
+export const GiveawaysDataSchema = new SimpleSchema({
   // Data fields
   title: {
     type: String,
@@ -46,8 +63,15 @@ Giveaways.schema = new SimpleSchema({
     label: 'Public ID of image avatar (Cloudinary)',
     optional: true,
   },
-
-  // Meta fields
+  batchId: {
+    type: String,
+    label: 'Batch Id of recurring group'
+  },
+  statusUpdates: {
+    type: [StatusUpdatesSchema],
+    label: 'Status updates for giveaway',
+    optional: true,
+  },
   userId: {
     type: String,
     regEx: SimpleSchema.RegEx.Id,
@@ -58,6 +82,10 @@ Giveaways.schema = new SimpleSchema({
     label: 'Locally deleted?',
     optional: true
   },
+});
+
+export const GiveawaysMetaSchema = new SimpleSchema({
+  // Meta fields
   createdAt: {
     type: Date,
     label: 'Published date/time',
@@ -81,15 +109,17 @@ Giveaways.schema = new SimpleSchema({
     },
     denyInsert: true,
     optional: true,
-  },
-  batchId: {
-    type: String,
-    label: 'Batch Id of recurring group'
   }
 });
 
+Giveaways.schema = new SimpleSchema([ GiveawaysDataSchema, GiveawaysMetaSchema ]);
 Giveaways.attachSchema(Giveaways.schema);
 
 if (Meteor.isServer) {
   Giveaways._ensureIndex({'coordinates':'2dsphere'});
+  Giveaways._ensureIndex({
+    'title': 'text',
+    'description': 'text',
+    'location': 'text',
+  });
 }

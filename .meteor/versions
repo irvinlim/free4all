@@ -71,6 +71,8 @@ mdg:validated-method@1.1.0
 mdg:validation-error@0.5.1
 meteor@1.1.15
 meteor-base@1.0.4
+meteorhacks:aggregate@1.3.0
+meteorhacks:collection-utils@1.2.0
 minifier-css@1.1.12
 minifier-js@1.1.12
 minimongo@1.0.17
@@ -81,6 +83,7 @@ modules-runtime@0.6.4
 momentjs:moment@2.13.1
 mongo@1.1.9
 mongo-id@1.0.5
+mongo-livedata@1.0.12
 npm-bcrypt@0.8.6_1
 npm-mongo@1.4.44
 oauth@1.1.11

@@ -15,7 +15,6 @@ import AllCategoriesList from '../../containers/all-categories-list.js'
 import TagsInput from 'react-tagsinput';
 
 import { insertGiveaway } from '../../../api/giveaways/methods.js';
-import { insertStatus } from '../../../api/status-updates/methods.js';
 import { StatusTypes } from '../../../api/status-types/status-types.js'
 
 import { geocode } from '../../../api/geocode/methods.js';
@@ -216,6 +215,8 @@ export default class InsertBtnDialog extends React.Component {
       let endHr= data.endTime.getHours();
       let endMin= data.endTime.getMinutes();
 
+      let availableStatus = StatusTypes.findOne({relativeOrder: 10});
+
       // check if no end date or earlier than start datetime
       let endDateTime = null;
       if (data.endDate === null){
@@ -237,7 +238,8 @@ export default class InsertBtnDialog extends React.Component {
           categoryId: data.childCatId,
           tags: data.tags,
           userId: data.userId,
-          batchId: data.batchId
+          batchId: data.batchId,
+          statusUpdates: [{ statusTypeId: availableStatus._id, date: new Date(), userId: data.userId }],
         }
 
         const gaId = insertGiveaway.call(ga, (error)=>{
@@ -245,21 +247,6 @@ export default class InsertBtnDialog extends React.Component {
             Bert.alert(error.reason, 'Error adding Giveaway');
           } else {
             this.setState(this.initialState);
-            Bert.alert('Giveaway Added!', 'success');
-          }
-        })
-
-        let availableStatus = StatusTypes.findOne({relativeOrder: 10});
-        insertStatus.call({
-          giveawayId:   gaId,
-          statusTypeId: availableStatus._id,
-          date:         new Date(),
-          userId:       data.userId,
-        },(error)=>{
-          if (error) {
-            Bert.alert(error.reason, 'Error adding Giveaway');
-          } else {
-            this.state = this.initialState;
             Bert.alert('Giveaway Added!', 'success');
           }
         })
@@ -284,7 +271,8 @@ export default class InsertBtnDialog extends React.Component {
             categoryId: data.childCatId,
             tags: data.tags,
             userId: data.userId,
-            batchId: data.batchId
+            batchId: data.batchId,
+            statusUpdates: [{ statusTypeId: availableStatus._id, date: new Date(), userId: data.userId }],
           }
 
           const gaId = insertGiveaway.call(ga, (error)=>{
@@ -292,20 +280,6 @@ export default class InsertBtnDialog extends React.Component {
               Bert.alert(error.reason, 'Error adding Giveaway');
             } else {
               this.setState(this.initialState);
-              Bert.alert('Giveaway Added!', 'success');
-            }
-          })
-
-          let availableStatus = StatusTypes.findOne({relativeOrder: 10});
-          insertStatus.call({
-            giveawayId:   gaId,
-            statusTypeId: availableStatus._id,
-            date:         new Date(),
-            userId:       data.userId,
-          },(error)=>{
-            if (error) {
-              Bert.alert(error.reason, 'Error adding Giveaway');
-            } else {
               Bert.alert('Giveaway Added!', 'success');
             }
           })

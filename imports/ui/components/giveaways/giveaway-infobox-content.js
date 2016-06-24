@@ -1,8 +1,8 @@
 import React from 'react';
 import { Row, Col } from 'react-bootstrap';
 
-import * as Helper from '../../../util/helper';
 import * as IconsHelper from '../../../util/icons';
+import * as GiveawaysHelper from '../../../util/giveaways';
 
 const iconRow = (icon, content) => {
   if (content && content.length)
@@ -19,21 +19,21 @@ const iconRow = (icon, content) => {
 };
 
 
-const getContent = ({ giveaway, latestStatus, latestStatusType, category, parentCategory }) => {
+const getContent = ({ giveaway }) => {
   if (!giveaway) {
     return (
       <em>Select a giveaway to see more information.</em>
     );
   } else {
     return (
-      <div>
-        <h3 className="single-line">{ giveaway.title }</h3>
-        <p className="category">{ parentCategory.name } &mdash; { category.name }</p>
-        <p className="description">{ giveaway.description ? Helper.nl2br(giveaway.description) : (<em>No description</em>) }</p>
-        { iconRow("date_range", Helper.compact_date_range(giveaway.startDateTime, giveaway.endDateTime)) }
+      <div className="giveaway">
+        <h3 className="lines-1">{ giveaway.title }</h3>
+        <p className="category">{ GiveawaysHelper.categoryBreadcrumbs(giveaway) }</p>
+        <p className="description">{ GiveawaysHelper.description(giveaway) }</p>
+        { iconRow("date_range", GiveawaysHelper.compactDateRange(giveaway.startDateTime, giveaway.endDateTime)) }
         { iconRow("location_on", giveaway.location ) }
-        { Helper.is_ongoing(giveaway.startDateTime, giveaway.endDateTime) ?
-            iconRow("info_outline", "Status: " + latestStatusType.label ) :
+        { !GiveawaysHelper.is_over(giveaway) ?
+            iconRow("info_outline", "Status: " + GiveawaysHelper.getLastOwnerStatusType(giveaway).label ) :
             iconRow("info_outline", "Status: Ended" ) }
       </div>
     );

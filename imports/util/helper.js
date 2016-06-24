@@ -45,34 +45,6 @@ export const propExistsDeep = function(parent, arrayOfChildProps) {
 }
 
 // Dates
-export const compact_date_range = (start, end) => {
-  moment.updateLocale('en', {
-    calendar: {
-      lastDay : '[yesterday at] LT',
-      sameDay : '[today at] LT',
-      nextDay : '[tomorrow at] LT',
-      lastWeek : '[last] dddd [at] LT',
-      nextWeek : 'dddd [at] LT',
-      sameElse : 'L'
-    }
-  });
-
-  start = moment(start);
-  end = moment(end);
-  now = moment();
-
-  if (start.isAfter(now)) {
-    // Haven't start
-    return "Starts " + start.calendar(now);
-  } else if (end.isBefore(now)) {
-    // Already ended
-    return "Ended " + end.calendar(now);
-  } else {
-    // Ongoing
-    return "Ending " + end.calendar();
-  }
-}
-
 export const is_ongoing = (start, end) => moment(start).isBefore(moment()) && moment(end).isAfter(moment());
 export const is_havent_start = (start, end) => moment(start).isAfter(moment());
 export const is_over = (start, end) => moment(end).isBefore(moment());

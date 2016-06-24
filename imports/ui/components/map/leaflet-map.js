@@ -1,7 +1,6 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Giveaways } from '../../../api/giveaways/giveaways';
-import { StatusUpdates } from '../../../api/status-updates/status-updates';
 import LeafletMapObject from './leaflet-map-object';
 import { rgeocode } from '../../../api/geocode/methods.js';
 
@@ -10,13 +9,6 @@ import * as LatLngHelper from '../../../util/latlng';
 export default class LeafletMap extends React.Component {
   constructor(props) {
     super(props);
-
-    // Elements in addingMarkers means that the marker is currently
-    // being added by the Giveaway added event.
-    // This subscribes to status updates for a particular Giveaway,
-    // which would trigger StatusUpdate added event.
-    // To prevent multiple triggers we have a temporary flag set in addingMarkers.
-    this.addingMarkers = {};
 
     this.mapObject = null;
   }
@@ -43,37 +35,13 @@ export default class LeafletMap extends React.Component {
     // Observe changes in giveaways
     Giveaways.find().observe({
       added: ga => {
-        // Set temporary flag.
-        self.addingMarkers[ga._id] = true;
-
-        Meteor.subscribe('status-updates-for-giveaway', ga._id, function() {
-          // Unset flag once all StatusUpdates have been added.
-          delete self.addingMarkers[ga._id];
-          self.mapObject.addMarker(ga._id, ga, clickHandler);
-        });
+        self.mapObject.addMarker(ga._id, ga, clickHandler);
       },
       changed: ga => {
-        Meteor.subscribe('status-updates-for-giveaway', ga._id, function() {
-          self.mapObject.updateMarker(ga._id, ga, clickHandler);
-        });
+        self.mapObject.updateMarker(ga._id, ga, clickHandler);
       },
       removed: ga => {
-        Meteor.subscribe('status-updates-for-giveaway', ga._id, function() {
-          self.mapObject.removeMarker(ga._id, ga, clickHandler);
-        });
-      },
-    });
-
-    // Observe status updates
-    StatusUpdates.find().observe({
-      added: statusUpdate => {
-        const ga = Giveaways.findOne(statusUpdate.giveawayId);
-
-        // Only add markers if the adding flag is not set.
-        // These markers are new since page load.
-        if (ga && !(ga._id in self.addingMarkers)) {
-          self.mapObject.updateMarker(ga._id, ga, clickHandler);
-        }
+        self.mapObject.removeMarker(ga._id, ga, clickHandler);
       },
     });
   }

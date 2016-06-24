@@ -3,3 +3,18 @@
   .num_ratings { line-height: 48px; }
   .voted span.material-icons { color: #0C4B86 !important; }
 }
+
+.giveaway {
+  h3 { margin-top: 0; }
+
+  .description {
+    line-height: 20px;
+    &.lines-1 { height: 20px; }
+    &.lines-2 { height: 40px; }
+    &.lines-3 { height: 60px; }
+    &.lines-4 { height: 80px; }
+  }
+
+  .small-text { color: #9e9e9e; font-size: 12px; }
+  .icon-avatar { height: 100%; text-align: center; }
+}

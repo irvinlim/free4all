@@ -7,7 +7,6 @@ import { Giveaways } from '../../../api/giveaways/giveaways';
 import { ParentCategories } from '../../../api/parent-categories/parent-categories';
 import { Categories } from '../../../api/categories/categories';
 import { StatusTypes } from '../../../api/status-types/status-types';
-import { StatusUpdates } from '../../../api/status-updates/status-updates';
 
 const composer = (props, onData) => {
   let giveaway, latestStatus, latestStatusType, category, parentCategory;
@@ -19,15 +18,7 @@ const composer = (props, onData) => {
 
     giveaway = Giveaways.findOne(props.gaId);
 
-    if (giveaway) {
-      console.log(giveaway)
-      latestStatus = StatusUpdates.findOne({ userId: giveaway.userId, giveawayId: giveaway._id }, { sort: { date: "desc" } });
-      latestStatusType = StatusTypes.findOne(latestStatus.statusTypeId);
-      category = Categories.findOne(giveaway.categoryId);
-      parentCategory = ParentCategories.findOne(category.parent);
-    }
-
-    onData(null, { giveaway, latestStatus, latestStatusType, category, parentCategory });
+    onData(null, { giveaway });
   }
 };
 

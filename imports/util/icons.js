@@ -1,7 +1,7 @@
 import React from 'react';
 import FontIcon from 'material-ui/FontIcon';
 
-export const catIcon = (cat) => icon(cat.iconClass);
+export const catIcon = (cat, style={}) => icon(cat.iconClass, style);
 
 export const icon = (className, style={}) => {
   if (className.substr(0,3) == "fa ")

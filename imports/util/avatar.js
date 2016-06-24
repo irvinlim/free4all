@@ -1,1 +1,3 @@
-export const getAvatar = (avatarId, size = 64) => $.cloudinary.url(avatarId, { width: size, height: size, crop: 'fill', fetch_format: "auto" });
+import ImagesHelper from './images';
+
+export const getAvatar = (avatarId, size = 64) => ImagesHelper.getURL(avatarId, 64, 64);
