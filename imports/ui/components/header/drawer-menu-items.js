@@ -5,10 +5,9 @@ import { browserHistory } from 'react-router';
 
 import Divider from 'material-ui/Divider';
 import MenuItem from 'material-ui/MenuItem';
-import { ActionHome, ActionExitToApp, ActionLock } from 'material-ui/svg-icons';
 
-import Login from '../auth/login';
 import { getHandleLogout } from '../../../modules/logout';
+import * as IconsHelper from '../../../util/icons';
 
 export class DrawerMenuItems extends React.Component {
   constructor(props) {
@@ -17,14 +16,15 @@ export class DrawerMenuItems extends React.Component {
 
   constructMenuItems() {
     this.menuItems = [
-      { title: "Home", href: "/", icon: (<ActionHome />) },
+      { title: "Map", href: "/", icon: IconsHelper.icon("map") },
+      { title: "Timeline", href: "/timeline", icon: IconsHelper.icon("timeline") },
       { divider: true },
     ];
 
     if (this.props.hasUser) {
-      this.menuItems.push({ title: "Log Out", onClick: getHandleLogout(), icon: (<ActionExitToApp />) });
+      this.menuItems.push({ title: "Log Out", onClick: getHandleLogout(), icon: IconsHelper.icon("exit_to_app") });
     } else {
-      this.menuItems.push({ title: "Log In", onClick: this.props.openLogin.bind(this), icon: (<ActionLock />) });
+      this.menuItems.push({ title: "Log In", onClick: this.props.openLogin.bind(this), icon: IconsHelper.icon("lock") });
     }
   }
 

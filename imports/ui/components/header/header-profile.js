@@ -44,7 +44,7 @@ export class HeaderProfile extends React.Component {
   noUser() {
     return (
       <div id="header-profile">
-        <IconButton onTouchTap={ this.props.openLogin } children={ IconsHelper.materialIcon("person", { color: Colors.grey50 }) } />
+        <IconButton id="login-button" onTouchTap={ this.props.openLogin } children={ IconsHelper.materialIcon("person", { color: Colors.grey50 }) } />
       </div>
     );
   }
