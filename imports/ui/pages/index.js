@@ -28,7 +28,7 @@ export class Index extends React.Component {
       mapCenter: null,
       mapZoom: null,
       mapMaxZoom: null,
-      openModal: false,
+      modalIsOpen: false,
       latLngClicked: {lat:"",lng:""},
       locName: "",
       locArr: [],
@@ -82,7 +82,7 @@ export class Index extends React.Component {
   }
 
   openInsertDialog(features, coords) {
-    this.setState({ openModal: true });
+    this.setState({ modalIsOpen: true });
     this.setState({ latLngClicked: coords });
     let featuresArr = features.map((loc)=> {
       loc.text = loc.place_name;
@@ -103,8 +103,11 @@ export class Index extends React.Component {
 
   }
 
-  closeInsertDialog(){
-    this.setState({ openModal: false });
+  closeModal(){
+    this.setState({ modalIsOpen: false });
+  }
+  openModal(){
+    this.setState({ modalIsOpen: true });
   }
 
   render() {
@@ -150,9 +153,10 @@ export class Index extends React.Component {
             <div id="map-floating-buttons" style={{ right: 20 + (this.state.nearbyBoxState > 0 ? $("#map-nearby-box").outerWidth() : 0) }}>
               <GoToGeolocationButton geolocationOnClick={ this.goToGeolocation.bind(this) } />
               <InsertBtnDialog
-                openModal={this.state.openModal}
-                closeModal={this.closeInsertDialog.bind(this)}
-                latLng={this.state.latLngClicked}
+                modalIsOpen={this.state.modalIsOpen} 
+                openModal={this.openModal.bind(this)}
+                closeModal={this.closeModal.bind(this)}
+                latLng={this.state.latLngClicked} 
                 locArr={this.state.locArr}
                 locName={this.state.locName}
               />

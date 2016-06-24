@@ -29,7 +29,7 @@ export default class InsertBtnDialog extends React.Component {
 
     this.initialState = {
       canSubmit: false,
-      open: false,
+      isOpen: false,
       tags: [],
       parentCatId: "",
       childCatId: "",
@@ -50,7 +50,7 @@ export default class InsertBtnDialog extends React.Component {
     this.state = this.initialState;
 
     this.handleAddLocation = () => {
-      this.setState({open: false});
+      props.closeModal();
       Bert.alert({
         hideDelay: 8000,
         title: 'Add Location',
@@ -131,11 +131,10 @@ export default class InsertBtnDialog extends React.Component {
     };
 
     this.handleOpen = () => {
-      this.setState({open: true});
+      props.openModal();
     };
 
     this.handleClose = () => {
-      this.setState({open: false});
       props.closeModal();
     };
 
@@ -197,7 +196,7 @@ export default class InsertBtnDialog extends React.Component {
 
     this.submitForm = () => {
       event.preventDefault();
-      this.setState({open: false});
+      props.closeModal();
       console.log("state", this.state);
       let data = this.state;
       data.title = String(data.title);
@@ -291,7 +290,7 @@ export default class InsertBtnDialog extends React.Component {
 
 componentWillReceiveProps(nextProps){
   this.setState({
-    open: nextProps.openModal,
+    isOpen: nextProps.modalIsOpen,
     lat: nextProps.latLng.lat,
     lng: nextProps.latLng.lng,
     location: nextProps.locName,
@@ -329,8 +328,8 @@ render() {
         bodyStyle={dialogStyle}
         actions={actionBtns}
         actionsContainerStyle={actionsContainerStyle}
-        modal={true}
-        open={this.state.open}
+        modal={false}
+        open={this.state.isOpen}
         onRequestClose={this.handleClose}
         autoScrollBodyContent={true}>
 
