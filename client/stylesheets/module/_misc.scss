@@ -5,5 +5,5 @@
 }
 
 // Text wrapping
-[class^="lines-"], [class*=" lines-"] { display: block; text-overflow: ellipsis; overflow: hidden; }
-.lines-1 { white-space: nowrap; }
+[class^="lines-"], [class*=" lines-"] { display: block; }
+.lines-1 { white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
