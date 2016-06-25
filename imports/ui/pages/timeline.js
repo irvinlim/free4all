@@ -1,6 +1,9 @@
 import React from 'react';
-import TextField from 'material-ui/TextField';
 import { Tabs, Tab } from 'material-ui/Tabs';
+import TextField from 'material-ui/TextField';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
+
 import TimelineItems from '../containers/timeline/timeline-items';
 
 export class Timeline extends React.Component {
@@ -13,8 +16,9 @@ export class Timeline extends React.Component {
       perPage: 10,
       view: "list",
       parentCategoryId: null,
-      categoryId: null,
+      categoryId: "all-categories",
       searchQuery: "",
+      sort: "highest-rated",
     };
   }
 
@@ -22,22 +26,73 @@ export class Timeline extends React.Component {
     return (event) => this.setState({ tab: tab });
   }
 
+  handleSetCategory(event, key, payload) {
+    this.setState({ categoryId: payload });
+  }
+
+  handleSetSort(event, key, payload) {
+    this.setState({ sort: payload });
+  }
+
   render() {
     return (
       <div id="timeline">
-        <div id="timeline-search" style={{ maxWidth: 600, margin: "20px auto" }}>
-          <TextField hintText="Search for a giveaway..." fullWidth={true} />
-        </div>
-
         <Tabs
           id="timeline-tabs"
-          style={{ maxWidth: 300, margin: "0 auto" }}
-          tabItemContainerStyle={{ backgroundColor: "none" }}
-          inkBarStyle={{ width: 100/6 + "%", marginLeft: 100/12 + "%" }}>
+          tabItemContainerStyle={{ backgroundColor: "#90a4cf" }}
+          inkBarStyle={{ backgroundColor: "#3a4b6e" }}>
           <Tab style={{ color: "#333" }} label="Current" onActive={ this.makeHandleSetTab("current").bind(this) } />
           <Tab style={{ color: "#333" }} label="Past" onActive={ this.makeHandleSetTab("past").bind(this) } />
           <Tab style={{ color: "#333" }} label="All-Time" onActive={ this.makeHandleSetTab("all-time").bind(this) } />
+          <Tab style={{ color: "#333" }} label="Search" onActive={ this.makeHandleSetTab("search").bind(this) }>
+            <div id="timeline-search">
+              <div className="flex-row nopad">
+                <div className="col col-xs-12 col-sm-6">
+                  <TextField
+                    id="timeline-search-query"
+                    type="text"
+                    placeholder="Search for a giveaway..."
+                    floatingLabelText="Search"
+                    floatingLabelFixed={true}
+                    fullWidth={true}
+                    style={{ fontSize: 14 }} />
+                </div>
+                <div className="col col-xs-6 col-sm-3">
+                  <SelectField
+                    id="timeline-category-select"
+                    floatingLabelText="Category"
+                    floatingLabelFixed={true}
+                    style={{ fontSize: 14, overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
+                    fullWidth={true}
+                    value={ this.state.categoryId }
+                    onChange={ this.handleSetCategory.bind(this) }>
+                    <MenuItem value="all-categories" primaryText="All Categories" />
+                  </SelectField>
+                </div>
+                <div className="col col-xs-6 col-sm-3">
+                  <SelectField
+                    id="timeline-sort-select"
+                    floatingLabelText="Sort"
+                    floatingLabelFixed={true}
+                    style={{ fontSize: 14, overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
+                    fullWidth={true}
+                    value={ this.state.sort }
+                    onChange={ this.handleSetSort.bind(this) }>
+                    <MenuItem value="highest-rated" primaryText="Highest rated first" />
+                    <MenuItem value="most-popular" primaryText="Most popular first" />
+                    <MenuItem value="nearest" primaryText="Nearest first" />
+                    <MenuItem value="newest-first" primaryText="Newest First" />
+                    <MenuItem value="oldest-first" primaryText="Oldest First" />
+                  </SelectField>
+                </div>
+              </div>
+            </div>
+          </Tab>
         </Tabs>
+
+        <div id="timeline-view">
+
+        </div>
 
         <TimelineItems
           tab={ this.state.tab }

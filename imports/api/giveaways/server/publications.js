@@ -44,31 +44,40 @@ Meteor.publish('giveaways-search', function(props) {
   // ...
 
   switch (props.tab) {
-    case "all-time":
-      // options.sort = {  };                       // Sort by highest ratings first
+    case "current":
+      selector.startDateTime = { $lte: tomorrow };  // Must be ongoing/starting in the next 24 hours
+      selector.endDateTime = { $gt:  now };         // Must not be over
+      options.sort = { startDateTime: -1 };         // Sort by newest first
       break;
     case "past":
       selector.endDateTime = { $lt:  now };         // Must be over
       options.sort = { endDateTime: -1 };           // Sort by most recently ended first
       break;
-    default: // Show current
-      selector.startDateTime = { $lte: tomorrow };  // Must be ongoing/starting in the next 24 hours
-      selector.endDateTime = { $gt:  now };         // Must not be over
-      options.sort = { startDateTime: -1 };         // Sort by newest first
+    case "all-time":
+      // options.sort = {  };                       // Sort by highest ratings first
+      break;
+    default: // Searching
+      // If no search query or category ID, show no results.
+      if (!props.parentCategoryId && !props.categoryId && !props.searchQuery.length)
+        return Giveaways.find(null);
+
+      // Categorisation: Either specific category or all categories in specific parent
+      if (props.parentCategoryId)
+        selector.categoryId = { $in: Categories.find({ parent: props.parentCategoryId }).map(cat => cat._id) };
+      else if (props.categoryId)
+        selector.categoryId = categoryId;
+
+      // Full-text search
+      if (props.searchQuery.length)
+        selector.$text = {
+          search: props.searchQuery,
+        };
+
+      // Custom sort according to props
+      // options.sort = {  };
+
       break;
   }
-
-  // Categorisation: Either specific category or all categories in specific parent
-  if (props.parentCategoryId)
-    selector.categoryId = { $in: Categories.find({ parent: props.parentCategoryId }).map(cat => cat._id) };
-  else if (props.categoryId)
-    selector.categoryId = categoryId;
-
-  // Full-text search
-  if (props.searchQuery.length)
-    selector.$text = {
-      search: props.searchQuery,
-    };
 
   return Giveaways.find(selector, options);
 });

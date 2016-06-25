@@ -16,7 +16,8 @@ html, html body { background-color: #eef0f3; height: 100%; }
 // Making my own Flexbox Grid (!!)
 
 .flex-row {
-  display: flex; flex-direction: row; align-items: stretch; padding: 15px 0;
+  padding: 15px 0;
+  &.nopad { padding: 0; }
 
   .col {
     padding: 0 15px; float: none !important;

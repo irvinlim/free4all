@@ -1,0 +1,8 @@
+#timeline-search {
+  background-color: rgba(#90a4cf, 0.25); padding: 0 10px;
+}
+
+#timeline-tabs {
+  margin: 0 -15px 15px;
+  @include media-sm-up { margin: 30px auto 20px; }
+}
