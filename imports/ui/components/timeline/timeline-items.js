@@ -7,6 +7,7 @@ import * as Colors from 'material-ui/styles/colors';
 import * as Helper from '../../../util/helper';
 import * as GiveawaysHelper from '../../../util/giveaways';
 import * as ImagesHelper from '../../../util/images';
+import * as IconsHelper from '../../../util/icons';
 
 const photoAvatar = (ga) => (
   <div className="photo-avatar" style={{ backgroundImage: 'url(' + ImagesHelper.getURL(ga.avatarId, 200, 200) + ')' }}>
@@ -30,6 +31,15 @@ const listItemRow = (ga) => (
         <h5 className="lines-1">{ GiveawaysHelper.categoryBreadcrumbs(ga) }</h5>
         <p className="description lines-2 ddd">{ GiveawaysHelper.description(ga) }</p>
         <p className="small-text lines-1">{ GiveawaysHelper.compactDateRange(ga.startDateTime, ga.endDateTime) }</p>
+
+        <div className="footer-actions">
+          <div className="upvotes">
+            { IconsHelper.icon("fa fa-thumbs-o-up", { fontSize: 14, color: "#9e9e9e", lineHeight: "20px" }) } { GiveawaysHelper.countUpvotes(ga) }
+          </div>
+          <div className="downvotes">
+            { IconsHelper.icon("fa fa-thumbs-o-down", { fontSize: 14, color: "#9e9e9e", lineHeight: "20px" }) } { GiveawaysHelper.countDownvotes(ga) }
+          </div>
+        </div>
       </div>
     </div>
   </Paper>
