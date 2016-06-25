@@ -45,8 +45,14 @@ const listItemRow = (ga) => (
   </Paper>
 );
 
+const subheaderPaginationRange = (offset, perPage) => (offset + 1) + "-" + (offset + perPage);
+
 export class TimelineItems extends React.Component {
   componentDidMount() {
+    Helper.onRenderDot3();
+  }
+
+  componentDidUpdate() {
     Helper.onRenderDot3();
   }
 
@@ -54,7 +60,9 @@ export class TimelineItems extends React.Component {
     const { giveaways, props } = this.props;
     return (
       <div id="timeline-items">
-        <Subheader>Showing items { props.offset + 1 }-{ props.offset + props.perPage }</Subheader>
+        <Subheader>
+          Showing items { subheaderPaginationRange(props.offset, props.perPage) }
+        </Subheader>
         { giveaways.map(listItemRow) }
       </div>
     );

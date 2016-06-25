@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiTheme from '../layouts/mui-theme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import Header from '../components/header/header';
@@ -142,7 +142,7 @@ export class Index extends React.Component {
     };
 
     return (
-      <MuiThemeProvider muiTheme={ getMuiTheme() }>
+      <MuiThemeProvider muiTheme={ MuiTheme }>
         <div id="main">
           <Header />
           <div className="full-container">

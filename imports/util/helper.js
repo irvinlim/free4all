@@ -18,7 +18,7 @@ export const sanitizeHexColour = (s) => s.replace(/[^a-fA-F0-9#]/g, "");
 export const nl2br = s => nl2brReact(s);
 export const dot3 = () => $('.ddd').dotdotdot();
 export const onRenderDot3 = () => {
-  $(window).on('resize', dot3);
+  $(window).off('resize', dot3).on('resize', dot3);
   dot3();
 };
 
