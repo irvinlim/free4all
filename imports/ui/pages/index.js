@@ -37,6 +37,8 @@ export class Index extends React.Component {
     };
 
     this.mapBounds = new ReactiveVar( null );
+
+    this.subscription = null;
   }
 
   selectGa(gaId) {
@@ -63,7 +65,7 @@ export class Index extends React.Component {
 
       // Re-subscribe every minute or if map center changed
       if (reactiveDateTime && reactiveMapBounds) {
-        Meteor.subscribe('giveaways-on-screen', reactiveDateTime, LatLngHelper.mongoBounds(reactiveMapBounds));
+        self.subscription = Meteor.subscribe('giveaways-on-screen', reactiveDateTime, LatLngHelper.mongoBounds(reactiveMapBounds));
       }
     });
 
@@ -77,6 +79,11 @@ export class Index extends React.Component {
       // Set current location
       self.setState({ geolocation: reactiveLatLng });
     })
+  }
+
+  componentWillUnmount() {
+    if (this.subscription)
+      this.subscription.stop();
   }
 
   goToGeolocation() {

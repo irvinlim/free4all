@@ -45,13 +45,10 @@ Meteor.publish('giveaways-search', function(props) {
 
   switch (props.tab) {
     case "all-time":
-      selector.startDateTime = { $lte: tomorrow };  // Must be ongoing/starting in the next 24 hours
-      selector.endDateTime = { $gt:  now };         // Must not be over
       // options.sort = {  };                       // Sort by highest ratings first
       break;
     case "past":
-      selector.startDateTime = { $lte: tomorrow };  // Must be ongoing/starting in the next 24 hours
-      selector.endDateTime = { $gt:  now };         // Must not be over
+      selector.endDateTime = { $lt:  now };         // Must be over
       options.sort = { endDateTime: -1 };           // Sort by most recently ended first
       break;
     default: // Show current
