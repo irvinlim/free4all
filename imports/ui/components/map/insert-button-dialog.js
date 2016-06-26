@@ -50,7 +50,7 @@ export default class InsertBtnDialog extends React.Component {
       dataSource: [],
       isCatMenuOpen: false,
       tile: null,
-      imgUrl: ""
+      avatarId: ""
     };
 
     this.state = this.initialState;
@@ -243,8 +243,7 @@ export default class InsertBtnDialog extends React.Component {
       data.lat = parseFloat(data.lat);
       data.userId = String(Meteor.userId());
       data.batchId = shortId.generate();
-      const imgUrlPre = data.tile.res.secure_url;
-      data.imgUrl = imgUrlPre.split('upload')[0]+ 'upload/' + 'h_300,c_scale' + imgUrlPre.split('upload')[1];
+      data.avatarId = data.tile.res.public_id;
       console.log("state", data);
 
       let startHr= data.startTime.getHours();
@@ -278,7 +277,7 @@ export default class InsertBtnDialog extends React.Component {
           userId: data.userId,
           batchId: data.batchId,
           statusUpdates: [{ statusTypeId: availableStatus._id, date: new Date(), userId: data.userId }],
-          imgUrl: data.imgUrl,
+          avatarId: data.avatarId,
         }
 
         const gaId = insertGiveaway.call(ga, (error)=>{
@@ -312,7 +311,7 @@ export default class InsertBtnDialog extends React.Component {
             userId: data.userId,
             batchId: data.batchId,
             statusUpdates: [{ statusTypeId: availableStatus._id, date: new Date(), userId: data.userId }],
-            imgUrl: data.imgUrl,
+            avatarId: data.avatarId,
 
           }
 

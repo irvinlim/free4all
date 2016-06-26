@@ -30,14 +30,6 @@
 // Sidebar boxes
 #map-info-box {
   background-color: rgba(#fcfcfc, 0.8); max-width: 350px;
-
-  p.category { font-weight: 300; }
-
-  .map-info-row {
-    line-height: 25px;
-    .info-row-icon { width: 20px; display: inline-block; margin-right: 10px; vertical-align: top; }
-    .info-row-text { width: calc(100% - 30px); display: inline-block; }
-  }
 }
 
 #map-nearby-box {
@@ -49,6 +41,7 @@
 @media (max-width:767px) {
   #map-info-box {
     max-width:none !important; background-color: #FFF; top: 100%; z-index: 1000;
+    .photo-avatar { height: 100%; max-height: 0; overflow: hidden; opacity: 0; @include transition-standard(all 225ms); }
 
     // Close/expand behaviour
     &.state-1 { // Peek at title
@@ -56,7 +49,10 @@
       p.category { font-weight: 300; margin-bottom: 20px; }
     }
 
-    &.state-2 { top: 0; } // Show full
+    &.state-2 { // Show full
+      top: 0;
+      .photo-avatar { max-height: 350px; opacity: 1; }
+    }
   }
 }
 

@@ -6,11 +6,11 @@ import Paper from 'material-ui/Paper';
 import * as Colors from 'material-ui/styles/colors';
 import * as Helper from '../../../util/helper';
 import * as GiveawaysHelper from '../../../util/giveaways';
-import * as ImagesHelper from '../../../util/images';
+import * as AvatarHelper from '../../../util/avatar';
 import * as IconsHelper from '../../../util/icons';
 
 const photoAvatar = (ga) => (
-  <div className="photo-avatar" style={{ backgroundImage: 'url(' + ImagesHelper.getURL(ga.avatarId, 200, 200) + ')' }}>
+  <div className="photo-avatar" style={{ backgroundImage: 'url(' + AvatarHelper.getUrl(ga.avatarId, 350) + ')' }}>
   </div>
 );
 

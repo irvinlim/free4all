@@ -1,3 +1,5 @@
+@import '../common/mixins';
+
 .giveaway-ratings {
   .container { width: 100%; }
   .num_ratings { line-height: 48px; }
@@ -18,11 +20,24 @@
   .small-text { color: #9e9e9e; font-size: 12px; }
 }
 
+.giveaway-infobox {
+  .photo-avatar {
+    img { display:block; max-height: 350px; width: calc(100% - 40px); margin: 0 auto 20px; @include border-radius(1000px); object-fit: cover; }
+  }
+  p.category { font-weight: 300; }
+
+  .map-info-row {
+    line-height: 25px;
+    .info-row-icon { width: 20px; display: inline-block; margin-right: 10px; vertical-align: top; }
+    .info-row-text { width: calc(100% - 30px); display: inline-block; }
+  }
+}
+
 .giveaway-card {
   .icon-avatar {
     height: 100%; text-align: center; display: flex; justify-content: center; align-items: center;
-    @media (max-width: 767px) { font-size: 40px; }
-    @media (min-width: 768px) { font-size: 64px; }
+    @include media-xs-only { font-size: 40px; }
+    @include media-sm-up { font-size: 64px; }
   }
 
   .photo-avatar {

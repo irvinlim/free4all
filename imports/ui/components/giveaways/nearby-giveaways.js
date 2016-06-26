@@ -21,7 +21,7 @@ const giveawayRow = (touchTapHandler) => (ga) => (
       </p>
     }
     leftAvatar={
-      ga.avatarId ? <Avatar src={ AvatarHelper.getAvatar(ga.avatarId, 64) } />
+      ga.avatarId ? <Avatar src={ AvatarHelper.getUrl(ga.avatarId, 64) } />
                   : <Avatar icon={ GiveawaysHelper.getCategoryIcon(ga) } backgroundColor={ GiveawaysHelper.getStatusColor(ga) } />
     }
     secondaryTextLines={2}

@@ -1,3 +1,3 @@
 import ImagesHelper from './images';
 
-export const getAvatar = (avatarId, size = 64) => ImagesHelper.getURL(avatarId, 64, 64);
+export const getUrl = (avatarId, size=64) => ImagesHelper.getUrl(avatarId, size, size);
