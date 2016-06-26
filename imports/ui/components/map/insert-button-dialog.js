@@ -6,6 +6,7 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import AutoComplete from 'material-ui/AutoComplete';
 import { Bert } from 'meteor/themeteorchef:bert';
 import FontIcon from 'material-ui/FontIcon';
+import {GridList, GridTile} from 'material-ui/GridList';
 
 import Formsy from 'formsy-react';
 import Paper from 'material-ui/Paper';
@@ -48,6 +49,7 @@ export default class InsertBtnDialog extends React.Component {
       recurring: false,
       dataSource: [],
       isCatMenuOpen: false,
+      tile: null,
     };
 
     this.state = this.initialState;
@@ -207,6 +209,20 @@ export default class InsertBtnDialog extends React.Component {
       this.setState({
         isCatMenuOpen: true,
         anchorEl: e.currentTarget
+      });
+    }
+
+    this.handleUpload = (e) => {
+      const self = this;
+      const files = e.currentTarget.files;
+      let tile = {};
+      tile.files= files;
+
+
+      // upload files to root cloudinary folder
+      Cloudinary.upload(files, {}, function(err, res) {
+        tile.res=res;
+        self.setState({ tile: tile});
       });
     }
 
@@ -535,7 +551,7 @@ render() {
                   anchorEl={this.state.anchorEl} 
                 />
                 </Col>                
-                <Col xs={12} md={12}>
+                <Col style={{paddingBottom: "28px"}}>
                   <TagsInput value={this.state.tags} onChange={this.handleTagsChange} />
                 </Col>
               </Row>
@@ -544,13 +560,17 @@ render() {
                 <Col xs={12} md={8} >
                 <h2>Upload Image</h2>
                 </Col>
-                <Col xs={12}>
+                <Col xs={12} md={4} 
+                style={{ paddingTop: 21 }}
+                >
                   <RaisedButton 
                   secondary={true} 
                   icon={ IconsHelper.materialIcon("backup") }
                   label="Choose an Image"
                   >
-                  <input type="file" style={{
+                  <input 
+                  type="file"
+                  style={{
                     cursor: 'pointer',
                     position: 'absolute',
                     top: 0,
@@ -560,8 +580,48 @@ render() {
                     width: '100%',
                     opacity: 0,     
                     zIndex: 1,
-                  }} />
+                  }}
+                  onChange={this.handleUpload} />
                   </RaisedButton>
+                </Col>
+              </Row>
+              
+              <Row>
+                <Col>
+                <div style={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  justifyContent: 'space-around',
+                }}>
+
+                {this.state.tile?
+                    <GridList
+                    cellHeight={300}
+                    cols={2}
+                    style={{
+                      width: '100%',
+                      height: 'auto',
+                      overflowY: 'auto',
+                      marginBottom: 24,
+                      paddingLeft:"15px",
+                      paddingRight:"15px"
+                    }}
+                    >
+                      <GridTile
+                      key={this.state.tile.res.secure_url}
+                      title={this.state.tile.files[0].name}
+                      cols={2}
+                      >
+                      <img 
+                      src={this.state.tile.res.secure_url} 
+                      />
+                      </GridTile>
+                    </GridList>
+                    :
+                    <GridList>
+                    </GridList>
+                  }
+                  </div>
                 </Col>
               </Row>
 
