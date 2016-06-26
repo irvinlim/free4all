@@ -39,6 +39,8 @@ export class Index extends React.Component {
     this.mapBounds = new ReactiveVar( null );
 
     this.subscription = null;
+    this.autorunSub = null;
+    this.autorunGeo = null;
   }
 
   selectGa(gaId) {
@@ -59,7 +61,7 @@ export class Index extends React.Component {
 
   componentWillMount() {
     const self = this;
-    Tracker.autorun(function () {
+    this.autorunSub = Tracker.autorun(function () {
       const reactiveDateTime = Chronos.currentTime(Meteor.settings.public.refresh_interval || 60000);
       const reactiveMapBounds = self.mapBounds.get();
 
@@ -69,7 +71,7 @@ export class Index extends React.Component {
       }
     });
 
-    Tracker.autorun(function() {
+    this.autorunGeo = Tracker.autorun(function() {
       const reactiveLatLng = Geolocation.latLng();
 
       // Set initial map center, if not geolocated yet
@@ -82,8 +84,9 @@ export class Index extends React.Component {
   }
 
   componentWillUnmount() {
-    if (this.subscription)
-      this.subscription.stop();
+    this.subscription && this.subscription.stop();
+    this.autorunSub && this.autorunSub.stop();
+    this.autorunGeo && this.autorunGeo.stop();
   }
 
   goToGeolocation() {
