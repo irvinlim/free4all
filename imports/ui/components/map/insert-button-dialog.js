@@ -50,6 +50,7 @@ export default class InsertBtnDialog extends React.Component {
       dataSource: [],
       isCatMenuOpen: false,
       tile: null,
+      imgUrl: ""
     };
 
     this.state = this.initialState;
@@ -238,6 +239,8 @@ export default class InsertBtnDialog extends React.Component {
       data.lat = parseFloat(data.lat);
       data.userId = String(Meteor.userId());
       data.batchId = shortId.generate();
+      const imgUrlPre = data.tile.res.secure_url;
+      data.imgUrl = imgUrlPre.split('upload')[0]+ 'upload/' + 'h_300,c_scale' + imgUrlPre.split('upload')[1];
       console.log("state", data);
 
       let startHr= data.startTime.getHours();
@@ -271,6 +274,7 @@ export default class InsertBtnDialog extends React.Component {
           userId: data.userId,
           batchId: data.batchId,
           statusUpdates: [{ statusTypeId: availableStatus._id, date: new Date(), userId: data.userId }],
+          imgUrl: data.imgUrl,
         }
 
         const gaId = insertGiveaway.call(ga, (error)=>{
@@ -304,6 +308,8 @@ export default class InsertBtnDialog extends React.Component {
             userId: data.userId,
             batchId: data.batchId,
             statusUpdates: [{ statusTypeId: availableStatus._id, date: new Date(), userId: data.userId }],
+            imgUrl: data.imgUrl,
+
           }
 
           const gaId = insertGiveaway.call(ga, (error)=>{
@@ -383,7 +389,8 @@ render() {
                     fullWidth={true}
                     required
                     hintText="What is name of the event?"
-                    onChange={this.handleTitle} />
+                    value={this.state.title}
+                    onBlur={this.handleTitle} />
                 </Col>
                 <Col xs={12}>
                 <FormsyText 
@@ -394,7 +401,8 @@ render() {
                   rows={3}
                   required
                   hintText="What is the event about?"
-                  onChange={this.handleDescription}
+                  value={this.state.description}
+                  onBlur={this.handleDescription}
                   />
                 </Col>
               </Row>
@@ -551,7 +559,7 @@ render() {
                   anchorEl={this.state.anchorEl} 
                 />
                 </Col>                
-                <Col style={{paddingBottom: "28px"}}>
+                <Col xs={12} md={12} style={{paddingBottom: "28px"}}>
                   <TagsInput value={this.state.tags} onChange={this.handleTagsChange} />
                 </Col>
               </Row>

@@ -110,6 +110,11 @@ export const GiveawaysDataSchema = new SimpleSchema({
     label: 'Locally deleted?',
     optional: true
   },
+  imgUrl: {
+    type: String,
+    label: 'Cloudinary secure_url .jpeg image',
+    optional: true
+  }
 });
 
 export const GiveawaysMetaSchema = new SimpleSchema({

@@ -20,11 +20,12 @@ const iconRow = (icon, content) => {
 
 
 const getContent = ({ giveaway }) => {
+  console.log(giveaway)
   if (!giveaway) {
     return (
       <em>Select a giveaway to see more information.</em>
     );
-  } else {
+  } else if(!giveaway.imgUrl){
     return (
       <div className="giveaway">
         <h3 className="lines-1">{ giveaway.title }</h3>
@@ -37,6 +38,20 @@ const getContent = ({ giveaway }) => {
             iconRow("info_outline", "Status: Ended" ) }
       </div>
     );
+  } else {
+    return (
+      <div className="giveaway">
+        <h3 className="lines-1">{ giveaway.title }</h3>
+        <p className="category">{ GiveawaysHelper.categoryBreadcrumbs(giveaway) }</p>
+        <p className="description">{ GiveawaysHelper.description(giveaway) }</p>
+        { iconRow("date_range", GiveawaysHelper.compactDateRange(giveaway.startDateTime, giveaway.endDateTime)) }
+        { iconRow("location_on", giveaway.location ) }
+        { !GiveawaysHelper.is_over(giveaway) ?
+            iconRow("info_outline", "Status: " + GiveawaysHelper.getLastOwnerStatusType(giveaway).label ) :
+            iconRow("info_outline", "Status: Ended" ) }
+        <img style={{width:"100%"}} src={ giveaway.imgUrl } />
+      </div>
+    )
   }
 };
 
