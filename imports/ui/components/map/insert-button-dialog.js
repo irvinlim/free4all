@@ -213,6 +213,10 @@ export default class InsertBtnDialog extends React.Component {
       });
     }
 
+    this.handleCloseCatMenu(){
+      this.setState({isCatMenuOpen: false})
+    }
+
     this.handleUpload = (e) => {
       const self = this;
       const files = e.currentTarget.files;
@@ -556,7 +560,8 @@ render() {
                   setParentCat={this.setParentCat} 
                   setChildCat={this.setChildCat}
                   isCatMenuOpen={this.state.isCatMenuOpen}
-                  anchorEl={this.state.anchorEl} 
+                  anchorEl={this.state.anchorEl}
+                  closeCatMenu={this.handleCloseCatMenu}
                 />
                 </Col>                
                 <Col xs={12} md={12} style={{paddingBottom: "28px"}}>
