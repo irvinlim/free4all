@@ -243,7 +243,10 @@ export default class InsertBtnDialog extends React.Component {
       data.lat = parseFloat(data.lat);
       data.userId = String(Meteor.userId());
       data.batchId = shortId.generate();
-      data.avatarId = data.tile.res.public_id;
+
+      if (data.tile)
+        data.avatarId = data.tile.res.public_id;
+
       console.log("state", data);
 
       let startHr= data.startTime.getHours();
