@@ -100,6 +100,7 @@ export class Timeline extends React.Component {
           tab={ this.state.tab }
           offset={ this.state.offset }
           perPage={ this.state.perPage }
+          sort={ this.state.sort }
           view={ this.state.view }
           categoryId={ this.state.categoryId }
           parentCategoryId={ this.state.parentCategoryId }

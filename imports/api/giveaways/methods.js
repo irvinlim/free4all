@@ -1,4 +1,4 @@
-import { Giveaways, GiveawaysDataSchema } from './giveaways';
+import { Giveaways, GiveawayNetRatings, GiveawaysDataSchema } from './giveaways';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { ValidatedMethod } from 'meteor/mdg:validated-method';
 
@@ -130,4 +130,11 @@ export const unvote = new ValidatedMethod({
       }
     });
   },
+});
+
+// GiveawayNetRatings
+Meteor.methods({
+  'giveaways.getNetRatingIDs': function(options) {
+    return GiveawayNetRatings.find({}, options).map(doc => doc._id);
+  }
 });

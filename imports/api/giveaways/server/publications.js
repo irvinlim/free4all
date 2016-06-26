@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import { Giveaways } from '../giveaways';
+import { Giveaways, GiveawayNetRatings } from '../giveaways';
 import { Categories } from '../../categories/categories';
 
 Meteor.publish('giveaway-by-id', function(gaId) {
@@ -40,44 +40,70 @@ Meteor.publish('giveaways-search', function(props) {
     limit: props.perPage,
   };
 
-  // Aggregate ratings
-  // ...
+  if (props.tab == "all-time") {
 
-  switch (props.tab) {
-    case "current":
-      selector.startDateTime = { $lte: tomorrow };  // Must be ongoing/starting in the next 24 hours
-      selector.endDateTime = { $gt:  now };         // Must not be over
-      options.sort = { startDateTime: -1 };         // Sort by newest first
-      break;
-    case "past":
-      selector.endDateTime = { $lt:  now };         // Must be over
-      options.sort = { endDateTime: -1 };           // Sort by most recently ended first
-      break;
-    case "all-time":
-      // options.sort = {  };                       // Sort by highest ratings first
-      break;
-    default: // Searching
-      // If no search query or category ID, show no results.
-      if (!props.parentCategoryId && !props.categoryId && !props.searchQuery.length)
-        return Giveaways.find(null);
+    // NOTE: Monitor if MapReduce runs unnecessarily slowly, if so move it to a cron job or something.
 
-      // Categorisation: Either specific category or all categories in specific parent
-      if (props.parentCategoryId)
-        selector.categoryId = { $in: Categories.find({ parent: props.parentCategoryId }).map(cat => cat._id) };
-      else if (props.categoryId)
-        selector.categoryId = categoryId;
+    // MapReduce ratings
+    Giveaways.mapReduce(function() {
+      if (!this.ratings) {
+        emit( this._id, 0);
+      } else {
+        emit( this._id, this.ratings.upvotes );
+        emit( this._id, this.ratings.downvotes );
+      }
+    }, function(key, votes) {
+      var upvotes = votes[0] ? votes[0].length : 0;
+      var downvotes = votes[1] ? votes[1].length : 0;
+      return upvotes - downvotes;
+    }, { out: "GiveawayNetRatings" });
 
-      // Full-text search
-      if (props.searchQuery.length)
-        selector.$text = {
-          search: props.searchQuery,
-        };
+    // Fetch _id's
+    const netRatingOptions = _.extend(options, { sort: { value: -1 } });
+    const ids = GiveawayNetRatings.find({}, netRatingOptions).map(doc => doc._id);
+    selector._id = { $in: ids };
 
-      // Custom sort according to props
-      // options.sort = {  };
+    // Return Giveaways (not sorted)
+    return Giveaways.find(selector, options);
 
-      break;
+  } else {
+
+    switch (props.tab) {
+
+      case "current":
+        selector.startDateTime = { $lte: tomorrow };  // Must be ongoing/starting in the next 24 hours
+        selector.endDateTime = { $gt:  now };         // Must not be over
+        options.sort = { startDateTime: -1 };         // Sort by newest first
+        break;
+
+      case "past":
+        selector.endDateTime = { $lt:  now };         // Must be over
+        options.sort = { endDateTime: -1 };           // Sort by most recently ended first
+        break;
+
+      default: // Searching
+        // If no search query or category ID, show no results.
+        if (!props.parentCategoryId && !props.categoryId && !props.searchQuery.length)
+          return Giveaways.find(null);
+
+        // Categorisation: Either specific category or all categories in specific parent
+        if (props.parentCategoryId)
+          selector.categoryId = { $in: Categories.find({ parent: props.parentCategoryId }).map(cat => cat._id) };
+        else if (props.categoryId)
+          selector.categoryId = categoryId;
+
+        // Full-text search
+        if (props.searchQuery.length)
+          selector.$text = {
+            search: props.searchQuery,
+          };
+
+        // Sort according to props.sort
+        // options.sort = {  };
+
+        break;
+    }
+
+    return Giveaways.find(selector, options);
   }
-
-  return Giveaways.find(selector, options);
 });

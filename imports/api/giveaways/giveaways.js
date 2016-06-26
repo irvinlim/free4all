@@ -2,6 +2,7 @@ import { Mongo } from 'meteor/mongo';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 export const Giveaways = new Mongo.Collection('Giveaways');
+export const GiveawayNetRatings = new Mongo.Collection("GiveawayNetRatings");
 
 export const StatusUpdatesSchema = new SimpleSchema({
   statusTypeId: {
