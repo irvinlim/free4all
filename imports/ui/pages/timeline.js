@@ -63,6 +63,7 @@ export class Timeline extends React.Component {
                     floatingLabelText="Category"
                     floatingLabelFixed={true}
                     style={{ fontSize: 14, overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
+                    iconStyle={{ fill: "#333" }}
                     fullWidth={true}
                     value={ this.state.categoryId }
                     onChange={ this.handleSetCategory.bind(this) }>
@@ -75,6 +76,7 @@ export class Timeline extends React.Component {
                     floatingLabelText="Sort"
                     floatingLabelFixed={true}
                     style={{ fontSize: 14, overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
+                    iconStyle={{ fill: "#333" }}
                     fullWidth={true}
                     value={ this.state.sort }
                     onChange={ this.handleSetSort.bind(this) }>

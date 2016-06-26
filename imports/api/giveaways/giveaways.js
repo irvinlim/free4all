@@ -9,14 +9,14 @@ export const StatusUpdatesSchema = new SimpleSchema({
     regEx: SimpleSchema.RegEx.Id,
     label: 'StatusType ID'
   },
-  date: {
-    type: Date,
-    label: 'Date that the status was set'
-  },
   userId: {
     type: String,
     regEx: SimpleSchema.RegEx.Id,
-    label: 'ID of User who updated this status.'
+    label: 'ID of User who updated this status'
+  },
+  date: {
+    type: Date,
+    label: 'Timestamp that the status was set',
   },
 });
 
@@ -24,11 +24,11 @@ export const RatingsSchema = new SimpleSchema({
   userId: {
     type: String,
     regEx: SimpleSchema.RegEx.Id,
-    label: 'ID of user who gave this rating.',
+    label: 'ID of user who gave this rating',
   },
-  isUpvote: {
-    type: Boolean,
-    label: 'True if rating is an upvote, false if it is a downvote'
+  date: {
+    type: Date,
+    label: 'Timestamp when rating was set',
   }
 });
 
@@ -85,8 +85,18 @@ export const GiveawaysDataSchema = new SimpleSchema({
     optional: true,
   },
   ratings: {
-    type: [RatingsSchema],
+    type: Object,
     label: 'User ratings for giveaway',
+    optional: true,
+  },
+  'ratings.upvotes': {
+    type: [RatingsSchema],
+    label: 'User upvote ratings for giveaway',
+    optional: true,
+  },
+  'ratings.downvotes': {
+    type: [RatingsSchema],
+    label: 'User downvote ratings for giveaway',
     optional: true,
   },
   userId: {

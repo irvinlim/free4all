@@ -40,23 +40,10 @@ export const getStatusColor = (ga) => {
 };
 
 // Ratings
-export const countUpvotes = (ga) => ga.ratings ? ga.ratings.reduce((sum, rating) => rating.isUpvote ? sum + 1 : sum, 0) : 0;
-export const countDownvotes = (ga) => ga.ratings ? ga.ratings.reduce((sum, rating) => !rating.isUpvote ? sum + 1 : sum, 0) : 0;
-export const getCurrentUserVote = (ga) => {
-  if (!Meteor.userId() || !ga.ratings)
-    return null;
-
-  const ownVotes = ga.ratings.filter(rating => Meteor.userId() == rating.userId);
-  return ownVotes.length ? ownVotes[0] : null;
-};
-export const currentUserUpvoted = (ga) => {
-  const currentUserVote = getCurrentUserVote(ga);
-  return currentUserVote && currentUserVote.isUpvote === true;
-};
-export const currentUserDownvoted = (ga) => {
-  const currentUserVote = getCurrentUserVote(ga);
-  return currentUserVote && currentUserVote.isUpvote === false;
-};
+export const countUpvotes = (ga) => ga.ratings && ga.ratings.upvotes ? ga.ratings.upvotes.length : 0;
+export const countDownvotes = (ga) => ga.ratings && ga.ratings.downvotes ? ga.ratings.downvotes.length : 0;
+export const currentUserUpvoted = (ga) => ga.ratings && ga.ratings.upvotes ? ga.ratings.upvotes.filter(rating => rating.userId == Meteor.userId()).length > 0 : false;
+export const currentUserDownvoted = (ga) => ga.ratings && ga.ratings.downvotes ? ga.ratings.downvotes.filter(rating => rating.userId == Meteor.userId()).length > 0 : false;
 
 // Dates
 export const is_ongoing = (ga) => Helper.is_ongoing(ga.startDateTime, ga.endDateTime);

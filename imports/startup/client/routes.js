@@ -28,15 +28,17 @@ const requireAuth = (nextState, replace) => {
 Meteor.startup(() => {
   render(
     <Router history={ browserHistory }>
-      <Route path="/" component={ Index } />
-      <Route component={ App }>
-        <Route name="recover-password" path="/recover-password" component={ RecoverPassword } />
-        <Route name="reset-password" path="/reset-password/:token" component={ ResetPassword } />
-        <Route name="signup" path="/signup" component={ Signup } />
+      <Route path="/">
+        <IndexRoute component={ Index } />
+        <Route component={ App }>
+          <Route name="recover-password" path="/recover-password" component={ RecoverPassword } />
+          <Route name="reset-password" path="/reset-password/:token" component={ ResetPassword } />
+          <Route name="signup" path="/signup" component={ Signup } />
 
-        <Route name="timeline" path="/timeline" component={ Timeline } />
+          <Route name="timeline" path="/timeline" component={ Timeline } />
 
-        <Route path="*" component={ NotFound } />
+          <Route path="*" component={ NotFound } />
+        </Route>
       </Route>
     </Router>,
     document.getElementById('react-root')

@@ -77,11 +77,9 @@ export const voteUp = new ValidatedMethod({
     else if (!giveaway)
       throw new Meteor.Error("giveaways.voteUp.undefinedGiveaway", "No such Giveaway found.");
 
-    let ratings = giveaway.ratings ? giveaway.ratings.filter(rating => rating.userId != userId) : [];
-    ratings.push({ userId, isUpvote: true });
-
     Giveaways.update(giveawayId, {
-      $set: { ratings },
+      $push: { 'ratings.upvotes': { userId, date: new Date() } },
+      $pull: { 'ratings.downvotes': { userId } }
     });
   },
 });
@@ -102,11 +100,9 @@ export const voteDown = new ValidatedMethod({
     else if (!giveaway)
       throw new Meteor.Error("giveaways.voteDown.undefinedGiveaway", "No such Giveaway found.");
 
-    let ratings = giveaway.ratings ? giveaway.ratings.filter(rating => rating.userId != userId) : [];
-    ratings.push({ userId, isUpvote: false });
-
     Giveaways.update(giveawayId, {
-      $set: { ratings },
+      $push: { 'ratings.downvotes': { userId, date: new Date() } },
+      $pull: { 'ratings.upvotes': { userId } }
     });
   },
 });
@@ -127,10 +123,11 @@ export const unvote = new ValidatedMethod({
     else if (!giveaway)
       throw new Meteor.Error("giveaways.unvote.undefinedGiveaway", "No such Giveaway found.");
 
-    let ratings = giveaway.ratings ? giveaway.ratings.filter(rating => rating.userId != userId) : [];
-
     Giveaways.update(giveawayId, {
-      $set: { ratings },
+      $pull: {
+        'ratings.upvotes': { userId },
+        'ratings.downvotes': { userId },
+      }
     });
   },
 });
