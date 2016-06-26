@@ -102,6 +102,7 @@ export default class InsertBtnDialog extends React.Component {
     this.styles = {
       dialogStyle:{
         backgroundColor: "rgb(224, 224, 224)",
+        width: "96%"
       },
       actionsContainerStyle:{
         backgroundColor: "rgb(224, 224, 224)",
@@ -380,27 +381,9 @@ render() {
                   onChange={this.handleDescription}
                   />
                 </Col>
-                <Col xs={12} md={4} >
-                  <RaisedButton
-                  label={this.state.childCatName}
-                  secondary={true}
-                  style={{"margin":"14px"}}
-                  onTouchTap={this.handleOpenCatMenu}
-                  icon={<FontIcon className={this.state.childCatIcon} />}
-                />
-                <AllCategoriesList
-                  setParentCat={this.setParentCat}
-                  setChildCat={this.setChildCat}
-                  isCatMenuOpen={this.state.isCatMenuOpen}
-                  anchorEl={this.state.anchorEl}
-                />
-                </Col>
-                <Col xs={12} md={8} style={{"paddingBottom":"10px"}}>
-                  <TagsInput value={this.state.tags} onChange={this.handleTagsChange} />
-                </Col>
               </Row>
 
-              <Row style={{ paddingTop: 16 }}>
+              <Row style={{ paddingTop: 21 }}>
                 <Col xs={12} md={8}>
                   <h2>When</h2>
                 </Col>
@@ -482,12 +465,12 @@ render() {
                 </Col>
               </Row>
 
-              <Row style={{ paddingTop: 16 }}>
+              <Row style={{ paddingTop: 21 }}>
                 <Col xs={12} sm={6} md={8}>
                   <h2>Where</h2>
                 </Col>
 
-                <Col xs={12} sm={6} md={4} style={{ paddingTop: 16 }}>
+                <Col xs={12} sm={6} md={4} style={{ paddingTop: 21 }}>
                   <RaisedButton
                     secondary={true}
                     onTouchTap={this.handleAddLocation}
@@ -534,11 +517,11 @@ render() {
                 </Col>
               </Row>
 
-              <Row style={{ paddingTop: 16 }}>
+              <Row style={{ paddingTop: 21 }}>
                 <Col xs={12} md={8} >
                   <h2>Categories</h2>
                 </Col>
-                <Col xs={12} md={4} style={{ paddingTop: 16 }}>
+                <Col xs={12} md={4} style={{ paddingTop: 21 }}>
                   <RaisedButton 
                   label={this.state.childCatName} 
                   secondary={true} 
