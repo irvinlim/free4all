@@ -213,7 +213,7 @@ export default class InsertBtnDialog extends React.Component {
       });
     }
 
-    this.handleCloseCatMenu = () => {
+    this.handleCloseCatMenu = (e) =>{
       this.setState({isCatMenuOpen: false})
     }
 
@@ -243,8 +243,10 @@ export default class InsertBtnDialog extends React.Component {
       data.lat = parseFloat(data.lat);
       data.userId = String(Meteor.userId());
       data.batchId = shortId.generate();
-      const imgUrlPre = data.tile.res.secure_url;
-      data.imgUrl = imgUrlPre.split('upload')[0]+ 'upload/' + 'h_300,c_scale' + imgUrlPre.split('upload')[1];
+      if(data.tile){
+        const imgUrlPre = data.tile.res.secure_url;
+        data.imgUrl = imgUrlPre.split('upload')[0]+ 'upload/' + 'h_300,c_scale' + imgUrlPre.split('upload')[1];
+      }
       console.log("state", data);
 
       let startHr= data.startTime.getHours();
