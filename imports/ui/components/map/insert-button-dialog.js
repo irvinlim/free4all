@@ -129,7 +129,7 @@ export default class InsertBtnDialog extends React.Component {
       },
       textFieldStyle: {
         pointerEvents: "none",
-      }
+      },
     };
 
     this.handleTagsChange = (tags) => {
@@ -315,7 +315,7 @@ componentWillReceiveProps(nextProps){
 }
 
 render() {
-  let { paperStyle, switchStyle, submitStyle, gridStyle, titleStyle, dialogStyle, actionsContainerStyle, toggle, labelStyle, textFieldStyle } = this.styles;
+  let { paperStyle, switchStyle, submitStyle, gridStyle, titleStyle, dialogStyle, actionsContainerStyle, toggle, labelStyle, textFieldStyle, imgInputStyle} = this.styles;
   let { wordsError, numericError, urlError } = this.errorMessages;
   const actionBtns = [
     // Submit Button
@@ -537,6 +537,31 @@ render() {
                 </Col>                
                 <Col xs={12} md={12}>
                   <TagsInput value={this.state.tags} onChange={this.handleTagsChange} />
+                </Col>
+              </Row>
+
+              <Row>
+                <Col xs={12} md={8} >
+                <h2>Upload Image</h2>
+                </Col>
+                <Col xs={12}>
+                  <RaisedButton 
+                  secondary={true} 
+                  icon={ IconsHelper.materialIcon("backup") }
+                  label="Choose an Image"
+                  >
+                  <input type="file" style={{
+                    cursor: 'pointer',
+                    position: 'absolute',
+                    top: 0,
+                    bottom: 0,
+                    right: 0,
+                    left: 0,
+                    width: '100%',
+                    opacity: 0,     
+                    zIndex: 1,
+                  }} />
+                  </RaisedButton>
                 </Col>
               </Row>
 
