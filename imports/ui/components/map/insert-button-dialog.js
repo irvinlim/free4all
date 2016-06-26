@@ -213,7 +213,7 @@ export default class InsertBtnDialog extends React.Component {
       });
     }
 
-    this.handleCloseCatMenu(){
+    this.handleCloseCatMenu = () => {
       this.setState({isCatMenuOpen: false})
     }
 
@@ -397,7 +397,7 @@ render() {
                     onBlur={this.handleTitle} />
                 </Col>
                 <Col xs={12}>
-                <FormsyText 
+                <FormsyText
                   name="description"
                   floatingLabelText="Description"
                   multiLine={true}
@@ -456,7 +456,7 @@ render() {
                     name="endTime"
                     required
                     pedantic={true}
-                    format="ampm" 
+                    format="ampm"
                     floatingLabelText="End Time"
                     textFieldStyle={this.dateTimeTextStyle}
                     onChange={this.handleChangeEndTimePicker12}
@@ -550,20 +550,20 @@ render() {
                   <h2>Categories</h2>
                 </Col>
                 <Col xs={12} md={4} style={{ paddingTop: 21 }}>
-                  <RaisedButton 
-                  label={this.state.childCatName} 
-                  secondary={true} 
+                  <RaisedButton
+                  label={this.state.childCatName}
+                  secondary={true}
                   onTouchTap={this.handleOpenCatMenu}
                   icon={<FontIcon className={this.state.childCatIcon} />}
                 />
-                <AllCategoriesList 
-                  setParentCat={this.setParentCat} 
+                <AllCategoriesList
+                  setParentCat={this.setParentCat}
                   setChildCat={this.setChildCat}
                   isCatMenuOpen={this.state.isCatMenuOpen}
                   anchorEl={this.state.anchorEl}
                   closeCatMenu={this.handleCloseCatMenu}
                 />
-                </Col>                
+                </Col>
                 <Col xs={12} md={12} style={{paddingBottom: "28px"}}>
                   <TagsInput value={this.state.tags} onChange={this.handleTagsChange} />
                 </Col>
@@ -573,15 +573,15 @@ render() {
                 <Col xs={12} md={8} >
                 <h2>Upload Image</h2>
                 </Col>
-                <Col xs={12} md={4} 
+                <Col xs={12} md={4}
                 style={{ paddingTop: 21 }}
                 >
-                  <RaisedButton 
-                  secondary={true} 
+                  <RaisedButton
+                  secondary={true}
                   icon={ IconsHelper.materialIcon("backup") }
                   label="Choose an Image"
                   >
-                  <input 
+                  <input
                   type="file"
                   style={{
                     cursor: 'pointer',
@@ -591,14 +591,14 @@ render() {
                     right: 0,
                     left: 0,
                     width: '100%',
-                    opacity: 0,     
+                    opacity: 0,
                     zIndex: 1,
                   }}
                   onChange={this.handleUpload} />
                   </RaisedButton>
                 </Col>
               </Row>
-              
+
               <Row>
                 <Col>
                 <div style={{
@@ -625,8 +625,8 @@ render() {
                       title={this.state.tile.files[0].name}
                       cols={2}
                       >
-                      <img 
-                      src={this.state.tile.res.secure_url} 
+                      <img
+                      src={this.state.tile.res.secure_url}
                       />
                       </GridTile>
                     </GridList>
