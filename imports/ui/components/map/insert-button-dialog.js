@@ -213,7 +213,7 @@ export default class InsertBtnDialog extends React.Component {
       });
     }
 
-    this.handleCloseCatMenu = () => {
+    this.handleCloseCatMenu = (e) =>{
       this.setState({isCatMenuOpen: false})
     }
 
