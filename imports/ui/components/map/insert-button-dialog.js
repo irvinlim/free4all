@@ -102,7 +102,6 @@ export default class InsertBtnDialog extends React.Component {
     this.styles = {
       dialogStyle:{
         backgroundColor: "rgb(224, 224, 224)",
-        width: "96%"
       },
       actionsContainerStyle:{
         backgroundColor: "rgb(224, 224, 224)",
@@ -340,6 +339,7 @@ render() {
       </FloatingActionButton>
 
       <Dialog
+        className="insertDialog"
         title="Add a new Giveaway"
         titleStyle={titleStyle}
         bodyStyle={dialogStyle}

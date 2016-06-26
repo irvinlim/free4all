@@ -35,3 +35,7 @@ form label.error {
 .add-giveaway-form .react-tagsinput, .add-giveaway-form .react-tagsinput--focused {
   position: static;
 }
+
+.insertDialog>div>div {
+    width: 96% !important;
+}
