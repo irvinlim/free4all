@@ -21,7 +21,6 @@ const iconRow = (icon, content) => {
 
 
 const getContent = ({ giveaway }) => {
-  console.log(giveaway)
   if (!giveaway) {
     return (
       <em>Select a giveaway to see more information.</em>

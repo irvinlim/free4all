@@ -234,6 +234,7 @@ export default class InsertBtnDialog extends React.Component {
     this.submitForm = () => {
       event.preventDefault();
       props.closeModal();
+      props.resetLoc();
       console.log("state", this.state);
       let data = this.state;
       data.title = String(data.title);
@@ -243,10 +244,11 @@ export default class InsertBtnDialog extends React.Component {
       data.lat = parseFloat(data.lat);
       data.userId = String(Meteor.userId());
       data.batchId = shortId.generate();
-
-      if (data.tile)
+      if (data.tile){
         data.avatarId = data.tile.res.public_id;
-
+        const imgUrlPre = data.tile.res.secure_url;
+        data.imgUrl = imgUrlPre.split('upload')[0]+ 'upload/' + 'h_300,c_scale' + imgUrlPre.split('upload')[1];
+      }
       console.log("state", data);
 
       let startHr= data.startTime.getHours();

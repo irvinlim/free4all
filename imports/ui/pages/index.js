@@ -137,6 +137,14 @@ export class Index extends React.Component {
     this.setState({ showMarkers: !this.state.showMarkers });
   }
 
+  resetLoc() {
+    this.setState({ 
+      latLngClicked: {lat:"",lng:""},
+      locArr: [],
+      locName: "",
+    })
+  }
+
   render() {
     const clickNearbyGa = ga => event => {
       this.selectGa(ga._id);
@@ -191,6 +199,7 @@ export class Index extends React.Component {
                 locName={this.state.locName}
                 addDraggable={this.addDraggable.bind(this)}
                 toggleMarkers={ this.toggleMarkers.bind(this) }
+                resetLoc={ this.resetLoc.bind(this) }
               />
             </div>
           </div>
