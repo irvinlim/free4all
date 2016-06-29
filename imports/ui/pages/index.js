@@ -40,6 +40,7 @@ export class Index extends React.Component {
       locArr: [],
       isDraggableAdded: false,
       showMarkers: true,
+      rGeoLoading: false,
     };
 
     this.mapBounds = new ReactiveVar( null );
@@ -158,6 +159,14 @@ export class Index extends React.Component {
     })
   }
 
+  addRGeoSpinner(){
+    this.setState({ rGeoLoading: true });
+  }
+
+  rmvRGeoSpinner(){
+    this.setState({ rGeoLoading: false });
+  }
+
   render() {
     const clickNearbyGa = ga => event => {
       this.selectGa(ga._id);
@@ -169,14 +178,6 @@ export class Index extends React.Component {
       <MuiThemeProvider muiTheme={ MuiTheme }>
         <div id="main">
           <Header />
-          <RefreshIndicator
-            size={40}
-            left={10}
-            top={0}
-            status="loading"
-          
-          />
-
           <div className="full-container">
             <LeafletMap
               gaId={ this.state.gaSelected }
@@ -192,8 +193,15 @@ export class Index extends React.Component {
               isDraggableAdded={ this.state.isDraggableAdded }
               stopDraggableAdded={ this.noAddDraggable.bind(this) }
               showMarkers={ this.state.showMarkers }
+              addRGeoSpinner={ this.addRGeoSpinner.bind(this) }
+              rmvRGeoSpinner={ this.rmvRGeoSpinner.bind(this) }
             />
-
+            <RefreshIndicator
+            size={40}
+            left={$(window).width()/2}
+            top={ 10}
+            status={ this.state.rGeoLoading ? "loading" : "hide" }
+            />
             <div id="map-boxes-container">
               <MapInfoBox
                 gaId={ this.state.gaSelected }
