@@ -82,7 +82,7 @@
 
 // Floating action buttons
 #map-floating-buttons {
-  position: fixed; bottom: 30px;
+  position: fixed; bottom: 30px; width: 64px;
   @include transition-standard(right 225ms);
 
   // No nearby box for mobile

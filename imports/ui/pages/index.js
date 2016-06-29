@@ -11,16 +11,21 @@ import MapNearbyBox from '../components/map/map-nearby-box';
 
 import { GoToGeolocationButton } from '../components/map/go-to-geolocation-button'
 import InsertBtnDialog from '../components/map/insert-button-dialog'
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import IconButton from 'material-ui/IconButton';
 
 import * as LatLngHelper from '../../util/latlng';
+import * as IconsHelper from '../../util/icons';
 import { Bert } from 'meteor/themeteorchef:bert';
 
 export class Index extends React.Component {
   constructor(props) {
     super(props);
+    const self = this;
 
     this.state = {
       // Properties
+      isAuthenticated: null,
       gaSelected: null,
       infoBoxState: 0,
       nearbyBoxState: 1,
@@ -41,6 +46,7 @@ export class Index extends React.Component {
     this.subscription = null;
     this.autorunSub = null;
     this.autorunGeo = null;
+    this.autorunAuth = null;
   }
 
   selectGa(gaId) {
@@ -80,6 +86,12 @@ export class Index extends React.Component {
 
       // Set current location
       self.setState({ geolocation: reactiveLatLng });
+    })
+
+    this.autorunAuth = Tracker.autorun(()=>{
+      self.setState({
+        isAuthenticated: Meteor.user()
+      });
     })
   }
 
@@ -190,17 +202,26 @@ export class Index extends React.Component {
 
             <div id="map-floating-buttons" style={{ right: 20 + (this.state.nearbyBoxState > 0 ? $("#map-nearby-box").outerWidth() : 0) }}>
               <GoToGeolocationButton geolocationOnClick={ this.goToGeolocation.bind(this) } />
-              <InsertBtnDialog
-                isModalOpen={this.state.isModalOpen}
-                openModal={this.openModal.bind(this)}
-                closeModal={this.closeModal.bind(this)}
-                latLng={this.state.latLngClicked}
-                locArr={this.state.locArr}
-                locName={this.state.locName}
-                addDraggable={this.addDraggable.bind(this)}
-                toggleMarkers={ this.toggleMarkers.bind(this) }
-                resetLoc={ this.resetLoc.bind(this) }
-              />
+              {this.state.isAuthenticated?
+                <InsertBtnDialog
+                  isModalOpen={this.state.isModalOpen}
+                  openModal={this.openModal.bind(this)}
+                  closeModal={this.closeModal.bind(this)}
+                  latLng={this.state.latLngClicked}
+                  locArr={this.state.locArr}
+                  locName={this.state.locName}
+                  addDraggable={this.addDraggable.bind(this)}
+                  toggleMarkers={ this.toggleMarkers.bind(this) }
+                  resetLoc={ this.resetLoc.bind(this) }
+                />
+                :
+                <IconButton tooltip="Login to add giveaways" style={{marginLeft:"-12px"}}>
+                  <FloatingActionButton disabled={true} >
+                    { IconsHelper.materialIcon("add", {color:"black"}) }
+                  </FloatingActionButton>
+
+                </IconButton>
+              }
             </div>
           </div>
         </div>
