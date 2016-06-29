@@ -504,6 +504,8 @@ render() {
 
                 <Col xs={12} sm={6} md={4} style={{ paddingTop: 21 }}>
                   <RaisedButton
+                    className="formBtn"
+                    style={{minHeight:"41px"}}
                     secondary={true}
                     onTouchTap={this.handleAddLocation}
                     label="Choose on Map"
@@ -555,6 +557,8 @@ render() {
                 </Col>
                 <Col xs={12} md={4} style={{ paddingTop: 21 }}>
                   <RaisedButton
+                  className="formBtn"
+                  style={{minHeight:"41px"}}
                   label={this.state.childCatName}
                   secondary={true}
                   onTouchTap={this.handleOpenCatMenu}
@@ -581,6 +585,8 @@ render() {
                 style={{ paddingTop: 21 }}
                 >
                   <RaisedButton
+                  className="formBtn"
+                  style={{minHeight:"41px"}}
                   secondary={true}
                   icon={ IconsHelper.materialIcon("backup") }
                   label="Choose an Image"

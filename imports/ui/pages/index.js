@@ -13,6 +13,7 @@ import { GoToGeolocationButton } from '../components/map/go-to-geolocation-butto
 import InsertBtnDialog from '../components/map/insert-button-dialog'
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import IconButton from 'material-ui/IconButton';
+import RefreshIndicator from 'material-ui/RefreshIndicator';
 
 import * as LatLngHelper from '../../util/latlng';
 import * as IconsHelper from '../../util/icons';
@@ -168,6 +169,14 @@ export class Index extends React.Component {
       <MuiThemeProvider muiTheme={ MuiTheme }>
         <div id="main">
           <Header />
+          <RefreshIndicator
+            size={40}
+            left={10}
+            top={0}
+            status="loading"
+          
+          />
+
           <div className="full-container">
             <LeafletMap
               gaId={ this.state.gaSelected }

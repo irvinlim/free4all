@@ -78,6 +78,7 @@ export default class LeafletMap extends React.Component {
 
       const marker = L.marker(nextProps.mapCenter, {icon:icon, draggable:'true', opacity:0.75});
       const popup = L.popup({closeOnClick: true, className:'dPopup'}).setContent('<p>Drag to select location!</p>')
+      const popupLoading = L.popup({closeOnClick: true, className:'dPopup'}).setContent('Loading')
 
       marker.on('dragstart',function(event){
         const marker = event.target;
@@ -89,6 +90,7 @@ export default class LeafletMap extends React.Component {
         const position = marker.getLatLng();
         rgeocode(Meteor.settings.public.MapBox.accessToken, position, self.props.openInsertDialog, self.removeDraggable.bind(self));
         marker.setLatLng(position,{draggable:'true'}).update();
+        marker.bindPopup(popupLoading).openPopup();
       });
 
       this.props.stopDraggableAdded();
