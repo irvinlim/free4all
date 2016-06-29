@@ -23,7 +23,7 @@
   position: absolute; top: 0; left: 0; height: 100%; width: 100%; pointer-events: none;
   h3 { margin: 0 0 10px; }
 
-  .map-sidebar { height: 100%; padding: 0; pointer-events: auto; position: absolute; @include transition(all 0.3s); }
+  .map-sidebar { height: 100%; padding: 0; pointer-events: auto; position: absolute; @include transition-standard(all 225ms); }
   .map-sidebar-box { padding: 20px 20px 0; }
 }
 
@@ -34,7 +34,7 @@
 
 #map-nearby-box {
   max-width:350px; z-index: 1000;
-  > div:not(.expand-button-nearbybox) { background-color: #fcfcfc; @include transition(opacity 0.3s ease-out); }
+  > div:not(.expand-button-nearbybox) { background-color: #fcfcfc; @include transition-standard(opacity 225ms); }
 }
 
 // Smaller-than-iPad devices
@@ -83,7 +83,7 @@
 // Floating action buttons
 #map-floating-buttons {
   position: fixed; bottom: 30px;
-  @include transition(right 0.5s ease-out);
+  @include transition-standard(right 225ms);
 
   // No nearby box for mobile
   @media (max-width:991px) { right: 30px !important; }
