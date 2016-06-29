@@ -7,6 +7,7 @@ import AutoComplete from 'material-ui/AutoComplete';
 import { Bert } from 'meteor/themeteorchef:bert';
 import FontIcon from 'material-ui/FontIcon';
 import {GridList, GridTile} from 'material-ui/GridList';
+import LinearProgress from 'material-ui/LinearProgress';
 
 import Formsy from 'formsy-react';
 import Paper from 'material-ui/Paper';
@@ -50,7 +51,8 @@ export default class InsertBtnDialog extends React.Component {
       dataSource: [],
       isCatMenuOpen: false,
       tile: null,
-      avatarId: ""
+      avatarId: "",
+      loadingFile: false,
     };
 
     this.state = this.initialState;
@@ -223,11 +225,14 @@ export default class InsertBtnDialog extends React.Component {
       let tile = {};
       tile.files= files;
 
+      this.setState({ loadingFile: true });
+
 
       // upload files to root cloudinary folder
       Cloudinary.upload(files, {}, function(err, res) {
         tile.res=res;
         self.setState({ tile: tile});
+        self.setState({ loadingFile : false})
       });
     }
 
@@ -608,7 +613,15 @@ render() {
                   </RaisedButton>
                 </Col>
               </Row>
-
+              <Row>
+                <Col>
+                  {this.state.loadingFile?
+                    <LinearProgress mode="indeterminate" />
+                    :
+                    <div />
+                  }
+                </Col>
+              </Row>
               <Row>
                 <Col>
                 <div style={{
@@ -616,6 +629,7 @@ render() {
                   flexWrap: 'wrap',
                   justifyContent: 'space-around',
                 }}>
+
 
                 {this.state.tile?
                     <GridList
