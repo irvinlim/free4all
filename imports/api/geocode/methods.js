@@ -7,8 +7,8 @@ export const geocode = (mapboxAccessToken, query, addState) => {
 	let url = 'https://api.tiles.mapbox.com/geocoding/v5/mapbox.places/' + encodeURIComponent(query) 
 		+ '.json?access_token=' + mapboxAccessToken;
 	console.log(url);
-	if(geoTimeout) 
-		Meteor.clearTimeout(geoTimeout);
+	if(geoTimeout) Meteor.clearTimeout(geoTimeout);
+
 	geoTimeout = Meteor.setTimeout( ()=>{
 		HTTP.get(url,{},function( error, response ) {
 			if ( error ) {
@@ -19,7 +19,7 @@ export const geocode = (mapboxAccessToken, query, addState) => {
 				geoTimeout = null;
 			}
 		})
-	})
+	}, 500)
 }
 // https://api.mapbox.com/geocoding/v5/mapbox.places/-73.989,40.733.json
 // Mapbox Reverse Geocoding
@@ -27,8 +27,8 @@ let rgeoTimeout;
 export const rgeocode = (mapboxAccessToken, latLng, openInsertDialog, removeDraggable, rmvRGeoSpinner) => {
 	let url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + latLng.lng +','+ latLng.lat 
 		+ '.json?access_token=' + mapboxAccessToken + '&autocomplete=true';
-	if(rgeoTimeout) 
-		Meteor.clearTimeout(rgeoTimeout);
+	if(rgeoTimeout) Meteor.clearTimeout(rgeoTimeout);
+
 	rgeoTimeout = Meteor.setTimeout( ()=>{
 		HTTP.get(url,{},function( error, response ) {
 			if ( error ) {
@@ -40,7 +40,7 @@ export const rgeocode = (mapboxAccessToken, latLng, openInsertDialog, removeDrag
 				rmvRGeoSpinner();
 			}
 		}) 
-	}, 500);
+	}, 1000);
 
 }
 
