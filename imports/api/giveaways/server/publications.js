@@ -35,7 +35,9 @@ Meteor.publish('giveaways-search', function(props) {
     deleted: { $ne:  true },  // Must not be deleted (local deletion)
   };
 
-  const options = {};
+  const options = {
+    fields: {}
+  };
 
   if (props.tab == "all-time") {
 
@@ -70,12 +72,10 @@ Meteor.publish('giveaways-search', function(props) {
       case "current":
         selector.startDateTime = { $lte: tomorrow };  // Must be ongoing/starting in the next 24 hours
         selector.endDateTime = { $gt:  now };         // Must not be over
-        options.sort = { startDateTime: -1 };         // Sort by newest first
         break;
 
       case "past":
         selector.endDateTime = { $lt:  now };         // Must be over
-        options.sort = { endDateTime: -1 };           // Sort by most recently ended first
         break;
 
       default: // Searching
@@ -84,19 +84,18 @@ Meteor.publish('giveaways-search', function(props) {
           return Giveaways.find(null);
 
         // Categorisation: Either specific category or all categories in specific parent
-        if (props.parentCategoryId)
+        if (props.parentCategoryId && props.parentCategoryId != 'all-categories')
           selector.categoryId = { $in: Categories.find({ parent: props.parentCategoryId }).map(cat => cat._id) };
-        else if (props.categoryId)
+        else if (props.categoryId && props.categoryId != 'all-categories')
           selector.categoryId = categoryId;
 
         // Full-text search
-        if (props.searchQuery.length)
+        if (props.searchQuery.length) {
           selector.$text = {
-            search: props.searchQuery,
+            $search: props.searchQuery,
           };
-
-        // Sort according to props.sort
-        // options.sort = {  };
+          options.fields = _.extend(options.fields, { score: { $meta: 'textScore' } });
+        }
 
         break;
     }
