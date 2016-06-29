@@ -35,10 +35,7 @@ Meteor.publish('giveaways-search', function(props) {
     deleted: { $ne:  true },  // Must not be deleted (local deletion)
   };
 
-  const options = {
-    skip: props.offset,
-    limit: props.perPage,
-  };
+  const options = {};
 
   if (props.tab == "all-time") {
 

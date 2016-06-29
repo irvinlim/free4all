@@ -2,12 +2,15 @@ import React from 'react';
 import Subheader from 'material-ui/Subheader';
 import { GridList, GridTile } from 'material-ui/GridList';
 import Paper from 'material-ui/Paper';
+import ReactList from 'react-list';
 
 import * as Colors from 'material-ui/styles/colors';
 import * as Helper from '../../../util/helper';
 import * as GiveawaysHelper from '../../../util/giveaways';
 import * as AvatarHelper from '../../../util/avatar';
 import * as IconsHelper from '../../../util/icons';
+
+let giveaways = [];
 
 const photoAvatar = (ga) => (
   <div className="photo-avatar" style={{ backgroundImage: 'url(' + AvatarHelper.getUrl(ga.avatarId, 350) + ')' }}>
@@ -45,6 +48,10 @@ const listItemRow = (ga) => (
   </Paper>
 );
 
+const renderItem = (index, key) => {
+  return listItemRow(giveaways[index]);
+};
+
 export class TimelineItems extends React.Component {
   componentDidMount() {
     Helper.onRenderDot3();
@@ -55,10 +62,16 @@ export class TimelineItems extends React.Component {
   }
 
   render() {
-    const { giveaways, props } = this.props;
+    const { props } = this.props;
+    giveaways = this.props.giveaways;
+
     return (
       <div id="timeline-items">
-        { giveaways.map(listItemRow) }
+        <ReactList
+          itemRenderer={ renderItem }
+          length={ giveaways.length }
+          type='simple'
+        />
       </div>
     );
   }

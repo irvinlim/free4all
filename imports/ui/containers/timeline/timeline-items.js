@@ -8,10 +8,7 @@ import { Giveaways } from '../../../api/giveaways/giveaways';
 const composer = (props, onData) => {
   if (Meteor.subscribe('giveaways-search', props).ready()) {
 
-    const options = {
-      skip: props.offset,
-      limit: props.perPage,
-    };
+    const options = {};
 
     if (props.tab == "all-time") {
 
@@ -50,7 +47,7 @@ const composer = (props, onData) => {
       }
 
       onData(null, {
-        giveaways: Giveaways.find({}, options),
+        giveaways: Giveaways.find({}, options).fetch(),
         props: props,
       });
 

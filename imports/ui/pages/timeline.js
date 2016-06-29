@@ -12,8 +12,6 @@ export class Timeline extends React.Component {
 
     this.state = {
       tab: "current",
-      offset: 0,
-      perPage: 10,
       view: "list",
       parentCategoryId: null,
       categoryId: "all-categories",
