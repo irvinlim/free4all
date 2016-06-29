@@ -33,17 +33,18 @@ export default class LeafletMap extends React.Component {
   observeChanges() {
     const self = this;
     const clickHandler = (gaId) => this.props.markerOnClick(gaId);
+    const callbackHandler = (id) => this.updateSelected();
 
     // Observe changes in giveaways
     Giveaways.find().observe({
       added: ga => {
-        self.mapObject.addMarker(ga._id, ga, clickHandler);
+        self.mapObject.addMarker(ga._id, ga, clickHandler, callbackHandler);
       },
       changed: ga => {
-        self.mapObject.updateMarker(ga._id, ga, clickHandler);
+        self.mapObject.updateMarker(ga._id, ga, clickHandler, callbackHandler);
       },
       removed: ga => {
-        self.mapObject.removeMarker(ga._id, ga, clickHandler);
+        self.mapObject.removeMarker(ga._id, ga, clickHandler, callbackHandler);
       },
     });
   }
@@ -55,25 +56,22 @@ export default class LeafletMap extends React.Component {
       self.props.setMapZoom(this.getZoom());
       self.props.setMapMaxZoom(this.getMaxZoom());
       self.props.setBounds(this.getBounds());
-
-      // Update selected map marker
-      if (self.props.gaId)
-        $(".map-marker").removeClass('selected').filter("[ga-id="+self.props.gaId+"]").addClass('selected');
     }).trigger();
 
-    this.mapObject.registerEventHandler('dblclick', function(event){
+    this.mapObject.registerEventHandler('dblclick', function(event) {
       rgeocode(Meteor.settings.public.MapBox.accessToken, event.latlng, self.props.openInsertDialog);
-    })
+    });
   }
 
   removeDraggable() {
     this.mapObject.map.removeLayer(this.draggableMarker);
   }
 
-  componentWillReceiveProps(nextProps){
+  componentWillReceiveProps(nextProps) {
     const self = this;
-    if(nextProps.isDraggableAdded){
 
+    // Add reverse geocode marker
+    if (nextProps.isDraggableAdded) {
       const css = { 'background-color': "#00bcd4", "font-size": "30px" };
       const iconHTML = '<i class="material-icons">add_location</i>'
       const icon = this.mapObject.markerIcon("map-marker", css, {}, iconHTML);
@@ -97,9 +95,9 @@ export default class LeafletMap extends React.Component {
       this.mapObject.map.addLayer(marker);
       this.draggableMarker = marker;
       marker.bindPopup(popup).openPopup();
-
     }
 
+    // Hide or show map markers
     if (this.mapObject && this.mapObject.map) {
       if (nextProps.showMarkers)
         this.mapObject.map.addLayer(this.mapObject.markerClusterGroup);
@@ -119,9 +117,14 @@ export default class LeafletMap extends React.Component {
         this.mapObject.map.panTo(this.props.mapCenter);
     }
 
+    this.updateSelected();
+  }
+
+  updateSelected() {
     // Update selected map marker
-    if (this.props.gaId && this.props.gaId != prevProps.gaId)
-      $(".map-marker").removeClass('selected').filter("[ga-id="+this.props.gaId+"]").addClass('selected');
+    $(".map-marker").removeClass('selected');
+    if (this.props.gaId)
+      $(".map-marker[ga-id="+this.props.gaId+"]").addClass('selected');
   }
 
   render() {

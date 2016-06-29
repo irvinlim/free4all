@@ -47,7 +47,7 @@ export default class LeafletMapObject {
     this.map.doubleClickZoom.disable();
   }
 
-  addMarker(id, ga, clickHandler) {
+  addMarker(id, ga, clickHandler, callback) {
     if (!id)
       return Helper.error("addMarker: No id specified.");
 
@@ -62,19 +62,25 @@ export default class LeafletMapObject {
     this.markers[id] = L.marker(LatLngHelper.lnglat2latlng(ga.coordinates), {icon: icon}).on('click', this.markerOnClick(ga, clickHandler));
 
     this.markerClusterGroup.addLayer(this.markers[id]);
+
+    if (callback)
+      callback(id);
   }
 
-  removeMarker(id, ga, clickHandler) {
+  removeMarker(id, ga, clickHandler, callback) {
     Helper.errorIf(!this.markers[id], "Error: No such marker for Giveaway #" + id);
 
     this.markers[id].off('click');
     this.markerClusterGroup.removeLayer(this.markers[id]);
     this.markers[id] = null;
+
+    if (callback)
+      callback(id);
   }
 
-  updateMarker(id, ga, clickHandler) {
+  updateMarker(id, ga, clickHandler, callback) {
     if (id in this.markers) this.removeMarker(id, ga, clickHandler);
-    this.addMarker(id, ga, clickHandler);
+    this.addMarker(id, ga, clickHandler, callback);
   }
 
   markerIcon(className, css, attr, content) {
