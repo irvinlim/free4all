@@ -23,6 +23,7 @@ BrowserPolicy.content.allowImageOrigin( 'res.cloudinary.com' );
 BrowserPolicy.content.allowImageOrigin( 'secure.gravatar.com' );
 BrowserPolicy.content.allowImageOrigin( 'graph.facebook.com' );
 BrowserPolicy.content.allowImageOrigin( '*.fbcdn.net' );
+BrowserPolicy.content.allowImageOrigin( '*.akamaihd.net' );
 BrowserPolicy.content.allowImageOrigin( '*.googleusercontent.com' );
 
 // Temp
