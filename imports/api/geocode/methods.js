@@ -40,7 +40,7 @@ export const rgeocode = (mapboxAccessToken, latLng, openInsertDialog, removeDrag
 				rmvRGeoSpinner();
 			}
 		}) 
-	}, 1500);
+	}, 500);
 
 }
 
