@@ -47,7 +47,7 @@ const composer = (props, onData) => {
           else if (props.sort == "newest-first")
             options.sort = { startDateTime: -1 };
           else if (props.sort == "oldest-first")
-            options.sort = { endDateTime: -1 };
+            options.sort = { startDateTime: 1 };
           break;
       }
 
@@ -57,6 +57,11 @@ const composer = (props, onData) => {
       });
 
     }
+  } else {
+    onData(null, {
+      giveaways: [],
+      props: props
+    });
   }
 };
 

@@ -79,9 +79,6 @@ Meteor.publish('giveaways-search', function(props) {
         break;
 
       default: // Searching
-        // If no search query or category ID, show no results.
-        if (!props.parentCategoryId && !props.categoryId && !props.searchQuery.length)
-          return Giveaways.find(null);
 
         // Categorisation: Either specific category or all categories in specific parent
         if (props.parentCategoryId && props.parentCategoryId != 'all-categories')
@@ -90,12 +87,8 @@ Meteor.publish('giveaways-search', function(props) {
           selector.categoryId = categoryId;
 
         // Full-text search
-        if (props.searchQuery.length) {
-          selector.$text = {
-            $search: props.searchQuery,
-          };
-          options.fields = _.extend(options.fields, { score: { $meta: 'textScore' } });
-        }
+        selector.$text = { $search: props.searchQuery };
+        options.fields = _.extend(options.fields, { score: { $meta: 'textScore' } });
 
         break;
     }
