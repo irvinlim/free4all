@@ -6,7 +6,7 @@ let geoTimeout;
 export const geocode = (mapboxAccessToken, query, addState) => {
 	let url = 'https://api.tiles.mapbox.com/geocoding/v5/mapbox.places/' + encodeURIComponent(query) 
 		+ '.json?access_token=' + mapboxAccessToken;
-	console.log(url);
+	
 	if(geoTimeout) Meteor.clearTimeout(geoTimeout);
 
 	geoTimeout = Meteor.setTimeout( ()=>{

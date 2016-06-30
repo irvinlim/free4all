@@ -228,16 +228,24 @@ export class Index extends React.Component {
                   locArr={this.state.locArr}
                   locName={this.state.locName}
                   addDraggable={this.addDraggable.bind(this)}
+                  stopDraggableAdded={this.noAddDraggable.bind(this)}
                   toggleMarkers={ this.toggleMarkers.bind(this) }
                   resetLoc={ this.resetLoc.bind(this) }
                 />
                 :
-                <IconButton tooltip="Login to add giveaways" style={{marginLeft:"-12px"}}>
+                <div>
+                  <IconButton 
+                    tooltip="Login to add giveaways" 
+                    style={{
+                      zIndex:1,
+                      position: "absolute",
+                    }}
+                  >
+                  </IconButton>
                   <FloatingActionButton disabled={true} >
                     { IconsHelper.materialIcon("add", {color:"black"}) }
                   </FloatingActionButton>
-
-                </IconButton>
+                </div>
               }
             </div>
           </div>

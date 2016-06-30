@@ -143,6 +143,16 @@ export default class InsertBtnDialog extends React.Component {
 
     this.handleOpen = () => {
       props.openModal();
+
+      let dateOnLoad = new Date();
+      hourNow = dateOnLoad.getHours();
+      dateOnLoad.setMinutes(0,0,0);
+      let date1hAfter = moment(dateOnLoad).add(1,'h').toDate();
+
+      this.setState({ 
+        startTime: dateOnLoad,
+        endTime: date1hAfter
+      })
     };
 
     this.handleClose = () => {
@@ -211,7 +221,7 @@ export default class InsertBtnDialog extends React.Component {
       e.preventDefault();
       this.setState({
         isCatMenuOpen: true,
-        anchorEl: e.currentTarget
+        anchorEl: e.currentTarget,
       });
     }
 
@@ -239,6 +249,7 @@ export default class InsertBtnDialog extends React.Component {
     this.submitForm = () => {
       event.preventDefault();
       props.closeModal();
+      props.stopDraggableAdded();
       props.resetLoc();
       console.log("state", this.state);
       let data = this.state;
