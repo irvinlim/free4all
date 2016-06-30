@@ -16,7 +16,7 @@ export class Timeline extends React.Component {
       parentCategoryId: null,
       categoryId: "all-categories",
       searchQuery: "",
-      sort: "highest-rated",
+      sort: "most-relevant",
     };
   }
 
@@ -30,6 +30,14 @@ export class Timeline extends React.Component {
 
   handleSetSort(event, key, payload) {
     this.setState({ sort: payload });
+  }
+
+  handleSearch(event) {
+    const code = event.which || event.keyCode;
+    if (code != 13)
+      return;
+
+    this.setState({ searchQuery: $(event.target).val() });
   }
 
   render() {
@@ -51,8 +59,10 @@ export class Timeline extends React.Component {
                     type="text"
                     placeholder="Search for a giveaway..."
                     floatingLabelText="Search"
+                    onKeyDown={ this.handleSearch.bind(this) }
                     floatingLabelFixed={true}
                     fullWidth={true}
+                    underlineShow={false}
                     style={{ fontSize: 14 }} />
                 </div>
                 <div className="col col-xs-6 col-sm-3">
@@ -63,6 +73,7 @@ export class Timeline extends React.Component {
                     style={{ fontSize: 14, overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
                     iconStyle={{ fill: "#333" }}
                     fullWidth={true}
+                    underlineShow={false}
                     value={ this.state.categoryId }
                     onChange={ this.handleSetCategory.bind(this) }>
                     <MenuItem value="all-categories" primaryText="All Categories" />
@@ -76,8 +87,10 @@ export class Timeline extends React.Component {
                     style={{ fontSize: 14, overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
                     iconStyle={{ fill: "#333" }}
                     fullWidth={true}
+                    underlineShow={false}
                     value={ this.state.sort }
                     onChange={ this.handleSetSort.bind(this) }>
+                    <MenuItem value="most-relevant" primaryText="Most relevant first" />
                     <MenuItem value="highest-rated" primaryText="Highest rated first" />
                     <MenuItem value="most-popular" primaryText="Most popular first" />
                     <MenuItem value="nearest" primaryText="Nearest first" />
