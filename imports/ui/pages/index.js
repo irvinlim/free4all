@@ -67,7 +67,7 @@ export class Index extends React.Component {
     this.setState({ nearbyBoxState: x });
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const self = this;
     this.autorunSub = Tracker.autorun(function () {
       const reactiveDateTime = Chronos.currentTime(Meteor.settings.public.refresh_interval || 60000);
@@ -90,11 +90,9 @@ export class Index extends React.Component {
       self.setState({ geolocation: reactiveLatLng });
     })
 
-    this.autorunAuth = Tracker.autorun(()=>{
-      self.setState({
-        isAuthenticated: Meteor.user()
-      });
-    })
+    this.autorunAuth = Tracker.autorun(function() {
+      self.setState({ isAuthenticated: Meteor.user() });
+    });
   }
 
   componentWillUnmount() {
@@ -152,7 +150,7 @@ export class Index extends React.Component {
   }
 
   resetLoc() {
-    this.setState({ 
+    this.setState({
       latLngClicked: {lat:"",lng:""},
       locArr: [],
       locName: "",
@@ -219,7 +217,7 @@ export class Index extends React.Component {
 
             <div id="map-floating-buttons" style={{ right: 20 + (this.state.nearbyBoxState > 0 ? $("#map-nearby-box").outerWidth() : 0) }}>
               <GoToGeolocationButton geolocationOnClick={ this.goToGeolocation.bind(this) } />
-              {this.state.isAuthenticated?
+              { this.state.isAuthenticated ?
                 <InsertBtnDialog
                   isModalOpen={this.state.isModalOpen}
                   openModal={this.openModal.bind(this)}
@@ -232,12 +230,9 @@ export class Index extends React.Component {
                   resetLoc={ this.resetLoc.bind(this) }
                 />
                 :
-                <IconButton tooltip="Login to add giveaways" style={{marginLeft:"-12px"}}>
-                  <FloatingActionButton disabled={true} >
-                    { IconsHelper.materialIcon("add", {color:"black"}) }
-                  </FloatingActionButton>
-
-                </IconButton>
+                <FloatingActionButton disabled={true}>
+                  { IconsHelper.materialIcon("add", {color:"black"}) }
+                </FloatingActionButton>
               }
             </div>
           </div>
