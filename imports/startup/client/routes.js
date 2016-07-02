@@ -7,6 +7,7 @@ import { App } from '../../ui/layouts/app';
 import { Documents } from '../../ui/pages/documents';
 import { Index } from '../../ui/pages/index';
 import { NotFound } from '../../ui/pages/not-found';
+import { Bert } from 'meteor/themeteorchef:bert';
 
 // Auth
 import { RecoverPassword } from '../../ui/pages/recover-password';
@@ -22,9 +23,19 @@ import { Dashboard } from '../../ui/pages/dashboard';
 const requireAuth = (nextState, replace) => {
   if (!Meteor.loggingIn() && !Meteor.userId()) {
     replace({
-      pathname: '/login',
+      pathname: '/',
       state: { nextPathname: nextState.location.pathname },
     });
+    if(nextState.location.pathname === "/dashboard"){
+      Meteor.setTimeout(function(){
+        Bert.alert({
+          title: 'Log in to access the dashboard!',
+          type: 'danger',
+          style: 'growl-top-right',
+          icon: 'fa-user'
+        });
+      }, 1000)
+    }
   }
 };
 
@@ -39,7 +50,7 @@ Meteor.startup(() => {
           <Route name="signup" path="/signup" component={ Signup } />
 
           <Route name="timeline" path="/timeline" component={ Timeline } />
-          <Route name="dashboard" path="/dashboard" component={ Dashboard } />
+          <Route name="dashboard" path="/dashboard" component={ Dashboard } onEnter={ requireAuth } />
 
           <Route path="*" component={ NotFound } />
         </Route>
