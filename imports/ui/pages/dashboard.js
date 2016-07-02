@@ -7,7 +7,7 @@ import Header from '../components/header/header';
 import LeafletMap from '../components/map/leaflet-map';
 
 import MapInfoBox from '../components/map/map-info-box';
-import MapNearbyBox from '../components/map/map-nearby-box';
+import MapUserBox from '../components/map/map-user-box';
 
 import { GoToGeolocationButton } from '../components/map/go-to-geolocation-button'
 import InsertBtnDialog from '../components/map/insert-button-dialog'
@@ -75,7 +75,7 @@ export class Dashboard extends React.Component {
 
       // Re-subscribe every minute or if map center changed
       if (reactiveDateTime && reactiveMapBounds) {
-        self.subscription = Meteor.subscribe('giveaways-on-screen', reactiveDateTime, LatLngHelper.mongoBounds(reactiveMapBounds));
+        self.subscription = Meteor.subscribe('user-giveaways-within-date', reactiveDateTime, moment(reactiveDateTime).add(1,'d').toDate());
       }
     });
 
@@ -90,9 +90,6 @@ export class Dashboard extends React.Component {
       self.setState({ geolocation: reactiveLatLng });
     })
 
-    this.autorunAuth = Tracker.autorun(function() {
-      self.setState({ isAuthenticated: Meteor.user() });
-    });
   }
 
   componentWillUnmount() {
@@ -203,7 +200,7 @@ export class Dashboard extends React.Component {
             boxState={ this.state.infoBoxState }
             setBoxState={ this.setInfoBoxState.bind(this) }
           />
-          <MapNearbyBox
+          <MapUserBox
             gaId={ this.state.gaSelected }
             boxState={ this.state.nearbyBoxState }
             setBoxState={ this.setNearbyBoxState.bind(this) }
@@ -214,7 +211,6 @@ export class Dashboard extends React.Component {
 
         <div id="map-floating-buttons" style={{ right: 20 + (this.state.nearbyBoxState > 0 ? $("#map-nearby-box").outerWidth() : 0) }}>
           <GoToGeolocationButton geolocationOnClick={ this.goToGeolocation.bind(this) } />
-          { this.state.isAuthenticated ?
             <InsertBtnDialog
               isModalOpen={this.state.isModalOpen}
               openModal={this.openModal.bind(this)}
@@ -227,21 +223,6 @@ export class Dashboard extends React.Component {
               toggleMarkers={ this.toggleMarkers.bind(this) }
               resetLoc={ this.resetLoc.bind(this) }
             />
-            :
-            <div>
-              <IconButton 
-                tooltip="Login to add giveaways" 
-                style={{
-                  zIndex:1,
-                  position: "absolute",
-                }}
-              >
-              </IconButton>
-              <FloatingActionButton disabled={true} >
-                { IconsHelper.materialIcon("add", {color:"black"}) }
-              </FloatingActionButton>
-            </div>
-          }
         </div>
       </div>
     );
