@@ -5,6 +5,7 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 
 import TimelineItems from '../containers/timeline/timeline-items';
+import { TimelineCategoriesListItems } from '../components/categories/timeline-categories-list-items';
 
 export class Timeline extends React.Component {
   constructor(props) {
@@ -76,7 +77,10 @@ export class Timeline extends React.Component {
                     underlineShow={false}
                     value={ this.state.categoryId }
                     onChange={ this.handleSetCategory.bind(this) }>
-                    <MenuItem value="all-categories" primaryText="All Categories" />
+                    { TimelineCategoriesListItems({
+                        itemsFilter: (items) => $.merge([{ _id: "all-categories", name: "All Categories" }], items),
+                      })
+                    }
                   </SelectField>
                 </div>
                 <div className="col col-xs-6 col-sm-3">

@@ -20,5 +20,4 @@ ParentCategories.schema = new SimpleSchema({
   },
 });
 
-
 ParentCategories.attachSchema(ParentCategories.schema);

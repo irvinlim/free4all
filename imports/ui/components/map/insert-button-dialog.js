@@ -14,7 +14,7 @@ import Paper from 'material-ui/Paper';
 import { FormsyCheckbox, FormsyDate, FormsyRadio, FormsyRadioGroup, FormsySelect, FormsyText, FormsyTime, FormsyToggle } from 'formsy-material-ui/lib';
 import { Grid, Row, Col } from 'react-bootstrap';
 
-import AllCategoriesList from '../../containers/all-categories-list.js'
+import AllCategoriesList from '../../containers/categories/all-categories-list';
 import TagsInput from 'react-tagsinput';
 
 import { insertGiveaway } from '../../../api/giveaways/methods.js';
@@ -149,7 +149,7 @@ export default class InsertBtnDialog extends React.Component {
       dateOnLoad.setMinutes(0,0,0);
       let date1hAfter = moment(dateOnLoad).add(1,'h').toDate();
 
-      this.setState({ 
+      this.setState({
         startTime: dateOnLoad,
         endTime: date1hAfter
       })

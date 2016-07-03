@@ -4,7 +4,7 @@ import FontIcon from 'material-ui/FontIcon';
 export const catIcon = (cat, style={}) => icon(cat.iconClass, style);
 
 export const icon = (className, style={}) => {
-  if (className.substr(0,3) == "fa ")
+  if (className && className.substr(0,3) == "fa ")
     return <i className={ className } style={ style }></i>;
   else
     return materialIcon(className, style);

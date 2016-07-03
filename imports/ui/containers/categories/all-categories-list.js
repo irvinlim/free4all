@@ -1,8 +1,8 @@
 import { composeWithTracker } from 'react-komposer';
-import { ParentCategories } from '../../api/parent-categories/parent-categories.js';
-import { Categories } from '../../api/categories/categories.js';
-import { AllCategoriesList } from '../components/map/all-categories-list.js';
-import { Loading } from '../components/loading.js';
+import { ParentCategories } from '../../../api/parent-categories/parent-categories';
+import { Categories } from '../../../api/categories/categories';
+import { AllCategoriesList } from '../../components/categories/all-categories-list';
+import { Loading } from '../../components/loading';
 import { Meteor } from 'meteor/meteor';
 
 const composer = (props, onData) => {
