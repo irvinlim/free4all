@@ -30,8 +30,8 @@ Meteor.publish('user-giveaways-within-date', function(startDateRange, endDateRan
   check(endDateRange, Date);
 
   const findParams = {
-    startDateTime:  { $lte: endDateRange, },
-    endDateTime:    { $gt:  startDateRange, },
+    startDateTime:  { $gte: startDateRange, },
+    endDateTime:    { $lt:  endDateRange, },
     userId:         this.userId,
   };
 

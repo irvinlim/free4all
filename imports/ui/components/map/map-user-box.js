@@ -6,13 +6,16 @@ import UserGiveaways from '../../containers/giveaways/user-giveaways';
 
 import * as IconsHelper from '../../../util/icons';
 
-export default class MapNearbyBox extends React.Component {
+export default class MapUserBox extends React.Component {
   positionBoxes() {
     $(window).resize(function() {
       $("#map-nearby-box").css('left', window.innerWidth - $("#map-nearby-box").outerWidth());
     });
     $(window).resize();
   }
+  formatDate(date) {
+    return moment(date).format("ddd, D MMM YYYY");
+  };
 
   componentDidMount() {
     const self = this;
@@ -33,7 +36,15 @@ export default class MapNearbyBox extends React.Component {
     return (
       <div id="map-nearby-box" className={ "map-sidebar hidden-xs hidden-sm col-md-3 col-lg-3 state-" + this.props.boxState }>
         <Scrollbars autoHide style={{ height: "100%" }}>
-          <UserGiveaways mapBounds={ this.props.mapBounds } nearbyOnClick={ this.props.nearbyOnClick } />
+          <UserGiveaways 
+          mapBounds={ this.props.mapBounds } 
+          nearbyOnClick={ this.props.nearbyOnClick } 
+          userUntilDate={ this.props.userUntilDate }
+          handleUserUntilDate={ this.props.handleUserUntilDate }
+          userFromDate={ this.props.userFromDate }
+          handleUserFromDate={ this.props.handleUserFromDate }
+          formatDate={ this.formatDate.bind(this) }
+          />
         </Scrollbars>
 
         <div className="expand-button-nearbybox hidden-xs hidden-sm">

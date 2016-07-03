@@ -43,6 +43,9 @@ export class Dashboard extends React.Component {
       rGeoLoading: false,
     };
 
+    this.userUntilDate = new ReactiveVar( moment().add(1,'w').toDate() );
+    this.userFromDate = new ReactiveVar( new Date() );
+
     this.mapBounds = new ReactiveVar( null );
 
     this.subscription = null;
@@ -70,12 +73,14 @@ export class Dashboard extends React.Component {
   componentDidMount() {
     const self = this;
     this.autorunSub = Tracker.autorun(function () {
-      const reactiveDateTime = Chronos.currentTime(Meteor.settings.public.refresh_interval || 60000);
-      const reactiveMapBounds = self.mapBounds.get();
+      // const reactiveDateTime = Chronos.currentTime(Meteor.settings.public.refresh_interval || 60000);
+      // const reactiveMapBounds = self.mapBounds.get();
+      const userFromDate = self.userFromDate.get();
+      const userUntilDate = self.userUntilDate.get();
 
-      // Re-subscribe every minute or if map center changed
-      if (reactiveDateTime && reactiveMapBounds) {
-        self.subscription = Meteor.subscribe('user-giveaways-within-date', reactiveDateTime, moment(reactiveDateTime).add(1,'d').toDate());
+      // Re-subscribe when date range changes
+      if (userFromDate && userUntilDate) {
+        self.subscription = Meteor.subscribe('user-giveaways-within-date', userFromDate, userUntilDate);
       }
     });
 
@@ -162,6 +167,13 @@ export class Dashboard extends React.Component {
     this.setState({ rGeoLoading: false });
   }
 
+  handleUserUntilDate(event, date){
+    this.userUntilDate.set(moment(date).add(23,'h').add(59,'m').toDate());
+  }
+  handleUserFromDate(event, date){
+    this.userFromDate.set(date);
+  }
+
   render() {
     const clickNearbyGa = ga => event => {
       this.selectGa(ga._id);
@@ -206,6 +218,10 @@ export class Dashboard extends React.Component {
             setBoxState={ this.setNearbyBoxState.bind(this) }
             mapBounds={ this.mapBounds.get() }
             nearbyOnClick={ clickNearbyGa }
+            userUntilDate={ this.userUntilDate.get() }
+            userFromDate={ this.userFromDate.get() }
+            handleUserUntilDate= { this.handleUserUntilDate.bind(this) }
+            handleUserFromDate= { this.handleUserFromDate.bind(this) }
           />
         </div>
 

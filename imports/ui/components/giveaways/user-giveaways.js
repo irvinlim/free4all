@@ -1,9 +1,11 @@
 import React from 'react';
+import { Grid, Row, Col } from 'react-bootstrap';
 import { List, ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import Subheader from 'material-ui/Subheader';
 import Avatar from 'material-ui/Avatar';
 import IconButton from 'material-ui/IconButton';
+import DatePicker from 'material-ui/DatePicker';
 
 import * as Helper from '../../../util/helper';
 import * as AvatarHelper from '../../../util/avatar';
@@ -19,7 +21,9 @@ const giveawayRow = (touchTapHandler) => (ga) => (
     }
     secondaryText={
       <p>
-        <span className="location">Added on: { moment(ga.created_at).format("ddd, Do MMM, h:mm a")}</span>
+        <span className="location">Starting on: { moment(ga.startDateTime).format("ddd, Do MMM, h:mm a")}</span>
+        <br />
+        <span className="location">Ending on: { moment(ga.endDateTime).format("ddd, Do MMM, h:mm a")}</span>
       </p>
     }
     leftAvatar={
@@ -32,7 +36,7 @@ const giveawayRow = (touchTapHandler) => (ga) => (
       <IconButton tooltip="Edit" style={{top: "9px",right: "12px"}}>
         { IconsHelper.materialIcon("mode_edit", {color:"grey",}) }
       </IconButton>
-          }
+    }
   />
 );
 
@@ -40,6 +44,34 @@ export const UserGiveaways = (props) => (
   <List>
     <Subheader>
       <h3 style={{ margin:"20px 0px 10px" }}>User's Giveaways</h3>
+      <Row>
+        <Col xs={12} md={2}>
+        <span>From</span>
+        </Col>
+        <Col xs={12} md={2}>
+        <DatePicker
+        value={ props.userFromDate }
+        onChange={ props.handleUserFromDate }
+        formatDate={ props.formatDate }
+        textFieldStyle={ {width:"126px"}}
+        />
+        </Col>
+      </Row>
+
+      <Row>
+        <Col xs={12} md={2}>
+        <span>Until</span>
+        </Col>
+        <Col xs={12} md={2}>
+        <DatePicker
+        value={ props.userUntilDate }
+        onChange={ props.handleUserUntilDate }
+        formatDate={ props.formatDate }
+        textFieldStyle={ {width:"126px"}}
+        />
+        </Col>
+      </Row>
+
     </Subheader>
     { props.giveaways ? Helper.insertDividers(props.giveaways.map(giveawayRow(props.nearbyOnClick))) : <div /> }
   </List>
