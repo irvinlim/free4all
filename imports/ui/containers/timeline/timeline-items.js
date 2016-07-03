@@ -10,7 +10,7 @@ const composer = (props, onData) => {
 
     const options = {};
 
-    if (props.tab == "all-time") {
+    if (props.tab == "all-time" || props.sort == "highest-rated") {
 
       // Get IDs for k-highest rated giveaways
       const netRatingOptions = _.extend(options, { sort: { value: -1 } });
@@ -26,8 +26,11 @@ const composer = (props, onData) => {
         // Finally, get items in sorted order
         const sortedGiveaways = ids.map(id => giveawayHashMap[id]);
 
+        // Remove undefined elements
+        const filteredGiveaways = sortedGiveaways.filter(ga => !!ga);
+
         onData(null, {
-          giveaways: sortedGiveaways,
+          giveaways: filteredGiveaways,
           props: props,
         });
       });

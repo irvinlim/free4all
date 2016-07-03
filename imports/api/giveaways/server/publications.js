@@ -40,9 +40,7 @@ Meteor.publish('giveaways-search', function(props) {
     fields: {}
   };
 
-  if (props.tab == "all-time") {
-
-    // NOTE: Monitor if MapReduce runs unnecessarily slowly, if so move it to a cron job or something.
+  if (props.tab == "all-time" || props.sort == "highest-rated") {
 
     // MapReduce ratings
     Giveaways.mapReduce(function() {
@@ -63,50 +61,46 @@ Meteor.publish('giveaways-search', function(props) {
     const ids = GiveawayNetRatings.find({}, netRatingOptions).map(doc => doc._id);
     selector._id = { $in: ids };
 
-    // Return Giveaways (not sorted)
-    return Giveaways.find(selector, options);
-
-  } else {
-
-    switch (props.tab) {
-
-      case "current":
-        selector.startDateTime = { $lte: tomorrow };  // Must be ongoing/starting in the next 24 hours
-        selector.endDateTime = { $gt:  now };         // Must not be over
-        break;
-
-      case "past":
-        selector.endDateTime = { $lt:  now };         // Must be over
-        break;
-
-      default: // Searching
-
-        // Categorisation: Either specific category or all categories in specific parent
-        if (props.categoryId && props.categoryId != 'all-categories') {
-          const cat = CategoriesHelper.getMaybeCategory(props.categoryId);
-
-          if (cat) {
-
-            if (cat.parent)
-              // Child category
-              selector.categoryId = categoryId;
-
-            else
-              // Parent category
-              selector.categoryId = { $in: CategoriesHelper.getOrderedChildCategoriesOf(cat).map(cat => cat._id) };
-
-          }
-        }
-
-        // Full-text search
-        if (props.searchQuery) {
-          selector.$text = { $search: props.searchQuery };
-          options.fields = _.extend(options.fields, { score: { $meta: 'textScore' } });
-        }
-
-        break;
-    }
-
-    return Giveaways.find(selector, options);
   }
+
+  switch (props.tab) {
+
+    case "all-time":
+      break;
+
+    case "current":
+      selector.startDateTime = { $lte: tomorrow };  // Must be ongoing/starting in the next 24 hours
+      selector.endDateTime = { $gt:  now };         // Must not be over
+      break;
+
+    case "past":
+      selector.endDateTime = { $lt:  now };         // Must be over
+      break;
+
+    default: // Searching
+
+      // Categorisation: Either specific category or all categories in specific parent
+      if (props.categoryId && props.categoryId != 'all-categories') {
+        const cat = CategoriesHelper.getMaybeCategory(props.categoryId);
+
+        if (cat) {
+          if (cat.parent)
+            // Child category
+            selector.categoryId = categoryId;
+          else
+            // Parent category
+            selector.categoryId = { $in: CategoriesHelper.getOrderedChildCategoriesOf(cat).map(cat => cat._id) };
+        }
+      }
+
+      // Full-text search
+      if (props.searchQuery) {
+        selector.$text = { $search: props.searchQuery };
+        options.fields = _.extend(options.fields, { score: { $meta: 'textScore' } });
+      }
+
+      break;
+  }
+
+  return Giveaways.find(selector, options);
 });
