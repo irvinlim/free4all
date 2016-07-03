@@ -17,7 +17,7 @@ import { Grid, Row, Col } from 'react-bootstrap';
 import AllCategoriesList from '../../containers/all-categories-list.js'
 import TagsInput from 'react-tagsinput';
 
-import { updateGiveaway } from '../../../api/giveaways/methods.js';
+import { updateGiveaway, removeGiveaway, removeGiveawayGroup } from '../../../api/giveaways/methods.js';
 import { StatusTypes } from '../../../api/status-types/status-types.js'
 import { Categories } from '../../../api/categories/categories.js';
 
@@ -306,6 +306,35 @@ export default class EditBtnDialog extends React.Component {
       })
     }
 
+    this.removeGiveaway = () => {
+      props.closeModal();
+      props.stopDraggableAdded();
+      props.resetLoc();
+      removeGiveaway.call({_id: this.state.gaId}, (error)=>{
+        if (error) {
+          Bert.alert(error.reason, 'Error updating giveaway');
+        } else {
+          this.setState(this.initialState);
+          Bert.alert('Giveaway Deleted!', 'success');
+        }
+      })
+
+    }
+
+    this.removeGiveawayGroup = () => {
+      props.closeModal();
+      props.stopDraggableAdded();
+      props.resetLoc();
+      removeGiveawayGroup.call({batchId: this.state.batchId}, (error)=>{
+        if (error) {
+          Bert.alert(error.reason, 'Error updating giveaway');
+        } else {
+          this.setState(this.initialState);
+          Bert.alert('Grouped Giveaways Deleted!', 'success');
+        }
+      })
+    }
+
   }
 
   componentWillReceiveProps(nextProps){
@@ -367,6 +396,18 @@ export default class EditBtnDialog extends React.Component {
         label="Cancel"
         primary={true}
         onTouchTap={this.handleClose} />,
+      <FlatButton
+        label="Delete"
+        secondary={true}
+        disabled={!this.state.canSubmit}
+        onTouchTap={this.removeGiveaway}
+        autoScrollBodyContent={true} />,
+      <FlatButton
+        label="Delete group"
+        secondary={true}
+        disabled={!this.state.canSubmit}
+        onTouchTap={this.removeGiveawayGroup}
+        autoScrollBodyContent={true} />,        
     ];
     return (
       <div>

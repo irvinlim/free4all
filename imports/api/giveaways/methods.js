@@ -26,10 +26,20 @@ export const updateGiveaway = new ValidatedMethod({
 export const removeGiveaway = new ValidatedMethod({
   name: 'giveaways.remove',
   validate: new SimpleSchema({
+    _id: { type: String },
+  }).validator(),
+  run({ _id }) {
+    Giveaways.remove(_id);
+  },
+});
+
+export const removeGiveawayGroup = new ValidatedMethod({
+  name: 'giveaways.removeGroup',
+  validate: new SimpleSchema({
     batchId: { type: String },
   }).validator(),
   run({ batchId }) {
-    Giveaways.remove(batchId);
+    Giveaways.remove({batchId: batchId});
   },
 });
 
