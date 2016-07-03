@@ -25,6 +25,7 @@ export const geocode = (mapboxAccessToken, query, addState) => {
 // Mapbox Reverse Geocoding
 let rgeoTimeout;
 export const rgeocode = (mapboxAccessToken, latLng, openInsertDialog, removeDraggable, rmvRGeoSpinner) => {
+	if(!openInsertDialog) return;
 	let url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + latLng.lng +','+ latLng.lat 
 		+ '.json?access_token=' + mapboxAccessToken + '&autocomplete=true';
 	if(rgeoTimeout) Meteor.clearTimeout(rgeoTimeout);

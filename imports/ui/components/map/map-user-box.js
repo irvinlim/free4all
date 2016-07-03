@@ -44,6 +44,7 @@ export default class MapUserBox extends React.Component {
           userFromDate={ this.props.userFromDate }
           handleUserFromDate={ this.props.handleUserFromDate }
           formatDate={ this.formatDate.bind(this) }
+          editGa={ this.props.editGa }
           />
         </Scrollbars>
 

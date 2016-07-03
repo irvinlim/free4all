@@ -13,7 +13,7 @@ import * as GiveawaysHelper from '../../../util/giveaways';
 import * as Colors from 'material-ui/styles/colors';
 import * as IconsHelper from '../../../util/icons';
 
-const giveawayRow = (touchTapHandler) => (ga) => (
+const giveawayRow = (touchTapHandler, editGa) => (ga) => (
   <ListItem
     key={ ga._id }
     primaryText={
@@ -33,7 +33,10 @@ const giveawayRow = (touchTapHandler) => (ga) => (
     secondaryTextLines={2}
     onTouchTap={ touchTapHandler(ga) }
     rightIconButton={    
-      <IconButton tooltip="Edit" style={{top: "9px",right: "12px"}}>
+      <IconButton 
+        tooltip="Edit" 
+        style={{top: "9px",right: "12px"}} 
+        onTouchTap={editGa(ga)}>
         { IconsHelper.materialIcon("mode_edit", {color:"grey",}) }
       </IconButton>
     }
@@ -73,6 +76,9 @@ export const UserGiveaways = (props) => (
       </Row>
 
     </Subheader>
-    { props.giveaways ? Helper.insertDividers(props.giveaways.map(giveawayRow(props.nearbyOnClick))) : <div /> }
+    { props.giveaways 
+      ? Helper.insertDividers(props.giveaways.map(giveawayRow(props.nearbyOnClick, props.editGa) )) 
+      : <div /> 
+    }
   </List>
 );

@@ -11,6 +11,7 @@ import MapUserBox from '../components/map/map-user-box';
 
 import { GoToGeolocationButton } from '../components/map/go-to-geolocation-button'
 import InsertBtnDialog from '../components/map/insert-button-dialog'
+import EditBtnDialog from '../components/map/edit-button-dialog'
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import IconButton from 'material-ui/IconButton';
 import RefreshIndicator from 'material-ui/RefreshIndicator';
@@ -26,7 +27,6 @@ export class Dashboard extends React.Component {
 
     this.state = {
       // Properties
-      isAuthenticated: null,
       gaSelected: null,
       infoBoxState: 0,
       nearbyBoxState: 1,
@@ -41,6 +41,7 @@ export class Dashboard extends React.Component {
       isDraggableAdded: false,
       showMarkers: true,
       rGeoLoading: false,
+      gaEdit: null,
     };
 
     this.userUntilDate = new ReactiveVar( moment().add(1,'w').toDate() );
@@ -107,32 +108,6 @@ export class Dashboard extends React.Component {
     this.setState({ mapCenter: this.state.geolocation });
   }
 
-  openInsertDialog(features, coords, removeDraggable) {
-    this.setState({ isModalOpen: true });
-    this.setState({ latLngClicked: coords });
-    let featuresArr = features.map((loc)=> {
-      loc.text = loc.place_name;
-      loc.value = loc.place_name;
-      return loc;
-    });
-    const selectedLocName = featuresArr[0].text;
-    this.setState({ locArr: featuresArr });
-    this.setState({ locName: selectedLocName });
-    Bert.alert({
-      hideDelay: 6000,
-      title: 'Location Selected',
-      message: selectedLocName,
-      type: 'info',
-      style: 'growl-top-right',
-      icon: 'fa-map-marker'
-    });
-    if(removeDraggable){
-      removeDraggable();
-    }
-
-    this.toggleMarkers();
-  }
-
   closeModal() {
     this.setState({ isModalOpen: false });
   }
@@ -174,11 +149,41 @@ export class Dashboard extends React.Component {
     this.userFromDate.set(date);
   }
 
+  openEditDialog(features, coords, removeDraggable) {
+    this.setState({ isModalOpen: true });
+    this.setState({ latLngClicked: coords });
+    let featuresArr = features.map((loc)=> {
+      loc.text = loc.place_name;
+      loc.value = loc.place_name;
+      return loc;
+    });
+    const selectedLocName = featuresArr[0].text;
+    this.setState({ locArr: featuresArr });
+    this.setState({ locName: selectedLocName });
+    Bert.alert({
+      hideDelay: 6000,
+      title: 'Location Selected',
+      message: selectedLocName,
+      type: 'info',
+      style: 'growl-top-right',
+      icon: 'fa-map-marker'
+    });
+    if(removeDraggable){
+      removeDraggable();
+    }
+    this.toggleMarkers();
+  }
+
   render() {
     const clickNearbyGa = ga => event => {
       this.selectGa(ga._id);
       this.setState({ mapCenter: LatLngHelper.lnglat2latlng(ga.coordinates) });
       this.setState({ mapZoom: this.state.mapMaxZoom });
+    };
+
+    const editGa = ga => event => {
+      this.setState({ isModalOpen: true });
+      this.setState({ gaEdit: ga });
     };
 
     return (
@@ -193,19 +198,21 @@ export class Dashboard extends React.Component {
           setMapZoom={ mapZoom => this.setState({ mapZoom: mapZoom })}
           setMapMaxZoom={ mapMaxZoom => this.setState({ mapMaxZoom: mapMaxZoom })}
           setBounds={ bounds => this.mapBounds.set(bounds) }
-          openInsertDialog={ this.openInsertDialog.bind(this) }
+          openInsertDialog={ this.openEditDialog.bind(this) }
           isDraggableAdded={ this.state.isDraggableAdded }
           stopDraggableAdded={ this.noAddDraggable.bind(this) }
           showMarkers={ this.state.showMarkers }
           addRGeoSpinner={ this.addRGeoSpinner.bind(this) }
           rmvRGeoSpinner={ this.rmvRGeoSpinner.bind(this) }
         />
+
         <RefreshIndicator
         size={40}
         left={$(window).width()/2}
         top={ 10}
         status={ this.state.rGeoLoading ? "loading" : "hide" }
         />
+
         <div id="map-boxes-container">
           <MapInfoBox
             gaId={ this.state.gaSelected }
@@ -220,27 +227,32 @@ export class Dashboard extends React.Component {
             nearbyOnClick={ clickNearbyGa }
             userUntilDate={ this.userUntilDate.get() }
             userFromDate={ this.userFromDate.get() }
-            handleUserUntilDate= { this.handleUserUntilDate.bind(this) }
-            handleUserFromDate= { this.handleUserFromDate.bind(this) }
+            handleUserUntilDate={ this.handleUserUntilDate.bind(this) }
+            handleUserFromDate={ this.handleUserFromDate.bind(this) }
+            editGa={ editGa }
           />
         </div>
 
         <div id="map-floating-buttons" style={{ right: 20 + (this.state.nearbyBoxState > 0 ? $("#map-nearby-box").outerWidth() : 0) }}>
           <GoToGeolocationButton geolocationOnClick={ this.goToGeolocation.bind(this) } />
-            <InsertBtnDialog
-              isModalOpen={this.state.isModalOpen}
-              openModal={this.openModal.bind(this)}
-              closeModal={this.closeModal.bind(this)}
-              latLng={this.state.latLngClicked}
-              locArr={this.state.locArr}
-              locName={this.state.locName}
-              addDraggable={this.addDraggable.bind(this)}
-              stopDraggableAdded={this.noAddDraggable.bind(this)}
-              toggleMarkers={ this.toggleMarkers.bind(this) }
-              resetLoc={ this.resetLoc.bind(this) }
-            />
         </div>
+
+        <EditBtnDialog
+          isModalOpen={ this.state.isModalOpen }
+          openModal={ this.openModal.bind(this) }
+          closeModal={ this.closeModal.bind(this) }
+          latLng={ this.state.latLngClicked }
+          locArr={ this.state.locArr }
+          locName={ this.state.locName }
+          addDraggable={ this.addDraggable.bind(this) }
+          stopDraggableAdded={ this.noAddDraggable.bind(this) }
+          toggleMarkers={ this.toggleMarkers.bind(this) }
+          resetLoc={ this.resetLoc.bind(this) }
+          gaEdit={ this.state.gaEdit }
+        />
+
       </div>
+
     );
   }
 }
