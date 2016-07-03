@@ -96,8 +96,6 @@ export class Timeline extends React.Component {
                     onChange={ this.handleSetSort.bind(this) }>
                     <MenuItem value="most-relevant" primaryText="Most relevant first" />
                     <MenuItem value="highest-rated" primaryText="Highest rated first" />
-                    <MenuItem value="most-popular" primaryText="Most popular first" />
-                    <MenuItem value="nearest" primaryText="Nearest first" />
                     <MenuItem value="newest-first" primaryText="Newest First" />
                     <MenuItem value="oldest-first" primaryText="Oldest First" />
                   </SelectField>
