@@ -14,7 +14,7 @@ import Paper from 'material-ui/Paper';
 import { FormsyCheckbox, FormsyDate, FormsyRadio, FormsyRadioGroup, FormsySelect, FormsyText, FormsyTime, FormsyToggle } from 'formsy-material-ui/lib';
 import { Grid, Row, Col } from 'react-bootstrap';
 
-import AllCategoriesList from '../../containers/all-categories-list.js'
+import AllCategoriesList from '../../containers/categories/all-categories-list.js'
 import TagsInput from 'react-tagsinput';
 
 import { updateGiveaway, removeGiveaway, removeGiveawayGroup } from '../../../api/giveaways/methods.js';
