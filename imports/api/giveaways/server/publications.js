@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { Giveaways, GiveawayNetRatings } from '../giveaways';
-import { Categories } from '../../categories/categories';
+
+import * as CategoriesHelper from '../../../util/categories';
 
 Meteor.publish('giveaway-by-id', function(gaId) {
   check(gaId, Match._id);
@@ -81,10 +82,21 @@ Meteor.publish('giveaways-search', function(props) {
       default: // Searching
 
         // Categorisation: Either specific category or all categories in specific parent
-        if (props.parentCategoryId && props.parentCategoryId != 'all-categories')
-          selector.categoryId = { $in: Categories.find({ parent: props.parentCategoryId }).map(cat => cat._id) };
-        else if (props.categoryId && props.categoryId != 'all-categories')
-          selector.categoryId = categoryId;
+        if (props.categoryId && props.categoryId != 'all-categories') {
+          const cat = CategoriesHelper.getMaybeCategory(props.categoryId);
+
+          if (cat) {
+
+            if (cat.parent)
+              // Child category
+              selector.categoryId = categoryId;
+
+            else
+              // Parent category
+              selector.categoryId = { $in: CategoriesHelper.getOrderedChildCategoriesOf(cat).map(cat => cat._id) };
+
+          }
+        }
 
         // Full-text search
         selector.$text = { $search: props.searchQuery };
