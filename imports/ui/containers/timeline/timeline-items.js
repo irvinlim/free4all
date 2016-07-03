@@ -42,7 +42,7 @@ const composer = (props, onData) => {
           options.sort = { endDateTime: -1 };   // Sort by most recently ended first
           break;
         default: // Searching
-          if (props.sort == "most-relevant")
+          if (props.searchQuery && props.sort == "most-relevant")
             options.sort = { score: { $meta: 'textScore' } };
           else if (props.sort == "newest-first")
             options.sort = { startDateTime: -1 };

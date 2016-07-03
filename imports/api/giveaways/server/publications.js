@@ -99,8 +99,10 @@ Meteor.publish('giveaways-search', function(props) {
         }
 
         // Full-text search
-        selector.$text = { $search: props.searchQuery };
-        options.fields = _.extend(options.fields, { score: { $meta: 'textScore' } });
+        if (props.searchQuery) {
+          selector.$text = { $search: props.searchQuery };
+          options.fields = _.extend(options.fields, { score: { $meta: 'textScore' } });
+        }
 
         break;
     }
