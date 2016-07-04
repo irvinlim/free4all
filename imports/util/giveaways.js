@@ -81,3 +81,18 @@ export const compactDateRange = (start, end) => {
 // Text
 export const description = (ga) => ga.description.length ? Helper.nl2br(ga.description) : null;
 export const descriptionFirstLine = (ga) => ga.description ? ga.description.split("\n")[0] : "";
+export const descriptionTruncate = (ga) => {
+
+  // No description.
+  if (!ga.description || !ga.description.length)
+    return "";
+
+  // No need to truncate.
+  if (ga.description.length <= 160)
+    return ga.description;
+
+  const firstWords = ga.description.substr(0, 160).split(" ");
+  firstWords.pop();
+
+  return firstWords.join(" ") + " ...";
+};

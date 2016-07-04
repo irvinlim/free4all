@@ -33,7 +33,7 @@ const listItemRow = (ga) => (
       <div className="col col-xs-8 col-sm-9">
         <h3 className="lines-1">{ ga.title }</h3>
         <h5 className="lines-1">{ GiveawaysHelper.categoryBreadcrumbs(ga) }</h5>
-        <p className="description lines-2 ddd">{ GiveawaysHelper.description(ga) }</p>
+        <p className="description">{ GiveawaysHelper.descriptionTruncate(ga) }</p>
         <p className="small-text lines-1">{ GiveawaysHelper.compactDateRange(ga.startDateTime, ga.endDateTime) }</p>
 
         <div className="footer-actions">
@@ -77,18 +77,12 @@ export class TimelineItems extends React.Component {
   }
 
   componentDidMount() {
-    Helper.onRenderDot3();
-
     $(window).resize(event => {
       this.setState({
         gridListCols: $(window).width() < 768 ? 2 : 4,
         gridListCellHeight: $(window).width() < 768 ? 180 : 250
       });
     }).resize();
-  }
-
-  componentDidUpdate() {
-    Helper.onRenderDot3();
   }
 
   render() {
