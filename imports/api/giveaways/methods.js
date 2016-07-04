@@ -14,10 +14,10 @@ export const insertGiveaway = new ValidatedMethod({
 
 export const updateGiveaway = new ValidatedMethod({
   name: 'giveaways.update',
-  validate: new SimpleSchema({
-    _id: { type: String },
-    'update.title': { type: String, optional: true },
-  }).validator(),
+  validate(payload){
+    const validator = GiveawaysDataSchema.validator();
+    validator(payload.update);
+  },
   run({ _id, update }) {
     Giveaways.update(_id, { $set: update });
   },
@@ -30,6 +30,16 @@ export const removeGiveaway = new ValidatedMethod({
   }).validator(),
   run({ _id }) {
     Giveaways.remove(_id);
+  },
+});
+
+export const removeGiveawayGroup = new ValidatedMethod({
+  name: 'giveaways.removeGroup',
+  validate: new SimpleSchema({
+    batchId: { type: String },
+  }).validator(),
+  run({ batchId }) {
+    Giveaways.remove({batchId: batchId});
   },
 });
 

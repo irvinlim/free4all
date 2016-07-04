@@ -1,4 +1,5 @@
 import React from 'react';
+import { Grid } from 'react-bootstrap';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
@@ -51,9 +52,9 @@ export class Timeline extends React.Component {
   render() {
     return (
       <div id="timeline">
+        <Grid>
 
         <div className="timeline-bar-top">
-
           <Tabs
             id="timeline-tabs"
             tabItemContainerStyle={{ backgroundColor: "#90a4cf" }}
@@ -124,18 +125,20 @@ export class Timeline extends React.Component {
             </IconButton>
           </div>
 
-        </div>
+          </div>
 
-        <TimelineItems
-          tab={ this.state.tab }
-          offset={ this.state.offset }
-          perPage={ this.state.perPage }
-          sort={ this.state.sort }
-          view={ this.state.view }
-          categoryId={ this.state.categoryId }
-          parentCategoryId={ this.state.parentCategoryId }
-          searchQuery={ this.state.searchQuery } />
-      </div>
+          <TimelineItems
+            tab={ this.state.tab }
+            offset={ this.state.offset }
+            perPage={ this.state.perPage }
+            sort={ this.state.sort }
+            view={ this.state.view }
+            categoryId={ this.state.categoryId }
+            parentCategoryId={ this.state.parentCategoryId }
+            searchQuery={ this.state.searchQuery } />
+
+          </Grid>
+        </div>
     );
   }
 }

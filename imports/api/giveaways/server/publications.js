@@ -25,6 +25,19 @@ Meteor.publish('giveaways-on-screen', function(date, mapBounds) {
   return Giveaways.find(findParams);
 });
 
+Meteor.publish('user-giveaways-within-date', function(startDateRange, endDateRange){
+  check(startDateRange, Date);
+  check(endDateRange, Date);
+
+  const findParams = {
+    startDateTime:  { $gte: startDateRange, },
+    endDateTime:    { $lt:  endDateRange, },
+    userId:         this.userId,
+  };
+
+  return Giveaways.find(findParams);
+})
+
 Meteor.publish('giveaways-search', function(props) {
   check(props, Object);
 
