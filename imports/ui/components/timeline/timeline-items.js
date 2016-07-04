@@ -11,6 +11,7 @@ import * as AvatarHelper from '../../../util/avatar';
 import * as IconsHelper from '../../../util/icons';
 
 let giveaways = [];
+let props = {};
 
 const photoAvatar = (ga) => (
   <div className="photo-avatar" style={{ backgroundImage: 'url(' + AvatarHelper.getUrl(ga.avatarId, 350) + ')' }}>
@@ -48,13 +49,42 @@ const listItemRow = (ga) => (
   </Paper>
 );
 
+const gridItemTile = (ga) => (
+  <GridTile
+    key={ ga._id }
+    title={ ga.title }
+    titleBackground='rgba(0, 0, 0, 0.55)'
+    subtitle={ GiveawaysHelper.descriptionFirstLine(ga) }>
+    { ga.avatarId ? photoAvatar(ga) : iconAvatar(ga) }
+  </GridTile>
+);
+
 const renderItem = (index, key) => {
-  return listItemRow(giveaways[index]);
+  if (props.view == "list")
+    return listItemRow(giveaways[index]);
+  else
+    return gridItemTile(giveaways[index]);
 };
 
 export class TimelineItems extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      gridListCols: 2,
+      gridListCellHeight: 768
+    };
+  }
+
   componentDidMount() {
     Helper.onRenderDot3();
+
+    $(window).resize(event => {
+      this.setState({
+        gridListCols: $(window).width() < 768 ? 2 : 4,
+        gridListCellHeight: $(window).width() < 768 ? 180 : 250
+      });
+    }).resize();
   }
 
   componentDidUpdate() {
@@ -62,17 +92,27 @@ export class TimelineItems extends React.Component {
   }
 
   render() {
-    const { props } = this.props;
+    props = this.props.props;
     giveaways = this.props.giveaways;
 
-    return (
-      <div id="timeline-items">
-        <ReactList
-          itemRenderer={ renderItem }
-          length={ giveaways.length }
-          type='simple'
-        />
-      </div>
-    );
+    if (props.view == "list")
+      return (
+        <div id="timeline-items">
+          <ReactList
+            itemRenderer={ renderItem }
+            length={ giveaways.length }
+            type='variable'
+          />
+        </div>
+      );
+
+    else
+      return (
+        <div id="timeline-items">
+          <GridList cols={ this.state.gridListCols } cellHeight={ this.state.gridListCellHeight }>
+            { giveaways.map(ga => gridItemTile(ga)) }
+          </GridList>
+        </div>
+      );
   }
 }

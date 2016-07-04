@@ -79,4 +79,5 @@ export const compactDateRange = (start, end) => {
 }
 
 // Text
-export const description = (ga) => ga.description.length ? Helper.nl2br(ga.description) : <em>No description</em>;
+export const description = (ga) => ga.description.length ? Helper.nl2br(ga.description) : null;
+export const descriptionFirstLine = (ga) => ga.description ? ga.description.split("\n")[0] : "";

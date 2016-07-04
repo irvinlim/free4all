@@ -3,6 +3,11 @@
 }
 
 #timeline-tabs {
-  margin: 0 -15px 15px;
-  @include media-sm-up { margin: 30px auto 20px; }
+  margin: 0 -15px 0;
+  @include media-sm-up { margin: 30px auto 0; }
+}
+
+#timeline-view-bar {
+  margin: 5px 0; text-align: right;
+  @include media-sm-up { margin: 5px auto 10px; }
 }
