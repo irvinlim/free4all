@@ -46,7 +46,7 @@
     // Close/expand behaviour
     &.state-1 { // Peek at title
       top: calc(100% - 90px);
-      p.category { font-weight: 300; margin-bottom: 20px; }
+      h5.category { margin-bottom: 20px; }
     }
 
     &.state-2 { // Show full
@@ -86,7 +86,7 @@
   @include transition-standard(right 225ms);
 
   // No nearby box for mobile
-  @media (max-width:991px) { right: 30px !important; }
+  @media (max-width:991px) { right: 20px !important; }
 
   & > div { margin-top: 15px; }
   .geolocation-button button { background-color: #f5f5f5 !important; }

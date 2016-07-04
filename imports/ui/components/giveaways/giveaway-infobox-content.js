@@ -34,7 +34,7 @@ const getContent = ({ giveaway }) => {
           </div> :
           <div /> }
         <h3 className="lines-1">{ giveaway.title }</h3>
-        <p className="category">{ GiveawaysHelper.categoryBreadcrumbs(giveaway) }</p>
+        <h5 className="category">{ GiveawaysHelper.categoryBreadcrumbs(giveaway) }</h5>
         <p className="description">{ GiveawaysHelper.description(giveaway) }</p>
         { iconRow("date_range", GiveawaysHelper.compactDateRange(giveaway.startDateTime, giveaway.endDateTime)) }
         { iconRow("location_on", giveaway.location ) }
