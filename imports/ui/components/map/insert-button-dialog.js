@@ -61,7 +61,7 @@ export default class InsertBtnDialog extends React.Component {
       props.closeModal();
       props.addDraggable();
 
-      props.toggleMarkers();
+      props.hideMarkers();
 
       Bert.alert({
         hideDelay: 8000,

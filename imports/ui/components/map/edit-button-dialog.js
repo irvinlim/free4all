@@ -65,7 +65,7 @@ export default class EditBtnDialog extends React.Component {
       props.closeModal();
       props.addDraggable();
 
-      props.toggleMarkers();
+      props.hideMarkers();
 
       Bert.alert({
         hideDelay: 8000,
@@ -153,7 +153,7 @@ export default class EditBtnDialog extends React.Component {
       dateOnLoad.setMinutes(0,0,0);
       let date1hAfter = moment(dateOnLoad).add(1,'h').toDate();
 
-      this.setState({ 
+      this.setState({
         startTime: dateOnLoad,
         endTime: date1hAfter
       })
@@ -207,7 +207,7 @@ export default class EditBtnDialog extends React.Component {
     this.handleChangeEndTimePicker12 = (e, date) => {
       this.setState({endTime: date});
     };
-    
+
     this.setParentCat = (parentCat) => {
       this.setState({ parentCatId: parentCat._id });
     };
@@ -342,10 +342,10 @@ export default class EditBtnDialog extends React.Component {
 
     if(gaEdit){
       // placeholder for grid tile text
-      let gaEditTile = { 
-        files:[{name:""}], 
+      let gaEditTile = {
+        files:[{name:""}],
         res: {secure_url:""}
-      }; 
+      };
       gaEditTile.res.secure_url = $.cloudinary.url(gaEdit.avatarId);
       const childCats = Categories.find().fetch();
       const childCat = childCats.find(cat => cat._id === gaEdit.categoryId);
@@ -377,7 +377,7 @@ export default class EditBtnDialog extends React.Component {
         lng: nextProps.latLng.lng,
         location: nextProps.locName,
         dataSource: nextProps.locArr,
-      })  
+      })
     }
   }
 
@@ -407,7 +407,7 @@ export default class EditBtnDialog extends React.Component {
         secondary={true}
         disabled={!this.state.canSubmit}
         onTouchTap={this.removeGiveawayGroup}
-        autoScrollBodyContent={true} />,        
+        autoScrollBodyContent={true} />,
     ];
     return (
       <div>
@@ -469,7 +469,7 @@ export default class EditBtnDialog extends React.Component {
                       className="DatePicker"
                       name="dateStart"
                       formatDate={this.formatDate}
-                      floatingLabelText="Start Date" 
+                      floatingLabelText="Start Date"
                       autoOk={true}
                       textFieldStyle={this.dateTimeTextStyle}
                       minDate={new Date()}

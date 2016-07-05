@@ -128,7 +128,7 @@ export class Index extends React.Component {
       removeDraggable();
     }
 
-    this.toggleMarkers();
+    this.showMarkers();
   }
 
   closeModal() {
@@ -145,8 +145,12 @@ export class Index extends React.Component {
     this.setState({ isDraggableAdded: false });
   }
 
-  toggleMarkers() {
-    this.setState({ showMarkers: !this.state.showMarkers });
+  showMarkers() {
+    this.setState({ showMarkers: true });
+  }
+
+  hideMarkers() {
+    this.setState({ showMarkers: false });
   }
 
   resetLoc() {
@@ -227,13 +231,13 @@ export class Index extends React.Component {
                   locName={this.state.locName}
                   addDraggable={this.addDraggable.bind(this)}
                   stopDraggableAdded={this.noAddDraggable.bind(this)}
-                  toggleMarkers={ this.toggleMarkers.bind(this) }
+                  hideMarkers={ this.hideMarkers.bind(this) }
                   resetLoc={ this.resetLoc.bind(this) }
                 />
                 :
                 <div>
-                  <IconButton 
-                    tooltip="Login to add giveaways" 
+                  <IconButton
+                    tooltip="Login to add giveaways"
                     style={{
                       zIndex:1,
                       position: "absolute",

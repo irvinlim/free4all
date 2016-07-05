@@ -122,8 +122,12 @@ export class Dashboard extends React.Component {
     this.setState({ isDraggableAdded: false });
   }
 
-  toggleMarkers() {
-    this.setState({ showMarkers: !this.state.showMarkers });
+  showMarkers() {
+    this.setState({ showMarkers: true });
+  }
+
+  hideMarkers() {
+    this.setState({ showMarkers: false });
   }
 
   resetLoc() {
@@ -171,7 +175,7 @@ export class Dashboard extends React.Component {
     if(removeDraggable){
       removeDraggable();
     }
-    this.toggleMarkers();
+    this.showMarkers();
   }
 
   render() {
@@ -246,7 +250,7 @@ export class Dashboard extends React.Component {
           locName={ this.state.locName }
           addDraggable={ this.addDraggable.bind(this) }
           stopDraggableAdded={ this.noAddDraggable.bind(this) }
-          toggleMarkers={ this.toggleMarkers.bind(this) }
+          hideMarkers={ this.hideMarkers.bind(this) }
           resetLoc={ this.resetLoc.bind(this) }
           gaEdit={ this.state.gaEdit }
         />
