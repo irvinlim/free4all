@@ -51,12 +51,14 @@ export default class LeafletMap extends React.Component {
 
   registerEventHandlers() {
     const self = this;
-    this.mapObject.registerEventHandler('moveend', function(event) {
+    const moveend = this.mapObject.registerEventHandler('moveend', function(event) {
       self.props.setMapCenter(this.getCenter());
       self.props.setMapZoom(this.getZoom());
       self.props.setMapMaxZoom(this.getMaxZoom());
       self.props.setBounds(this.getBounds());
-    }).trigger();
+    });
+
+    setTimeout(moveend.trigger, 500);
 
     this.mapObject.registerEventHandler('dblclick', function(event) {
       rgeocode(Meteor.settings.public.MapBox.accessToken, event.latlng, self.props.openInsertDialog);
@@ -76,10 +78,10 @@ export default class LeafletMap extends React.Component {
       const iconHTML = '<i class="material-icons">add_location</i>'
       const icon = this.mapObject.markerIcon("map-marker", css, {}, iconHTML);
 
-      const marker = L.marker(nextProps.mapCenter, {icon:icon, draggable:'true', opacity:0.75});
-      const popup = L.popup({closeOnClick: true, className:'dPopup'}).setContent('<p>Drag to select location!</p>')
+      const marker = L.marker(nextProps.mapCenter, { icon: icon, draggable: 'true', opacity: 0.75 });
+      const popup = L.popup({ closeOnClick: true, className: 'dPopup' }).setContent('<p>Drag to select location!</p>');
 
-      marker.on('dragstart',function(event){
+      marker.on('dragstart', function(event){
         const marker = event.target;
         marker.setOpacity(1);
       })
@@ -87,7 +89,7 @@ export default class LeafletMap extends React.Component {
       marker.on('dragend', function(event){
         const marker = event.target;
         const position = marker.getLatLng();
-        marker.setLatLng(position,{draggable:'true'}).update();
+        marker.setLatLng(position,{ draggable: 'true' }).update();
         nextProps.addRGeoSpinner();
         rgeocode(Meteor.settings.public.MapBox.accessToken, position, self.props.openInsertDialog, self.removeDraggable.bind(self), nextProps.rmvRGeoSpinner);
       });

@@ -121,10 +121,16 @@ export default class LeafletMapObject {
   }
 
   registerEventHandler(event, callback) {
+    const self = this;
     const handler = this.map.on(event, callback.bind(this.map));
 
-    return {
-      trigger: () => this.map.fire(event),
+    const ret = {
+      trigger: function() {
+        self.map.fire(event);
+        return ret;
+      },
     };
+
+    return ret;
   }
 }

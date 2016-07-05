@@ -69,6 +69,8 @@ export class Index extends React.Component {
 
   componentDidMount() {
     const self = this;
+
+    // Autorun subscription
     this.autorunSub = Tracker.autorun(function () {
       const reactiveDateTime = Chronos.currentTime(Meteor.settings.public.refresh_interval || 60000);
       const reactiveMapBounds = self.mapBounds.get();
@@ -79,6 +81,7 @@ export class Index extends React.Component {
       }
     });
 
+    // Autorun track device location
     this.autorunGeo = Tracker.autorun(function() {
       const reactiveLatLng = Geolocation.latLng();
 
@@ -90,6 +93,7 @@ export class Index extends React.Component {
       self.setState({ geolocation: reactiveLatLng });
     })
 
+    // Autorun check user authenticated
     this.autorunAuth = Tracker.autorun(function() {
       self.setState({ isAuthenticated: Meteor.user() });
     });
@@ -99,6 +103,7 @@ export class Index extends React.Component {
     this.subscription && this.subscription.stop();
     this.autorunSub && this.autorunSub.stop();
     this.autorunGeo && this.autorunGeo.stop();
+    this.autorunAuth && this.autorunAuth.stop();
   }
 
   goToGeolocation() {
@@ -113,9 +118,11 @@ export class Index extends React.Component {
       loc.value = loc.place_name;
       return loc;
     });
+
     const selectedLocName = featuresArr[0].text;
     this.setState({ locArr: featuresArr });
     this.setState({ locName: selectedLocName });
+
     Bert.alert({
       hideDelay: 6000,
       title: 'Location Selected',
@@ -124,9 +131,9 @@ export class Index extends React.Component {
       style: 'growl-top-right',
       icon: 'fa-map-marker'
     });
-    if(removeDraggable){
+
+    if (removeDraggable)
       removeDraggable();
-    }
 
     this.showMarkers();
   }
@@ -134,6 +141,7 @@ export class Index extends React.Component {
   closeModal() {
     this.setState({ isModalOpen: false });
   }
+
   openModal() {
     this.setState({ isModalOpen: true });
   }
@@ -141,6 +149,7 @@ export class Index extends React.Component {
   addDraggable() {
     this.setState({ isDraggableAdded: true });
   }
+
   noAddDraggable() {
     this.setState({ isDraggableAdded: false });
   }
@@ -186,7 +195,7 @@ export class Index extends React.Component {
               infoBoxState={ this.state.infoBoxState }
               markerOnClick={ gaId => this.selectGa(gaId) }
               mapCenter={ this.state.mapCenter }
-              setMapCenter={ mapCenter => this.setState({ mapCenter: mapCenter }) }
+              setMapCenter={ mapCenter => this.setState({ mapCenter }) }
               mapZoom={ this.state.mapZoom }
               setMapZoom={ mapZoom => this.setState({ mapZoom: mapZoom })}
               setMapMaxZoom={ mapMaxZoom => this.setState({ mapMaxZoom: mapMaxZoom })}
@@ -199,10 +208,10 @@ export class Index extends React.Component {
               rmvRGeoSpinner={ this.rmvRGeoSpinner.bind(this) }
             />
             <RefreshIndicator
-            size={40}
-            left={$(window).width()/2}
-            top={ 10}
-            status={ this.state.rGeoLoading ? "loading" : "hide" }
+              size={40}
+              top={10}
+              left={ $(window).width() / 2 }
+              status={ this.state.rGeoLoading ? "loading" : "hide" }
             />
             <div id="map-boxes-container">
               <MapInfoBox
@@ -238,12 +247,7 @@ export class Index extends React.Component {
                 <div>
                   <IconButton
                     tooltip="Login to add giveaways"
-                    style={{
-                      zIndex:1,
-                      position: "absolute",
-                    }}
-                  >
-                  </IconButton>
+                    style={{ zIndex: 1, position: "absolute" }} />
                   <FloatingActionButton disabled={true} >
                     { IconsHelper.materialIcon("add", {color:"black"}) }
                   </FloatingActionButton>
