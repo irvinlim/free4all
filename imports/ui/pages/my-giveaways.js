@@ -20,7 +20,7 @@ import * as LatLngHelper from '../../util/latlng';
 import * as IconsHelper from '../../util/icons';
 import { Bert } from 'meteor/themeteorchef:bert';
 
-export class Dashboard extends React.Component {
+export class MyGiveaways extends React.Component {
   constructor(props) {
     super(props);
     const self = this;
@@ -261,6 +261,6 @@ export class Dashboard extends React.Component {
   }
 }
 
-Dashboard.propTypes = {
+MyGiveaways.propTypes = {
   name: React.PropTypes.string,
 };
