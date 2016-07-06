@@ -48,7 +48,7 @@
 }
 
 .giveaway-card {
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 
   .flex-row {
     padding: 15px 10px; // More padding because of Paper's edges
@@ -84,4 +84,12 @@
   line-height: 25px;
   .info-row-icon { width: 20px; display: inline-block; margin-right: 10px; vertical-align: top; }
   .info-row-text { width: calc(100% - 30px); display: inline-block; }
+}
+
+// Sharing buttons
+.share.btn {
+  margin: 5px;
+  &:hover, &:active, &:focus { color: #fff; opacity: 0.9; }
+  &.pinterest-share { display: none; }
+  &.shareit-google-colors { color: #fff; background: #D34836; }
 }
