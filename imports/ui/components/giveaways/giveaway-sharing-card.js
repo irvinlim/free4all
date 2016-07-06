@@ -12,7 +12,12 @@ export const GiveawaySharingCard = ({ ga }) => (
     <div className="flex-row">
       <div className="col col-xs-12">
         <h3>Share</h3>
-        <TextField id="share-url" value={ Meteor.absoluteUrl('giveaway/' + ga._id) } fullWidth={true} onTouchTap={ () => $("#share-url").select() } />
+        <TextField
+          id="share-url"
+          fullWidth={true}
+          inputStyle={{ fontSize: "12px" }}
+          value={ Meteor.absoluteUrl('giveaway/' + ga._id) }
+          onTouchTap={ () => $("#share-url").select() } />
         <ShareItWrapper ga={ga} />
       </div>
     </div>

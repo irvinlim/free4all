@@ -50,7 +50,7 @@
 .giveaway-card {
   margin-bottom: 30px;
 
-  .flex-row {
+  .flex-row:not(.nopad) {
     padding: 15px 10px; // More padding because of Paper's edges
   }
 }
@@ -87,6 +87,8 @@
 }
 
 // Status Updates List
+.status-updates-list, .status-updates-actions { margin-bottom: 10px; }
+
 .status-updates-list {
   padding: 5px 10px;
 

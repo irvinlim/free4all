@@ -12,17 +12,24 @@ const composer = (props, onData) => {
   if (Meteor.subscribe('giveaway-by-id', props.gaId).ready()) {
     const ga = Giveaways.findOne(props.gaId);
     const sortedStatusUpdates = GiveawaysHelper.getSortedStatusUpdates(ga);
-    const denormalized = sortedStatusUpdates.map(su => {
+    const latestOwnerUpdate = GiveawaysHelper.getLastOwnerStatus(ga);
+
+    const denormalize = su => {
       return {
         user: Meteor.users.findOne(su.userId),
         statusType: StatusTypes.findOne(su.statusTypeId),
         date: su.date
       };
-    });
+    };
+
+    const denormalizedStatusUpdates = sortedStatusUpdates.map(denormalize);
 
     onData(null, {
-      statusUpdates: denormalized,
-      owner: Meteor.users.findOne(ga.userId)
+      ga: ga,
+      statusUpdates: denormalizedStatusUpdates,
+      latestOwnerUpdate: denormalize(latestOwnerUpdate),
+      owner: Meteor.users.findOne(ga.userId),
+      statusTypes: StatusTypes.find({}, { sort: { relativeOrder: 1 } })
     });
   }
 };
