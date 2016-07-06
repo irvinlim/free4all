@@ -53,6 +53,7 @@ const listItemRow = (ga) => (
 const gridItemTile = (ga) => (
   <GridTile
     key={ ga._id }
+    className="giveaway giveaway-timeline-item"
     title={ ga.title }
     titleBackground='rgba(0, 0, 0, 0.55)'
     subtitle={ GiveawaysHelper.descriptionFirstLine(ga) }>
