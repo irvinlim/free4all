@@ -33,6 +33,17 @@ export const getFullName = (user) => {
     return "";
 };
 
+export const getFullNameWithLabelIfEqual = (user, user2, label) => {
+  user = maybeGetUser(user);
+  user2 = maybeGetUser(user2);
+  const fullName = getFullName(user);
+
+  if (user && user2 && user._id == user2._id)
+    return <span>{ fullName } <span className="user-label">({ label })</span></span>
+  else
+    return <span>{ fullName }</span>;
+};
+
 export const getFirstInitial = (user) => {
   user = maybeGetUser(user);
   return propExistsDeep(user, ['profile', 'firstName']) ? user.profile.firstName.charAt(0) : null;

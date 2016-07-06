@@ -7,7 +7,7 @@ export const GiveawayMetaCard = ({ ga, user, shareCount }) => (
   <Paper className="giveaway giveaway-card">
     <div className="flex-row">
       <div className="col col-xs-12">
-        <h3>About the User</h3>
+        <h3>About the Author</h3>
 
         <div style={{ margin: "20px 0 10px" }}>
           <div style={{ width: 84, display: "inline-block" }}>

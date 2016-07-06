@@ -86,6 +86,19 @@
   .info-row-text { width: calc(100% - 30px); display: inline-block; }
 }
 
+// Status Updates List
+.status-updates-list {
+  padding: 5px 10px;
+
+  .status-update-row {
+    line-height: 16px;
+
+    .orb { margin-right: 10px; }
+    .timestamp { font-size: 10px; margin-left: 10px; }
+    .user-label { color: #7098ef; font-size: 12px; }
+  }
+}
+
 // Sharing buttons
 .share.btn {
   margin: 5px;

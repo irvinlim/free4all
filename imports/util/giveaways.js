@@ -23,6 +23,10 @@ export const getCategoryIcon = (ga, style={}) => IconsHelper.catIcon(getCategory
 export const categoryBreadcrumbs = (ga) => getParentCategory(ga).name + " — " + getCategory(ga).name;
 
 // Statuses
+export const getSortedStatusUpdates = (ga) => {
+  return ga.statusUpdates.sort((a,b) => b.date - a.date);
+};
+
 export const getLastOwnerStatus = (ga) => {
   const ownerStatuses = ga.statusUpdates.filter(su => su.userId == ga.userId);
   if (!ownerStatuses.length) return null;
