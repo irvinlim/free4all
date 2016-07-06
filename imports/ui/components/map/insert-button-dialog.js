@@ -145,7 +145,6 @@ export default class InsertBtnDialog extends React.Component {
       props.openModal();
 
       let dateOnLoad = new Date();
-      hourNow = dateOnLoad.getHours();
       dateOnLoad.setMinutes(0,0,0);
       let date1hAfter = moment(dateOnLoad).add(1,'h').toDate();
 
@@ -251,7 +250,7 @@ export default class InsertBtnDialog extends React.Component {
       props.closeModal();
       props.stopDraggableAdded();
       props.resetLoc();
-      console.log("state", this.state);
+      // console.log("state", this.state);
       let data = this.state;
       data.title = String(data.title);
       data.description = String(data.description);

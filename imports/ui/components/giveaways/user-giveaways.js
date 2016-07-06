@@ -64,7 +64,7 @@ export const UserGiveaways = (props) => (
           </Col>
         </Row>
 
-        <Row>
+        <Row style={{paddingBottom:"10px"}}>
           <Col xs={12} md={2}>
           <span>Until</span>
           </Col>

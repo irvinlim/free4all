@@ -45,8 +45,8 @@ export class MyGiveaways extends React.Component {
       showDateRange: true,
     };
 
-    this.userUntilDate = new ReactiveVar( moment().add(1,'w').toDate() );
-    this.userFromDate = new ReactiveVar( new Date() );
+    this.userUntilDate = new ReactiveVar( moment().set('hour', 0).set('minute',0).add(1,'w').toDate() );
+    this.userFromDate = new ReactiveVar( moment().set('hour', 0).set('minute',0).toDate() );
     this.isAllGa = new ReactiveVar( false );
 
     this.mapBounds = new ReactiveVar( null );
@@ -81,6 +81,8 @@ export class MyGiveaways extends React.Component {
       const userFromDate = self.userFromDate.get();
       const userUntilDate = self.userUntilDate.get();
       const isAllGa = self.isAllGa.get();
+      // trigger ui update
+      self.setState({showDateRange: self.state.showDateRange});
 
       // Re-subscribe when date range changes
       if (userFromDate && userUntilDate) {

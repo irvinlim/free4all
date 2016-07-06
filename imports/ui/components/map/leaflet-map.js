@@ -62,7 +62,9 @@ export default class LeafletMap extends React.Component {
 
     if(!self.props.isDbClickDisabled){
       this.mapObject.registerEventHandler('dblclick', function(event) {
-        rgeocode(Meteor.settings.public.MapBox.accessToken, event.latlng, self.props.openInsertDialog, self.props.rmvRGeoSpinner);
+        self.props.addRGeoSpinner();
+        rgeocode(Meteor.settings.public.MapBox.accessToken, event.latlng, self.props.openInsertDialog, 
+          self.props.rmvRGeoSpinner);
       });  
     }
     
@@ -94,7 +96,8 @@ export default class LeafletMap extends React.Component {
         const position = marker.getLatLng();
         marker.setLatLng(position,{ draggable: 'true' }).update();
         nextProps.addRGeoSpinner();
-        rgeocode(Meteor.settings.public.MapBox.accessToken, position, self.props.openInsertDialog, self.removeDraggable.bind(self), self.props.rmvRGeoSpinner);
+        rgeocode(Meteor.settings.public.MapBox.accessToken, position, self.props.openInsertDialog, 
+          self.props.rmvRGeoSpinner, self.removeDraggable.bind(self));
       });
 
       this.props.stopDraggableAdded();
