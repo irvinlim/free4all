@@ -50,11 +50,11 @@ export const pushStatusUpdate = new ValidatedMethod({
   validate: new SimpleSchema({
     giveawayId: { type: String },
     statusTypeId: { type: String },
-    date: { type: Date },
     userId: { type: String },
   }).validator(),
-  run({ giveawayId, statusTypeId, date, userId }) {
+  run({ giveawayId, statusTypeId, userId }) {
     const giveaway = Giveaways.findOne(giveawayId);
+    const date = new Date();
 
     if (!this.userId)
       throw new Meteor.Error("giveaways.pushStatusUpdate.notLoggedIn", "Must be logged in to update status.");
@@ -63,6 +63,17 @@ export const pushStatusUpdate = new ValidatedMethod({
     else if (!giveaway)
       throw new Meteor.Error("giveaways.pushStatusUpdate.undefinedGiveaway", "No such Giveaway found.");
 
+    // Check if have same user update in the last minute, and modify that update instead of pushing.
+    // Remove any updates within the last minute before pushing the new one.
+    const oneMinAgo = moment(date).subtract(1, 'minutes');
+    const notWithinLastMinute = giveaway.statusUpdates.filter(su => moment(su.date).isBefore(oneMinAgo));
+
+    if (notWithinLastMinute.length && notWithinLastMinute.length < giveaway.statusUpdates.length)
+      Giveaways.update(giveawayId, {
+        $set: { statusUpdates: notWithinLastMinute }
+      });
+
+    // Push new status update
     Giveaways.update(giveawayId, {
       $push: { statusUpdates: { statusTypeId, date, userId } }
     });

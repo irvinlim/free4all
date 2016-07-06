@@ -1,4 +1,5 @@
 import React from 'react';
+import { Meteor } from 'meteor/meteor';
 import Paper from 'material-ui/Paper';
 import Subheader from 'material-ui/Subheader';
 import FlatButton from 'material-ui/FlatButton';
@@ -7,6 +8,8 @@ import * as Helper from '../../../util/helper';
 import * as GiveawaysHelper from '../../../util/giveaways';
 import * as IconsHelper from '../../../util/icons';
 import * as UsersHelper from '../../../util/users';
+
+import { pushStatusUpdate } from '../../../api/giveaways/methods';
 
 const statusUpdateRow = (owner) => (su, index) => (
   <div className="status-update-row" key={index}>
@@ -20,14 +23,22 @@ const statusUpdateRow = (owner) => (su, index) => (
   </div>
 );
 
-const statusTypeActionRow = (count) => (statusType, index) => (
+const statusTypeActionHandler = (giveawayId, statusTypeId) => (event) => {
+  if (!Meteor.userId())
+    return;
+
+  pushStatusUpdate.call({ giveawayId, statusTypeId, userId: Meteor.userId() });
+};
+
+const statusTypeActionRow = (count, ga) => (statusType, index) => (
   <div className={ "col col-xs-12 col-sm-" + 12/count } key={index}>
     <FlatButton
       label={ statusType.label }
       backgroundColor={ statusType.hexColour }
       hoverColor={ Helper.shadeColor(statusType.hexColour, -0.2) }
       labelStyle={{ fontSize: "13px", textTransform: "none", color: "#fff", padding: 5 }}
-      style={{ width: "calc(100% - 10px)", margin: "0 auto 5px" }} />
+      style={{ width: "calc(100% - 10px)", margin: "0 auto 5px" }}
+      onTouchTap={ statusTypeActionHandler(ga._id, statusType._id) } />
   </div>
 );
 
@@ -40,12 +51,12 @@ const LatestUpdate = ({ latestOwnerUpdate, owner }) => (
   </div>
 );
 
-const ContributeUpdate = ({ statusTypes }) => (
+const ContributeUpdate = ({ statusTypes, ga }) => (
   <div className="contribute-update">
     <Subheader>Contribute a status update</Subheader>
     <div className="status-updates-actions">
       <div className="flex-row nopad">
-        { statusTypes.map(statusTypeActionRow(statusTypes.count())) }
+        { statusTypes.map(statusTypeActionRow(statusTypes.count(), ga)) }
       </div>
     </div>
   </div>
@@ -68,7 +79,7 @@ export const GiveawayStatusUpdatesCard = ({ ga, statusUpdates, statusTypes, late
 
         { LatestUpdate({ latestOwnerUpdate, owner }) }
 
-        { GiveawaysHelper.is_ongoing(ga) ? ContributeUpdate({ statusTypes }) : null }
+        { GiveawaysHelper.is_ongoing(ga) ? ContributeUpdate({ statusTypes, ga }) : null }
 
         { AllUpdates({ statusUpdates, owner }) }
 
