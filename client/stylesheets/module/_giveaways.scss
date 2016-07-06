@@ -49,6 +49,10 @@
 
 .giveaway-card {
   margin-bottom: 20px;
+
+  .flex-row {
+    padding: 15px 10px; // More padding because of Paper's edges
+  }
 }
 
 .giveaway-single {

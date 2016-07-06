@@ -5,25 +5,27 @@ import { Grid, Row, Col } from 'react-bootstrap';
 import GiveawaySingleCard from '../containers/giveaways/giveaway-single-card';
 import GiveawayRatingsCard from '../containers/giveaways/giveaway-ratings-card';
 import GiveawayMetaCard from '../containers/giveaways/giveaway-meta-card';
+import GiveawaySharingCard from '../containers/giveaways/giveaway-sharing-card';
 
 export class Giveaway extends React.Component {
   render() {
     return (
       <div id="giveaway-single">
         <Grid style={{ marginTop: 20 }}>
-          <Row>
-            <Col xs={12}>
+          <div className="flex-row nopad">
+            <div className="col col-xs-12">
               <GiveawaySingleCard gaId={ this.props.params.id } />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={12} sm={6} md={4}>
+            </div>
+          </div>
+          <div className="flex-row nopad">
+            <div className="col col-xs-12 col-sm-6">
               <GiveawayRatingsCard gaId={ this.props.params.id } />
-            </Col>
-            <Col xs={12} sm={6} md={4}>
+            </div>
+            <div className="col col-xs-12 col-sm-6">
               <GiveawayMetaCard gaId={ this.props.params.id } />
-            </Col>
-          </Row>
+              <GiveawaySharingCard gaId={ this.props.params.id } />
+            </div>
+          </div>
         </Grid>
       </div>
     );
