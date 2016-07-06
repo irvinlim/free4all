@@ -45,6 +45,7 @@ export default class LeafletMapObject {
 
     this.map.addLayer(this.markerClusterGroup);
     this.map.doubleClickZoom.disable();
+    this.map.keyboard.disable();
   }
 
   addMarker(id, ga, clickHandler, callback) {
