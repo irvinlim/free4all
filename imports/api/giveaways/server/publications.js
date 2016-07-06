@@ -8,6 +8,11 @@ Meteor.publish('giveaway-by-id', function(gaId) {
   return Giveaways.find(gaId);
 });
 
+Meteor.publish('giveaways-by-user', function(userId) {
+  check(userId, Match._id);
+  return Giveaways.find({ userId: userId });
+});
+
 Meteor.publish('giveaways-on-screen', function(date, mapBounds) {
   check(date, Date);
   check(mapBounds, Array);

@@ -8,7 +8,7 @@ import * as GiveawaysHelper from '../../../util/giveaways';
 const iconRow = (icon, content) => {
   if (content && content.length)
     return (
-      <div className="map-info-row">
+      <div className="info-row">
         <div className="info-row-icon">
           { IconsHelper.icon(icon, { fontSize: 18, lineHeight: "25px" }) }
         </div>
@@ -36,7 +36,7 @@ const getContent = ({ giveaway }) => {
         <h3 className="lines-1">{ giveaway.title }</h3>
         <h5 className="category">{ GiveawaysHelper.categoryBreadcrumbs(giveaway) }</h5>
         <p className="description">{ GiveawaysHelper.description(giveaway) }</p>
-        { iconRow("date_range", GiveawaysHelper.compactDateRange(giveaway.startDateTime, giveaway.endDateTime)) }
+        { iconRow("date_range", GiveawaysHelper.compactDateRange(giveaway)) }
         { iconRow("location_on", giveaway.location ) }
         { !GiveawaysHelper.is_over(giveaway) ?
             iconRow("info_outline", "Status: " + GiveawaysHelper.getLastOwnerStatusType(giveaway).label ) :

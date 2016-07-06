@@ -5,8 +5,10 @@ import { ParentCategories } from '../api/parent-categories/parent-categories';
 import { Categories } from '../api/categories/categories';
 import { StatusTypes } from '../api/status-types/status-types';
 
+import * as Colors from 'material-ui/styles/colors';
 import * as Helper from './helper';
 import * as IconsHelper from './icons';
+import * as AvatarHelper from './avatar';
 
 // Category
 export const getCategory = (ga) => Categories.findOne(ga.categoryId);
@@ -49,8 +51,21 @@ export const currentUserDownvoted = (ga) => ga.ratings && ga.ratings.downvotes ?
 export const is_ongoing = (ga) => Helper.is_ongoing(ga.startDateTime, ga.endDateTime);
 export const is_havent_start = (ga) => Helper.is_havent_start(ga.startDateTime, ga.endDateTime);
 export const is_over = (ga) => Helper.is_over(ga.startDateTime, ga.endDateTime);
+export const is_same_date = (ga) => moment(ga.startDateTime).format('D MMM YYYY') == moment(ga.endDateTime).format('D MMM YYYY');
 
-export const compactDateRange = (start, end) => {
+export const dateRange = (ga) => {
+  startDate = moment(ga.startDateTime).format("D MMM YYYY");
+  endDate = moment(ga.endDateTime).format("D MMM YYYY");
+  startTime = moment(ga.startDateTime).format("hh:mm A");
+  endTime = moment(ga.endDateTime).format("hh:mm A");
+
+  if (is_same_date(ga))
+    return startDate + ", " + startTime + " - " + endTime;
+  else
+    return startDate + " " + startTime + " - " + endDate + " " + endTime;
+};
+
+export const compactDateRange = (ga) => {
   moment.updateLocale('en', {
     calendar: {
       lastDay : '[yesterday at] LT',
@@ -62,8 +77,8 @@ export const compactDateRange = (start, end) => {
     }
   });
 
-  start = moment(start);
-  end = moment(end);
+  start = moment(ga.startDateTime);
+  end = moment(ga.endDateTime);
   now = moment();
 
   if (start.isAfter(now)) {
@@ -76,7 +91,7 @@ export const compactDateRange = (start, end) => {
     // Ongoing
     return "Ending " + end.calendar();
   }
-}
+};
 
 // Text
 export const description = (ga) => ga.description.length ? Helper.nl2br(ga.description) : null;
@@ -95,4 +110,24 @@ export const descriptionTruncate = (ga) => {
   firstWords.pop();
 
   return firstWords.join(" ") + " ...";
+};
+
+// Avatar
+export const makeAvatar = (ga, size=64, style={}) => {
+  if (!ga)
+    return null;
+
+  if (ga.avatarId)
+    return (
+      <div className="photo-avatar">
+        { AvatarHelper.getImage(ga.avatarId, size) }
+      </div>
+    );
+
+  else
+    return (
+      <div className="icon-avatar" style={{ backgroundColor: getStatusColor(ga) }}>
+        <span>{ getCategoryIcon(ga, { color: Colors.grey50 }) }</span>
+      </div>
+    );
 };

@@ -1,6 +1,11 @@
 import { Meteor } from 'meteor/meteor';
+import React from 'react';
+import Avatar from 'material-ui/Avatar';
+
+import * as Colors from 'material-ui/styles/colors';
 import { propExistsDeep } from './helper';
 import * as AvatarHelper from './avatar';
+import * as IconsHelper from './icons';
 
 const maybeGetUser = (userOrId) => {
   if (!userOrId)
@@ -11,11 +16,29 @@ const maybeGetUser = (userOrId) => {
     return Meteor.users.findOne(userOrId);
 };
 
-export const getFirstInitial = (user) => {
+// Name
+
+
+export const getFullName = (user) => {
   user = maybeGetUser(user);
-  return propExistsDeep(user, ['profile', 'name', 'first']) ? user.profile.name.first.charAt(0) : null;
+
+  const firstName = propExistsDeep(user, ['profile', 'firstName']) ? user.profile.firstName : null;
+  const lastName = propExistsDeep(user, ['profile', 'lastName']) ? user.profile.lastName : null;
+
+  if (firstName && lastName)
+    return firstName + " " + lastName;
+  else if (firstName)
+    return firstName;
+  else
+    return "";
 };
 
+export const getFirstInitial = (user) => {
+  user = maybeGetUser(user);
+  return propExistsDeep(user, ['profile', 'firstName']) ? user.profile.firstName.charAt(0) : null;
+};
+
+// Profile
 export const resolveGender = (gender) => {
   switch (gender.toLowerCase()) {
     case "male":
@@ -27,6 +50,7 @@ export const resolveGender = (gender) => {
   }
 };
 
+// Avatar
 const resolveFacebookAvatarSize = (size) => {
   if (size <= 50)
     return "small";
@@ -34,7 +58,7 @@ const resolveFacebookAvatarSize = (size) => {
     return "normal";
   else
     return "large";
-}
+};
 
 export const getAvatarUrl = (user, size=64) => {
   user = maybeGetUser(user);
@@ -56,4 +80,16 @@ export const getAvatarUrl = (user, size=64) => {
     return Gravatar.imageUrl(user.emails[0].address, { size: size, default: 'mm', secure: true });
   else
     return null;
-}
+};
+
+export const getAvatar = (user, size=64, style) => {
+  const avatarUrl = getAvatarUrl(user, size);
+  const firstInitial = getFirstInitial(user);
+
+  if (avatarUrl)
+    return <Avatar src={ avatarUrl } size={size} style={style} />;
+  else if (firstInitial)
+    return <Avatar backgroundColor="#097381" style={style}>{ firstInitial }</Avatar>;
+  else
+    return IconsHelper.materialIcon("person", _.extend({ color: Colors.grey50 }, style));
+};

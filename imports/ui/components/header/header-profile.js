@@ -1,7 +1,6 @@
 import React from 'react';
 import { browserHistory } from 'react-router';
 import IconButton from 'material-ui/IconButton';
-import Avatar from 'material-ui/Avatar';
 import Popover from 'material-ui/Popover';
 import { List, ListItem } from 'material-ui/List';
 import * as Colors from 'material-ui/styles/colors';
@@ -51,16 +50,11 @@ export class HeaderProfile extends React.Component {
 
   showProfileButton(user) {
     const gotourl = (url) => () => browserHistory.push(url);
-    const avatarUrl = UsersHelper.getAvatarUrl(this.props.user, 40);
 
     return (
       <div id="header-profile">
         <IconButton onTouchTap={ this.openPopover.bind(this) }>
-          { avatarUrl ? <Avatar src={ avatarUrl } size={40} /> :
-                          UsersHelper.getFirstInitial(this.props.user) ?
-                            <Avatar backgroundColor="#097381">{ UsersHelper.getFirstInitial(this.props.user) }</Avatar> :
-                              IconsHelper.materialIcon("person", { color: Colors.grey50 })
-          }
+          { UsersHelper.getAvatar(this.props.user, 40) }
         </IconButton>
 
         <Popover

@@ -3,6 +3,7 @@ import Subheader from 'material-ui/Subheader';
 import { GridList, GridTile } from 'material-ui/GridList';
 import Paper from 'material-ui/Paper';
 import ReactList from 'react-list';
+import { browserHistory } from 'react-router';
 
 import * as Colors from 'material-ui/styles/colors';
 import * as Helper from '../../../util/helper';
@@ -25,7 +26,7 @@ const iconAvatar = (ga) => (
 );
 
 const listItemRow = (ga) => (
-  <Paper key={ ga._id } style={{ marginBottom: 20 }} className="giveaway giveaway-card">
+  <Paper key={ ga._id } style={{ marginBottom: 20 }} className="giveaway giveaway-timeline-item" onTouchTap={ (event) => browserHistory.push('/giveaway/' + ga._id) }>
     <div className="flex-row">
       <div className="col nopad col-xs-4 col-sm-3">
           { ga.avatarId ? photoAvatar(ga) : iconAvatar(ga) }
@@ -34,7 +35,7 @@ const listItemRow = (ga) => (
         <h3 className="lines-1">{ ga.title }</h3>
         <h5 className="lines-1">{ GiveawaysHelper.categoryBreadcrumbs(ga) }</h5>
         <p className="description">{ GiveawaysHelper.descriptionTruncate(ga) }</p>
-        <p className="small-text lines-1">{ GiveawaysHelper.compactDateRange(ga.startDateTime, ga.endDateTime) }</p>
+        <p className="small-text lines-1">{ GiveawaysHelper.compactDateRange(ga) }</p>
 
         <div className="footer-actions">
           <div className="upvotes">
