@@ -20,7 +20,7 @@ import * as LatLngHelper from '../../util/latlng';
 import * as IconsHelper from '../../util/icons';
 import { Bert } from 'meteor/themeteorchef:bert';
 
-export class Dashboard extends React.Component {
+export class MyGiveaways extends React.Component {
   constructor(props) {
     super(props);
     const self = this;
@@ -42,10 +42,12 @@ export class Dashboard extends React.Component {
       showMarkers: true,
       rGeoLoading: false,
       gaEdit: null,
+      showDateRange: true,
     };
 
-    this.userUntilDate = new ReactiveVar( moment().add(1,'w').toDate() );
-    this.userFromDate = new ReactiveVar( new Date() );
+    this.userUntilDate = new ReactiveVar( moment().set('hour', 0).set('minute',0).add(1,'w').toDate() );
+    this.userFromDate = new ReactiveVar( moment().set('hour', 0).set('minute',0).toDate() );
+    this.isAllGa = new ReactiveVar( false );
 
     this.mapBounds = new ReactiveVar( null );
 
@@ -78,10 +80,13 @@ export class Dashboard extends React.Component {
       // const reactiveMapBounds = self.mapBounds.get();
       const userFromDate = self.userFromDate.get();
       const userUntilDate = self.userUntilDate.get();
+      const isAllGa = self.isAllGa.get();
+      // trigger ui update
+      self.setState({showDateRange: self.state.showDateRange});
 
       // Re-subscribe when date range changes
       if (userFromDate && userUntilDate) {
-        self.subscription = Meteor.subscribe('user-giveaways-within-date', userFromDate, userUntilDate);
+        self.subscription = Meteor.subscribe('user-giveaways-within-date', userFromDate, userUntilDate, isAllGa);
       }
     });
 
@@ -153,6 +158,11 @@ export class Dashboard extends React.Component {
     this.userFromDate.set(date);
   }
 
+  handleAllUserGiveaways(){
+    this.setState({ showDateRange: !this.state.showDateRange });
+    this.isAllGa.set(!this.isAllGa.get());
+  }
+
   openEditDialog(features, coords, removeDraggable) {
     this.setState({ isModalOpen: true });
     this.setState({ latLngClicked: coords });
@@ -208,6 +218,7 @@ export class Dashboard extends React.Component {
           showMarkers={ this.state.showMarkers }
           addRGeoSpinner={ this.addRGeoSpinner.bind(this) }
           rmvRGeoSpinner={ this.rmvRGeoSpinner.bind(this) }
+          isDbClickDisabled= { true }
         />
 
         <RefreshIndicator
@@ -233,7 +244,9 @@ export class Dashboard extends React.Component {
             userFromDate={ this.userFromDate.get() }
             handleUserUntilDate={ this.handleUserUntilDate.bind(this) }
             handleUserFromDate={ this.handleUserFromDate.bind(this) }
+            handleAllUserGiveaways={ this.handleAllUserGiveaways.bind(this) }
             editGa={ editGa }
+            showDateRange={ this.state.showDateRange }
           />
         </div>
 
@@ -261,6 +274,6 @@ export class Dashboard extends React.Component {
   }
 }
 
-Dashboard.propTypes = {
+MyGiveaways.propTypes = {
   name: React.PropTypes.string,
 };

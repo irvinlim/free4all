@@ -65,7 +65,7 @@ export class HeaderProfile extends React.Component {
           targetOrigin={{"horizontal":"right","vertical":"top"}}
           style={{ padding: '4px 0' }}>
           <List id="header-profile-popover">
-            <ListItem primaryText="Dashboard" onTouchTap={ gotourl('/dashboard') } />
+            <ListItem primaryText="My Giveaways" onTouchTap={ gotourl('/my-giveaways') } />
             <ListItem primaryText="Profile" onTouchTap={ gotourl('/profile') } />
             <ListItem primaryText="Settings" onTouchTap={ gotourl('/settings') } />
             <ListItem primaryText="Log Out" onTouchTap={ getHandleLogout() } />

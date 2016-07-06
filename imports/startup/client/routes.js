@@ -18,8 +18,8 @@ import { Signup } from '../../ui/pages/signup';
 import { Timeline } from '../../ui/pages/timeline';
 import { Giveaway } from '../../ui/pages/giveaway';
 
-// Dashboard
-import { Dashboard } from '../../ui/pages/dashboard';
+// MyGiveaways
+import { MyGiveaways } from '../../ui/pages/my-giveaways';
 
 const requireAuth = (nextState, replace) => {
   if (!Meteor.loggingIn() && !Meteor.userId()) {
@@ -27,10 +27,10 @@ const requireAuth = (nextState, replace) => {
       pathname: '/',
       state: { nextPathname: nextState.location.pathname },
     });
-    if(nextState.location.pathname === "/dashboard"){
+    if(nextState.location.pathname === "/my-giveaways"){
       Meteor.setTimeout(function(){
         Bert.alert({
-          title: 'Log in to access the dashboard!',
+          title: 'Log in to access your giveaways!',
           type: 'danger',
           style: 'growl-top-right',
           icon: 'fa-user'
@@ -52,7 +52,7 @@ Meteor.startup(() => {
 
           <Route name="timeline" path="/timeline" component={ Timeline } />
           <Route name="giveaway" path="/giveaway/:id" component={ Giveaway } />
-          <Route name="dashboard" path="/dashboard" component={ Dashboard } onEnter={ requireAuth } />
+          <Route name="my-giveaways" path="/my-giveaways" component={ MyGiveaways } onEnter={ requireAuth } />
 
           <Route path="*" component={ NotFound } />
         </Route>

@@ -6,6 +6,7 @@ import Subheader from 'material-ui/Subheader';
 import Avatar from 'material-ui/Avatar';
 import IconButton from 'material-ui/IconButton';
 import DatePicker from 'material-ui/DatePicker';
+import Toggle from 'material-ui/Toggle';
 
 import * as Helper from '../../../util/helper';
 import * as AvatarHelper from '../../../util/avatar';
@@ -47,30 +48,46 @@ export const UserGiveaways = (props) => (
   <List>
     <Subheader>
       <h3 style={{ margin:"20px 0px 10px" }}>User's Giveaways</h3>
-      <Row>
-        <Col xs={12} md={2}>
-        <span>From</span>
-        </Col>
-        <Col xs={12} md={2}>
-        <DatePicker
-        value={ props.userFromDate }
-        onChange={ props.handleUserFromDate }
-        formatDate={ props.formatDate }
-        textFieldStyle={ {width:"126px"}}
-        />
-        </Col>
-      </Row>
+      { props.showDateRange ? 
+      <div>
+        <Row>
+          <Col xs={12} md={2}>
+          <span>From</span>
+          </Col>
+          <Col xs={12} md={2}>
+          <DatePicker
+          value={ props.userFromDate }
+          onChange={ props.handleUserFromDate }
+          formatDate={ props.formatDate }
+          textFieldStyle={ {width:"126px"}}
+          />
+          </Col>
+        </Row>
+
+        <Row style={{paddingBottom:"10px"}}>
+          <Col xs={12} md={2}>
+          <span>Until</span>
+          </Col>
+          <Col xs={12} md={2}>
+          <DatePicker
+          value={ props.userUntilDate }
+          onChange={ props.handleUserUntilDate }
+          formatDate={ props.formatDate }
+          textFieldStyle={ {width:"126px"}}
+          />
+          </Col>
+        </Row>
+        </div>
+        :
+      <div />
+      }
 
       <Row>
-        <Col xs={12} md={2}>
-        <span>Until</span>
-        </Col>
-        <Col xs={12} md={2}>
-        <DatePicker
-        value={ props.userUntilDate }
-        onChange={ props.handleUserUntilDate }
-        formatDate={ props.formatDate }
-        textFieldStyle={ {width:"126px"}}
+        <Col xs={12} md={7}>
+        <Toggle
+        labelStyle= {{fontWeight:200}}
+        label="All my giveaways"
+        onToggle={ props.handleAllUserGiveaways }
         />
         </Col>
       </Row>

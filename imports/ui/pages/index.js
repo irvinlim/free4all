@@ -206,6 +206,7 @@ export class Index extends React.Component {
               showMarkers={ this.state.showMarkers }
               addRGeoSpinner={ this.addRGeoSpinner.bind(this) }
               rmvRGeoSpinner={ this.rmvRGeoSpinner.bind(this) }
+              isDbClickDisabled= { false }
             />
             <RefreshIndicator
               size={40}
