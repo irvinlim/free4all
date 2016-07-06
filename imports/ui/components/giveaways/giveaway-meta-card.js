@@ -9,7 +9,7 @@ export const GiveawayMetaCard = ({ ga, user, shareCount }) => (
       <div className="col col-xs-12">
         <h3>About the User</h3>
 
-        <div style={{ marginTop: 10 }}>
+        <div style={{ margin: "20px 0 10px" }}>
           <div style={{ width: 84, display: "inline-block" }}>
             { UsersHelper.getAvatar(user, 64, { margin: "0 auto", display: "block" }) }
           </div>
