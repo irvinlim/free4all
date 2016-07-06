@@ -43,8 +43,10 @@ export default class MapUserBox extends React.Component {
           handleUserUntilDate={ this.props.handleUserUntilDate }
           userFromDate={ this.props.userFromDate }
           handleUserFromDate={ this.props.handleUserFromDate }
+          handleAllUserGiveaways= { this.props.handleAllUserGiveaways }
           formatDate={ this.formatDate.bind(this) }
           editGa={ this.props.editGa }
+          showDateRange={ this.props.showDateRange }
           />
         </Scrollbars>
 

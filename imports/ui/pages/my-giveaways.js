@@ -42,10 +42,12 @@ export class MyGiveaways extends React.Component {
       showMarkers: true,
       rGeoLoading: false,
       gaEdit: null,
+      showDateRange: true,
     };
 
     this.userUntilDate = new ReactiveVar( moment().add(1,'w').toDate() );
     this.userFromDate = new ReactiveVar( new Date() );
+    this.isAllGa = new ReactiveVar( false );
 
     this.mapBounds = new ReactiveVar( null );
 
@@ -78,10 +80,11 @@ export class MyGiveaways extends React.Component {
       // const reactiveMapBounds = self.mapBounds.get();
       const userFromDate = self.userFromDate.get();
       const userUntilDate = self.userUntilDate.get();
+      const isAllGa = self.isAllGa.get();
 
       // Re-subscribe when date range changes
       if (userFromDate && userUntilDate) {
-        self.subscription = Meteor.subscribe('user-giveaways-within-date', userFromDate, userUntilDate);
+        self.subscription = Meteor.subscribe('user-giveaways-within-date', userFromDate, userUntilDate, isAllGa);
       }
     });
 
@@ -153,6 +156,11 @@ export class MyGiveaways extends React.Component {
     this.userFromDate.set(date);
   }
 
+  handleAllUserGiveaways(){
+    this.setState({ showDateRange: !this.state.showDateRange });
+    this.isAllGa.set(!this.isAllGa.get());
+  }
+
   openEditDialog(features, coords, removeDraggable) {
     this.setState({ isModalOpen: true });
     this.setState({ latLngClicked: coords });
@@ -208,6 +216,7 @@ export class MyGiveaways extends React.Component {
           showMarkers={ this.state.showMarkers }
           addRGeoSpinner={ this.addRGeoSpinner.bind(this) }
           rmvRGeoSpinner={ this.rmvRGeoSpinner.bind(this) }
+          isDbClickDisabled= { true }
         />
 
         <RefreshIndicator
@@ -233,7 +242,9 @@ export class MyGiveaways extends React.Component {
             userFromDate={ this.userFromDate.get() }
             handleUserUntilDate={ this.handleUserUntilDate.bind(this) }
             handleUserFromDate={ this.handleUserFromDate.bind(this) }
+            handleAllUserGiveaways={ this.handleAllUserGiveaways.bind(this) }
             editGa={ editGa }
+            showDateRange={ this.state.showDateRange }
           />
         </div>
 

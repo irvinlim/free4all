@@ -25,17 +25,20 @@ Meteor.publish('giveaways-on-screen', function(date, mapBounds) {
   return Giveaways.find(findParams);
 });
 
-Meteor.publish('user-giveaways-within-date', function(startDateRange, endDateRange){
+Meteor.publish('user-giveaways-within-date', function(startDateRange, endDateRange, isAllGa){
   check(startDateRange, Date);
   check(endDateRange, Date);
+  check(isAllGa, Boolean);
 
   const findParams = {
     startDateTime:  { $gte: startDateRange, },
     endDateTime:    { $lt:  endDateRange, },
     userId:         this.userId,
   };
-
-  return Giveaways.find(findParams);
+  if(isAllGa)
+    return Giveaways.find({userId: this.userId});
+  else
+    return Giveaways.find(findParams);
 })
 
 Meteor.publish('giveaways-search', function(props) {
