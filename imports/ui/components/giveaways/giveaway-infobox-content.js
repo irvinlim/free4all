@@ -1,12 +1,13 @@
 import React from 'react';
 import { Row, Col } from 'react-bootstrap';
+import { Link } from 'react-router';
 
 import * as IconsHelper from '../../../util/icons';
 import * as AvatarHelper from '../../../util/avatar';
 import * as GiveawaysHelper from '../../../util/giveaways';
 
 const iconRow = (icon, content) => {
-  if (content && content.length)
+  if (content)
     return (
       <div className="info-row">
         <div className="info-row-icon">
@@ -41,6 +42,7 @@ const getContent = ({ giveaway }) => {
         { !GiveawaysHelper.is_over(giveaway) ?
             iconRow("info_outline", "Status: " + GiveawaysHelper.getLastOwnerStatusType(giveaway).label ) :
             iconRow("info_outline", "Status: Ended" ) }
+        { iconRow("link", <Link to={ "/giveaway/" + giveaway._id }>Permalink</Link>) }
       </div>
     );
   }
