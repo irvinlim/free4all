@@ -3,9 +3,9 @@ const geo = require('mapbox-geocoding');
 
 // Mapbox Geocoding
 let geoTimeout;
-export const geocode = (mapboxAccessToken, query, addState) => {
+export const geocode = (mapboxAccessToken, query, mapCenter, addState) => {
 	let url = 'https://api.tiles.mapbox.com/geocoding/v5/mapbox.places/' + encodeURIComponent(query) 
-		+ '.json?access_token=' + mapboxAccessToken;
+		+ '.json?proximity=' + mapCenter.lng + ',' + mapCenter.lat + '&access_token=' + mapboxAccessToken;
 	
 	if(geoTimeout) Meteor.clearTimeout(geoTimeout);
 

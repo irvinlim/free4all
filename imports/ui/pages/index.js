@@ -243,6 +243,7 @@ export class Index extends React.Component {
                   stopDraggableAdded={this.noAddDraggable.bind(this)}
                   hideMarkers={ this.hideMarkers.bind(this) }
                   resetLoc={ this.resetLoc.bind(this) }
+                  mapCenter={ this.state.mapCenter }
                 />
                 :
                 <div>

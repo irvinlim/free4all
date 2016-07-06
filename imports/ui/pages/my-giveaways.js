@@ -266,6 +266,7 @@ export class MyGiveaways extends React.Component {
           hideMarkers={ this.hideMarkers.bind(this) }
           resetLoc={ this.resetLoc.bind(this) }
           gaEdit={ this.state.gaEdit }
+          mapCenter={ this.state.mapCenter }
         />
 
       </div>

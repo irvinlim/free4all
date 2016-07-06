@@ -78,7 +78,7 @@ export default class EditBtnDialog extends React.Component {
 
     this.geocodeInputLoc = (value) => {
       if(value.length > 5){
-        geocode(Meteor.settings.public.MapBox.accessToken, value,
+        geocode(Meteor.settings.public.MapBox.accessToken, value, this.props.mapCenter,
           (locObjs) => {
             let locArr = locObjs.map((loc)=> {
               loc.text = loc.place_name;

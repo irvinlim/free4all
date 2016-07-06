@@ -74,7 +74,7 @@ export default class InsertBtnDialog extends React.Component {
 
     this.geocodeInputLoc = (value) => {
       if(value.length > 5){
-        geocode(Meteor.settings.public.MapBox.accessToken, value,
+        geocode(Meteor.settings.public.MapBox.accessToken, value, this.props.mapCenter,
         (locObjs) => {
           let locArr = locObjs.map((loc)=> {
             loc.text = loc.place_name;
@@ -390,7 +390,7 @@ render() {
         bodyStyle={dialogStyle}
         actions={actionBtns}
         actionsContainerStyle={actionsContainerStyle}
-        modal={false}
+        modal={true}
         open={this.state.isOpen}
         onRequestClose={this.handleClose}
         autoScrollBodyContent={true}>
