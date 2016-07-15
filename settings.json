@@ -31,5 +31,9 @@
     "Google":{
       "clientSecret": "<CLIENT_SECRET>"
     },
+    "kadira": { 
+      "appId": "<API_KEY>",
+      "appSecret": "<API_SECRET>"
+    }
   }
 }
