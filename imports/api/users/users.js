@@ -100,7 +100,7 @@ Schema.User = new SimpleSchema({
     type: Date,
     optional: true
   },
-  groups:{
+  communities:{
     type: [String],
     optional: true
   },

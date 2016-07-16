@@ -20,3 +20,8 @@ Meteor.publish('user-by-id', function(userId) {
     fields: userPublicFields,
   });
 });
+
+Meteor.publish('userIds-by-commId', function(commId) {
+  check(commId, Match._id);
+  return Meteor.users.find({communities: commId}, {_id: true});
+});
