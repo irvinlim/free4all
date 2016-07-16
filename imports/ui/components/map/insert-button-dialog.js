@@ -1,4 +1,5 @@
 import React from 'react';
+import Paper from 'material-ui/Paper';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -10,7 +11,6 @@ import {GridList, GridTile} from 'material-ui/GridList';
 import LinearProgress from 'material-ui/LinearProgress';
 
 import Formsy from 'formsy-react';
-import Paper from 'material-ui/Paper';
 import { FormsyCheckbox, FormsyDate, FormsyRadio, FormsyRadioGroup, FormsySelect, FormsyText, FormsyTime, FormsyToggle } from 'formsy-material-ui/lib';
 import { Grid, Row, Col } from 'react-bootstrap';
 
@@ -574,6 +574,12 @@ render() {
                   onTouchTap={this.handleOpenCatMenu}
                   icon={<FontIcon className={this.state.childCatIcon} />}
                 />
+                <Col className="displayNone">
+                <FormsyText
+                  name="childCatRequired"
+                  value={this.state.childCatIcon}
+                  required />
+                </Col>
                 <AllCategoriesList
                   setParentCat={this.setParentCat}
                   setChildCat={this.setChildCat}

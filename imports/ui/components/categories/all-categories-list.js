@@ -15,7 +15,10 @@ export const AllCategoriesList = ({ allCategories, props }) => (
       open={props.isCatMenuOpen}
       onRequestClose={props.closeCatMenu}
       animation={PopoverAnimationVertical}>
-      <AllCategoriesListItems parentCategories={ allCategories[0] } categories={ allCategories[1] } clickHandler={ props.setChildCat } />
+      <AllCategoriesListItems 
+        parentCategories={ allCategories[0] } 
+        categories={ allCategories[1] } 
+        clickHandler={ props.setChildCat } />
     </Popover> :
     <Popover
       anchorEl ={props.anchorEl}
