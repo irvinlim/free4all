@@ -585,6 +585,12 @@ export default class EditBtnDialog extends React.Component {
                     onTouchTap={this.handleOpenCatMenu}
                     icon={<FontIcon className={this.state.childCatIcon} />}
                   />
+                  <Col className="displayNone">
+                    <FormsyText
+                    name="childCatRequired"
+                    value={this.state.childCatIcon}
+                    required />
+                  </Col>
                   <AllCategoriesList
                     setParentCat={this.setParentCat}
                     setChildCat={this.setChildCat}
