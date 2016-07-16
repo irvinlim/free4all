@@ -554,6 +554,7 @@ export default class EditBtnDialog extends React.Component {
                       validations="isNumeric"
                       validationError={numericError}
                       hintText="Latitude"
+                      required
                       floatingLabelText="Latitude"
                       value={this.state.lat}
                       onChange={this.handleLat}
@@ -565,6 +566,7 @@ export default class EditBtnDialog extends React.Component {
                       validations="isNumeric"
                       validationError={numericError}
                       hintText="Longitude"
+                      required
                       floatingLabelText="Longitude"
                       value={this.state.lng}
                       onChange={this.handleLng}
