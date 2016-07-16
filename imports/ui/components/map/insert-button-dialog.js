@@ -393,7 +393,9 @@ render() {
         modal={true}
         open={this.state.isOpen}
         onRequestClose={this.handleClose}
-        autoScrollBodyContent={true}>
+        autoScrollBodyContent={true}
+        autoDetectWindowHeight={false}
+        >
 
         <Paper style={paperStyle}>
           <Formsy.Form

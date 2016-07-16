@@ -6,8 +6,6 @@ export default class LeafletMapObject {
   constructor(elemId) {
     const self = this;
     
-    // http://leafletjs.com/reference.html#global
-    L_PREFER_CANVAS = true;
     this.markers = {};
     this.markerClusterGroup = new L.markerClusterGroup({
       iconCreateFunction: function(cluster) {

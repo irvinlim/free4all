@@ -4,7 +4,6 @@
 
 @import "base/extends";
 @import "base/animations";
-@import "base/forms";
 @import "base/layout";
 @import "base/flexboxgrid";
 
@@ -17,5 +16,6 @@
 @import "module/misc";
 @import "module/signup";
 @import "module/timeline";
+@import "module/forms";
 
 @import "state/navbar";
