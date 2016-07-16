@@ -63,13 +63,6 @@ export default class InsertBtnDialog extends React.Component {
 
       props.hideMarkers();
 
-      Bert.alert({
-        hideDelay: 8000,
-        title: 'Add Location',
-        message: 'Drag marker to select location!',
-        type: 'info',
-        icon: 'fa-map-marker'
-      });
     }
 
     this.geocodeInputLoc = (value) => {

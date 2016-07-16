@@ -72,13 +72,16 @@ export default class LeafletMap extends React.Component {
 
   removeDraggable() {
     this.mapObject.map.removeLayer(this.draggableMarker);
+    this.draggableMarker = null;
   }
 
   componentWillReceiveProps(nextProps) {
     const self = this;
-
     // Add reverse geocode marker
     if (nextProps.isDraggableAdded) {
+      // Remove previous marker if any
+      if(this.draggableMarker) self.removeDraggable();
+
       const css = { 'background-color': "#00bcd4", "font-size": "30px" };
       const iconHTML = '<i class="material-icons">add_location</i>'
       const icon = this.mapObject.markerIcon("map-marker", css, {}, iconHTML);
