@@ -85,9 +85,9 @@ export class Index extends React.Component {
     this.autorunGeo = Tracker.autorun(function() {
       const reactiveLatLng = Geolocation.latLng();
 
-      // Set initial map center, if not geolocated yet
-      if (!self.state.geolocation)
-        self.setState({ mapCenter: reactiveLatLng });
+      // Disabled initialize map center, if not geolocated yet
+      // if (!self.state.geolocation)
+      //   self.setState({ mapCenter: reactiveLatLng });
 
       // Set current location
       self.setState({ geolocation: reactiveLatLng });

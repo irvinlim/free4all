@@ -51,14 +51,21 @@ export default class LeafletMap extends React.Component {
 
   registerEventHandlers() {
     const self = this;
-    const moveend = this.mapObject.registerEventHandler('moveend', function(event) {
+    const zoomend = this.mapObject.registerEventHandler('zoomend', function(event) {
+      self.props.setMapCenter(this.getCenter());
+      self.props.setMapZoom(this.getZoom());
+      self.props.setMapMaxZoom(this.getMaxZoom());
+      self.props.setBounds(this.getBounds());
+    });
+    const dragend = this.mapObject.registerEventHandler('dragend', function(event) {
       self.props.setMapCenter(this.getCenter());
       self.props.setMapZoom(this.getZoom());
       self.props.setMapMaxZoom(this.getMaxZoom());
       self.props.setBounds(this.getBounds());
     });
 
-    setTimeout(moveend.trigger, 500);
+    Meteor.setTimeout(zoomend.trigger, 500);
+    Meteor.setTimeout(dragend.trigger, 500);
 
     if(!self.props.isDbClickDisabled){
       this.mapObject.registerEventHandler('dblclick', function(event) {
