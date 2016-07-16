@@ -211,7 +211,7 @@ export class Index extends React.Component {
             <RefreshIndicator
               size={40}
               top={10}
-              left={ $(window).width() / 2 }
+              left={ $(window).width() / 2.05 }
               status={ this.state.rGeoLoading ? "loading" : "hide" }
             />
             <div id="map-boxes-container">
