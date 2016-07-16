@@ -20,7 +20,7 @@ import TagsInput from 'react-tagsinput';
 import { insertGiveaway } from '../../../api/giveaways/methods.js';
 import { StatusTypes } from '../../../api/status-types/status-types.js'
 
-import { geocode } from '../../../api/geocode/methods.js';
+import { geocode } from '../../../util/geocode.js';
 import { shortId } from '../../../util/helper.js'
 
 import * as IconsHelper from '../../../util/icons';

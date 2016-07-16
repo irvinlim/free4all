@@ -2,7 +2,7 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Giveaways } from '../../../api/giveaways/giveaways';
 import LeafletMapObject from './leaflet-map-object';
-import { rgeocode } from '../../../api/geocode/methods.js';
+import { rgeocode } from '../../../util/geocode.js';
 
 import * as LatLngHelper from '../../../util/latlng';
 

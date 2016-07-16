@@ -17,6 +17,4 @@ import '../../api/status-types/server/publications';
 import '../../api/giveaways/methods';
 import '../../api/giveaways/server/publications';
 
-import '../../api/geocode/methods';
-
 import './publications';

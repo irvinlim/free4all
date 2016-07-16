@@ -99,6 +99,18 @@ Schema.User = new SimpleSchema({
   heartbeat: {
     type: Date,
     optional: true
+  },
+  groups:{
+    type: [String],
+    optional: true
+  },
+  home_location: {
+    type: [Number],
+    decimal: true,
+    minCount: 2,
+    maxCount: 2,
+    label: 'Array of coordinates in MongoDB style \[Lng, Lat\]',
+    optional: true
   }
 });
 

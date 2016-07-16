@@ -21,7 +21,7 @@ import { updateGiveaway, removeGiveaway, removeGiveawayGroup } from '../../../ap
 import { StatusTypes } from '../../../api/status-types/status-types.js'
 import { Categories } from '../../../api/categories/categories.js';
 
-import { geocode } from '../../../api/geocode/methods.js';
+import { geocode } from '../../../util/geocode.js';
 import { shortId } from '../../../util/helper.js'
 
 import * as IconsHelper from '../../../util/icons';
