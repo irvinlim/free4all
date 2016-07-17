@@ -8,6 +8,7 @@ import LeafletMap from '../components/map/leaflet-map';
 
 import MapInfoBox from '../components/map/map-info-box';
 import MapNearbyBox from '../components/map/map-nearby-box';
+import SelectHome from '../components/form/select-home';
 
 import { GoToGeolocationButton } from '../components/map/go-to-geolocation-button'
 import InsertBtnDialog from '../components/map/insert-button-dialog'
@@ -41,6 +42,8 @@ export class Index extends React.Component {
       isDraggableAdded: false,
       showMarkers: true,
       rGeoLoading: false,
+      isHomeLocOpen: false,
+      homeLocation: null,
     };
 
     this.mapBounds = new ReactiveVar( null );
@@ -97,6 +100,19 @@ export class Index extends React.Component {
     this.autorunAuth = Tracker.autorun(function() {
       self.setState({ isAuthenticated: Meteor.user() });
     });
+
+    this.autorunHomeLoc = Tracker.autorun(function(){
+      // Logged in -> get home_loc -> set map center
+      // No home_loc ->  open dialog
+      const home_location = Session.get('home_location');
+      console.log(home_location)
+      if(home_location){
+        self.setState({ mapCenter: home_location })
+      } else {
+        self.setState({ isHomeLocOpen: true })
+      }
+    })
+
   }
 
   componentWillUnmount() {
@@ -104,6 +120,7 @@ export class Index extends React.Component {
     this.autorunSub && this.autorunSub.stop();
     this.autorunGeo && this.autorunGeo.stop();
     this.autorunAuth && this.autorunAuth.stop();
+    this.autorunHomeLoc && this.autorunHomeLoc.stop();
   }
 
   goToGeolocation() {
@@ -178,6 +195,14 @@ export class Index extends React.Component {
     this.setState({ rGeoLoading: false });
   }
 
+  openSelectHomeModal(){
+    this.setState({ isHomeLocOpen: true });
+  }
+
+  closeSelectHomeModal(){
+    this.setState({ isHomeLocOpen: false });
+  }
+
   render() {
     const clickNearbyGa = ga => event => {
       this.selectGa(ga._id);
@@ -230,30 +255,39 @@ export class Index extends React.Component {
             </div>
 
             <div id="map-floating-buttons" style={{ right: 20 + (this.state.nearbyBoxState > 0 ? $("#map-nearby-box").outerWidth() : 0) }}>
-              <GoToGeolocationButton geolocationOnClick={ this.goToGeolocation.bind(this) } />
+
+              <GoToGeolocationButton 
+                geolocationOnClick={ this.goToGeolocation.bind(this) } />
+
+              <SelectHome 
+                isHomeLocOpen={ this.state.isHomeLocOpen }
+                homeLocation={ this.state.homeLocation }
+                setMapCenter={ mapCenter => this.setState({ mapCenter }) }
+                openSelectHomeModal={ this.openSelectHomeModal.bind(this) }
+                closeSelectHomeModal={ this.closeSelectHomeModal.bind(this) } />     
+
               { this.state.isAuthenticated ?
-                <InsertBtnDialog
-                  isModalOpen={this.state.isModalOpen}
-                  openModal={this.openModal.bind(this)}
-                  closeModal={this.closeModal.bind(this)}
-                  latLng={this.state.latLngClicked}
-                  locArr={this.state.locArr}
-                  locName={this.state.locName}
-                  addDraggable={this.addDraggable.bind(this)}
-                  stopDraggableAdded={this.noAddDraggable.bind(this)}
-                  hideMarkers={ this.hideMarkers.bind(this) }
-                  resetLoc={ this.resetLoc.bind(this) }
-                  mapCenter={ this.state.mapCenter }
-                />
-                :
-                <div>
-                  <IconButton
-                    tooltip="Login to add giveaways"
-                    style={{ zIndex: 1, position: "absolute" }} />
-                  <FloatingActionButton disabled={true} >
-                    { IconsHelper.materialIcon("add", {color:"black"}) }
-                  </FloatingActionButton>
-                </div>
+              <InsertBtnDialog
+                isModalOpen={this.state.isModalOpen}
+                openModal={this.openModal.bind(this)}
+                closeModal={this.closeModal.bind(this)}
+                latLng={this.state.latLngClicked}
+                locArr={this.state.locArr}
+                locName={this.state.locName}
+                addDraggable={this.addDraggable.bind(this)}
+                stopDraggableAdded={this.noAddDraggable.bind(this)}
+                hideMarkers={ this.hideMarkers.bind(this) }
+                resetLoc={ this.resetLoc.bind(this) }
+                mapCenter={ this.state.mapCenter } />
+              :
+              <div>
+                <IconButton
+                  tooltip="Login to add giveaways"
+                  style={{ zIndex: 1, position: "absolute" }} />
+                <FloatingActionButton disabled={true} >
+                  { IconsHelper.materialIcon("add", {color:"black"}) }
+                </FloatingActionButton>
+              </div>
               }
             </div>
           </div>

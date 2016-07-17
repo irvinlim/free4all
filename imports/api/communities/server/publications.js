@@ -3,7 +3,7 @@ import { Communities } from '../communities';
 
 Meteor.publish('all-communities', () => Communities.find());
 
-Meteor.publish('communityId-by-id', function(communityId) {
+Meteor.publish('community-by-id', function(communityId) {
   check(communityId, Match._id);
   return Communities.find(communityId);
 });

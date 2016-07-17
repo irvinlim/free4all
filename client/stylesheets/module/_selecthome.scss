@@ -1,0 +1,10 @@
+.schoolCommunity{
+    height: auto;
+    width: 75%;
+    >g{
+	    transition: 1s;
+    	&:hover{
+	    	fill: #3F51B5;
+	    }
+	}
+}

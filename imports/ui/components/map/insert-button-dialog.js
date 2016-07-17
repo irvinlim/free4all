@@ -22,7 +22,6 @@ import { StatusTypes } from '../../../api/status-types/status-types.js'
 
 import { geocode } from '../../../util/geocode.js';
 import { shortId } from '../../../util/helper.js'
-
 import * as IconsHelper from '../../../util/icons';
 
 export default class InsertBtnDialog extends React.Component {
