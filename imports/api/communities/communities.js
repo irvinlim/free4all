@@ -15,11 +15,12 @@ Communities.schema = new SimpleSchema({
   },
   ownerId: {
     type: String,
-    label: '_id of user who created group'
+    regEx: SimpleSchema.RegEx.Id,
+    label: 'ID of user who created community'
   },
   count: {
     type: Number,
-    label: 'Sum of people in group for resubscription on change'
+    label: 'Sum of people in community'
   },
   website: {
     type: String,
@@ -45,6 +46,19 @@ Communities.schema = new SimpleSchema({
       const id = Meteor.settings.public.MapBox.mapID;
       const accessToken = Meteor.settings.public.MapBox.accessToken;
       return "https://api.tiles.mapbox.com/v4/"+ id +"/{z}/{x}/{y}.png?access_token=" + accessToken;
+    }
+  },
+  createdAt: {
+    type: Date,
+    label: 'Published date/time',
+    autoValue: function() {
+      if (this.isInsert) {
+        return new Date();
+      } else if (this.isUpsert) {
+        return { $setOnInsert: new Date() };
+      } else {
+        this.unset();
+      }
     }
   }
 });

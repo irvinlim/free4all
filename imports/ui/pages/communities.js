@@ -6,8 +6,7 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
 
-import TimelineItems from '../containers/timeline/timeline-items';
-import { TimelineCategoriesListItems } from '../components/categories/timeline-categories-list-items';
+import CommunitiesItems from '../containers/communities/communities-items';
 
 import * as IconsHelper from '../../util/icons';
 
@@ -16,23 +15,12 @@ export class Communities extends React.Component {
     super(props);
 
     this.state = {
-      tab: "current",
-      view: "list",
-      parentCategoryId: null,
-      categoryId: "all-categories",
       searchQuery: "",
+      view: "list",
       sort: "most-relevant",
     };
   }
-
-  makeHandleSetTab(tab) {
-    return (event) => this.setState({ tab: tab });
-  }
-
-  handleSetCategory(event, key, payload) {
-    this.setState({ categoryId: payload });
-  }
-
+  
   handleSetSort(event, key, payload) {
     this.setState({ sort: payload });
   }
@@ -61,7 +49,7 @@ export class Communities extends React.Component {
                 <TextField
                   id="community-search-query"
                   type="text"
-                  placeholder="Search for a giveaway..."
+                  placeholder="Search for a community..."
                   floatingLabelText="Search"
                   onKeyDown={ this.handleSearch.bind(this) }
                   floatingLabelFixed={true}
@@ -71,7 +59,7 @@ export class Communities extends React.Component {
               </div>
               <div className="col col-xs-12 col-sm-3">
                 <SelectField
-                  id="timeline-sort-select"
+                  id="community-sort-select"
                   floatingLabelText="Sort"
                   floatingLabelFixed={true}
                   style={{ fontSize: 14, overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
@@ -81,25 +69,28 @@ export class Communities extends React.Component {
                   value={ this.state.sort }
                   onChange={ this.handleSetSort.bind(this) }>
                   <MenuItem value="most-relevant" primaryText="Most relevant first" />
-                  <MenuItem value="highest-rated" primaryText="Highest rated first" />
-                  <MenuItem value="newest-first" primaryText="Newest First" />
-                  <MenuItem value="oldest-first" primaryText="Oldest First" />
+                  <MenuItem value="largest-first" primaryText="Largest First" />
+                  <MenuItem value="smallest-first" primaryText="Smallest First" />
                 </SelectField>
               </div>
             </div>
           </div>
 
+          <div id="timeline-view-bar">
+            <IconButton onTouchTap={ this.makeHandleSetView('list').bind(this) } tooltip="List view" style={{ zIndex: 10 }}>
+              { IconsHelper.icon("view_list", { color: this.state.view == "list" ? "#5b6a88" : "#9facc7" }) }
+            </IconButton>
+            <IconButton onTouchTap={ this.makeHandleSetView('grid').bind(this) } tooltip="Grid view" style={{ zIndex: 10 }}>
+              { IconsHelper.icon("view_module", { color: this.state.view == "grid" ? "#5b6a88" : "#9facc7" }) }
+            </IconButton>
+          </div>
+
         </div>
 
-        <TimelineItems
-          tab={ this.state.tab }
-          offset={ this.state.offset }
-          perPage={ this.state.perPage }
+        <CommunitiesItems
           sort={ this.state.sort }
-          view={ this.state.view }
-          categoryId={ this.state.categoryId }
-          parentCategoryId={ this.state.parentCategoryId }
-          searchQuery={ this.state.searchQuery } />
+          searchQuery={ this.state.searchQuery }
+          view={ this.state.view } />
 
         </Grid>
       </div>

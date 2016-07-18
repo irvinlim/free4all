@@ -71,8 +71,8 @@ export const CommunityGiveaways = (props) => (
           />
           </Col>
         </Row>
-        </div>
-        :
+      </div>
+      :
       <div />
       }
 
