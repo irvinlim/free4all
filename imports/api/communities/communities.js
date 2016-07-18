@@ -35,7 +35,7 @@ Communities.schema = new SimpleSchema({
   zoom: {
     type: Number,
     label: 'Zoom level of map',
-    defaultValue: 5
+    defaultValue: 15
   }
 });
 

@@ -15,6 +15,7 @@ const users = [{
     lastName: "User"
   },
   roles: ['admin'],
+  home_location: [1.2993372,103.777426],
 }];
 
 users.forEach(({ email, password, profile, roles }) => {
@@ -63,3 +64,17 @@ default_categories.forEach(cat => {
   if (!Categories.findOne({ 'name': cat.name }))
     Categories.insert(cat);
 });
+
+
+// Default communities
+// const default_communities = [
+//   { name: "Pizza", iconClass: 'fa fae-pizza', relativeOrder: 10, parent: ParentCategories.findOne({ name: "Food & Drink" })._id },
+//   { name: "Buffet", iconClass: 'restaurant', relativeOrder: 11, parent: ParentCategories.findOne({ name: "Food & Drink" })._id },
+//   { name: "Ice Cream", iconClass: 'fa fae-popsicle', relativeOrder: 12, parent: ParentCategories.findOne({ name: "Food & Drink" })._id },
+//   { name: "Coffee", iconClass: 'fa fa-coffee', relativeOrder: 13, parent: ParentCategories.findOne({ name: "Food & Drink" })._id },
+// ];
+
+// default_categories.forEach(cat => {
+//   if (!Categories.findOne({ 'name': cat.name }))
+//     Categories.insert(cat);
+// });

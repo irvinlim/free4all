@@ -9,6 +9,7 @@ import LeafletMap from '../components/map/leaflet-map';
 import MapInfoBox from '../components/map/map-info-box';
 import MapNearbyBox from '../components/map/map-nearby-box';
 import SelectHome from '../components/form/select-home';
+import GoToHomeButton from '../components/form/go-to-home-button';
 
 import { GoToGeolocationButton } from '../components/map/go-to-geolocation-button'
 import InsertBtnDialog from '../components/map/insert-button-dialog'
@@ -27,7 +28,7 @@ export class Index extends React.Component {
 
     this.state = {
       // Properties
-      isAuthenticated: null,
+      isAuthenticated: false,
       gaSelected: null,
       infoBoxState: 0,
       nearbyBoxState: 1,
@@ -98,20 +99,28 @@ export class Index extends React.Component {
 
     // Autorun check user authenticated
     this.autorunAuth = Tracker.autorun(function() {
-      self.setState({ isAuthenticated: Meteor.user() });
+      if(Meteor.user()){
+        const user = Meteor.user();
+        self.setState({ 
+          isAuthenticated: true,
+          // homeLocation: user.home_location,
+          // isHomeLocOpen: false
+        });
+        // Session.setPersistent('home_location', user.home_location);
+      } else {
+        self.setState({ homeLocation: null })
+        Session.setPersistent('home_location', null);
+      }
     });
 
-    this.autorunHomeLoc = Tracker.autorun(function(){
-      // Logged in -> get home_loc -> set map center
-      // No home_loc ->  open dialog
-      const home_location = Session.get('home_location');
-      console.log(home_location)
-      if(home_location){
-        self.setState({ mapCenter: home_location })
-      } else {
-        self.setState({ isHomeLocOpen: true })
-      }
-    })
+    // Logged in -> get home_loc -> set map center
+    // No home_loc ->  open dialog
+    const homeLocation = Session.get('home_location');
+    if(homeLocation){
+      self.setState({ mapCenter: homeLocation, homeLocation: homeLocation})
+    } else {
+      self.setState({ isHomeLocOpen: true })
+    }
 
   }
 
@@ -120,11 +129,14 @@ export class Index extends React.Component {
     this.autorunSub && this.autorunSub.stop();
     this.autorunGeo && this.autorunGeo.stop();
     this.autorunAuth && this.autorunAuth.stop();
-    this.autorunHomeLoc && this.autorunHomeLoc.stop();
   }
 
   goToGeolocation() {
     this.setState({ mapCenter: this.state.geolocation });
+  }
+
+  goToHomeLoc(){
+    this.setState({ mapCenter: this.state.homeLocation });
   }
 
   openInsertDialog(features, coords, removeDraggable) {
@@ -195,13 +207,33 @@ export class Index extends React.Component {
     this.setState({ rGeoLoading: false });
   }
 
-  openSelectHomeModal(){
-    this.setState({ isHomeLocOpen: true });
+  setHomeLoc(uniName){
+    let coords;
+    this.setState({ isHomeLocOpen: false });
+    switch(uniName){
+      case 'nus':
+        coords = [1.2993372,103.777426];
+        Session.setPersistent('home_location', coords);
+        this.setState({ mapCenter: coords, homeLocation: coords});
+        this.setState({ mapZoom: 16});
+        break;
+      case 'ntu':
+        coords = [1.3484298,103.6837826];
+        Session.setPersistent('home_location', coords);
+        this.setState({ mapCenter: coords, homeLocation: coords});
+        this.setState({ mapZoom: 16});
+        break;
+      case 'smu':
+        coords = [1.2969614,103.8513713];
+        Session.setPersistent('home_location', coords);
+        this.setState({ mapCenter: coords, homeLocation: coords});
+        this.setState({ mapZoom: 18});
+        break;
+      default:
+        break;
+    }
   }
 
-  closeSelectHomeModal(){
-    this.setState({ isHomeLocOpen: false });
-  }
 
   render() {
     const clickNearbyGa = ga => event => {
@@ -254,17 +286,19 @@ export class Index extends React.Component {
               />
             </div>
 
+            <SelectHome 
+              isHomeLocOpen={ this.state.isHomeLocOpen }
+              closeSelectHomeModal={ () => this.setState({ isHomeLocOpen: false }) } 
+              setHomeLoc={this.setHomeLoc.bind(this)} />     
+
             <div id="map-floating-buttons" style={{ right: 20 + (this.state.nearbyBoxState > 0 ? $("#map-nearby-box").outerWidth() : 0) }}>
 
               <GoToGeolocationButton 
                 geolocationOnClick={ this.goToGeolocation.bind(this) } />
 
-              <SelectHome 
-                isHomeLocOpen={ this.state.isHomeLocOpen }
-                homeLocation={ this.state.homeLocation }
-                setMapCenter={ mapCenter => this.setState({ mapCenter }) }
-                openSelectHomeModal={ this.openSelectHomeModal.bind(this) }
-                closeSelectHomeModal={ this.closeSelectHomeModal.bind(this) } />     
+              <GoToHomeButton
+                goToHomeLoc = { this.goToHomeLoc.bind(this) }
+                homeLocation ={ this.state.homeLocation }/>
 
               { this.state.isAuthenticated ?
               <InsertBtnDialog

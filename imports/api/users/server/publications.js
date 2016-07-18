@@ -6,6 +6,7 @@ const userPublicFields = {
   emails: true,
   'services.facebook.id': true,
   'services.google.picture': true,
+  home_location: true,
 };
 
 Meteor.publish('user-data', function() {
