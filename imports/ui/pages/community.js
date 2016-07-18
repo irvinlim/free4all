@@ -42,7 +42,8 @@ export class Community extends React.Component {
       // isDraggableAdded: false,
       // rGeoLoading: false,
       // gaEdit: null,
-      // showDateRange: true,
+      showDateRange: true,
+      isAllGa: false
     };
 
     this.userUntilDate = new ReactiveVar( moment().set('hour', 0).set('minute',0).add(1,'w').toDate() );
@@ -75,16 +76,15 @@ export class Community extends React.Component {
 
   componentDidMount() {
     const self = this;
-    self.subscriptionUserIds = Meteor.subscribe('userIds-by-commId', self.props.params.id);
-    // giveaways-by-users, userIds
-
+    
     this.autorunSub = Tracker.autorun(function () {
       const userFromDate = self.userFromDate.get();
       const userUntilDate = self.userUntilDate.get();
       const isAllGa = self.isAllGa.get();
 
       // trigger ui update
-      // self.setState({showDateRange: self.state.showDateRange});
+      self.setState({showDateRange: self.state.showDateRange});
+      self.setState({isAllGa: isAllGa})
 
 
       // Re-subscribe when date range changes
@@ -198,11 +198,6 @@ export class Community extends React.Component {
       this.setState({ mapZoom: this.state.mapMaxZoom });
     };
 
-    const editGa = ga => event => {
-      this.setState({ isModalOpen: true });
-      this.setState({ gaEdit: ga });
-    };
-
     return (
       <div className="full-container">
         <LeafletMap
@@ -228,7 +223,10 @@ export class Community extends React.Component {
             gaId={ this.state.gaSelected }
             boxState={ this.state.infoBoxState }
             setBoxState={ this.setInfoBoxState.bind(this) } />
+
           <MapCommunityBox
+            communityId={ this.props.params.id }
+            isAllGa={ this.state.isAllGa }
             gaId={ this.state.gaSelected }
             boxState={ this.state.nearbyBoxState }
             setBoxState={ this.setNearbyBoxState.bind(this) }
@@ -239,7 +237,6 @@ export class Community extends React.Component {
             handleUserUntilDate={ this.handleUserUntilDate.bind(this) }
             handleUserFromDate={ this.handleUserFromDate.bind(this) }
             handleAllUserGiveaways={ this.handleAllUserGiveaways.bind(this) }
-            editGa={ editGa }
             showDateRange={ this.state.showDateRange } />
         </div>
 

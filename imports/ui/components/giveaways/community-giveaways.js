@@ -27,16 +27,14 @@ const giveawayRow = (touchTapHandler, editGa) => (ga) => (
         <span className="location">Ending on: { moment(ga.endDateTime).format("ddd, Do MMM, h:mm a")}</span>
       </p>
     }
+    leftAvatar={
+      ga.avatarId ? <Avatar src={ AvatarHelper.getUrl(ga.avatarId, 64) } />
+      : <Avatar icon={ GiveawaysHelper.getCategoryIcon(ga) } backgroundColor={ GiveawaysHelper.getStatusColor(ga) } />
+    }
+
     secondaryTextLines={2}
     onTouchTap={ touchTapHandler(ga) }
-    rightIconButton={    
-      <IconButton 
-        tooltip="Edit" 
-        style={{top: "9px",right: "12px"}} 
-        onTouchTap={editGa(ga)}>
-        { IconsHelper.materialIcon("mode_edit", {color:"grey",}) }
-      </IconButton>
-    }
+
   />
 );
 
@@ -79,10 +77,10 @@ export const CommunityGiveaways = (props) => (
       }
 
       <Row>
-        <Col xs={12} md={7}>
+        <Col xs={12} md={8}>
         <Toggle
         labelStyle= {{fontWeight:200}}
-        label="All my giveaways"
+        label="All community giveaways"
         onToggle={ props.handleAllUserGiveaways }
         />
         </Col>

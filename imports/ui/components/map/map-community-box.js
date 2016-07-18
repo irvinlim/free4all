@@ -38,6 +38,7 @@ export default class MapCommunityBox extends React.Component {
         <Scrollbars autoHide style={{ height: "100%" }}>
 
           <CommunityGiveaways 
+            communityId={ this.props.communityId }
             mapBounds={ this.props.mapBounds } 
             nearbyOnClick={ this.props.nearbyOnClick } 
             userUntilDate={ this.props.userUntilDate }
@@ -46,7 +47,7 @@ export default class MapCommunityBox extends React.Component {
             handleUserFromDate={ this.props.handleUserFromDate }
             handleAllUserGiveaways= { this.props.handleAllUserGiveaways }
             formatDate={ this.formatDate.bind(this) }
-            editGa={ this.props.editGa }
+            isAllGa={ this.props.isAllGa }
             showDateRange={ this.props.showDateRange } />
 
         </Scrollbars>

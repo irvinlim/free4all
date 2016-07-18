@@ -55,6 +55,7 @@ Meteor.publish('users-giveaways-within-date', function(startDateRange, endDateRa
   check(startDateRange, Date);
   check(endDateRange, Date);
   check(isAllGa, Boolean);
+  check(userIds, Array);
 
   const findParams = {
     startDateTime:  { $gte: startDateRange },

@@ -8,7 +8,7 @@ import { Giveaways } from '../../../api/giveaways/giveaways';
 import * as LatLngHelper from '../../../util/latlng';
 
 const composer = (props, onData) => {
-  setTimeout(function() {
+  Meteor.setTimeout(function() {
     const giveaways = Giveaways.find({}, {
       sort: { startDateTime: -1 }, // Show more recent ones first
       limit: 50,
