@@ -12,7 +12,6 @@ export default class GoToHomeButton extends React.Component {
     return(
       this.props.homeLocation ?
       <FloatingActionButton 
-        style={{marginBottom: "10px"}} 
         onTouchTap={ this.props.goToHomeLoc } >
         { IconsHelper.materialIcon("home") }
       </FloatingActionButton>

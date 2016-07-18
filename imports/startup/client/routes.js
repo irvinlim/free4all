@@ -16,6 +16,7 @@ import { Signup } from '../../ui/pages/signup';
 
 // Timeline
 import { Timeline } from '../../ui/pages/timeline';
+import { Communities } from '../../ui/pages/communities';
 import { Giveaway } from '../../ui/pages/giveaway';
 
 // MyGiveaways
@@ -51,6 +52,7 @@ Meteor.startup(() => {
           <Route name="signup" path="/signup" component={ Signup } />
 
           <Route name="timeline" path="/timeline" component={ Timeline } />
+          <Route name="communities" path="/communities" component={ Communities } />
           <Route name="giveaway" path="/giveaway/:id" component={ Giveaway } />
           <Route name="my-giveaways" path="/my-giveaways" component={ MyGiveaways } onEnter={ requireAuth } />
 

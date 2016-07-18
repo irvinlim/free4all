@@ -8,7 +8,7 @@ import LeafletMap from '../components/map/leaflet-map';
 
 import MapInfoBox from '../components/map/map-info-box';
 import MapNearbyBox from '../components/map/map-nearby-box';
-import SelectHome from '../components/form/select-home';
+import SelectHomeDialog from '../components/form/select-home-dialog';
 import GoToHomeButton from '../components/form/go-to-home-button';
 
 import { GoToGeolocationButton } from '../components/map/go-to-geolocation-button'
@@ -99,25 +99,25 @@ export class Index extends React.Component {
 
     // Autorun check user authenticated
     this.autorunAuth = Tracker.autorun(function() {
-      if(Meteor.user()){
-        const user = Meteor.user();
-        self.setState({ 
-          isAuthenticated: true,
-          // homeLocation: user.home_location,
-          // isHomeLocOpen: false
-        });
-        // Session.setPersistent('home_location', user.home_location);
-      } else {
-        self.setState({ homeLocation: null })
-        Session.setPersistent('home_location', null);
+      const user = Meteor.user();
+      if(user){
+        self.setState({ isAuthenticated: true });
+        if(user.homeLocation){
+          // homeLocation state is for goToHomeLocation Button
+          self.setState({ homeLocation: user.homeLocation });
+          // homeLocation session is for initial map center
+          Session.setPersistent('homeLocation', user.homeLocation);
+        }
       }
     });
 
-    // Logged in -> get home_loc -> set map center
-    // No home_loc ->  open dialog
-    const homeLocation = Session.get('home_location');
+    // Set initial map center for returning visitor, open dialog if not set
+    const homeLocation = Session.get('homeLocation');
     if(homeLocation){
-      self.setState({ mapCenter: homeLocation, homeLocation: homeLocation})
+      self.setState({ 
+        mapCenter: homeLocation, 
+        homeLocation: homeLocation
+      })
     } else {
       self.setState({ isHomeLocOpen: true })
     }
@@ -167,28 +167,8 @@ export class Index extends React.Component {
     this.showMarkers();
   }
 
-  closeModal() {
-    this.setState({ isModalOpen: false });
-  }
-
-  openModal() {
-    this.setState({ isModalOpen: true });
-  }
-
-  addDraggable() {
-    this.setState({ isDraggableAdded: true });
-  }
-
-  noAddDraggable() {
-    this.setState({ isDraggableAdded: false });
-  }
-
   showMarkers() {
     this.setState({ showMarkers: true });
-  }
-
-  hideMarkers() {
-    this.setState({ showMarkers: false });
   }
 
   resetLoc() {
@@ -199,33 +179,25 @@ export class Index extends React.Component {
     })
   }
 
-  addRGeoSpinner(){
-    this.setState({ rGeoLoading: true });
-  }
-
-  rmvRGeoSpinner(){
-    this.setState({ rGeoLoading: false });
-  }
-
   setHomeLoc(uniName){
     let coords;
     this.setState({ isHomeLocOpen: false });
     switch(uniName){
       case 'nus':
         coords = [1.2993372,103.777426];
-        Session.setPersistent('home_location', coords);
+        Session.setPersistent('homeLocation', coords);
         this.setState({ mapCenter: coords, homeLocation: coords});
         this.setState({ mapZoom: 16});
         break;
       case 'ntu':
         coords = [1.3484298,103.6837826];
-        Session.setPersistent('home_location', coords);
+        Session.setPersistent('homeLocation', coords);
         this.setState({ mapCenter: coords, homeLocation: coords});
         this.setState({ mapZoom: 16});
         break;
       case 'smu':
         coords = [1.2969614,103.8513713];
-        Session.setPersistent('home_location', coords);
+        Session.setPersistent('homeLocation', coords);
         this.setState({ mapCenter: coords, homeLocation: coords});
         this.setState({ mapZoom: 18});
         break;
@@ -259,10 +231,10 @@ export class Index extends React.Component {
               setBounds={ bounds => this.mapBounds.set(bounds) }
               openInsertDialog={ this.openInsertDialog.bind(this) }
               isDraggableAdded={ this.state.isDraggableAdded }
-              stopDraggableAdded={ this.noAddDraggable.bind(this) }
+              stopDraggableAdded={ ()=>{this.setState({ isDraggableAdded: false })} }
               showMarkers={ this.state.showMarkers }
-              addRGeoSpinner={ this.addRGeoSpinner.bind(this) }
-              rmvRGeoSpinner={ this.rmvRGeoSpinner.bind(this) }
+              addRGeoSpinner={ ()=>{this.setState({ rGeoLoading: true })} }
+              rmvRGeoSpinner={ ()=>{this.setState({ rGeoLoading: false })} }
               isDbClickDisabled= { false }
             />
             <RefreshIndicator
@@ -286,7 +258,7 @@ export class Index extends React.Component {
               />
             </div>
 
-            <SelectHome 
+            <SelectHomeDialog 
               isHomeLocOpen={ this.state.isHomeLocOpen }
               closeSelectHomeModal={ () => this.setState({ isHomeLocOpen: false }) } 
               setHomeLoc={this.setHomeLoc.bind(this)} />     
@@ -298,19 +270,19 @@ export class Index extends React.Component {
 
               <GoToHomeButton
                 goToHomeLoc = { this.goToHomeLoc.bind(this) }
-                homeLocation ={ this.state.homeLocation }/>
+                homeLocation = { this.state.homeLocation }/>
 
               { this.state.isAuthenticated ?
               <InsertBtnDialog
                 isModalOpen={this.state.isModalOpen}
-                openModal={this.openModal.bind(this)}
-                closeModal={this.closeModal.bind(this)}
+                openModal={ ()=>{this.setState({ isModalOpen: true })} }
+                closeModal={ ()=>{this.setState({ isModalOpen: false })} }
                 latLng={this.state.latLngClicked}
                 locArr={this.state.locArr}
                 locName={this.state.locName}
-                addDraggable={this.addDraggable.bind(this)}
-                stopDraggableAdded={this.noAddDraggable.bind(this)}
-                hideMarkers={ this.hideMarkers.bind(this) }
+                addDraggable={ ()=>{this.setState({ isDraggableAdded: true })} }
+                stopDraggableAdded={ ()=>{this.setState({ isDraggableAdded: false })} }
+                hideMarkers={ ()=>{this.setState({ showMarkers: false })} }
                 resetLoc={ this.resetLoc.bind(this) }
                 mapCenter={ this.state.mapCenter } />
               :

@@ -100,16 +100,25 @@ Schema.User = new SimpleSchema({
     type: Date,
     optional: true
   },
-  communities:{
-    type: [String],
+  communityIds:{
+    type: Array,
     optional: true
   },
-  home_location: {
+  "communityIds.$":{
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
+  },
+  homeLocation: {
     type: [Number],
     decimal: true,
     minCount: 2,
     maxCount: 2,
     label: 'Array of coordinates in MongoDB style \[Lng, Lat\]',
+    optional: true
+  },
+  homeCommunityId: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id,
     optional: true
   }
 });

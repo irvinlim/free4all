@@ -19,7 +19,7 @@ const customTitleStyle = {
   marginBottom: "33px"
 }
 
-export default class SelectHome extends React.Component {
+export default class SelectHomeDialog extends React.Component {
 
   constructor(props){
     super(props)

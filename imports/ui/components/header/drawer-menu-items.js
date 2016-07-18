@@ -18,6 +18,7 @@ export class DrawerMenuItems extends React.Component {
     this.menuItems = [
       { title: "Map", href: "/", icon: IconsHelper.icon("map") },
       { title: "Timeline", href: "/timeline", icon: IconsHelper.icon("timeline") },
+      { title: "Communities", href: "/communities", icon: IconsHelper.icon("people") },
       { divider: true },
     ];
 
