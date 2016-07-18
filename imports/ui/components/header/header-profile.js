@@ -66,6 +66,7 @@ export class HeaderProfile extends React.Component {
           style={{ padding: '4px 0' }}>
           <List id="header-profile-popover">
             <ListItem primaryText="My Giveaways" onTouchTap={ gotourl('/my-giveaways') } />
+            <ListItem primaryText="My Communities" onTouchTap={ gotourl('/my-communities') } />
             <ListItem primaryText="Profile" onTouchTap={ gotourl('/profile') } />
             <ListItem primaryText="Settings" onTouchTap={ gotourl('/settings') } />
             <ListItem primaryText="Log Out" onTouchTap={ getHandleLogout() } />

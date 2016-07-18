@@ -16,8 +16,12 @@ import { Signup } from '../../ui/pages/signup';
 
 // Timeline
 import { Timeline } from '../../ui/pages/timeline';
-import { Communities } from '../../ui/pages/communities';
 import { Giveaway } from '../../ui/pages/giveaway';
+
+// Communities
+import { Community } from '../../ui/pages/community';
+import { Communities } from '../../ui/pages/communities';
+import { MyCommunities } from '../../ui/pages/my-communities';
 
 // MyGiveaways
 import { MyGiveaways } from '../../ui/pages/my-giveaways';
@@ -28,15 +32,29 @@ const requireAuth = (nextState, replace) => {
       pathname: '/',
       state: { nextPathname: nextState.location.pathname },
     });
-    if(nextState.location.pathname === "/my-giveaways"){
-      Meteor.setTimeout(function(){
-        Bert.alert({
-          title: 'Log in to access your giveaways!',
-          type: 'danger',
-          style: 'growl-top-right',
-          icon: 'fa-user'
-        });
-      }, 1000)
+    switch(nextState.location.pathname){
+      case "/my-giveaways":
+        Meteor.setTimeout(function(){
+          Bert.alert({
+            title: 'Log in to access your giveaways!',
+            type: 'danger',
+            style: 'growl-top-right',
+            icon: 'fa-user'
+          });
+        }, 1000)
+        break;
+      case "/my-communities":
+        Meteor.setTimeout(function(){
+          Bert.alert({
+            title: 'Log in to access your communities!',
+            type: 'danger',
+            style: 'growl-top-right',
+            icon: 'fa-user'
+          });
+        }, 1000)
+        break;
+      default:
+        break;
     }
   }
 };
@@ -52,9 +70,12 @@ Meteor.startup(() => {
           <Route name="signup" path="/signup" component={ Signup } />
 
           <Route name="timeline" path="/timeline" component={ Timeline } />
-          <Route name="communities" path="/communities" component={ Communities } />
           <Route name="giveaway" path="/giveaway/:id" component={ Giveaway } />
           <Route name="my-giveaways" path="/my-giveaways" component={ MyGiveaways } onEnter={ requireAuth } />
+          
+          <Route name="communities" path="/communities" component={ Communities } />
+          <Route name="community" path="/community/:id" component={ Community } />
+          <Route name="my-communities" path="/my-communities" component={ MyCommunities }  onEnter={ requireAuth } />
 
           <Route path="*" component={ NotFound } />
         </Route>

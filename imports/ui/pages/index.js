@@ -188,6 +188,7 @@ export class Index extends React.Component {
         Session.setPersistent('homeLocation', coords);
         this.setState({ mapCenter: coords, homeLocation: coords});
         this.setState({ mapZoom: 16});
+        // TODO: go to the community route instead of setting mapcenter and zoom
         break;
       case 'ntu':
         coords = [1.3484298,103.6837826];

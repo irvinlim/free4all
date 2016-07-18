@@ -51,6 +51,22 @@ Meteor.publish('user-giveaways-within-date', function(startDateRange, endDateRan
     return Giveaways.find(findParams);
 })
 
+Meteor.publish('users-giveaways-within-date', function(startDateRange, endDateRange, isAllGa, userIds){
+  check(startDateRange, Date);
+  check(endDateRange, Date);
+  check(isAllGa, Boolean);
+
+  const findParams = {
+    startDateTime:  { $gte: startDateRange },
+    endDateTime:    { $lt:  endDateRange },
+    userId:         { $in: userIds }
+  };
+  if(isAllGa)
+    return Giveaways.find({ userId: {$in: userIds}})
+  else
+    return Giveaways.find(findParams);
+})
+
 Meteor.publish('giveaways-search', function(props) {
   check(props, Object);
 

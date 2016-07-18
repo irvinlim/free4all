@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
@@ -36,7 +37,23 @@ Communities.schema = new SimpleSchema({
     type: Number,
     label: 'Zoom level of map',
     defaultValue: 15
+  },
+  mapURL: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Url,
+    autoValue: function(){
+      const id = Meteor.settings.public.MapBox.mapID;
+      const accessToken = Meteor.settings.public.MapBox.accessToken;
+      return "https://api.tiles.mapbox.com/v4/"+ id +"/{z}/{x}/{y}.png?access_token=" + accessToken;
+    }
   }
 });
 
 Communities.attachSchema(Communities.schema);
+
+if (Meteor.isServer) {
+  Communities._ensureIndex({
+    'name': 'text',
+    'website': 'text',
+  });
+}
