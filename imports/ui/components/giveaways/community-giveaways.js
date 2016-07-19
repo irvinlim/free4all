@@ -5,6 +5,8 @@ import Divider from 'material-ui/Divider';
 import Subheader from 'material-ui/Subheader';
 import Avatar from 'material-ui/Avatar';
 import IconButton from 'material-ui/IconButton';
+import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
 import DatePicker from 'material-ui/DatePicker';
 import Toggle from 'material-ui/Toggle';
 
@@ -41,7 +43,47 @@ const giveawayRow = (touchTapHandler, editGa) => (ga) => (
 export const CommunityGiveaways = (props) => (
   <List>
     <Subheader>
-      <h3 style={{ margin:"20px 0px 10px" }}>Community Giveaways</h3>
+      <h3 style={{ margin:"20px 0px 10px" }}>{props.community.name}</h3>
+      <Row>
+        <Col xs={12}>
+          <span className="lines-1">{ props.community.description }</span>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col xs={7}>
+        { props.user ?
+           props.user.communityIds && props.user.communityIds.indexOf(props.community._id) > -1 ?
+            <FlatButton 
+              label="Leave Community" 
+              className="leaveComm" />
+            :
+            <RaisedButton 
+              style={{height: "48px"}} 
+              label="Join Community" 
+              className="joinComm" 
+              primary={true} />
+          :
+          <div>
+            <IconButton
+              tooltip="Register to join community!"
+              tooltipPosition="bottom-right"
+              style={{ zIndex: 1, position: "absolute", width:"75%" }} />
+            <RaisedButton 
+              style={{height: "48px"}}
+              label="Join Community" 
+              disabled={true} />
+          </div>
+        }
+        </Col>
+        <Col xs={5}>
+          <span>{props.community.count + ' ' + Helper.pluralizer(props.community.count,"member", "members")} </span>
+        </Col>
+      </Row>
+
+      <hr />
+      <h3 style={{ margin:"20px 0px 10px" }}>{props.community.name} Giveaways</h3>
+
       { props.showDateRange ? 
       <div>
         <Row>
@@ -53,7 +95,8 @@ export const CommunityGiveaways = (props) => (
           value={ props.userFromDate }
           onChange={ props.handleUserFromDate }
           formatDate={ props.formatDate }
-          textFieldStyle={ {width:"126px"}}
+          textFieldStyle={ {width:"105px", fontSize:"14px"}}
+          id="community-fromDate"
           />
           </Col>
         </Row>
@@ -67,7 +110,8 @@ export const CommunityGiveaways = (props) => (
           value={ props.userUntilDate }
           onChange={ props.handleUserUntilDate }
           formatDate={ props.formatDate }
-          textFieldStyle={ {width:"126px"}}
+          textFieldStyle={ {width:"105px", fontSize:"14px"}}
+          id="community-untilDate"
           />
           </Col>
         </Row>
@@ -77,15 +121,16 @@ export const CommunityGiveaways = (props) => (
       }
 
       <Row>
-        <Col xs={12} md={8}>
+        <Col xs={12} md={6}>
         <Toggle
         labelStyle= {{fontWeight:200}}
-        label="All community giveaways"
+        label="All giveaways"
         onToggle={ props.handleAllUserGiveaways }
         />
         </Col>
       </Row>
 
+  
     </Subheader>
     { props.giveaways 
       ? Helper.insertDividers(props.giveaways.map(giveawayRow(props.nearbyOnClick, props.editGa) )) 

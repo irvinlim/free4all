@@ -7,6 +7,16 @@ import CommunityGiveaways from '../../containers/giveaways/community-giveaways';
 import * as IconsHelper from '../../../util/icons';
 
 export default class MapCommunityBox extends React.Component {
+  constructor(props){
+    super(props)
+
+    this.state = {
+      user: null,
+    }
+
+    this.autorunAuth = null;
+  }
+
   positionBoxes() {
     $(window).resize(function() {
       $("#map-nearby-box").css('left', window.innerWidth - $("#map-nearby-box").outerWidth());
@@ -30,6 +40,15 @@ export default class MapCommunityBox extends React.Component {
     });
 
     this.positionBoxes();
+
+    this.autorunAuth = Tracker.autorun(function(){
+      const user = Meteor.user();
+      self.setState({ user: user })
+    })
+  }
+
+  componentWillUnmount(){
+    this.autorunAuth && this.autorunAuth.stop();
   }
 
   render() {
@@ -48,7 +67,8 @@ export default class MapCommunityBox extends React.Component {
             handleAllUserGiveaways= { this.props.handleAllUserGiveaways }
             formatDate={ this.formatDate.bind(this) }
             isAllGa={ this.props.isAllGa }
-            showDateRange={ this.props.showDateRange } />
+            showDateRange={ this.props.showDateRange }
+            user={this.state.user} />
 
         </Scrollbars>
 

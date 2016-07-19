@@ -47,34 +47,32 @@ const giveawayRow = (touchTapHandler, editGa) => (ga) => (
 export const UserGiveaways = (props) => (
   <List>
     <Subheader>
-      <h3 style={{ margin:"20px 0px 10px" }}>User's Giveaways</h3>
+      <h3 style={{ margin:"20px 0px 10px" }}>Your Giveaways</h3>
       { props.showDateRange ? 
       <div>
         <Row>
           <Col xs={12} md={2}>
-          <span>From</span>
+            <span>From</span>
           </Col>
           <Col xs={12} md={2}>
-          <DatePicker
-          value={ props.userFromDate }
-          onChange={ props.handleUserFromDate }
-          formatDate={ props.formatDate }
-          textFieldStyle={ {width:"126px"}}
-          />
+            <DatePicker
+            value={ props.userFromDate }
+            onChange={ props.handleUserFromDate }
+            formatDate={ props.formatDate }
+            textFieldStyle={ {width:"105px", fontSize:"14px"}} />
           </Col>
         </Row>
 
         <Row style={{paddingBottom:"10px"}}>
           <Col xs={12} md={2}>
-          <span>Until</span>
+            <span>Until</span>
           </Col>
           <Col xs={12} md={2}>
-          <DatePicker
-          value={ props.userUntilDate }
-          onChange={ props.handleUserUntilDate }
-          formatDate={ props.formatDate }
-          textFieldStyle={ {width:"126px"}}
-          />
+            <DatePicker
+            value={ props.userUntilDate }
+            onChange={ props.handleUserUntilDate }
+            formatDate={ props.formatDate }
+            textFieldStyle={ {width:"105px", fontSize:"14px"}} />
           </Col>
         </Row>
         </div>
@@ -83,10 +81,10 @@ export const UserGiveaways = (props) => (
       }
 
       <Row>
-        <Col xs={12} md={7}>
+        <Col xs={12} md={6}>
         <Toggle
         labelStyle= {{fontWeight:200}}
-        label="All my giveaways"
+        label="All giveaways"
         onToggle={ props.handleAllUserGiveaways }
         />
         </Col>

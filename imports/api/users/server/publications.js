@@ -8,6 +8,7 @@ const userPublicFields = {
   'services.google.picture': true,
   homeLocation: true,
   homeCommunityId: true,
+  communityIds: true
 };
 
 Meteor.publish('user-data', function() {
@@ -25,5 +26,7 @@ Meteor.publish('user-by-id', function(userId) {
 
 Meteor.publish('userIds-by-commId', function(commId) {
   check(commId, Match._id);
-  return Meteor.users.find({communityIds: commId}, {_id: true});
+  return Meteor.users.find({communityIds: commId}, {
+    _id: true
+  });
 });
