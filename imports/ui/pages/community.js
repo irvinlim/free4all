@@ -74,6 +74,10 @@ export class Community extends React.Component {
     this.setState({ nearbyBoxState: x });
   }
 
+  setMapCenter(mapCenter){
+    this.setState({ mapCenter: mapCenter })
+  }
+
   componentDidMount() {
     const self = this;
     
@@ -205,7 +209,7 @@ export class Community extends React.Component {
           infoBoxState={ this.state.infoBoxState }
           markerOnClick={ gaId => this.selectGa(gaId) }
           mapCenter={ this.state.mapCenter }
-          setMapCenter={ mapCenter => this.setState({ mapCenter: mapCenter }) }
+          setMapCenter={ this.setMapCenter.bind(this) }
           mapZoom={ this.state.mapZoom }
           setMapZoom={ mapZoom => this.setState({ mapZoom: mapZoom })}
           setMapMaxZoom={ mapMaxZoom => this.setState({ mapMaxZoom: mapMaxZoom })}
@@ -237,7 +241,8 @@ export class Community extends React.Component {
             handleUserUntilDate={ this.handleUserUntilDate.bind(this) }
             handleUserFromDate={ this.handleUserFromDate.bind(this) }
             handleAllUserGiveaways={ this.handleAllUserGiveaways.bind(this) }
-            showDateRange={ this.state.showDateRange } />
+            showDateRange={ this.state.showDateRange }
+            setMapCenter={ this.setMapCenter.bind(this) } />
         </div>
 
         <div id="map-floating-buttons" style={{ right: 20 + (this.state.nearbyBoxState > 0 ? $("#map-nearby-box").outerWidth() : 0) }}>

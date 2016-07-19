@@ -7,30 +7,35 @@ import { Communities } from '../../../api/communities/communities';
 import * as LatLngHelper from '../../../util/latlng';
 
 const composer = (props, onData) => {
-  if(!props.user) return  
+  if(!props.user) 
+    return  
   if(Meteor.subscribe('userIds-by-commId', props.communityId).ready()){
-
     const users = Meteor.users.find({ communityIds: props.communityId}).fetch();
     const userIds = users.map(user => user._id);
 
-    if(userIds.length>0 && Meteor.subscribe('users-giveaways-within-date', 
-      props.userFromDate, props.userUntilDate, props.isAllGa, userIds).ready()){
-
+    if(Meteor.subscribe('community-by-id', props.communityId).ready()){
+      const community = Communities.findOne(props.communityId);
       let giveaways = [];
-      const findParams = {
-        startDateTime:  { $gte: props.userFromDate },
-        endDateTime:    {  $lt: props.userUntilDate },
-        userId:         {  $in: userIds }
-      };
 
-      if(props.isAllGa)
-        giveaways = Giveaways.find({ userId: {$in: userIds}})
-      else
-        giveaways = Giveaways.find(findParams);
+      if(Meteor.subscribe('users-giveaways-within-date', 
+        props.userFromDate, props.userUntilDate, props.isAllGa, userIds).ready()){
+        const findParams = {
+          startDateTime:  { $gte: props.userFromDate },
+          endDateTime:    {  $lt: props.userUntilDate },
+          userId:         {  $in: userIds }
+        };
+        if(props.isAllGa)
+          giveaways = Giveaways.find({ userId: { $in: userIds } })
+        else
+          giveaways = Giveaways.find(findParams);
 
-      if(Meteor.subscribe('community-by-id', props.communityId).ready()){
-        const community = Communities.findOne(props.communityId);
-
+        onData(null, {
+          community: community,
+          giveaways: giveaways,
+          nearbyOnClick: props.nearbyOnClick,
+          user: props.user,
+        });
+      } else {
         onData(null, {
           community: community,
           giveaways: giveaways,

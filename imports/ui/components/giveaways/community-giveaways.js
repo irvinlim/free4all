@@ -9,12 +9,20 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import DatePicker from 'material-ui/DatePicker';
 import Toggle from 'material-ui/Toggle';
+import { joinCommunity, leaveCommunity } from '../../../api/users/methods'
 
 import * as Helper from '../../../util/helper';
 import * as AvatarHelper from '../../../util/avatar';
 import * as GiveawaysHelper from '../../../util/giveaways';
 import * as Colors from 'material-ui/styles/colors';
 import * as IconsHelper from '../../../util/icons';
+
+const joinCommunityHandler = (payload) => {
+  joinCommunity.call(payload);
+}
+const leaveCommunityHandler = (payload) => {
+  leaveCommunity.call(payload);
+}
 
 const giveawayRow = (touchTapHandler, editGa) => (ga) => (
   <ListItem
@@ -55,10 +63,12 @@ export const CommunityGiveaways = (props) => (
         { props.user ?
            props.user.communityIds && props.user.communityIds.indexOf(props.community._id) > -1 ?
             <FlatButton 
+              onTouchTap={ leaveCommunityHandler.bind(this, { userId: props.user._id, commId: props.community._id} )}
               label="Leave Community" 
               className="leaveComm" />
             :
             <RaisedButton 
+              onTouchTap={ joinCommunityHandler.bind(this, { userId: props.user._id, commId: props.community._id} )}
               style={{height: "48px"}} 
               label="Join Community" 
               className="joinComm" 

@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { ValidatedMethod } from 'meteor/mdg:validated-method';
 
+import { Communities } from '../communities/communities';
 import { propExistsDeep } from '../../util/helper';
 import * as UsersHelper from '../../util/users';
 
@@ -70,4 +71,42 @@ export const updateProfileIVLE = new ValidatedMethod({
       if (propExistsDeep(user, ['services', 'ivle', 'name']))
         Meteor.users.update( { _id: user._id }, { $set: { 'profile.firstName': user.services.ivle.name } });
   },
+});
+
+export const joinCommunity = new ValidatedMethod({
+  name: 'users.joinCommunity',
+  validate: new SimpleSchema({
+    commId:{ type: String },
+    userId:{ type: String }
+  }).validator(),
+  run({ commId, userId }){
+    const user = Meteor.users.findOne(userId);
+
+    if (!user)
+      return;
+
+    if(!user.communityIds || user.communityIds.indexOf(commId) === -1){
+      Meteor.users.update( { _id: user._id }, { $push: { 'communityIds': commId } });
+      Communities.update( { _id: commId }, {$inc: {'count': 1}})
+    }
+  }
+});
+
+export const leaveCommunity = new ValidatedMethod({
+  name: 'users.leaveCommunity',
+  validate: new SimpleSchema({
+    commId:{ type: String },
+    userId:{ type: String }
+  }).validator(),
+  run({ commId, userId }){
+    const user = Meteor.users.findOne(userId);
+
+    if (!user)
+      return;
+
+    if(!user.communityIds || user.communityIds.indexOf(commId) > -1){
+      Meteor.users.update( { _id: user._id }, { $pull: { 'communityIds': commId } });
+      Communities.update( { _id: commId }, {$inc: {'count': -1}})
+    } 
+  }
 });
