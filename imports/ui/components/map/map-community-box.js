@@ -53,6 +53,7 @@ export default class MapCommunityBox extends React.Component {
       console.log(self.props.communityId)
       self.commSubscription = Meteor.subscribe('community-by-id', self.props.communityId, function(){
         const comm = Communities.findOne(self.props.communityId);
+        // setTimeout due to initial coords at nus
         Meteor.setTimeout(function(){
           self.props.setMapCenter(comm.coordinates)
           self.props.setMapZoom(comm.zoom)

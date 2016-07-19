@@ -12,38 +12,35 @@ const composer = (props, onData) => {
   if(Meteor.subscribe('userIds-by-commId', props.communityId).ready()){
     const users = Meteor.users.find({ communityIds: props.communityId}).fetch();
     const userIds = users.map(user => user._id);
+    const community = Communities.findOne(props.communityId);
+    let giveaways = [];
 
-    // if(Meteor.subscribe('community-by-id', props.communityId).ready()){
-      const community = Communities.findOne(props.communityId);
-      let giveaways = [];
+    if(Meteor.subscribe('users-giveaways-within-date', 
+      props.userFromDate, props.userUntilDate, props.isAllGa, userIds).ready()){
+      const findParams = {
+        startDateTime:  { $gte: props.userFromDate },
+        endDateTime:    {  $lt: props.userUntilDate },
+        userId:         {  $in: userIds }
+      };
+      if(props.isAllGa)
+        giveaways = Giveaways.find({ userId: { $in: userIds } })
+      else
+        giveaways = Giveaways.find(findParams);
 
-      if(Meteor.subscribe('users-giveaways-within-date', 
-        props.userFromDate, props.userUntilDate, props.isAllGa, userIds).ready()){
-        const findParams = {
-          startDateTime:  { $gte: props.userFromDate },
-          endDateTime:    {  $lt: props.userUntilDate },
-          userId:         {  $in: userIds }
-        };
-        if(props.isAllGa)
-          giveaways = Giveaways.find({ userId: { $in: userIds } })
-        else
-          giveaways = Giveaways.find(findParams);
-
-        onData(null, {
-          community: community,
-          giveaways: giveaways,
-          nearbyOnClick: props.nearbyOnClick,
-          user: props.user,
-        });
-      } else {
-        onData(null, {
-          community: community,
-          giveaways: giveaways,
-          nearbyOnClick: props.nearbyOnClick,
-          user: props.user,
-        });
-      }
-    // }
+      onData(null, {
+        community: community,
+        giveaways: giveaways,
+        nearbyOnClick: props.nearbyOnClick,
+        user: props.user,
+      });
+    } else {
+      onData(null, {
+        community: community,
+        giveaways: giveaways,
+        nearbyOnClick: props.nearbyOnClick,
+        user: props.user,
+      });
+    }
   }
 };
 export default composeWithTracker(composer, Loading)(CommunityGiveaways);

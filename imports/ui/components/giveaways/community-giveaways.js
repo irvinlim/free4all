@@ -6,10 +6,11 @@ import Subheader from 'material-ui/Subheader';
 import Avatar from 'material-ui/Avatar';
 import IconButton from 'material-ui/IconButton';
 import RaisedButton from 'material-ui/RaisedButton';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
 import FlatButton from 'material-ui/FlatButton';
 import DatePicker from 'material-ui/DatePicker';
 import Toggle from 'material-ui/Toggle';
-import { joinCommunity, leaveCommunity } from '../../../api/users/methods'
+import { joinCommunity, leaveCommunity, setHomeCommunity } from '../../../api/users/methods'
 
 import * as Helper from '../../../util/helper';
 import * as AvatarHelper from '../../../util/avatar';
@@ -22,6 +23,10 @@ const joinCommunityHandler = (payload) => {
 }
 const leaveCommunityHandler = (payload) => {
   leaveCommunity.call(payload);
+}
+
+const setHomeCommHandler = (payload) => {
+  setHomeCommunity.call(payload);
 }
 
 const giveawayRow = (touchTapHandler, editGa) => (ga) => (
@@ -51,14 +56,43 @@ const giveawayRow = (touchTapHandler, editGa) => (ga) => (
 export const CommunityGiveaways = (props) => (
   <List>
     <Subheader>
-      <h3 style={{ margin:"20px 0px 10px" }}>{props.community.name}</h3>
+      <h3 style={{ margin:"20px 0px 0px" }}>{props.community.name}</h3>
       <Row>
         <Col xs={12}>
-          <span className="lines-1">{ props.community.description }</span>
+          <div>{ props.community.description }</div>
+          <div style={{marginTop:"-30px"}}>
+            { props.community.count + ' ' + Helper.pluralizer(props.community.count,"member", "members")} 
+          </div>
         </Col>
       </Row>
-
       <Row>
+        <Col xs={5} style={{padding: "0 0 0 15px"}}>
+        { props.user ?
+           props.user.homeCommunityId && props.user.homeCommunityId == props.community._id ?
+           <FlatButton
+             label="Home"
+             icon={ IconsHelper.materialIcon("home") } />
+           :
+           <RaisedButton 
+             style={{height: "48px"}}
+             onTouchTap={ setHomeCommHandler.bind(this, { userId: props.user._id, community: props.community }) }
+             primary={true}
+             label="Set Home"
+             icon={ IconsHelper.materialIcon("home") } />
+          :
+          <div>
+            <IconButton
+              tooltip="Register to save home community!"
+              tooltipPosition="bottom-right"
+              style={{ zIndex: 1, position: "absolute", width:"75%" }} />
+            <RaisedButton 
+              style={{height: "48px"}}
+              label="Set home" 
+              disabled={true} />
+          </div>
+
+        }
+        </Col>
         <Col xs={7}>
         { props.user ?
            props.user.communityIds && props.user.communityIds.indexOf(props.community._id) > -1 ?
@@ -86,11 +120,7 @@ export const CommunityGiveaways = (props) => (
           </div>
         }
         </Col>
-        <Col xs={5}>
-          <span>{props.community.count + ' ' + Helper.pluralizer(props.community.count,"member", "members")} </span>
-        </Col>
       </Row>
-
       <hr />
       <h3 style={{ margin:"20px 0px 10px" }}>{props.community.name} Giveaways</h3>
 

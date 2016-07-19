@@ -110,3 +110,22 @@ export const leaveCommunity = new ValidatedMethod({
     } 
   }
 });
+
+export const setHomeCommunity = new ValidatedMethod({
+  name: 'users.setHomeCommunity',
+  validate: new SimpleSchema({
+    community:{ type: Object, blackbox: true},
+    userId:{ type: String },
+  }).validator(),
+  run({ community, userId }){
+    const user = Meteor.users.findOne(userId);
+
+    if (!user)
+      return;
+
+    Meteor.users.update({ _id: user._id }, {$set: {
+      'homeLocation': community.coordinates,
+      'homeCommunityId': community._id
+    }});
+  }
+});
