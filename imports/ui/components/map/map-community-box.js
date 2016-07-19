@@ -50,7 +50,6 @@ export default class MapCommunityBox extends React.Component {
     })
 
     this.autorunSub = Tracker.autorun(function(){
-      console.log(self.props.communityId)
       self.commSubscription = Meteor.subscribe('community-by-id', self.props.communityId, function(){
         const comm = Communities.findOne(self.props.communityId);
         // setTimeout due to initial coords at nus

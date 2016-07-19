@@ -7,13 +7,17 @@ import { Communities } from '../../../api/communities/communities';
 import * as LatLngHelper from '../../../util/latlng';
 
 const composer = (props, onData) => {
-  if(!props.user) 
-    return  
   if(Meteor.subscribe('userIds-by-commId', props.communityId).ready()){
     const users = Meteor.users.find({ communityIds: props.communityId}).fetch();
     const userIds = users.map(user => user._id);
     const community = Communities.findOne(props.communityId);
     let giveaways = [];
+
+    if(!props.user)
+      props.user = null;
+
+    console.log(props.user)
+
 
     if(Meteor.subscribe('users-giveaways-within-date', 
       props.userFromDate, props.userUntilDate, props.isAllGa, userIds).ready()){

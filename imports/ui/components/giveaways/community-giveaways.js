@@ -88,6 +88,7 @@ export const CommunityGiveaways = (props) => (
             <RaisedButton 
               style={{height: "48px"}}
               label="Set home" 
+              icon={ IconsHelper.materialIcon("home") }
               disabled={true} />
           </div>
 
