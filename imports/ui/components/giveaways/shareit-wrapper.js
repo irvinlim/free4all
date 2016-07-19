@@ -13,7 +13,7 @@ export default class ShareItWrapper extends React.Component {
       description: ga.description,
     };
 
-    this.view = Blaze.renderWithData(Template.shareit, { shareData }, ReactDOM.findDOMNode(this.refs.container));
+    this.view = Blaze.renderWithData(Template.shareit, shareData, ReactDOM.findDOMNode(this.refs.container));
   }
 
   componentWillUnmount() {
