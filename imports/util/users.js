@@ -30,7 +30,7 @@ export const getFullName = (user) => {
   else if (firstName)
     return firstName;
   else
-    return "";
+    return "Someone";
 };
 
 export const getFullNameWithLabelIfEqual = (user, user2, label) => {
