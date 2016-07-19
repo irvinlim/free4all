@@ -19,12 +19,14 @@ Meteor.publish('communities-search', function(props) {
   else if (props.sort == "smallest-first")
   	_.extend(options.fields, { sort: { count: 1 } });
 
-  // Full-text search
   if (props.searchQuery) {
     selector.$text = { $search: props.searchQuery };
     options.fields = _.extend(options.fields, { score: { $meta: 'textScore' } });
   }
 
+  if(props.user && props.user.communityIds){
+    _.extend(selector, {_id: {$in: props.user.communityIds} });
+  }
 
   return Communities.find(selector, options);
 });

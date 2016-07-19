@@ -15,11 +15,6 @@ import * as ImagesHelper from '../../../util/images';
 let communities = [];
 let props = {};
 
-const photoAvatar = (comm) => (
-  <div className="photo-avatar" style={{ backgroundImage: 'url(' + AvatarHelper.getUrl(comm.pictureId, 350) + ')' }}>
-  </div>
-);
-
 const listItemRow = (comm) => (
   <Paper key={ comm._id } style={{ marginBottom: 20 }} 
     className="giveaway giveaway-timeline-item" 
