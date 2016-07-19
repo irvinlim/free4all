@@ -1,10 +1,7 @@
+@import "../common/_mixins";
+
 .schoolCommunity{
-    height: auto;
-    width: 75%;
-    >g{
-	    transition: 1s;
-    	&:hover{
-	    	fill: #3F51B5;
-	    }
-	}
+  height: auto; width: 75%; cursor: pointer;
+  & > g { @include transition-standard(fill 225ms); }
+  &:hover > g { fill: #3F51B5; }
 }
