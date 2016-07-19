@@ -13,7 +13,7 @@ const composer = (props, onData) => {
     const users = Meteor.users.find({ communityIds: props.communityId}).fetch();
     const userIds = users.map(user => user._id);
 
-    if(Meteor.subscribe('community-by-id', props.communityId).ready()){
+    // if(Meteor.subscribe('community-by-id', props.communityId).ready()){
       const community = Communities.findOne(props.communityId);
       let giveaways = [];
 
@@ -43,7 +43,7 @@ const composer = (props, onData) => {
           user: props.user,
         });
       }
-    }
+    // }
   }
 };
 export default composeWithTracker(composer, Loading)(CommunityGiveaways);

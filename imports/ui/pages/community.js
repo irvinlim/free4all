@@ -242,7 +242,9 @@ export class Community extends React.Component {
             handleUserFromDate={ this.handleUserFromDate.bind(this) }
             handleAllUserGiveaways={ this.handleAllUserGiveaways.bind(this) }
             showDateRange={ this.state.showDateRange }
-            setMapCenter={ this.setMapCenter.bind(this) } />
+            setMapCenter={ this.setMapCenter.bind(this) } 
+            setMapZoom={ (mapZoom)=>{ this.setState({ mapZoom: mapZoom }) } }/>
+
         </div>
 
         <div id="map-floating-buttons" style={{ right: 20 + (this.state.nearbyBoxState > 0 ? $("#map-nearby-box").outerWidth() : 0) }}>

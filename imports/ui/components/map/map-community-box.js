@@ -1,6 +1,7 @@
 import React from 'react';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import { Scrollbars } from 'react-custom-scrollbars';
+import { Communities } from '../../../api/communities/communities';
 
 import CommunityGiveaways from '../../containers/giveaways/community-giveaways';
 
@@ -15,6 +16,8 @@ export default class MapCommunityBox extends React.Component {
     }
 
     this.autorunAuth = null;
+    this.autorunSub = null;
+    this.commSubscription = null;
   }
 
   positionBoxes() {
@@ -45,10 +48,24 @@ export default class MapCommunityBox extends React.Component {
       const user = Meteor.user();
       self.setState({ user: user })
     })
+
+    this.autorunSub = Tracker.autorun(function(){
+      console.log(self.props.communityId)
+      self.commSubscription = Meteor.subscribe('community-by-id', self.props.communityId, function(){
+        const comm = Communities.findOne(self.props.communityId);
+        Meteor.setTimeout(function(){
+          self.props.setMapCenter(comm.coordinates)
+          self.props.setMapZoom(comm.zoom)
+        }, 500);
+      });
+    })
+    
   }
 
   componentWillUnmount(){
     this.autorunAuth && this.autorunAuth.stop();
+    this.autorunSub && this.autorunSub.stop();
+    this.commSubscription && this.commSubscription.stop();
   }
 
   render() {
