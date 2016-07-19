@@ -45,6 +45,7 @@ export class Index extends React.Component {
       rGeoLoading: false,
       isHomeLocOpen: false,
       homeLocation: null,
+      homeZoom: null,
     };
 
     this.mapBounds = new ReactiveVar( null );
@@ -52,6 +53,7 @@ export class Index extends React.Component {
     this.subscription = null;
     this.autorunSub = null;
     this.autorunGeo = null;
+    this.autorunHome = null;
     this.autorunAuth = null;
   }
 
@@ -102,21 +104,33 @@ export class Index extends React.Component {
       const user = Meteor.user();
       if(user){
         self.setState({ isAuthenticated: true });
-        if(user.homeLocation){
+        if(user.homeLocation && user.homeZoom){
           // homeLocation state is for goToHomeLocation Button
-          self.setState({ homeLocation: user.homeLocation });
+          self.setState({ homeLocation: user.homeLocation, homeZoom: user.homeZoom });
           // homeLocation session is for initial map center
-          Session.setPersistent('homeLocation', user.homeLocation);
+          Session.setPersistent('homeLocation', { coordinates: user.homeLocation, zoom: user.homeZoom });
         }
+      } else {
+        self.setState( {isAuthenticated: false });
       }
     });
 
+    this.autorunHome = Tracker.autorun(function(){
+      let homeLoc = Session.get('homeLocation');
+      if(homeLoc)
+        self.setState({ 
+          homeLocation: homeLoc.coordinates, 
+          homeZoom: homeLoc.zoom 
+        })
+    });
+
     // Set initial map center for returning visitor, open dialog if not set
-    const homeLocation = Session.get('homeLocation');
-    if(homeLocation){
+    let homeLoc = Session.get('homeLocation');
+    if(homeLoc){
       self.setState({ 
-        mapCenter: homeLocation, 
-        homeLocation: homeLocation
+        mapCenter: homeLoc.coordinates, 
+        homeLocation: homeLoc.coordinates,
+        mapZoom: homeLoc.zoom
       })
     } else {
       self.setState({ isHomeLocOpen: true })
@@ -127,6 +141,7 @@ export class Index extends React.Component {
   componentWillUnmount() {
     this.subscription && this.subscription.stop();
     this.autorunSub && this.autorunSub.stop();
+    this.autorunHome && this.autorunHome.stop();
     this.autorunGeo && this.autorunGeo.stop();
     this.autorunAuth && this.autorunAuth.stop();
   }
@@ -136,7 +151,10 @@ export class Index extends React.Component {
   }
 
   goToHomeLoc(){
-    this.setState({ mapCenter: this.state.homeLocation });
+    this.setState({ 
+      mapCenter: this.state.homeLocation, 
+      mapZoom: this.state.homeZoom 
+    });
   }
 
   openInsertDialog(features, coords, removeDraggable) {
@@ -180,27 +198,28 @@ export class Index extends React.Component {
   }
 
   setHomeLoc(uniName){
-    let coords;
+    let coords, zoom;
     this.setState({ isHomeLocOpen: false });
     switch(uniName){
       case 'nus':
         coords = [1.2993372,103.777426];
-        Session.setPersistent('homeLocation', coords);
-        this.setState({ mapCenter: coords, homeLocation: coords});
-        this.setState({ mapZoom: 16});
+        zoom = 16
+        Session.setPersistent('homeLocation', {coordinates: coords, zoom: zoom});
+        this.setState({ mapZoom: zoom, mapCenter: coords, homeLocation: coords, homeZoom: zoom});
         // TODO: go to the community route instead of setting mapcenter and zoom
         break;
       case 'ntu':
         coords = [1.3484298,103.6837826];
-        Session.setPersistent('homeLocation', coords);
-        this.setState({ mapCenter: coords, homeLocation: coords});
-        this.setState({ mapZoom: 16});
+        zoom = 16
+        Session.setPersistent('homeLocation', {coordinates: coords, zoom: zoom});
+        this.setState({ mapZoom: zoom, mapCenter: coords, homeLocation: coords, homeZoom: zoom});
+
         break;
       case 'smu':
         coords = [1.2969614,103.8513713];
-        Session.setPersistent('homeLocation', coords);
-        this.setState({ mapCenter: coords, homeLocation: coords});
-        this.setState({ mapZoom: 18});
+        zoom = 18
+        Session.setPersistent('homeLocation', {coordinates: coords, zoom: zoom});
+        this.setState({ mapZoom: zoom, mapCenter: coords, homeLocation: coords, homeZoom: zoom});
         break;
       default:
         break;
@@ -271,7 +290,7 @@ export class Index extends React.Component {
 
               <GoToHomeButton
                 goToHomeLoc = { this.goToHomeLoc.bind(this) }
-                homeLocation = { this.state.homeLocation }/>
+                homeLocation = { this.state.homeLocation } />
 
               { this.state.isAuthenticated ?
               <InsertBtnDialog

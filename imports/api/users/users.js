@@ -116,6 +116,10 @@ Schema.User = new SimpleSchema({
     label: 'Array of coordinates in MongoDB style \[Lng, Lat\]',
     optional: true
   },
+  homeZoom:{
+    type: Number,
+    optional: true
+  },
   homeCommunityId: {
     type: String,
     regEx: SimpleSchema.RegEx.Id,

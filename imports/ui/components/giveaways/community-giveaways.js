@@ -26,6 +26,11 @@ const leaveCommunityHandler = (payload) => {
 }
 
 const setHomeCommHandler = (payload) => {
+  Session.setPersistent('homeLocation', {
+    coordinates: payload.community.coordinates, 
+    zoom: payload.community.zoom
+  })
+
   setHomeCommunity.call(payload);
 }
 

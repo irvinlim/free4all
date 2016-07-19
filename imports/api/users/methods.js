@@ -124,8 +124,9 @@ export const setHomeCommunity = new ValidatedMethod({
       return;
 
     Meteor.users.update({ _id: user._id }, {$set: {
+      'homeCommunityId': community._id,
       'homeLocation': community.coordinates,
-      'homeCommunityId': community._id
+      'homeZoom': community.zoom
     }});
   }
 });
