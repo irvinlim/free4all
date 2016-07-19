@@ -10,34 +10,36 @@ import * as Helper from '../../../util/helper';
 import * as GiveawaysHelper from '../../../util/giveaways';
 import * as AvatarHelper from '../../../util/avatar';
 import * as IconsHelper from '../../../util/icons';
+import * as ImagesHelper from '../../../util/images';
 
 let communities = [];
 let props = {};
 
-// const photoAvatar = (ga) => (
-//   <div className="photo-avatar" style={{ backgroundImage: 'url(' + AvatarHelper.getUrl(ga.avatarId, 350) + ')' }}>
-//   </div>
-// );
-
-// const iconAvatar = (ga) => (
-//   <div className="icon-avatar" style={{ backgroundColor: GiveawaysHelper.getStatusColor(ga) }}>
-//     { GiveawaysHelper.getCategoryIcon(ga, { color: Colors.grey50 }) }
-//   </div>
-// );
+const photoAvatar = (comm) => (
+  <div className="photo-avatar" style={{ backgroundImage: 'url(' + AvatarHelper.getUrl(comm.pictureId, 350) + ')' }}>
+  </div>
+);
 
 const listItemRow = (comm) => (
   <Paper key={ comm._id } style={{ marginBottom: 20 }} 
     className="giveaway giveaway-timeline-item" 
     onTouchTap={ (event) => browserHistory.push('/community/' + comm._id) }>
     
-    <div className="flex-row">
-      <div className="col nopad col-xs-4 col-sm-3">
-      { comm.website }
+    <div className="flex-row" style={{padding: "45px 0"}}>
+      <div className="col somepad col-xs-4 col-sm-3">
+        <div className="photo-avatar-community" style={{ backgroundImage: 'url('+ ImagesHelper.getUrlScale(comm.pictureId, 350) +')'}}>
+        </div>
       </div>
-      <div className="col col-xs-8 col-sm-9">
+      <div className="col col-xs-5 col-sm-7">
         <h3 className="lines-1">{ comm.name }</h3>
-        <h3 className="lines-1">{ comm.count }</h3>
+        <p className="lines-1">{ comm.description }</p>
+        <p className="small-text lines-1">{ comm.website }</p>
       </div>
+      <div className="col col-xs-3 col-sm-2">
+        <h3 className="description">{ comm.count }</h3>
+        <p className="small-text">{ Helper.pluralizer(comm.count, "member", "members") }</p>
+      </div>
+
 
     </div>
   </Paper>

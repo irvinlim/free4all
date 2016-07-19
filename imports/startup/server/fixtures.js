@@ -28,9 +28,9 @@ users.forEach(({ email, password, profile, roles }) => {
     
     // Default communities
     const default_communities = [
-      { name: "NUS", ownerId: userId, count:1, pictureId: "zx2viu", website: "http://nus.edu.sg", coordinates: [1.2993372,103.777426], zoom: 16, mapURL: "https://api.mapbox.com/styles/v1/leonmak/ciqri7cxi0004c3neujg0demt/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibGVvbm1hayIsImEiOiJkNzQ3YWVlZDczYjMxNjhhMjVhZWI4OWFkM2I2MWUwOCJ9.uL_x_vTDIse10HSvMb6XIg"},
-      { name: "NTU", ownerId: userId, count:1, pictureId: "cbk4vh", website: "http://ntu.edu.sg", coordinates: [1.3484298,103.6837826], zoom: 16, mapURL: "https://api.mapbox.com/styles/v1/leonmak/cilzxkl5400hrcglvjxu6qxpz/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibGVvbm1hayIsImEiOiJkNzQ3YWVlZDczYjMxNjhhMjVhZWI4OWFkM2I2MWUwOCJ9.uL_x_vTDIse10HSvMb6XIg"},
-      { name: "SMU", ownerId: userId, count:1, pictureId: "xfitp3", website: "http://smu.edu.sg", coordinates: [1.2969614,103.8513713], zoom: 18, mapURL: "https://api.mapbox.com/styles/v1/leonmak/ciqri96i70002cbnhztwxix8a/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibGVvbm1hayIsImEiOiJkNzQ3YWVlZDczYjMxNjhhMjVhZWI4OWFkM2I2MWUwOCJ9.uL_x_vTDIse10HSvMb6XIg"},
+      { name:"NUS", description: "National University of Singapore", ownerId: userId, count:1, pictureId: "nuslogo_zx2viu_cckvxo", website: "http://nus.edu.sg", coordinates: [1.2993372,103.777426], zoom: 16, mapURL: "https://api.mapbox.com/styles/v1/leonmak/ciqri7cxi0004c3neujg0demt/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibGVvbm1hayIsImEiOiJkNzQ3YWVlZDczYjMxNjhhMjVhZWI4OWFkM2I2MWUwOCJ9.uL_x_vTDIse10HSvMb6XIg"},
+      { name:"NTU", description: "Nanyang Technological University of Singapore", ownerId: userId, count:1, pictureId: "ntulogo_cbk4vh", website: "http://ntu.edu.sg", coordinates: [1.3484298,103.6837826], zoom: 16, mapURL: "https://api.mapbox.com/styles/v1/leonmak/cilzxkl5400hrcglvjxu6qxpz/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibGVvbm1hayIsImEiOiJkNzQ3YWVlZDczYjMxNjhhMjVhZWI4OWFkM2I2MWUwOCJ9.uL_x_vTDIse10HSvMb6XIg"},
+      { name:"SMU", description: "Singapore Management University", ownerId: userId, count:1, pictureId: "smulogo_xfitp3", website: "http://smu.edu.sg", coordinates: [1.2969614,103.8513713], zoom: 18, mapURL: "https://api.mapbox.com/styles/v1/leonmak/ciqri96i70002cbnhztwxix8a/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibGVvbm1hayIsImEiOiJkNzQ3YWVlZDczYjMxNjhhMjVhZWI4OWFkM2I2MWUwOCJ9.uL_x_vTDIse10HSvMb6XIg"},
     ];
 
     default_communities.forEach(comm => {

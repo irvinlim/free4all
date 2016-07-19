@@ -23,5 +23,6 @@ html, html body { background-color: #eef0f3; height: 100%; }
   .col {
     padding: 0 15px; float: none !important;
     &.nopad { padding: 0; margin: -15px 0; }
+    &.somepad { padding: 18px; margin: -15px 0; }
   }
 }

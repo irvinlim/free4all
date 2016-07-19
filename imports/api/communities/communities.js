@@ -9,6 +9,10 @@ Communities.schema = new SimpleSchema({
     type: String,
     label: 'Community name'
   },
+  description: {
+    type: String,
+    label: 'Community description'
+  },
   pictureId: {
     type: String,
     label: 'Public ID of Cloudinary image'

@@ -88,3 +88,6 @@ export const shadeColor = (color, factor) => {
 
   return "#" + RR + GG + BB;
 };
+
+// Pluralizer
+export const pluralizer = (number, singular, plural) => number > 1 ? plural : singular;
