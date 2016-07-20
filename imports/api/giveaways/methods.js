@@ -8,6 +8,10 @@ export const insertGiveaway = new ValidatedMethod({
   name: 'giveaways.insert',
   validate: GiveawaysDataSchema.validator(),
   run(giveaway) {
+    if (!this.userId)
+      throw new Meteor.Error("giveaways.insertGiveaway.notLoggedIn", "Must be logged in to insert giveaway.");
+
+    // Insert giveaway
     return Giveaways.insert(giveaway);
   },
 });
@@ -19,6 +23,14 @@ export const updateGiveaway = new ValidatedMethod({
     validator(payload.update);
   },
   run({ _id, update }) {
+    const giveaway = Giveaways.findOne(_id);
+
+    if (!this.userId)
+      throw new Meteor.Error("giveaways.updateGiveaway.notLoggedIn", "Must be logged in to update giveaway.");
+    else if (!giveaway)
+      throw new Meteor.Error("giveaways.updateGiveaway.undefinedGiveaway", "No such Giveaway found.");
+
+    // Update giveaway
     Giveaways.update(_id, { $set: update });
   },
 });
@@ -29,7 +41,26 @@ export const removeGiveaway = new ValidatedMethod({
     _id: { type: String },
   }).validator(),
   run({ _id }) {
-    Giveaways.remove(_id);
+    const giveaway = Giveaways.findOne(giveawayId);
+
+    if (!this.userId)
+      throw new Meteor.Error("giveaways.removeGiveaway.notLoggedIn", "Must be logged in to remove giveaway.");
+    else if (!giveaway)
+      throw new Meteor.Error("giveaways.removeGiveaway.undefinedGiveaway", "No such Giveaway found.");
+    else if (giveaway.isRemoved)
+      throw new Meteor.Error("giveaways.removeGiveaway.alreadyRemoved", "Giveaway already removed.");
+
+    // Update removed flag, removeUser ID and removeDate
+    Giveaways.update({
+      _id: _id,
+      isRemoved: { $ne: true }
+    }, {
+      $set: {
+        isRemoved: true,
+        removeUserId: this.userId,
+        removeDate: new Date()
+      }
+    });
   },
 });
 
@@ -39,7 +70,25 @@ export const removeGiveawayGroup = new ValidatedMethod({
     batchId: { type: String },
   }).validator(),
   run({ batchId }) {
-    Giveaways.remove({batchId: batchId});
+    const giveaways = Giveaways.find(batchId);
+
+    if (!this.userId)
+      throw new Meteor.Error("giveaways.removeGiveawayGroup.notLoggedIn", "Must be logged in to remove giveaway.");
+    else if (!giveaways.count())
+      throw new Meteor.Error("giveaways.removeGiveawayGroup.undefinedGiveaway", "No such Giveaway found.");
+
+    // Update removed flag, removeUser ID and removedDate.
+    // Don't update giveaways that have already been previously removed.
+    Giveaways.update({
+      batchId: batchId,
+      isRemoved: { $ne: true }
+    }, {
+      $set: {
+        isRemoved: true,
+        removeUserId: this.userId,
+        removeDate: new Date()
+      }
+    });
   },
 });
 

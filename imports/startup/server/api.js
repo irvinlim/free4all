@@ -17,6 +17,9 @@ import '../../api/status-types/server/publications';
 import '../../api/giveaways/methods';
 import '../../api/giveaways/server/publications';
 
+import '../../api/giveaway-comments/methods';
+import '../../api/giveaway-comments/server/publications';
+
 import '../../api/communities/methods';
 import '../../api/communities/server/publications';
 

@@ -71,7 +71,7 @@ const AllUpdates = ({ statusUpdates, owner }) => (
         autoHide
         autoHeight
         autoHeightMin={22}
-        autoHeightMax={300}>
+        autoHeightMax={150}>
         { statusUpdates.map(statusUpdateRow(owner)) }
       </Scrollbars>
     </div>

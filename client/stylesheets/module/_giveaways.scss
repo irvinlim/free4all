@@ -116,3 +116,12 @@
   &.pinterest-share { display: none; }
   &.shareit-google-colors { color: #fff; background: #D34836; }
 }
+
+.comments-list {
+  .comment-body {
+    h5.comment-username { margin: 0 0 5px; color: #212121; font-weight: 500; }
+    p.timestamp { margin: 5px 0 0; }
+  }
+}
+
+.add-comment-form, .comment-row { padding: 12px 0; }

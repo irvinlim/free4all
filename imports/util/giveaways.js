@@ -135,3 +135,6 @@ export const makeAvatar = (ga, size=64, style={}) => {
       </div>
     );
 };
+
+// Comments
+export const commentBody = (content) => content.length ? Helper.nl2br(content) : null;
