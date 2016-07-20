@@ -29,7 +29,7 @@ Meteor.publish('giveaways-on-screen', function(date, mapBounds) {
     },
     startDateTime:  { $lte: tomorrow, },    // Must be ongoing/starting in the next 24 hours
     endDateTime:    { $gt:  date, },        // Must not be over
-    deleted:        { $ne:  true },         // Must not be deleted (local deletion)
+    isRemoved:        { $ne:  true },       // Must not be deleted (local deletion)
   };
 
   return Giveaways.find(findParams);
@@ -76,7 +76,7 @@ Meteor.publish('giveaways-search', function(props) {
   const tomorrow = moment(now).add(1, 'd').toDate();
 
   const selector = {
-    deleted: { $ne:  true },  // Must not be deleted (local deletion)
+    isRemoved: { $ne:  true },  // Must not be deleted (local deletion)
   };
 
   const options = {

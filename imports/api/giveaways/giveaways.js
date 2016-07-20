@@ -105,9 +105,19 @@ export const GiveawaysDataSchema = new SimpleSchema({
     regEx: SimpleSchema.RegEx.Id,
     label: 'ID of User who posted this giveaway'
   },
-  deleted: {
+  isRemoved: {
     type: Boolean,
-    label: 'Locally deleted?',
+    label: 'Whether this giveaway has been removed',
+    defaultValue: false
+  },
+  removeUserId: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id,
+    label: 'ID of user who removed this giveaway'
+  },
+  removeDate: {
+    type: Date,
+    label: 'Date when giveaway was removed',
     optional: true
   },
   avatarId: {
