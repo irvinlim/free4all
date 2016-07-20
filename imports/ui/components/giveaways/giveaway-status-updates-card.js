@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import Paper from 'material-ui/Paper';
 import Subheader from 'material-ui/Subheader';
 import FlatButton from 'material-ui/FlatButton';
+import { Scrollbars } from 'react-custom-scrollbars';
 
 import * as Helper from '../../../util/helper';
 import * as GiveawaysHelper from '../../../util/giveaways';
@@ -66,7 +67,13 @@ const AllUpdates = ({ statusUpdates, owner }) => (
   <div className="all-updates">
     <Subheader>All status updates</Subheader>
     <div className="status-updates-list">
-      { statusUpdates.map(statusUpdateRow(owner)) }
+      <Scrollbars
+        autoHide
+        autoHeight
+        autoHeightMin={22}
+        autoHeightMax={300}>
+        { statusUpdates.map(statusUpdateRow(owner)) }
+      </Scrollbars>
     </div>
   </div>
 );
