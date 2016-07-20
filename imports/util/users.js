@@ -82,7 +82,7 @@ export const getAvatarUrl = (user, size=64) => {
     return AvatarHelper.getUrl(user.profile.avatarId, size);
   // Using Facebook Graph
   else if (propExistsDeep(user, ['services', 'facebook', 'id']))
-    return "http://graph.facebook.com/" + user.services.facebook.id + "/picture/?type=" + resolveFacebookAvatarSize(size);
+    return "https://graph.facebook.com/" + user.services.facebook.id + "/picture/?type=" + resolveFacebookAvatarSize(size);
   // Using Google+ profile picture (provided on first login)
   else if (propExistsDeep(user, ['services', 'google', 'picture']))
     return user.services.google.picture;
