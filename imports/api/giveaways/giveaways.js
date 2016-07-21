@@ -108,7 +108,8 @@ export const GiveawaysDataSchema = new SimpleSchema({
   isRemoved: {
     type: Boolean,
     label: 'Whether this giveaway has been removed',
-    defaultValue: false
+    defaultValue: false,
+    optional: true
   },
   removeUserId: {
     type: String,
