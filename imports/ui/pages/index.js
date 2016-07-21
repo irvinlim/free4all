@@ -28,7 +28,6 @@ export class Index extends React.Component {
 
     this.state = {
       // Properties
-      isAuthenticated: false,
       gaSelected: null,
       infoBoxState: 0,
       nearbyBoxState: 1,
@@ -46,6 +45,7 @@ export class Index extends React.Component {
       isHomeLocOpen: false,
       homeLocation: null,
       homeZoom: null,
+      user: null,
     };
 
     this.mapBounds = new ReactiveVar( null );
@@ -102,17 +102,13 @@ export class Index extends React.Component {
     // Autorun check user authenticated
     this.autorunAuth = Tracker.autorun(function() {
       const user = Meteor.user();
-      if(user){
-        self.setState({ isAuthenticated: true });
-        if(user.homeLocation && user.homeZoom){
-          // homeLocation state is for goToHomeLocation Button
-          self.setState({ homeLocation: user.homeLocation, homeZoom: user.homeZoom });
-          // homeLocation session is for initial map center
-          Session.setPersistent('homeLocation', { coordinates: user.homeLocation, zoom: user.homeZoom });
-        }
-      } else {
-        self.setState( {isAuthenticated: false });
+      if(user && user.homeLocation && user.homeZoom){
+        // homeLocation state is for goToHomeLocation Button
+        self.setState({ homeLocation: user.homeLocation, homeZoom: user.homeZoom });
+        // homeLocation session is for initial map center
+        Session.setPersistent('homeLocation', { coordinates: user.homeLocation, zoom: user.homeZoom });
       }
+      self.setState({user});
     });
 
     this.autorunHome = Tracker.autorun(function(){
@@ -292,7 +288,7 @@ export class Index extends React.Component {
                 goToHomeLoc = { this.goToHomeLoc.bind(this) }
                 homeLocation = { this.state.homeLocation } />
 
-              { this.state.isAuthenticated ?
+              { this.state.user ?
               <InsertBtnDialog
                 isModalOpen={this.state.isModalOpen}
                 openModal={ ()=>{this.setState({ isModalOpen: true })} }
@@ -304,7 +300,8 @@ export class Index extends React.Component {
                 stopDraggableAdded={ ()=>{this.setState({ isDraggableAdded: false })} }
                 hideMarkers={ ()=>{this.setState({ showMarkers: false })} }
                 resetLoc={ this.resetLoc.bind(this) }
-                mapCenter={ this.state.mapCenter } />
+                mapCenter={ this.state.mapCenter }
+                user={ this.state.user } />
               :
               <div>
                 <IconButton

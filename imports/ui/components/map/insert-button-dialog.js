@@ -249,7 +249,8 @@ export default class InsertBtnDialog extends React.Component {
       data.location = String(data.location);
       data.lng = parseFloat(data.lng);
       data.lat = parseFloat(data.lat);
-      data.userId = String(Meteor.userId());
+      data.userId = props.user._id;
+      data.removeUserId = props.user._id;
       data.batchId = shortId.generate();
       if (data.tile){
         data.avatarId = data.tile.res.public_id;

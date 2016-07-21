@@ -6,12 +6,10 @@ import { Loading } from '../../components/loading';
 import { Communities } from '../../../api/communities/communities';
 
 const composer = (props, onData) => {
-  if(!props.user || !props.user.communityIds)
-    return
-
+  
   const options = {};
 
-  if (Meteor.subscribe('communities-search', props).ready()) {
+  if (props.user && props.user.communityIds && Meteor.subscribe('communities-search', props).ready()) {
 
     if (props.searchQuery && props.sort == "most-relevant")
       options.sort = { score: { $meta: 'textScore' } };

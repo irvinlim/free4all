@@ -114,7 +114,8 @@ export const GiveawaysDataSchema = new SimpleSchema({
   removeUserId: {
     type: String,
     regEx: SimpleSchema.RegEx.Id,
-    label: 'ID of user who removed this giveaway'
+    label: 'ID of user who removed this giveaway',
+    optional: true
   },
   removeDate: {
     type: Date,
