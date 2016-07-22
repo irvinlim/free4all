@@ -20,9 +20,11 @@ const composer = (props, onData) => {
 
     const denormalizedComments = sortedComments.map(comment => {
       return {
+        _id: comment._id,
         user: Meteor.users.findOne(comment.userId),
         content: comment.content,
-        createdAt: comment.createdAt
+        createdAt: comment.createdAt,
+        updatedAt: comment.updatedAt,
       };
     });
 

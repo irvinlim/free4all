@@ -21,7 +21,81 @@ export const insertComment = new ValidatedMethod({
     else if (!ga)
       throw new Meteor.Error("giveawayComments.insertComment.undefinedGiveaway", "No such Giveaway found.");
 
-    // Insert giveaway
+    // Insert comment
     return GiveawayComments.insert({ giveawayId, userId, content });
+  },
+});
+
+export const editComment = new ValidatedMethod({
+  name: 'giveawayComments.edit',
+  validate: new SimpleSchema({
+    _id: { type: String },
+    userId: { type: String },
+    content: { type: String }
+  }).validator(),
+  run({ _id, userId, content }) {
+    // Get comment
+    const comment = GiveawayComments.findOne(_id);
+
+    if (!comment)
+      throw new Meteor.Error("giveawayComments.editComment.undefinedComment", "No such comment found.");
+
+    // Check authorized
+    const isAuthorized = Roles.userIsInRole(this.userId, ['moderator', 'admin']) || userId == comment.userId;
+
+    if (!this.userId || this.userId != userId)
+      throw new Meteor.Error("giveawayComments.editComment.notLoggedIn", "Must be logged in to edit comment.");
+    else if (!isAuthorized)
+      throw new Meteor.Error("giveawayComments.editComment.notAuthorized", "Not authorized to edit comment.");
+
+    // Update comment
+    return GiveawayComments.update(_id, { $set: { content } });
+  },
+});
+
+export const removeComment = new ValidatedMethod({
+  name: 'giveawayComments.remove',
+  validate: new SimpleSchema({
+    _id: { type: String },
+    userId: { type: String },
+  }).validator(),
+  run({ _id, userId }) {
+    // Get comment
+    const comment = GiveawayComments.findOne(_id);
+
+    if (!comment)
+      throw new Meteor.Error("giveawayComments.removeComment.undefinedComment", "No such comment found.");
+
+    // Check authorized
+    const isAuthorized = Roles.userIsInRole(this.userId, ['moderator', 'admin']) || userId == comment.userId;
+
+    if (!this.userId || this.userId != userId)
+      throw new Meteor.Error("giveawayComments.removeComment.notLoggedIn", "Must be logged in to remove comment.");
+    else if (!isAuthorized)
+      throw new Meteor.Error("giveawayComments.removeComment.notAuthorized", "Not authorized to remove comment.");
+
+    // Update comment
+    return GiveawayComments.update(_id, { $set: { isRemoved: true, removeUserId } });
+  },
+});
+
+export const flagComment = new ValidatedMethod({
+  name: 'giveawayComments.flag',
+  validate: new SimpleSchema({
+    _id: { type: String },
+    userId: { type: String },
+  }).validator(),
+  run({ _id, userId }) {
+    const comment = GiveawayComments.findOne(_id);
+
+    if (!comment)
+      throw new Meteor.Error("giveawayComments.flagComment.undefinedComment", "No such comment found.");
+    else if (!this.userId || this.userId != userId)
+      throw new Meteor.Error("giveawayComments.flagComment.notLoggedIn", "Must be logged in to flag comment.");
+    else if (userId == comment.userId)
+      throw new Meteor.Error("giveawayComments.flagComment.cannotFlagOwnComment", "Cannot flag own comment.");
+
+    // Update comment
+    return GiveawayComments.update(_id, { $set: { isFlagged: true, flagUserId: userId } });
   },
 });

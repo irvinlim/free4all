@@ -23,7 +23,7 @@ GiveawayComments.schema = new SimpleSchema({
     type: Date,
     label: 'Date that comment was created',
     autoValue: function() {
-      if (this.isInsert || this.isUpdate) {
+      if (this.isInsert) {
         return new Date();
       } else if (this.isUpsert) {
         return { $setOnInsert: new Date() };
@@ -32,6 +32,7 @@ GiveawayComments.schema = new SimpleSchema({
       }
     }
   },
+
   updatedAt: {
     type: Date,
     label: 'Date that comment was updated',
