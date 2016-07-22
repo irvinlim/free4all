@@ -36,11 +36,15 @@ const CommentRow = (owner) => ({ content, user, createdAt }, index) => (
   </div>
 );
 
-const NoComments = () => (
-  <p>
-    <em>No comments yet. Add yours?</em>
-  </p>
-);
+const NoComments = () => {
+  const cta = Meteor.user() ? "Add yours?" : "Login to comment!";
+
+  return (
+    <p>
+      <em>No comments yet. { cta }</em>
+    </p>
+  );
+}
 
 export class GiveawayCommentsCard extends React.Component {
   constructor(props) {
@@ -71,6 +75,33 @@ export class GiveawayCommentsCard extends React.Component {
     });
   }
 
+  AddComments() {
+    return (
+      <div>
+        <Divider style={{ marginTop: 15 }} />
+
+        <div className="add-comment-form">
+          { LayoutHelper.threeColumns(
+              UsersHelper.getAvatar(Meteor.user(), 40, { margin: "6px auto", display: "flex" }),
+              <TextField
+                id="add-comment-field"
+                name="add-comment"
+                value={ this.state.addCommentValue }
+                onChange={ event => this.setState({ addCommentValue: event.target.value }) }
+                multiLine={true}
+                fullWidth={true}
+                underlineShow={false}
+                hintText="Add a comment..."
+                hintStyle={{ fontSize: 14 }}
+                textareaStyle={{ fontSize: 14 }} />,
+              <FlatButton onTouchTap={ this.handlePostComment.bind(this) } label="Post" style={{ margin: "6px auto" }} />,
+              40
+            ) }
+        </div>
+      </div>
+    );
+  }
+
   componentWillMount() {
     this.setState({ ga: this.props.ga });
   }
@@ -88,26 +119,7 @@ export class GiveawayCommentsCard extends React.Component {
               { comments.length ? CommentsList(comments, owner) : NoComments() }
             </div>
 
-            <Divider style={{ marginTop: 15 }} />
-
-            <div className="add-comment-form">
-              { LayoutHelper.threeColumns(
-                  UsersHelper.getAvatar(Meteor.user(), 40, { margin: "6px auto", display: "flex" }),
-                  <TextField
-                    id="add-comment-field"
-                    name="add-comment"
-                    value={ this.state.addCommentValue }
-                    onChange={ event => this.setState({ addCommentValue: event.target.value }) }
-                    multiLine={true}
-                    fullWidth={true}
-                    underlineShow={false}
-                    hintText="Add a comment..."
-                    hintStyle={{ fontSize: 14 }}
-                    textareaStyle={{ fontSize: 14 }} />,
-                  <FlatButton onTouchTap={ this.handlePostComment.bind(this) } label="Post" style={{ margin: "6px auto" }} />,
-                  40
-                ) }
-            </div>
+            { Meteor.user() ? this.AddComments() : null }
 
           </div>
         </div>
