@@ -9,6 +9,7 @@ export default class LeafletMapPreview extends React.Component{
 		this.elemId = 'map-preview'
 		this.marker = null
 		this.map = null
+		this.previewTimeout = null
 	}
 
 	componentDidMount(){
@@ -19,9 +20,7 @@ export default class LeafletMapPreview extends React.Component{
 
 		// Remove old marker if new one selected
 		if(this.marker) 
-			this.map.removeLayer(this.marker);		
-
-		this.map.setView(nextProps.previewCoords, nextProps.previewZoom)
+			this.map.removeLayer(this.marker)
 
 		// Marker styles
 	    const css = { 'background-color': "#00bcd4", "font-size": "30px" }
@@ -30,6 +29,13 @@ export default class LeafletMapPreview extends React.Component{
 	    
 	    this.marker = L.marker(nextProps.previewCoords, { icon: icon, opacity: 1 })
 	    this.marker.addTo(this.map)
+
+	    const self = this;
+	    if(this.previewTimeout) Meteor.clearInterval(this.previewTimeout);
+	    this.previewTimeout = Meteor.setTimeout(function(){
+			self.map.setView(nextProps.previewCoords, nextProps.previewZoom,{animate: true, duration: 1})
+	    }, 100)
+
 	}
 
 	makeMap(elemId){
