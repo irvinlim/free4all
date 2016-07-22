@@ -42,6 +42,13 @@ const composer = (props, onData) => {
         user: props.user,
       });
     }
-  }
+  } else {
+      onData(null, {
+        community: [],
+        giveaways: [],
+        nearbyOnClick: props.nearbyOnClick,
+        user: props.user,
+      });
+    }
 };
 export default composeWithTracker(composer, Loading)(CommunityGiveaways);

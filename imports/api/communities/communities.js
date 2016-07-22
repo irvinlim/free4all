@@ -47,10 +47,13 @@ Communities.schema = new SimpleSchema({
     type: String,
     regEx: SimpleSchema.RegEx.Url,
     autoValue: function(){
-      const id = Meteor.settings.public.MapBox.mapID;
-      const accessToken = Meteor.settings.public.MapBox.accessToken;
-      return "https://api.tiles.mapbox.com/v4/"+ id +"/{z}/{x}/{y}.png?access_token=" + accessToken;
-    }
+      if(this.isInsert){
+        const id = Meteor.settings.public.MapBox.mapID;
+        const accessToken = Meteor.settings.public.MapBox.accessToken;
+        return "https://api.tiles.mapbox.com/v4/"+ id +"/{z}/{x}/{y}.png?access_token=" + accessToken;
+      }
+    },
+    label: 'Mapbox studio style'
   },
   createdAt: {
     type: Date,
