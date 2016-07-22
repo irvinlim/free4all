@@ -88,8 +88,11 @@ export class Community extends React.Component {
 
         // setTimeout due to initial coords at nus
         Meteor.setTimeout(function(){
-          self.setMapCenter(comm.coordinates)
-          self.setState({ mapZoom: comm.zoom, mapURL: comm.mapURL })
+          self.setState({ 
+            mapCenter: comm.coordinates,
+            mapZoom: comm.zoom, 
+            mapURL: comm.mapURL 
+          })
         }, 100);
       });
     });

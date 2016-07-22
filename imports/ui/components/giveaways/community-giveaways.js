@@ -133,10 +133,10 @@ export const CommunityGiveaways = (props) => (
       { props.showDateRange ? 
       <div>
         <Row>
-          <Col xs={12} md={2}>
+          <Col xs={12} md={2} style={{width: "42px", top: "1px"}}>
           <span>From</span>
           </Col>
-          <Col xs={12} md={2}>
+          <Col xs={12} md={4}>
           <DatePicker
           value={ props.userFromDate }
           onChange={ props.handleUserFromDate }
@@ -145,13 +145,10 @@ export const CommunityGiveaways = (props) => (
           id="community-fromDate"
           />
           </Col>
-        </Row>
-
-        <Row style={{paddingBottom:"10px"}}>
-          <Col xs={12} md={2}>
+          <Col xs={12} md={2} style={{width: "42px", top: "1px"}}>
           <span>Until</span>
           </Col>
-          <Col xs={12} md={2}>
+          <Col xs={12} md={4}>
           <DatePicker
           value={ props.userUntilDate }
           onChange={ props.handleUserUntilDate }
