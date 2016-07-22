@@ -15,6 +15,7 @@ export default class LeafletMapObject {
 
     this.makeMap(elemId);
     this.initializeGeolocation();
+    this.extraTileLayer = null;
   }
 
   makeMap(elemId) {
@@ -133,5 +134,13 @@ export default class LeafletMapObject {
     };
 
     return ret;
+  }
+
+  addExtraTileLayer(mapURL){
+    this.extraTileLayer = L.tileLayer(mapURL).addTo(this.map);
+  }
+
+  removeExtraTileLayer(){
+    if(this.extraTileLayer) this.map.removeLayer(this.extraTileLayer);
   }
 }

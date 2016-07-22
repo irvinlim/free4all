@@ -127,6 +127,14 @@ export default class LeafletMap extends React.Component {
       else
         this.mapObject.map.removeLayer(this.mapObject.markerClusterGroup);
     }
+
+    // Update map tiles
+    if(nextProps.mapURL){
+      this.mapObject.removeExtraTileLayer();
+      this.mapObject.addExtraTileLayer(nextProps.mapURL);
+      this.props.removeMapURLState(); // To prevent multiple calls
+    }
+
   }
 
   componentDidUpdate(prevProps, prevState) {
