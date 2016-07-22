@@ -31,7 +31,7 @@ export default class LeafletMapPreview extends React.Component{
 	    this.marker.addTo(this.map)
 
 	    const self = this;
-	    if(this.previewTimeout) Meteor.clearInterval(this.previewTimeout);
+	    if(this.previewTimeout) Meteor.clearTimeout(this.previewTimeout);
 	    this.previewTimeout = Meteor.setTimeout(function(){
 			self.map.setView(nextProps.previewCoords, nextProps.previewZoom,{animate: true, duration: 1})
 	    }, 100)
