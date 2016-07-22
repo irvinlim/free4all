@@ -7,6 +7,7 @@ BrowserPolicy.content.allowSameOriginForAll();
 
 // Maps
 BrowserPolicy.content.allowImageOrigin( 'api.tiles.mapbox.com' );
+BrowserPolicy.content.allowImageOrigin( 'api.mapbox.com' );
 
 // Mapbox Geocoding
 BrowserPolicy.content.allowOriginForAll( 'api.tiles.mapbox.com' );

@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import MuiTheme from '../layouts/mui-theme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import { Communities } from '../../api/communities/communities';
 
 import Header from '../components/header/header';
 import LeafletMap from '../components/map/leaflet-map';
@@ -35,15 +36,10 @@ export class Community extends React.Component {
       mapZoom: null,
       mapMaxZoom: null,
       showMarkers: true,
-      // isModalOpen: false,
-      // latLngClicked: {lat:"",lng:""},
-      // locName: "",
-      // locArr: [],
-      // isDraggableAdded: false,
-      // rGeoLoading: false,
-      // gaEdit: null,
       showDateRange: true,
-      isAllGa: false
+      isAllGa: false,
+      user: null,
+      mapURL: null,
     };
 
     this.userUntilDate = new ReactiveVar( moment().set('hour', 0).set('minute',0).add(1,'w').toDate() );
@@ -81,28 +77,25 @@ export class Community extends React.Component {
   componentDidMount() {
     const self = this;
     
+    this.autorunAuth = Tracker.autorun(function(){
+      const user = Meteor.user();
+      self.setState({ user: user })
+    })
+
     this.autorunSub = Tracker.autorun(function () {
-      const userFromDate = self.userFromDate.get();
-      const userUntilDate = self.userUntilDate.get();
-      const isAllGa = self.isAllGa.get();
+      Meteor.subscribe('community-by-id', self.props.params.id, function(){
+        const comm = Communities.findOne(self.props.params.id);
 
-      // trigger ui update
-      self.setState({showDateRange: self.state.showDateRange});
-      self.setState({isAllGa: isAllGa})
-
-
-      // Re-subscribe when date range changes
-      // if (userFromDate && userUntilDate) {
-      //   self.subscriptionUserIds = Meteor.subscribe('users-giveaways-within-date', userFromDate, userUntilDate, isAllGa);
-      // }
+        // setTimeout due to initial coords at nus
+        Meteor.setTimeout(function(){
+          self.setMapCenter(comm.coordinates)
+          self.setState({ mapZoom: comm.zoom, mapURL: comm.mapURL })
+        }, 100);
+      });
     });
 
     this.autorunGeo = Tracker.autorun(function() {
       const reactiveLatLng = Geolocation.latLng();
-
-      // Set initial map center, if not geolocated yet
-      // if (!self.state.geolocation)
-      //   self.setState({ mapCenter: reactiveLatLng });
 
       // Set current location
       self.setState({ geolocation: reactiveLatLng });
@@ -112,6 +105,7 @@ export class Community extends React.Component {
 
   componentWillUnmount() {
     this.subscriptionUserIds && this.subscriptionUserIds.stop();
+    this.autorunAuth && this.autorunAuth.stop();
     this.autorunSub && this.autorunSub.stop();
     this.autorunGeo && this.autorunGeo.stop();
   }
@@ -220,7 +214,9 @@ export class Community extends React.Component {
           showMarkers={ this.state.showMarkers }
           addRGeoSpinner={ this.addRGeoSpinner.bind(this) }
           rmvRGeoSpinner={ this.rmvRGeoSpinner.bind(this) }
-          isDbClickDisabled= { true } />
+          isDbClickDisabled= { true } 
+          mapURL= { this.state.mapURL }
+          removeMapURLState={()=>{ this.setState({mapURL: null})} } />
 
         <div id="map-boxes-container">
           <MapInfoBox
@@ -242,9 +238,7 @@ export class Community extends React.Component {
             handleUserFromDate={ this.handleUserFromDate.bind(this) }
             handleAllUserGiveaways={ this.handleAllUserGiveaways.bind(this) }
             showDateRange={ this.state.showDateRange }
-            setMapCenter={ this.setMapCenter.bind(this) } 
-            setMapZoom={ (mapZoom)=>{ this.setState({ mapZoom: mapZoom }) } }/>
-
+            user={ this.state.user } />
         </div>
 
         <div id="map-floating-buttons" style={{ right: 20 + (this.state.nearbyBoxState > 0 ? $("#map-nearby-box").outerWidth() : 0) }}>
