@@ -301,7 +301,8 @@ export class Index extends React.Component {
                 hideMarkers={ ()=>{this.setState({ showMarkers: false })} }
                 resetLoc={ this.resetLoc.bind(this) }
                 mapCenter={ this.state.mapCenter }
-                user={ this.state.user } />
+                user={ this.state.user }
+                zoom={ this.state.mapZoom } />
               :
               <div>
                 <IconButton

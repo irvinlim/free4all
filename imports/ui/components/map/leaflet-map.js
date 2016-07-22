@@ -84,17 +84,26 @@ export default class LeafletMap extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const self = this;
+
     // Add reverse geocode marker
     if (nextProps.isDraggableAdded) {
-      // Remove previous marker if any
-      if(this.draggableMarker) self.removeDraggable();
 
+      // To prevent repeated run on prop change
+      this.props.stopDraggableAdded(); 
+      
       const css = { 'background-color': "#00bcd4", "font-size": "30px" };
       const iconHTML = '<i class="material-icons">add_location</i>'
       const icon = this.mapObject.markerIcon("map-marker", css, {}, iconHTML);
 
       const marker = L.marker(nextProps.mapCenter, { icon: icon, draggable: 'true', opacity: 0.75 });
       const popup = L.popup({ closeOnClick: true, className: 'dPopup' }).setContent('<p>Drag to select location!</p>');
+
+      // Remove previous marker if any
+      if(this.draggableMarker) self.removeDraggable();
+      this.mapObject.map.addLayer(marker);
+      this.draggableMarker = marker;
+
+      marker.bindPopup(popup).openPopup();
 
       marker.on('dragstart', function(event){
         const marker = event.target;
@@ -109,11 +118,6 @@ export default class LeafletMap extends React.Component {
         rgeocode(Meteor.settings.public.MapBox.accessToken, position, self.props.openInsertDialog, 
           self.props.rmvRGeoSpinner, self.removeDraggable.bind(self));
       });
-
-      this.props.stopDraggableAdded();
-      this.mapObject.map.addLayer(marker);
-      this.draggableMarker = marker;
-      marker.bindPopup(popup).openPopup();
     }
 
     // Hide or show map markers

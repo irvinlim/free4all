@@ -9,19 +9,19 @@ import { Bert } from 'meteor/themeteorchef:bert';
 import FontIcon from 'material-ui/FontIcon';
 import {GridList, GridTile} from 'material-ui/GridList';
 import LinearProgress from 'material-ui/LinearProgress';
-
 import Formsy from 'formsy-react';
 import { FormsyCheckbox, FormsyDate, FormsyRadio, FormsyRadioGroup, FormsySelect, FormsyText, FormsyTime, FormsyToggle } from 'formsy-material-ui/lib';
 import { Grid, Row, Col } from 'react-bootstrap';
-
-import AllCategoriesList from '../../containers/categories/all-categories-list';
 import TagsInput from 'react-tagsinput';
 
+import AllCategoriesList from '../../containers/categories/all-categories-list';
+import LeafletMapPreview from './leaflet-map-preview';
+
 import { insertGiveaway } from '../../../api/giveaways/methods.js';
-import { StatusTypes } from '../../../api/status-types/status-types.js'
+import { StatusTypes } from '../../../api/status-types/status-types.js';
 
 import { geocode } from '../../../util/geocode.js';
-import { shortId } from '../../../util/helper.js'
+import { shortId } from '../../../util/helper.js';
 import * as IconsHelper from '../../../util/icons';
 
 export default class InsertBtnDialog extends React.Component {
@@ -52,6 +52,7 @@ export default class InsertBtnDialog extends React.Component {
       tile: null,
       avatarId: "",
       loadingFile: false,
+      zoom: 1,
     };
 
     this.state = this.initialState;
@@ -59,9 +60,7 @@ export default class InsertBtnDialog extends React.Component {
     this.handleAddLocation = () => {
       props.closeModal();
       props.addDraggable();
-
       props.hideMarkers();
-
     }
 
     this.geocodeInputLoc = (value) => {
@@ -257,7 +256,7 @@ export default class InsertBtnDialog extends React.Component {
         const imgUrlPre = data.tile.res.secure_url;
         data.imgUrl = imgUrlPre.split('upload')[0]+ 'upload/' + 'h_300,c_scale' + imgUrlPre.split('upload')[1];
       }
-      console.log("state", data);
+      // console.log("state", data);
 
       let startHr= data.startTime.getHours();
       let startMin= data.startTime.getMinutes();
@@ -277,7 +276,7 @@ export default class InsertBtnDialog extends React.Component {
       }
 
       if (!data.recurring){
-        console.log("one giveaway")
+        // console.log("one giveaway")
         const ga = {
           title: data.title,
           description: data.description,
@@ -305,7 +304,7 @@ export default class InsertBtnDialog extends React.Component {
       } else {
         // how many days recurring
         let numberOfDays = moment(data.endDate).diff(moment(data.startDate),'days')+1;
-        console.log("Recurring", numberOfDays, "days");
+        // console.log("Recurring", numberOfDays, "days");
 
         for(let i = 0; i<numberOfDays; i++){
 
@@ -349,6 +348,7 @@ componentWillReceiveProps(nextProps){
     lng: nextProps.latLng.lng,
     location: nextProps.locName,
     dataSource: nextProps.locArr,
+    zoom: nextProps.zoom,
   })
 }
 
@@ -562,6 +562,18 @@ render() {
                     disabled={true} />
                 </Col>
               </Row>
+
+              {this.state.lat ?
+                <Row>
+                  <Col xs={12}>
+                    <LeafletMapPreview 
+                      previewCoords={ { lat:this.state.lat, lng:this.state.lng } }
+                      previewZoom={this.state.zoom} />
+                  </Col>
+                </Row>
+                :
+                <div />
+              }
 
               <Row style={{ paddingTop: 21 }}>
                 <Col xs={12} md={8} >

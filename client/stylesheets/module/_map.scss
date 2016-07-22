@@ -6,6 +6,12 @@
   .leaflet-div-icon { background: transparent; border: none; }
 }
 
+
+#map-preview {
+  height: 150px;
+  .leaflet-div-icon { background: transparent; border: none; }
+}
+
 .map-marker {
   width: 44px; height: 44px; border: 2px solid transparent; border-radius: 50% 50% 50% 0; background: #89849b;
   position: absolute; left: 50%; top: 50%; margin-top: -20px; @include border-radius(50% 50% 50% 0);
