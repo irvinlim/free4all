@@ -4,6 +4,7 @@ import { Meteor } from 'meteor/meteor';
 import { ParentCategories } from '../api/parent-categories/parent-categories';
 import { Categories } from '../api/categories/categories';
 import { StatusTypes } from '../api/status-types/status-types';
+import { GiveawayComments } from '../api/giveaway-comments/giveaway-comments';
 
 import * as Colors from 'material-ui/styles/colors';
 import * as Helper from './helper';
@@ -149,3 +150,4 @@ export const countTotalFlags = (ga) => ga.flags ? ga.flags.length : 0;
 // Comments
 export const commentBody = (content) => content.length ? Helper.nl2br(content) : null;
 export const userHasFlaggedComment = userHasFlagged;
+export const countTotalComments = (ga) => GiveawayComments.find({ giveawayId: ga._id }).count();

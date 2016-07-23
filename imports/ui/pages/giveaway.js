@@ -7,6 +7,7 @@ import GiveawayRatingsCard from '../containers/giveaways/giveaway-ratings-card';
 import GiveawayStatusUpdatesCard from '../containers/giveaways/giveaway-status-updates-card';
 import GiveawayCommentsCard from '../containers/giveaways/giveaway-comments-card';
 import GiveawayMetaCard from '../containers/giveaways/giveaway-meta-card';
+import GiveawayMapCard from '../containers/giveaways/giveaway-map-card';
 import GiveawaySharingCard from '../containers/giveaways/giveaway-sharing-card';
 
 export class Giveaway extends React.Component {
@@ -21,6 +22,7 @@ export class Giveaway extends React.Component {
           </div>
           <div className="flex-row nopad">
             <div className="col col-xs-12 col-sm-6">
+              <GiveawayMapCard gaId={ this.props.params.id } />
               <GiveawayRatingsCard gaId={ this.props.params.id } />
               <GiveawayCommentsCard gaId={ this.props.params.id } />
             </div>
