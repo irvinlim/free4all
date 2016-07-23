@@ -9,6 +9,9 @@ import { GiveawayComments } from '../../../api/giveaway-comments/giveaway-commen
 import * as GiveawaysHelper from '../../../util/giveaways';
 
 const composer = (props, onData) => {
+  if (!props.gaId)
+    return;
+
   if (Meteor.subscribe('comments-for-giveaway', props.gaId).ready()) {
     const ga = Giveaways.findOne(props.gaId);
     const sortedComments = GiveawayComments.find({
@@ -32,6 +35,7 @@ const composer = (props, onData) => {
       ga: ga,
       comments: denormalizedComments,
       owner: Meteor.users.findOne(ga.userId),
+      showActions: props.showActions,
     });
   }
 };

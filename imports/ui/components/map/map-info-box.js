@@ -1,9 +1,12 @@
 import React from 'react';
+import FlatButton from 'material-ui/FlatButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
+import { Link } from 'react-router';
 import { Scrollbars } from 'react-custom-scrollbars';
 
 import GiveawayInfoboxContent from '../../containers/giveaways/giveaway-infobox-content';
 import GiveawayRatings from '../../containers/giveaways/giveaway-ratings';
+import GiveawayComments from '../../containers/giveaways/giveaway-comments';
 
 import * as IconsHelper from '../../../util/icons';
 
@@ -50,13 +53,26 @@ export default class MapInfoBox extends React.Component {
     return (
       <div id="map-info-box" className={ "map-sidebar col-xs-12 col-sm-6 col-md-3 col-lg-3 state-" + this.props.boxState }>
         <Scrollbars autoHide style={{ height: "100%",  }}>
-          <div className="map-sidebar-box" id="info-box-top">
+          <div className="map-sidebar-box">
             <GiveawayInfoboxContent gaId={ this.props.gaId } />
+
+            <Link className="button" to={ "/giveaway/" + this.props.gaId }>
+              <FlatButton label="View Giveaway" style={{ display: "block", margin: "0 auto" }} />
+            </Link>
           </div>
 
-          <div className="map-sidebar-box" id="info-box-bot">
+          <div className="map-sidebar-box">
             <h3>User Reviews</h3>
             <GiveawayRatings gaId={ this.props.gaId } />
+          </div>
+
+          <div className="map-sidebar-box">
+            <h3>Comments</h3>
+            <GiveawayComments gaId={ this.props.gaId } showActions={false} />
+
+            <Link className="button" to={ "/giveaway/" + this.props.gaId }>
+              <FlatButton label="Post a Comment" style={{ display: "block", margin: "0 auto" }} />
+            </Link>
           </div>
         </Scrollbars>
 

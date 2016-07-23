@@ -6,6 +6,8 @@ html body {
 
 html, html body { background-color: #eef0f3; height: 100%; }
 
+a.button:hover { text-decoration: none; }
+
 .full-container {
   position: relative;
   height: 100%;

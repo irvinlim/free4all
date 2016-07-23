@@ -75,9 +75,7 @@ export class GiveawayCommentsCard extends React.Component {
           <div className="col col-xs-12">
             <h3>Comments</h3>
 
-            <div className="comments-list">
-              <GiveawayComments gaId={ this.props.gaId } />
-            </div>
+            <GiveawayComments gaId={ this.props.gaId } showActions={true} />
 
             { Meteor.user() ? AddComments(this) : null }
 

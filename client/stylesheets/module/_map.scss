@@ -31,6 +31,7 @@
 
   .map-sidebar { height: 100%; padding: 0; pointer-events: auto; position: absolute; @include transition-standard(all 225ms); }
   .map-sidebar-box { padding: 20px 20px 0; }
+  .map-sidebar-box:last-child { padding-bottom: 10px; }
 }
 
 // Sidebar boxes

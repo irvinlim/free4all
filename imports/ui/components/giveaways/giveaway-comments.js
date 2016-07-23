@@ -37,7 +37,7 @@ const CommentRowDisplay = (self, { _id, content, user, createdAt, updatedAt }, o
     { GiveawaysHelper.commentBody(content) }
     <p className="timestamp small-text">
       { updatedAt ? "updated " + moment(updatedAt).fromNow() : moment(createdAt).fromNow() }
-      { Meteor.userId() ?
+      { self.props.showActions && Meteor.userId() ?
         user && user._id === Meteor.userId() ? CommentActionsOwner(self, _id, content) : CommentActionsNonOwner(self, _id, content) :
         null
       }
@@ -160,9 +160,10 @@ export class GiveawayComments extends React.Component {
   }
 
   render() {
-    if (this.props.comments.length)
-      return CommentsList(this, this.props.comments, this.props.owner);
-    else
-      return NoComments();
+    return (
+      <div className="giveaway comments-list">
+        { this.props.comments.length ? CommentsList(this, this.props.comments, this.props.owner) : NoComments() }
+      </div>
+    );
   }
 }
