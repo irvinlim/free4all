@@ -13,7 +13,7 @@ import GiveawaySharingCard from '../containers/giveaways/giveaway-sharing-card';
 export class Giveaway extends React.Component {
   render() {
     return (
-      <div id="page-giveaway-single">
+      <div id="page-giveaway-single" className="page-container">
         <Grid>
           <div className="flex-row nopad">
             <div className="col col-xs-12">

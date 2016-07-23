@@ -1,3 +1,5 @@
+@import '../common/_mixins';
+
 html body {
   &, .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6, p { font-family: Roboto, sans-serif; color: #444; }
   .h1, .h2, .h3, .h4, h1, h2, h3, h4 { font-weight: 300; }
@@ -14,6 +16,12 @@ a.button:hover { text-decoration: none; }
   width: 100%;
   left: 0;
   overflow: hidden;
+}
+
+.page-container {
+  padding-top: 20px;
+  @include media-xs-only { padding-top: 10px; }
+  .container { padding: 0; }
 }
 
 // Making my own Flexbox Grid (!!)
