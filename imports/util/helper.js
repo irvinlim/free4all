@@ -90,4 +90,4 @@ export const shadeColor = (color, factor) => {
 };
 
 // Pluralizer
-export const pluralizer = (number, singular, plural) => number > 1 ? plural : singular;
+export const pluralizer = (number, singular, plural) => number === 1 ? singular : plural;

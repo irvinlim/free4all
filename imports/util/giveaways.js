@@ -45,9 +45,12 @@ export const getStatusColor = (ga) => {
   return Helper.sanitizeHexColour(lastOwnerStatusType.hexColour);
 };
 
+export const countTotalStatusUpdates = (ga) => ga.statusUpdates ? ga.statusUpdates.length : 0;
+
 // Ratings
 export const countUpvotes = (ga) => ga.ratings && ga.ratings.upvotes ? ga.ratings.upvotes.length : 0;
 export const countDownvotes = (ga) => ga.ratings && ga.ratings.downvotes ? ga.ratings.downvotes.length : 0;
+export const countTotalVotes = (ga) => ga.ratings ? (ga.ratings.upvotes ? ga.ratings.upvotes.length : 0) + (ga.ratings.downvotes ? ga.ratings.downvotes.length : 0) : 0;
 export const currentUserUpvoted = (ga) => ga.ratings && ga.ratings.upvotes ? ga.ratings.upvotes.filter(rating => rating.userId == Meteor.userId()).length > 0 : false;
 export const currentUserDownvoted = (ga) => ga.ratings && ga.ratings.downvotes ? ga.ratings.downvotes.filter(rating => rating.userId == Meteor.userId()).length > 0 : false;
 

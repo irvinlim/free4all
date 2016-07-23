@@ -4,6 +4,7 @@ import { GiveawayMetaCard } from '../../components/giveaways/giveaway-meta-card'
 import { Loading } from '../../components/loading';
 
 import { Giveaways } from '../../../api/giveaways/giveaways';
+import { GiveawayComments } from '../../../api/giveaway-comments/giveaway-comments';
 
 const composer = (props, onData) => {
   if (Meteor.subscribe('giveaway-by-id', props.gaId).ready()) {
@@ -15,7 +16,11 @@ const composer = (props, onData) => {
       if (Meteor.subscribe('giveaways-by-user', ga.userId).ready()) {
         const shareCount = Giveaways.find({ userId: ga.userId }).count();
 
-        onData(null, { ga, user, shareCount });
+        if (Meteor.subscribe('comments-for-giveaway', props.gaId).ready()) {
+          const commentCount = GiveawayComments.find({ giveawayId: props.gaId, isRemoved: { $ne: true } }).count();
+
+          onData(null, { ga, user, shareCount, commentCount });
+        }
       }
     }
   }
