@@ -13,7 +13,7 @@ const AboutAuthor = ({ ga, user, shareCount }) => (
 
     <div style={{ margin: "20px 0 10px" }}>
       <div style={{ width: 84, display: "inline-block" }}>
-        { UsersHelper.getAvatar(user, 64, { margin: "0 auto", display: "flex" }) }
+        { UsersHelper.getAvatar(user, 64, { margin: "0 auto", display: "block" }) }
       </div>
       <div style={{ width: "calc(100% - 94px)", marginLeft: 10, display: "inline-block", verticalAlign: "top" }}>
         <h4 style={{ marginTop: 10 }}>{ UsersHelper.getFullName(user) }</h4>

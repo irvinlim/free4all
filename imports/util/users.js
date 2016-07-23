@@ -100,7 +100,7 @@ export const getAvatar = (user, size=64, style) => {
   if (avatarUrl)
     return <Avatar src={ avatarUrl } size={size} style={style} />;
   else if (firstInitial)
-    return <Avatar backgroundColor="#097381" style={style}>{ firstInitial }</Avatar>;
+    return <Avatar backgroundColor="#097381" size={size} style={style}>{ firstInitial }</Avatar>;
   else
     return IconsHelper.materialIcon("person", _.extend({ color: Colors.grey50 }, style));
 };

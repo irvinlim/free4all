@@ -34,7 +34,7 @@ const CommentRowDisplay = (self, comment, owner) => {
   const { _id, content, user, createdAt, updatedAt } = comment;
 
   return LayoutHelper.twoColumns(
-    UsersHelper.getAvatar(user, 40, { margin: "0 auto", display: "flex" }),
+    UsersHelper.getAvatar(user, 40, { margin: "0 auto", display: "block" }),
     <div className="comment-body">
       <h5 className="comment-username">{ UsersHelper.getFullNameWithLabelIfEqual(user, owner, "Author") }</h5>
       { GiveawaysHelper.commentBody(content) }
@@ -70,7 +70,7 @@ const CommentActionsNonOwner = (self, comment) => (
 );
 
 const CommentRowEditing = (self, { _id, content, user, createdAt, updatedAt }, owner) => LayoutHelper.twoColumns(
-  UsersHelper.getAvatar(user, 40, { margin: "0 auto", display: "flex" }),
+  UsersHelper.getAvatar(user, 40, { margin: "0 auto", display: "block" }),
   <div className="comment-body">
     <h5 className="comment-username">{ UsersHelper.getFullNameWithLabelIfEqual(user, owner, "Author") }</h5>
     <TextField

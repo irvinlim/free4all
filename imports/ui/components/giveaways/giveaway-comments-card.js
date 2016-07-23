@@ -19,7 +19,7 @@ const AddComments = (self) => (
 
     <div className="add-comment-form">
       { LayoutHelper.threeColumns(
-          UsersHelper.getAvatar(Meteor.user(), 40, { margin: "6px auto", display: "flex" }),
+          UsersHelper.getAvatar(Meteor.user(), 40, { margin: "6px auto", display: "block" }),
           <TextField
             id="add-comment-field"
             name="add-comment"
