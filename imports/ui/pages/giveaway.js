@@ -13,8 +13,8 @@ import GiveawaySharingCard from '../containers/giveaways/giveaway-sharing-card';
 export class Giveaway extends React.Component {
   render() {
     return (
-      <div id="giveaway-single">
-        <Grid style={{ marginTop: 20 }}>
+      <div id="page-giveaway-single">
+        <Grid>
           <div className="flex-row nopad">
             <div className="col col-xs-12">
               <GiveawaySingleCard gaId={ this.props.params.id } />

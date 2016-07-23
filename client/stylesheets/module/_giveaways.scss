@@ -49,10 +49,17 @@
 
 .giveaway-card {
   margin-bottom: 30px;
+  @include media-xs-only { margin-bottom: 10px; }
 
   .flex-row:not(.nopad) {
     padding: 15px 10px; // More padding because of Paper's edges
   }
+}
+
+#page-giveaway-single {
+  padding-top: 20px;
+  @include media-xs-only { padding-top: 10px; }
+  .container { padding: 0; }
 }
 
 .giveaway-single {
