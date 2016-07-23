@@ -1,6 +1,5 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
-import { Grid, Row, Col } from 'react-bootstrap';
 import IconButton from 'material-ui/IconButton';
 
 import { voteUp, voteDown, unvote } from '../../../api/giveaways/methods';
@@ -19,29 +18,27 @@ const makeVoteClickHandler = (isUpvote, voted, gaId) => {
 
 export const GiveawayRatings = ({ giveaway }) => (
   <div className="giveaway-ratings">
-    <Grid>
-      <Row>
-        <Col xs={3}>
-          <IconButton
-            className="button-upvote"
-            className={ GiveawaysHelper.currentUserUpvoted(giveaway) ? "voted" : "" }
-            onTouchTap={ makeVoteClickHandler(true, GiveawaysHelper.currentUserUpvoted(giveaway), giveaway._id) }
-            children={ IconsHelper.materialIcon("thumb_up") } />
-        </Col>
-        <Col xs={3}>
-          <span className="num_ratings">{ GiveawaysHelper.countUpvotes(giveaway) }</span>
-        </Col>
-        <Col xs={3}>
-          <IconButton
-            className="button-downvote"
-            className={ GiveawaysHelper.currentUserDownvoted(giveaway) ? "voted" : "" }
-            onTouchTap={ makeVoteClickHandler(false, GiveawaysHelper.currentUserDownvoted(giveaway), giveaway._id) }
-            children={ IconsHelper.materialIcon("thumb_down") } />
-        </Col>
-        <Col xs={3}>
-          <span className="num_ratings">{ GiveawaysHelper.countDownvotes(giveaway) }</span>
-        </Col>
-      </Row>
-    </Grid>
+    <div className="flex-row nopad">
+      <div className="col col-xs-3">
+        <IconButton
+          className="button-upvote"
+          className={ GiveawaysHelper.currentUserUpvoted(giveaway) ? "voted" : "" }
+          onTouchTap={ makeVoteClickHandler(true, GiveawaysHelper.currentUserUpvoted(giveaway), giveaway._id) }
+          children={ IconsHelper.materialIcon("thumb_up") } />
+      </div>
+      <div className="col col-xs-3">
+        <span className="num_ratings">{ GiveawaysHelper.countUpvotes(giveaway) }</span>
+      </div>
+      <div className="col col-xs-3">
+        <IconButton
+          className="button-downvote"
+          className={ GiveawaysHelper.currentUserDownvoted(giveaway) ? "voted" : "" }
+          onTouchTap={ makeVoteClickHandler(false, GiveawaysHelper.currentUserDownvoted(giveaway), giveaway._id) }
+          children={ IconsHelper.materialIcon("thumb_down") } />
+      </div>
+      <div className="col col-xs-3">
+        <span className="num_ratings">{ GiveawaysHelper.countDownvotes(giveaway) }</span>
+      </div>
+    </div>
   </div>
 );

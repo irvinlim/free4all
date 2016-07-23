@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
 
-import { Grid, Row, Col } from 'react-bootstrap';
+import { Grid } from 'react-bootstrap';
 import GiveawaySingleCard from '../containers/giveaways/giveaway-single-card';
 import GiveawayRatingsCard from '../containers/giveaways/giveaway-ratings-card';
 import GiveawayStatusUpdatesCard from '../containers/giveaways/giveaway-status-updates-card';

@@ -1,7 +1,7 @@
 @import '../common/mixins';
 
 .giveaway-ratings {
-  .container { width: 100%; }
+  font-size: 18px;
   .num_ratings { line-height: 48px; }
   .voted span.material-icons { color: #0C4B86 !important; }
 }
