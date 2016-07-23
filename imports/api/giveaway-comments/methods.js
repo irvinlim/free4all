@@ -4,6 +4,7 @@ import { ValidatedMethod } from 'meteor/mdg:validated-method';
 
 import { Giveaways } from '../giveaways/giveaways';
 
+// Only logged in users can insert comments.
 export const insertComment = new ValidatedMethod({
   name: 'giveawayComments.insert',
   validate: new SimpleSchema({
@@ -26,6 +27,7 @@ export const insertComment = new ValidatedMethod({
   },
 });
 
+// Only comment author and mods/admins can edit comments.
 export const editComment = new ValidatedMethod({
   name: 'giveawayComments.edit',
   validate: new SimpleSchema({
@@ -53,6 +55,7 @@ export const editComment = new ValidatedMethod({
   },
 });
 
+// Only comment author and mods/admins can remove comments.
 export const removeComment = new ValidatedMethod({
   name: 'giveawayComments.remove',
   validate: new SimpleSchema({
@@ -75,10 +78,11 @@ export const removeComment = new ValidatedMethod({
       throw new Meteor.Error("giveawayComments.removeComment.notAuthorized", "Not authorized to remove comment.");
 
     // Update comment
-    return GiveawayComments.update(_id, { $set: { isRemoved: true, removeUserId } });
+    return GiveawayComments.update(_id, { $set: { isRemoved: true, removeUserId: userId } });
   },
 });
 
+// Only non-authors can flag comments.
 export const flagComment = new ValidatedMethod({
   name: 'giveawayComments.flag',
   validate: new SimpleSchema({
@@ -97,5 +101,31 @@ export const flagComment = new ValidatedMethod({
 
     // Update comment
     return GiveawayComments.update(_id, { $set: { isFlagged: true, flagUserId: userId } });
+  },
+});
+
+// Only mods/admins can unflag comments.
+export const unflagComment = new ValidatedMethod({
+  name: 'giveawayComments.unflag',
+  validate: new SimpleSchema({
+    _id: { type: String },
+    userId: { type: String },
+  }).validator(),
+  run({ _id, userId }) {
+    const comment = GiveawayComments.findOne(_id);
+
+    if (!comment)
+      throw new Meteor.Error("giveawayComments.unflagComment.undefinedComment", "No such comment found.");
+
+    // Check authorized
+    const isAuthorized = Roles.userIsInRole(this.userId, ['moderator', 'admin']);
+
+    if (!this.userId || this.userId != userId)
+      throw new Meteor.Error("giveawayComments.unflagComment.notLoggedIn", "Must be logged in to unflag comment.");
+    else if (!isAuthorized)
+      throw new Meteor.Error("giveawayComments.unflagComment.notAuthorized", "Not authorized to unflag comment.");
+
+    // Update comment
+    return GiveawayComments.update(_id, { $set: { isFlagged: false }, $unset: { flagUserId: "" } });
   },
 });

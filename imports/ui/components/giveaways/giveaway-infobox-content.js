@@ -42,7 +42,7 @@ const getContent = ({ giveaway }) => {
         { !GiveawaysHelper.is_over(giveaway) ?
             iconRow("info_outline", "Status: " + GiveawaysHelper.getLastOwnerStatusType(giveaway).label ) :
             iconRow("info_outline", "Status: Ended" ) }
-        { iconRow("link", <Link to={ "/giveaway/" + giveaway._id }>Permalink</Link>) }
+        { iconRow("link", <Link to={ "/giveaway/" + giveaway._id }>See More...</Link>) }
       </div>
     );
   }
