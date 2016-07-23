@@ -36,12 +36,12 @@
 
 // Sidebar boxes
 #map-info-box {
-  background-color: rgba(#fcfcfc, 0.8); max-width: 350px;
+  background-color: rgba(#fcfcfc, 0.9); max-width: 350px;
 }
 
 #map-nearby-box {
   max-width:350px; z-index: 1000;
-  > div:not(.expand-button-nearbybox) { background-color: #fcfcfc; @include transition-standard(opacity 225ms); }
+  > div:not(.expand-button-nearbybox) { background-color: rgba(#fcfcfc, 0.9); @include transition-standard(opacity 225ms); }
 }
 
 // Smaller-than-iPad devices
