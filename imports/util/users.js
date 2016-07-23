@@ -18,19 +18,9 @@ const maybeGetUser = (userOrId) => {
 
 // Name
 
-
 export const getFullName = (user) => {
   user = maybeGetUser(user);
-
-  const firstName = propExistsDeep(user, ['profile', 'firstName']) ? user.profile.firstName : null;
-  const lastName = propExistsDeep(user, ['profile', 'lastName']) ? user.profile.lastName : null;
-
-  if (firstName && lastName)
-    return firstName + " " + lastName;
-  else if (firstName)
-    return firstName;
-  else
-    return "Someone";
+  return propExistsDeep(user, ['profile', 'name']) ? user.profile.name : "Someone";
 };
 
 export const getFullNameWithLabelIfEqual = (user, user2, label) => {
@@ -46,7 +36,7 @@ export const getFullNameWithLabelIfEqual = (user, user2, label) => {
 
 export const getFirstInitial = (user) => {
   user = maybeGetUser(user);
-  return propExistsDeep(user, ['profile', 'firstName']) ? user.profile.firstName.charAt(0) : null;
+  return propExistsDeep(user, ['profile', 'name']) ? user.profile.name.charAt(0) : null;
 };
 
 // Profile

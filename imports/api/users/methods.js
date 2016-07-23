@@ -17,13 +17,22 @@ export const updateProfileFacebook = new ValidatedMethod({
     if (!user)
       return;
 
-    if (!propExistsDeep(user, ['profile', 'firstName']))
-      if (propExistsDeep(user, ['services', 'facebook', 'first_name']))
-        Meteor.users.update( { _id: user._id }, { $set: { 'profile.firstName': user.services.facebook.first_name } });
+    if (!propExistsDeep(user, ['profile', 'name'])) {
+      let name = "";
 
-    if (!propExistsDeep(user, ['profile', 'lastName']))
-      if (propExistsDeep(user, ['services', 'facebook', 'last_name']))
-        Meteor.users.update( { _id: user._id }, { $set: { 'profile.lastName': user.services.facebook.last_name } });
+      if (propExistsDeep(user, ['services', 'facebook', 'first_name'])) {
+        name = user.services.facebook.first_name;
+      }
+
+      if (propExistsDeep(user, ['services', 'facebook', 'last_name'])) {
+        if (name.length)
+          name += " " + user.services.facebook.last_name;
+        else
+          name = user.services.facebook.last_name;
+      }
+
+      Meteor.users.update( { _id: user._id }, { $set: { 'profile.name': name } });
+    }
 
     if (!propExistsDeep(user, ['profile', 'gender']))
       if (propExistsDeep(user, ['services', 'facebook', 'gender']))
@@ -42,13 +51,22 @@ export const updateProfileGoogle = new ValidatedMethod({
     if (!user)
       return;
 
-    if (!propExistsDeep(user, ['profile', 'firstName']))
-      if (propExistsDeep(user, ['services', 'google', 'given_name']))
-        Meteor.users.update( { _id: user._id }, { $set: { 'profile.firstName': user.services.google.given_name } });
+    if (!propExistsDeep(user, ['profile', 'name'])) {
+      let name = "";
 
-    if (!propExistsDeep(user, ['profile', 'lastName']))
-      if (propExistsDeep(user, ['services', 'google', 'family_name']))
-        Meteor.users.update( { _id: user._id }, { $set: { 'profile.lastName': user.services.google.family_name } });
+      if (propExistsDeep(user, ['services', 'google', 'given_name'])) {
+        name = user.services.google.given_name;
+      }
+
+      if (propExistsDeep(user, ['services', 'google', 'family_name'])) {
+        if (name.length)
+          name += " " + user.services.google.family_name;
+        else
+          name = user.services.google.family_name;
+      }
+
+      Meteor.users.update( { _id: user._id }, { $set: { 'profile.name': name } });
+    }
 
     if (!propExistsDeep(user, ['profile', 'gender']))
       if (propExistsDeep(user, ['services', 'google', 'gender']))
@@ -67,9 +85,9 @@ export const updateProfileIVLE = new ValidatedMethod({
     if (!user)
       return;
 
-    if (!propExistsDeep(user, ['profile', 'firstName']))
+    if (!propExistsDeep(user, ['profile', 'name']))
       if (propExistsDeep(user, ['services', 'ivle', 'name']))
-        Meteor.users.update( { _id: user._id }, { $set: { 'profile.firstName': user.services.ivle.name } });
+        Meteor.users.update( { _id: user._id }, { $set: { 'profile.name': user.services.ivle.name } });
   },
 });
 
@@ -107,7 +125,7 @@ export const leaveCommunity = new ValidatedMethod({
     if(!user.communityIds || user.communityIds.indexOf(commId) > -1){
       Meteor.users.update( { _id: user._id }, { $pull: { 'communityIds': commId } });
       Communities.update( { _id: commId }, {$inc: {'count': -1}})
-    } 
+    }
   }
 });
 

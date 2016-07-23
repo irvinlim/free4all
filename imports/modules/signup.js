@@ -11,10 +11,7 @@ const getUserData = () => ({
   email: getInputValue(component.refs.emailAddress),
   password: getInputValue(component.refs.password),
   profile: {
-    name: {
-      first: getInputValue(component.refs.firstName),
-      last: getInputValue(component.refs.lastName),
-    },
+    name: getInputValue(component.refs.name)
   },
 });
 
@@ -34,10 +31,7 @@ const signUp = () => {
 const validate = () => {
   $(component.refs.signup).validate({
     rules: {
-      firstName: {
-        required: true,
-      },
-      lastName: {
+      name: {
         required: true,
       },
       emailAddress: {
@@ -50,11 +44,8 @@ const validate = () => {
       },
     },
     messages: {
-      firstName: {
-        required: 'First name?',
-      },
-      lastName: {
-        required: 'Last name?',
+      name: {
+        required: 'What is your name?',
       },
       emailAddress: {
         required: 'Need an email address here.',

@@ -12,8 +12,7 @@ const users = [{
   email: 'admin@admin.com',
   password: 'password',
   profile: {
-    firstName: "Admin",
-    lastName: "User"
+    name: "Admin User",
   },
   roles: ['admin'],
   homeLocation: [1.2993372,103.777426],
@@ -25,7 +24,7 @@ users.forEach(({ email, password, profile, roles }) => {
   if (!userExists) {
     const userId = Accounts.createUser({ email, password, profile });
     Roles.addUsersToRoles(userId, roles);
-    
+
     // Default communities
     const default_communities = [
       { name:"NUS", description: "National University of Singapore", ownerId: userId, count:1, pictureId: "nuslogo_zx2viu_cckvxo", website: "http://nus.edu.sg", coordinates: [1.2993372,103.777426], zoom: 16, mapURL: "https://api.mapbox.com/styles/v1/leonmak/ciqri7cxi0004c3neujg0demt/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibGVvbm1hayIsImEiOiJkNzQ3YWVlZDczYjMxNjhhMjVhZWI4OWFkM2I2MWUwOCJ9.uL_x_vTDIse10HSvMb6XIg"},

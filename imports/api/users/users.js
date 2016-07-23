@@ -14,11 +14,7 @@ Schema.UserCountry = new SimpleSchema({
 });
 
 Schema.UserProfile = new SimpleSchema({
-  firstName: {
-    type: String,
-    optional: true
-  },
-  lastName: {
+  name: {
     type: String,
     optional: true
   },

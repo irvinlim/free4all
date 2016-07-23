@@ -19,25 +19,14 @@ export class Signup extends React.Component {
           <h4 className="page-header">Sign Up</h4>
           <form ref="signup" className="signup" onSubmit={ this.handleSubmit }>
             <Row>
-              <Col xs={ 6 } sm={ 6 }>
+              <Col xs={ 12 } sm={ 12 }>
                 <FormGroup>
                   <ControlLabel>First Name</ControlLabel>
                   <FormControl
                     type="text"
-                    ref="firstName"
-                    name="firstName"
-                    placeholder="First Name"
-                  />
-                </FormGroup>
-              </Col>
-              <Col xs={ 6 } sm={ 6 }>
-                <FormGroup>
-                  <ControlLabel>Last Name</ControlLabel>
-                  <FormControl
-                    type="text"
-                    ref="lastName"
-                    name="lastName"
-                    placeholder="Last Name"
+                    ref="name"
+                    name="name"
+                    placeholder="Name"
                   />
                 </FormGroup>
               </Col>
