@@ -149,7 +149,7 @@ export class GiveawayComments extends React.Component {
         console.log(error);
         Bert.alert(error.reason, 'danger');
       } else {
-        Bert.alert('Thanks for flagging, we will be reviewing the comment shortly.', 'success');
+        Bert.alert('Thanks for flagging, we will be reviewing this shortly.', 'success');
       }
     });
   }

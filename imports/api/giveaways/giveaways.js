@@ -33,6 +33,18 @@ export const RatingsSchema = new SimpleSchema({
   }
 });
 
+export const FlagsSchema = new SimpleSchema({
+  userId: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id,
+    label: 'ID of user who flagged this giveaway',
+  },
+  date: {
+    type: Date,
+    label: 'Timestamp when flag was set',
+  }
+});
+
 export const GiveawaysDataSchema = new SimpleSchema({
   // Data fields
   title: {
@@ -100,6 +112,11 @@ export const GiveawaysDataSchema = new SimpleSchema({
     label: 'User downvote ratings for giveaway',
     optional: true,
   },
+  flags: {
+    type: [FlagsSchema],
+    label: 'Flags for giveaway',
+    optional: true
+  },
   userId: {
     type: String,
     regEx: SimpleSchema.RegEx.Id,
@@ -126,7 +143,7 @@ export const GiveawaysDataSchema = new SimpleSchema({
     type: String,
     label: 'Cloudinary public ID',
     optional: true
-  }
+  },
 });
 
 export const GiveawaysMetaSchema = new SimpleSchema({

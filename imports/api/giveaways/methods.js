@@ -2,6 +2,8 @@ import { Giveaways, GiveawayNetRatings, GiveawaysDataSchema } from './giveaways'
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { ValidatedMethod } from 'meteor/mdg:validated-method';
 
+import * as GiveawaysHelper from '../../util/giveaways';
+
 // CRUD
 
 export const insertGiveaway = new ValidatedMethod({
@@ -88,6 +90,62 @@ export const removeGiveawayGroup = new ValidatedMethod({
         removeUserId: this.userId,
         removeDate: new Date()
       }
+    });
+  },
+});
+
+// Flags
+
+export const flagGiveaway = new ValidatedMethod({
+  name: 'giveaways.flag',
+  validate: new SimpleSchema({
+    _id: { type: String },
+    userId: { type: String },
+  }).validator(),
+  run({ _id, userId }) {
+    const giveaway = Giveaways.findOne(_id);
+
+    if (!this.userId || this.userId != userId)
+      throw new Meteor.Error("giveaways.flagGiveaway.notLoggedIn", "Must be logged in to flag giveaway.");
+    else if (!giveaway)
+      throw new Meteor.Error("giveaways.flagGiveaway.undefinedGiveaway", "No such Giveaway found.");
+    else if (userId == giveaway.userId)
+      throw new Meteor.Error("giveaways.flagGiveaway.cannotFlagOwnGiveaway", "You cannot flag your own giveaway.");
+
+    if (GiveawaysHelper.userHasFlagged(giveaway, userId))
+      Giveaways.update(_id, {
+        $pull: { flags: { userId } },
+      });
+
+    // Push flag by user
+    Giveaways.update(_id, {
+      $push: { flags: { userId, date: new Date() } },
+    });
+  },
+});
+
+export const unflagGiveaway = new ValidatedMethod({
+  name: 'giveaways.unflag',
+  validate: new SimpleSchema({
+    _id: { type: String },
+    userId: { type: String },
+  }).validator(),
+  run({ _id, userId }) {
+    const giveaway = Giveaways.findOne(_id);
+
+    if (!giveaway)
+      throw new Meteor.Error("giveaways.unflagGiveaway.undefinedGiveaway", "No such Giveaway found.");
+
+    const isAuthorized = Roles.userIsInRole(this.userId, ['moderator', 'admin']);
+
+    if (!this.userId || this.userId != userId)
+      throw new Meteor.Error("giveaways.unflagGiveaway.notLoggedIn", "Must be logged in to unflag giveaway.");
+    else if (!isAuthorized)
+      throw new Meteor.Error("giveaways.unflagGiveaway.notAuthorized", "Not authorized to unflag giveaway.");
+
+    // Clear all flags
+    Giveaways.update(_id, {
+      $set: { flags: [] },
     });
   },
 });
