@@ -30,35 +30,42 @@ const CommentRow = (self, owner) => (comment, index) => (
   </div>
 );
 
-const CommentRowDisplay = (self, { _id, content, user, createdAt, updatedAt }, owner) => LayoutHelper.twoColumns(
-  UsersHelper.getAvatar(user, 40, { margin: "0 auto", display: "flex" }),
-  <div className="comment-body">
-    <h5 className="comment-username">{ UsersHelper.getFullNameWithLabelIfEqual(user, owner, "Author") }</h5>
-    { GiveawaysHelper.commentBody(content) }
-    <p className="timestamp small-text">
-      { updatedAt ? "updated " + moment(updatedAt).fromNow() : moment(createdAt).fromNow() }
-      { self.props.showActions && Meteor.userId() ?
-        user && user._id === Meteor.userId() ? CommentActionsOwner(self, _id, content) : CommentActionsNonOwner(self, _id, content) :
-        null
-      }
-    </p>
-  </div>,
-  40
-);
+const CommentRowDisplay = (self, comment, owner) => {
+  const { _id, content, user, createdAt, updatedAt } = comment;
 
-const CommentActionsOwner = (self, _id, content) => (
+  return LayoutHelper.twoColumns(
+    UsersHelper.getAvatar(user, 40, { margin: "0 auto", display: "flex" }),
+    <div className="comment-body">
+      <h5 className="comment-username">{ UsersHelper.getFullNameWithLabelIfEqual(user, owner, "Author") }</h5>
+      { GiveawaysHelper.commentBody(content) }
+      <p className="timestamp small-text">
+        { updatedAt ? "updated " + moment(updatedAt).fromNow() : moment(createdAt).fromNow() }
+        { self.props.showActions && Meteor.userId() ?
+          user && user._id === Meteor.userId() ? CommentActionsOwner(self, comment) : CommentActionsNonOwner(self, comment) :
+          null
+        }
+      </p>
+    </div>,
+    40
+  );
+};
+
+const CommentActionsOwner = (self, comment) => (
   <span>
     { middot }
-    <a role="button" onTouchTap={ event => self.setState({ currentlyEditing: _id, editCommentValue: content }) }>Edit</a>
+    <a role="button" onTouchTap={ event => self.setState({ currentlyEditing: comment._id, editCommentValue: comment.content }) }>Edit</a>
     { middot }
-    <a role="button" onTouchTap={ event => self.handleRemoveComment(_id) }>Remove</a>
+    <a role="button" onTouchTap={ event => self.handleRemoveComment(comment._id) }>Remove</a>
   </span>
 );
 
-const CommentActionsNonOwner = (self, _id, content) => (
+const CommentActionsNonOwner = (self, comment) => (
   <span>
     { middot }
-    <a role="button" onTouchTap={ event => self.handleFlagComment(_id) }>Flag</a>
+    { !GiveawaysHelper.userHasFlaggedComment(comment, Meteor.userId()) ?
+      <a role="button" onTouchTap={ event => self.handleFlagComment(comment._id) }>Flag</a> :
+      "Flagged"
+    }
   </span>
 );
 

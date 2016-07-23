@@ -4,6 +4,8 @@ import { ValidatedMethod } from 'meteor/mdg:validated-method';
 
 import { Giveaways } from '../giveaways/giveaways';
 
+import * as GiveawaysHelper from '../../util/giveaways';
+
 // Only logged in users can insert comments.
 export const insertComment = new ValidatedMethod({
   name: 'giveawayComments.insert',
@@ -99,8 +101,15 @@ export const flagComment = new ValidatedMethod({
     else if (userId == comment.userId)
       throw new Meteor.Error("giveawayComments.flagComment.cannotFlagOwnComment", "Cannot flag own comment.");
 
+    if (GiveawaysHelper.userHasFlaggedComment(comment, userId))
+      GiveawayComments.update(_id, {
+        $pull: { flags: { userId } },
+      });
+
     // Update comment
-    return GiveawayComments.update(_id, { $set: { isFlagged: true, flagUserId: userId } });
+    return GiveawayComments.update(_id, {
+      $push: { flags: { userId, date: new Date() } }
+    });
   },
 });
 
@@ -126,6 +135,8 @@ export const unflagComment = new ValidatedMethod({
       throw new Meteor.Error("giveawayComments.unflagComment.notAuthorized", "Not authorized to unflag comment.");
 
     // Update comment
-    return GiveawayComments.update(_id, { $set: { isFlagged: false }, $unset: { flagUserId: "" } });
+    return GiveawayComments.update(_id, {
+      $set: { flags: [] },
+    });
   },
 });

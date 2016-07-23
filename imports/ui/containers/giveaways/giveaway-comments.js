@@ -28,13 +28,9 @@ const composer = (props, onData) => {
 
     if (Meteor.subscribe('users-by-id', users).ready()) {
       const denormalizedComments = sortedComments.map(comment => {
-        return {
-          _id: comment._id,
+        return _.extend(comment, {
           user: Meteor.users.findOne(comment.userId),
-          content: comment.content,
-          createdAt: comment.createdAt,
-          updatedAt: comment.updatedAt,
-        };
+        });
       });
 
       onData(null, {

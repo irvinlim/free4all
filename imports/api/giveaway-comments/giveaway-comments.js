@@ -3,6 +3,18 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 export const GiveawayComments = new Mongo.Collection('GiveawayComments');
 
+export const FlagsSchema = new SimpleSchema({
+  userId: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id,
+    label: 'ID of user who flagged this giveaway',
+  },
+  date: {
+    type: Date,
+    label: 'Timestamp when flag was set',
+  }
+});
+
 GiveawayComments.schema = new SimpleSchema({
   giveawayId: {
     type: String,
@@ -32,7 +44,6 @@ GiveawayComments.schema = new SimpleSchema({
       }
     }
   },
-
   updatedAt: {
     type: Date,
     label: 'Date that comment was updated',
@@ -44,22 +55,12 @@ GiveawayComments.schema = new SimpleSchema({
     optional: true
   },
 
-  isFlagged: {
-    type: Boolean,
-    label: 'Whether the comment is flagged',
-    defaultValue: false
-  },
-  flagUserId: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id,
-    label: 'ID of user who flagged this comment',
+  flags: {
+    type: [FlagsSchema],
+    label: 'Flags for this comment',
     optional: true
   },
-  flagDate: {
-    type: Date,
-    label: 'Date when comment was flagged',
-    optional: true
-  },
+
   isRemoved: {
     type: Boolean,
     label: 'Whether the comment has been removed',

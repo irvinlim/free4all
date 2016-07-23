@@ -139,12 +139,13 @@ export const makeAvatar = (ga, size=64, style={}) => {
     );
 };
 
-// Comments
-export const commentBody = (content) => content.length ? Helper.nl2br(content) : null;
-
 // Flags
 export const userHasFlagged = (ga, user) => {
   const userId = user && user._id ? user._id : user;
   return userId && ga.flags ? ga.flags.some(flag => flag.userId == userId) : false;
 };
 export const countTotalFlags = (ga) => ga.flags ? ga.flags.length : 0;
+
+// Comments
+export const commentBody = (content) => content.length ? Helper.nl2br(content) : null;
+export const userHasFlaggedComment = userHasFlagged;
