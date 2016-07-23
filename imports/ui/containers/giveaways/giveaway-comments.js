@@ -21,22 +21,29 @@ const composer = (props, onData) => {
       sort: { createdAt: -1 }
     });
 
-    const denormalizedComments = sortedComments.map(comment => {
-      return {
-        _id: comment._id,
-        user: Meteor.users.findOne(comment.userId),
-        content: comment.content,
-        createdAt: comment.createdAt,
-        updatedAt: comment.updatedAt,
-      };
+    const users = [];
+    sortedComments.forEach(comment => {
+      if (users.indexOf(comment.userId) < 0) users.push(comment.userId);
     });
 
-    onData(null, {
-      ga: ga,
-      comments: denormalizedComments,
-      owner: Meteor.users.findOne(ga.userId),
-      showActions: props.showActions,
-    });
+    if (Meteor.subscribe('users-by-id', users).ready()) {
+      const denormalizedComments = sortedComments.map(comment => {
+        return {
+          _id: comment._id,
+          user: Meteor.users.findOne(comment.userId),
+          content: comment.content,
+          createdAt: comment.createdAt,
+          updatedAt: comment.updatedAt,
+        };
+      });
+
+      onData(null, {
+        ga: ga,
+        comments: denormalizedComments,
+        owner: Meteor.users.findOne(ga.userId),
+        showActions: props.showActions,
+      });
+    }
   }
 };
 

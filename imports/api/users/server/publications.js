@@ -24,6 +24,15 @@ Meteor.publish('user-by-id', function(userId) {
   });
 });
 
+Meteor.publish('users-by-id', function(userIds) {
+  check(userIds, Array);
+  return Meteor.users.find({
+    _id: { $in: userIds }
+  }, {
+    fields: userPublicFields,
+  });
+});
+
 Meteor.publish('userIds-by-commId', function(commId) {
   check(commId, Match._id);
   return Meteor.users.find({communityIds: commId}, {

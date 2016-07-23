@@ -22,15 +22,22 @@ const composer = (props, onData) => {
       };
     };
 
-    const denormalizedStatusUpdates = sortedStatusUpdates.map(denormalize);
-
-    onData(null, {
-      ga: ga,
-      statusUpdates: denormalizedStatusUpdates,
-      latestOwnerUpdate: denormalize(latestOwnerUpdate),
-      owner: Meteor.users.findOne(ga.userId),
-      statusTypes: StatusTypes.find({}, { sort: { relativeOrder: 1 } })
+    const users = [];
+    sortedStatusUpdates.forEach(comment => {
+      if (users.indexOf(comment.userId) < 0) users.push(comment.userId);
     });
+
+    if (Meteor.subscribe('users-by-id', users).ready()) {
+      const denormalizedStatusUpdates = sortedStatusUpdates.map(denormalize);
+
+      onData(null, {
+        ga: ga,
+        statusUpdates: denormalizedStatusUpdates,
+        latestOwnerUpdate: denormalize(latestOwnerUpdate),
+        owner: Meteor.users.findOne(ga.userId),
+        statusTypes: StatusTypes.find({}, { sort: { relativeOrder: 1 } })
+      });
+    }
   }
 };
 
