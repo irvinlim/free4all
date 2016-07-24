@@ -16,10 +16,10 @@ let communities = [];
 let props = {};
 
 const listItemRow = (comm) => (
-  <Paper key={ comm._id } style={{ marginBottom: 20 }} 
-    className="giveaway giveaway-timeline-item" 
+  <Paper key={ comm._id } style={{ marginBottom: 20 }}
+    className="giveaway giveaway-timeline-item"
     onTouchTap={ (event) => browserHistory.push('/community/' + comm._id) }>
-    
+
     <div className="flex-row" style={{padding: "45px 0"}}>
       <div className="col somepad col-xs-4 col-sm-3">
         <div className="photo-avatar-community" style={{ backgroundImage: 'url('+ ImagesHelper.getUrlScale(comm.pictureId, 350) +')'}}>
@@ -66,15 +66,21 @@ export class CommunitiesItems extends React.Component {
       gridListCols: 2,
       gridListCellHeight: 768
     };
-  }
 
-  componentDidMount() {
-    $(window).resize(event => {
+    this.windowResizeHandler = (event) => {
       this.setState({
         gridListCols: $(window).width() < 768 ? 2 : 4,
         gridListCellHeight: $(window).width() < 768 ? 180 : 250
       });
-    }).resize();
+    };
+  }
+
+  componentDidMount() {
+    $(window).bind('resize', this.windowResizeHandler).resize();
+  }
+
+  componentWillUnmount() {
+    $(window).unbind('resize', this.windowResizeHandler);
   }
 
   render() {
