@@ -33,12 +33,12 @@ const giveawayRow = (touchTapHandler, editGa) => (ga) => (
     }
     secondaryTextLines={2}
     onTouchTap={ touchTapHandler(ga) }
-    rightIconButton={    
-      <IconButton 
-        tooltip="Edit" 
-        style={{top: "9px",right: "12px"}} 
+    rightIconButton={
+      <IconButton
+        tooltip="Edit"
+        style={{top: "9px",right: "12px"}}
         onTouchTap={editGa(ga)}>
-        { IconsHelper.materialIcon("mode_edit", {color:"grey",}) }
+        { IconsHelper.materialIcon("mode_edit", { color:"grey" }) }
       </IconButton>
     }
   />
@@ -48,7 +48,7 @@ export const UserGiveaways = (props) => (
   <List>
     <Subheader>
       <h3 style={{ margin:"20px 0px 10px" }}>Your Giveaways</h3>
-      { props.showDateRange ? 
+      { props.showDateRange ?
       <div>
         <Row>
           <Col xs={12} md={2}>
@@ -56,10 +56,11 @@ export const UserGiveaways = (props) => (
           </Col>
           <Col xs={12} md={2}>
             <DatePicker
-            value={ props.userFromDate }
-            onChange={ props.handleUserFromDate }
-            formatDate={ props.formatDate }
-            textFieldStyle={ {width:"105px", fontSize:"14px"}} />
+              id="fromDate"
+              value={ props.userFromDate }
+              onChange={ props.handleUserFromDate }
+              formatDate={ props.formatDate }
+              textFieldStyle={{ width:"105px", fontSize:"14px" }} />
           </Col>
         </Row>
 
@@ -69,10 +70,11 @@ export const UserGiveaways = (props) => (
           </Col>
           <Col xs={12} md={2}>
             <DatePicker
-            value={ props.userUntilDate }
-            onChange={ props.handleUserUntilDate }
-            formatDate={ props.formatDate }
-            textFieldStyle={ {width:"105px", fontSize:"14px"}} />
+              id="toDate"
+              value={ props.userUntilDate }
+              onChange={ props.handleUserUntilDate }
+              formatDate={ props.formatDate }
+              textFieldStyle={{ width:"105px", fontSize:"14px" }} />
           </Col>
         </Row>
         </div>
@@ -91,9 +93,9 @@ export const UserGiveaways = (props) => (
       </Row>
 
     </Subheader>
-    { props.giveaways 
-      ? Helper.insertDividers(props.giveaways.map(giveawayRow(props.nearbyOnClick, props.editGa) )) 
-      : <div /> 
+    { props.giveaways
+      ? Helper.insertDividers(props.giveaways.map(giveawayRow(props.nearbyOnClick, props.editGa) ))
+      : <div />
     }
   </List>
 );
