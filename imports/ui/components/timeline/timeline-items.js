@@ -76,15 +76,21 @@ export class TimelineItems extends React.Component {
       gridListCols: 2,
       gridListCellHeight: 768
     };
-  }
 
-  componentDidMount() {
-    $(window).resize(event => {
+    this.windowResizeHandler = (event) => {
       this.setState({
         gridListCols: $(window).width() < 768 ? 2 : 4,
         gridListCellHeight: $(window).width() < 768 ? 180 : 250
       });
-    }).resize();
+    };
+  }
+
+  componentDidMount() {
+    $(window).bind('resize', this.windowResizeHandler).resize();
+  }
+
+  componentWillUnmount() {
+    $(window).unbind('resize', this.windowResizeHandler);
   }
 
   render() {
