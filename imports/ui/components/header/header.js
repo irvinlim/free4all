@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navbar } from 'react-bootstrap';
-import { Link } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 import AppBar from 'material-ui/AppBar';
 
 import HeaderProfile from '../../containers/header/header-profile';
@@ -15,6 +15,19 @@ export default class Header extends React.Component {
       drawerOpen: false,
       loginOpen: false,
     };
+  }
+
+  componentDidMount() {
+    // Open login dialog if path is equal
+    if (this.props.location.pathname === "/login")
+      this.setState({ loginOpen: true });
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    // Update browserHistory when closing login dialog via this specific route
+    if (this.props.location.pathname === "/login" && nextState.loginOpen === false) {
+      browserHistory.push('/');
+    }
   }
 
   openDrawer() {

@@ -102,36 +102,36 @@ export class Index extends React.Component {
     // Autorun check user authenticated
     this.autorunAuth = Tracker.autorun(function() {
       const user = Meteor.user();
-      if(user && user.homeLocation && user.homeZoom){
+      if (user && user.homeLocation && user.homeZoom) {
         // homeLocation state is for goToHomeLocation Button
         self.setState({ homeLocation: user.homeLocation, homeZoom: user.homeZoom });
         // homeLocation session is for initial map center
         Session.setPersistent('homeLocation', { coordinates: user.homeLocation, zoom: user.homeZoom });
       }
-      self.setState({user});
+      self.setState({ user });
     });
 
     this.autorunHome = Tracker.autorun(function(){
       let homeLoc = Session.get('homeLocation');
-      if(homeLoc)
-        self.setState({ 
-          homeLocation: homeLoc.coordinates, 
-          homeZoom: homeLoc.zoom 
-        })
+      if (homeLoc)
+        self.setState({
+          homeLocation: homeLoc.coordinates,
+          homeZoom: homeLoc.zoom
+        });
     });
 
     // Set initial map center for returning visitor, open dialog if not set
     let homeLoc = Session.get('homeLocation');
-    if(homeLoc){
-      self.setState({ 
-        mapCenter: homeLoc.coordinates, 
+    if (homeLoc) {
+      self.setState({
+        mapCenter: homeLoc.coordinates,
         homeLocation: homeLoc.coordinates,
         mapZoom: homeLoc.zoom
-      })
-    } else {
-      self.setState({ isHomeLocOpen: true })
+      });
+    } else if (this.props.location.pathname !== "/login") {
+      // Open dialog only if login dialog is not to be opened
+      self.setState({ isHomeLocOpen: true });
     }
-
   }
 
   componentWillUnmount() {
@@ -147,9 +147,9 @@ export class Index extends React.Component {
   }
 
   goToHomeLoc(){
-    this.setState({ 
-      mapCenter: this.state.homeLocation, 
-      mapZoom: this.state.homeZoom 
+    this.setState({
+      mapCenter: this.state.homeLocation,
+      mapZoom: this.state.homeZoom
     });
   }
 
@@ -190,7 +190,7 @@ export class Index extends React.Component {
       latLngClicked: {lat:"",lng:""},
       locArr: [],
       locName: "",
-    })
+    });
   }
 
   setHomeLoc(uniName){
@@ -233,7 +233,7 @@ export class Index extends React.Component {
     return (
       <MuiThemeProvider muiTheme={ MuiTheme }>
         <div id="main">
-          <Header />
+          <Header location={ this.props.location } />
           <div className="full-container">
             <LeafletMap
               gaId={ this.state.gaSelected }
@@ -274,14 +274,14 @@ export class Index extends React.Component {
               />
             </div>
 
-            <SelectHomeDialog 
+            <SelectHomeDialog
               isHomeLocOpen={ this.state.isHomeLocOpen }
-              closeSelectHomeModal={ () => this.setState({ isHomeLocOpen: false }) } 
-              setHomeLoc={this.setHomeLoc.bind(this)} />     
+              closeSelectHomeModal={ () => this.setState({ isHomeLocOpen: false }) }
+              setHomeLoc={this.setHomeLoc.bind(this)} />
 
             <div id="map-floating-buttons" style={{ right: 20 + (this.state.nearbyBoxState > 0 ? $("#map-nearby-box").outerWidth() : 0) }}>
 
-              <GoToGeolocationButton 
+              <GoToGeolocationButton
                 geolocationOnClick={ this.goToGeolocation.bind(this) } />
 
               <GoToHomeButton
