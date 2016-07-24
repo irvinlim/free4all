@@ -25,7 +25,7 @@ const AboutAuthor = ({ ga, user, shareCount }) => (
 
 const MetaStatsRow = (icon, text) => LayoutHelper.twoColumns(IconsHelper.icon("fa fa-" + icon), text, 16, 6, 4, "meta-stats-row");
 
-const MetaInfo = ({ ga, commentCount }) => {
+const MetaInfo = ({ ga, commentCount, pageViews }) => {
   const ratings = GiveawaysHelper.countTotalVotes(ga);
   const comments = commentCount;
   const updates = GiveawaysHelper.countTotalStatusUpdates(ga);
@@ -34,6 +34,7 @@ const MetaInfo = ({ ga, commentCount }) => {
     <div>
       <h3>Statistics</h3>
 
+      { MetaStatsRow("eye", pageViews + " " + pluralizer(ratings, "page view", "page views")) }
       { MetaStatsRow("star-o", ratings + " " + pluralizer(ratings, "rating", "ratings") + " in total") }
       { MetaStatsRow("comments", comments + " " + pluralizer(comments, "comment", "comments")) }
       { MetaStatsRow("bell-o", updates + " " + pluralizer(updates, "status update", "status updates")) }

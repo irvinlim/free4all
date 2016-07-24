@@ -31,7 +31,11 @@
     "Google":{
       "clientSecret": "<CLIENT_SECRET>"
     },
-    "kadira": { 
+    "GAServiceAccount": {
+      "emailAddress": "<SERVICE_ACCOUNT_EMAIL>",
+      "keyId": "<SERVICE_ACCOUNT_KEY>"
+    },
+    "kadira": {
       "appId": "<API_KEY>",
       "appSecret": "<API_SECRET>"
     }

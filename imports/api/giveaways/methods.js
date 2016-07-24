@@ -1,7 +1,10 @@
+import { Meteor } from 'meteor/meteor';
+
 import { Giveaways, GiveawayNetRatings, GiveawaysDataSchema } from './giveaways';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { ValidatedMethod } from 'meteor/mdg:validated-method';
 
+import { propExistsDeep } from '../../util/helper';
 import * as GiveawaysHelper from '../../util/giveaways';
 
 // CRUD
@@ -260,9 +263,49 @@ export const unvote = new ValidatedMethod({
   },
 });
 
-// GiveawayNetRatings
-Meteor.methods({
-  'giveaways.getNetRatingIDs': function(options) {
-    return GiveawayNetRatings.find({}, options).map(doc => doc._id);
-  }
-});
+
+if (Meteor.isServer) {
+
+  // GiveawayNetRatings
+  Meteor.methods({
+    'giveaways.getNetRatingIDs': function(options) {
+      return GiveawayNetRatings.find({}, options).map(doc => doc._id);
+    }
+  });
+
+  // Google Analytics
+  Meteor.methods({
+    'giveaways.getPageviews': function(gaId) {
+      check(gaId, String);
+
+      var fut = new Future();
+
+      // const path = '/portfolio/';
+      const path = '/giveaway/' + gaId + '/';
+
+      const options = {
+       'ids': 'ga:' + Meteor.settings.public.GoogleAnalytics.profileId,
+        'start-date': '2005-01-01',
+        'end-date': 'today',
+        'dimensions': 'ga:pagePath',
+        'metrics': 'ga:pageviews',
+        'filters': 'ga:pagePath==' + path
+      };
+
+      GoogleAnalytics.get(options, function(err, entries) {
+        if (!err) {
+          let ret = 0;
+
+          if (propExistsDeep(entries, [0, 'metrics', 0, 'ga:pageviews']))
+            ret = entries[0].metrics[0]['ga:pageviews'];
+
+          fut['return'](ret);
+        }
+      });
+
+      // Wait for async to finish before returning the result
+      return fut.wait();
+    }
+  });
+
+}

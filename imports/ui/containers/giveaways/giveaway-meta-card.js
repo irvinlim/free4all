@@ -16,11 +16,21 @@ const composer = (props, onData) => {
       if (Meteor.subscribe('giveaways-by-user', ga.userId).ready()) {
         const shareCount = Giveaways.find({ userId: ga.userId }).count();
 
-        if (Meteor.subscribe('comments-for-giveaway', props.gaId).ready()) {
-          const commentCount = GiveawayComments.find({ giveawayId: props.gaId, isRemoved: { $ne: true } }).count();
+        if (ga.userId != Meteor.userId()) {
+          onData(null, { ga, user, shareCount, commentCount: 0, pageViews: 0 });
+        } else {
+          if (Meteor.subscribe('comments-for-giveaway', props.gaId).ready()) {
+            const commentCount = GiveawayComments.find({ giveawayId: props.gaId, isRemoved: { $ne: true } }).count();
 
-          onData(null, { ga, user, shareCount, commentCount });
+            Meteor.call('giveaways.getPageviews', props.gaId, function (error, pageViews) {
+              if (error)
+                pageViews = 0;
+
+              onData(null, { ga, user, shareCount, commentCount, pageViews });
+            });
+          }
         }
+
       }
     }
   }
