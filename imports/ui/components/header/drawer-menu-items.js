@@ -23,6 +23,11 @@ export class DrawerMenuItems extends React.Component {
     ];
 
     if (this.props.hasUser) {
+      this.menuItems.push({ title: "My Giveaways", href: "/my-giveaways", icon: IconsHelper.icon("folder_shared") });
+      this.menuItems.push({ title: "My Communities", href: "/my-communities", icon: IconsHelper.icon("group") });
+      this.menuItems.push({ divider: true });
+      this.menuItems.push({ title: "Profile", href: "/profile", icon: IconsHelper.icon("person") });
+      this.menuItems.push({ title: "Settings", href: "/settings", icon: IconsHelper.icon("settings") });
       this.menuItems.push({ title: "Log Out", onClick: getHandleLogout(), icon: IconsHelper.icon("exit_to_app") });
     } else {
       this.menuItems.push({ title: "Log In", onClick: this.props.openLogin.bind(this), icon: IconsHelper.icon("lock") });
@@ -36,10 +41,7 @@ export class DrawerMenuItems extends React.Component {
       <div id="drawer-menu-items">
         { this.menuItems.map((item, index) => {
           if (item.divider) {
-            return (
-              <Divider
-                key={ 'menudivider'+index }
-              />);
+            return <Divider key={ 'menudivider' + index } />;
           } else {
             const onClick = () => {
               if (item.onClick)
