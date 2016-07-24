@@ -42,7 +42,33 @@ export const propExistsDeep = function(parent, arrayOfChildProps) {
     object = object[prop];
     return true;
   });
-}
+};
+
+/**
+ * Maps object properties using a given function.
+ * @param  {Object}   obj   Target object
+ * @param  {Function} fn    Mapping function that takes in an object property value, and returns a new value to be assigned.
+ *                          Method signature:
+ *                            function(value, key: string) => newValue
+ * @return {Object}         Newly constructed object with mapped properties. Original object is not modified.
+ */
+export const map_obj = function(obj, fn) {
+  return Object.keys(obj).reduce(function(accum, curr) {
+    accum[curr] = fn(obj[curr], curr);
+    return accum;
+  }, {});
+};
+
+export const objToPairArray = function(obj, keyK, keyV) {
+  const arr = [];
+  Object.keys(obj).forEach(key => {
+    const pair = {};
+    pair[keyK] = key;
+    pair[keyV] = obj[key];
+    arr.push(pair);
+  });
+  return arr;
+};
 
 // Dates
 export const is_ongoing = (start, end) => moment(start).isBefore(moment()) && moment(end).isAfter(moment());

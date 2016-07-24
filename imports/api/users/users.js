@@ -1,9 +1,9 @@
 import { Mongo } from 'meteor/mongo';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-Schema = {};
+export const UsersSchema = {};
 
-Schema.UserCountry = new SimpleSchema({
+UsersSchema.UserCountry = new SimpleSchema({
   name: {
     type: String
   },
@@ -13,7 +13,7 @@ Schema.UserCountry = new SimpleSchema({
   }
 });
 
-Schema.UserProfile = new SimpleSchema({
+UsersSchema.UserProfile = new SimpleSchema({
   name: {
     type: String,
     optional: true
@@ -24,7 +24,7 @@ Schema.UserProfile = new SimpleSchema({
   },
   gender: {
     type: String,
-    allowedValues: ['Male', 'Female', 'Unspecified'],
+    allowedValues: ['Male', 'Female', 'Others'],
     optional: true
   },
   organization : {
@@ -41,7 +41,7 @@ Schema.UserProfile = new SimpleSchema({
     optional: true
   },
   country: {
-    type: Schema.UserCountry,
+    type: UsersSchema.UserCountry,
     optional: true
   },
   avatarId: {
@@ -50,7 +50,7 @@ Schema.UserProfile = new SimpleSchema({
   },
 });
 
-Schema.User = new SimpleSchema({
+UsersSchema.Data = new SimpleSchema({
   username: {
     type: String,
     optional: true
@@ -78,7 +78,7 @@ Schema.User = new SimpleSchema({
     type: Date
   },
   profile: {
-    type: Schema.UserProfile,
+    type: UsersSchema.UserProfile,
     optional: true
   },
   services: {
@@ -123,4 +123,4 @@ Schema.User = new SimpleSchema({
   }
 });
 
-Meteor.users.attachSchema(Schema.User);
+Meteor.users.attachSchema(UsersSchema.Data);

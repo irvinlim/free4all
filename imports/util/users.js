@@ -72,7 +72,7 @@ export const getAvatarUrl = (user, size=64) => {
     return AvatarHelper.getUrl(user.profile.avatarId, size);
   // Using Facebook Graph
   else if (propExistsDeep(user, ['services', 'facebook', 'id']))
-    return "https://graph.facebook.com/" + user.services.facebook.id + "/picture/?type=" + resolveFacebookAvatarSize(size);
+    return "https://graph.facebook.com/" + user.services.facebook.id + "/picture/?width=" + size;
   // Using Google+ profile picture (provided on first login)
   else if (propExistsDeep(user, ['services', 'google', 'picture']))
     return user.services.google.picture;
@@ -94,3 +94,11 @@ export const getAvatar = (user, size=64, style) => {
   else
     return IconsHelper.materialIcon("person", _.extend({ color: Colors.grey50 }, style));
 };
+
+// Authentication
+const hasService = (service) => (user) => propExistsDeep(user, ['services', service]);
+export const hasPasswordService = hasService('password');
+export const hasFacebookService = hasService('facebook');
+export const hasGoogleService = hasService('google');
+export const hasIvleService = hasService('ivle');
+export const countServices = (user) => Object.size(user.services).length - propExistsDeep(user, ['services', 'resume']);

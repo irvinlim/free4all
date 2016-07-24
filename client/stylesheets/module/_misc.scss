@@ -4,6 +4,9 @@
   span { position: relative; display: inline-block; padding: 0 10px; background-color: #fff; line-height: 41px; font-size: 12px; font-weight: 500; color: #999; }
 }
 
+// Avatar
+.avatar { background-size: cover !important; }
+
 // Text wrapping
 [class^="lines-"], [class*=" lines-"] { display: block; }
 .lines-1 { white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }

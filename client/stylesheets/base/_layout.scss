@@ -1,5 +1,6 @@
 @import '../common/_mixins';
 
+// Base
 html body {
   &, .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6, p { font-family: Roboto, sans-serif; color: #444; }
   .h1, .h2, .h3, .h4, h1, h2, h3, h4 { font-weight: 300; }
@@ -8,8 +9,11 @@ html body {
 
 html, html body { background-color: #eef0f3; height: 100%; }
 
+// Common elements
 a.button:hover { text-decoration: none; }
+label[for] { font-weight: inherit; }
 
+// Containers
 .full-container {
   position: relative;
   height: 100%;
@@ -24,8 +28,7 @@ a.button:hover { text-decoration: none; }
   .container { padding: 0; }
 }
 
-// Making my own Flexbox Grid (!!)
-
+// Flexbox Grid
 .flex-row {
   padding: 15px 0;
   &.nopad { padding: 0; }

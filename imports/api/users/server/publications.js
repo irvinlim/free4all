@@ -12,9 +12,7 @@ const userPublicFields = {
 };
 
 Meteor.publish('user-data', function() {
-  return Meteor.users.find(this.userId, {
-    fields: userPublicFields,
-  });
+  return Meteor.users.find(this.userId);
 });
 
 Meteor.publish('user-by-id', function(userId) {

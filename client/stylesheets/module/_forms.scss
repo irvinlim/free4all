@@ -32,3 +32,8 @@ form label.error {
 .formBtn > button > div > div {
     height: 42px !important;
 }
+
+.form-box {
+  margin-bottom: 20px;
+  @include media-xs-only { margin-bottom: 10px; }
+}
