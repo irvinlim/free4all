@@ -9,6 +9,9 @@
     "Google":{
       "clientId": "<CLIENT_ID>"
     },
+    "GoogleAnalytics": {
+      "profileId": "<GA_PROFILE_ID>"
+    },
     "IVLE": {
       "apiKey": "<API_KEY>"
     },
@@ -31,7 +34,7 @@
     "Google":{
       "clientSecret": "<CLIENT_SECRET>"
     },
-    "GAServiceAccount": {
+    "GoogleAnalytics": {
       "emailAddress": "<SERVICE_ACCOUNT_EMAIL>",
       "keyId": "<SERVICE_ACCOUNT_KEY>"
     },
