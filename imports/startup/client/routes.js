@@ -8,6 +8,8 @@ import { Index } from '../../ui/pages/index';
 import { NotFound } from '../../ui/pages/not-found';
 import { Bert } from 'meteor/themeteorchef:bert';
 
+import { logPageView } from '../../util/analytics';
+
 // Auth
 import { RecoverPassword } from '../../ui/pages/recover-password';
 import { ResetPassword } from '../../ui/pages/reset-password';
@@ -65,20 +67,6 @@ const authRedirect = (nextState, replace) => {
       state: { nextPathname: nextState.location.pathname },
     });
   }
-};
-
-const logPageView = () => {
-  // Set URL
-  ReactGA.set({ page: window.location.pathname });
-
-  // Set Meteor userId, if present
-  if (Meteor.userId())
-    ReactGA.set({ userId: Meteor.userId() });
-  else
-    ReactGA.set({ userId: null });
-
-  // Send page view to GA
-  ReactGA.pageview(window.location.pathname);
 };
 
 Meteor.startup(() => {
