@@ -67,26 +67,40 @@ const authRedirect = (nextState, replace) => {
   }
 };
 
+const logPageView = () => {
+  // Set URL
+  ReactGA.set({ page: window.location.pathname });
+
+  // Set Meteor userId, if present
+  if (Meteor.userId())
+    ReactGA.set({ userId: Meteor.userId() });
+  else
+    ReactGA.set({ userId: null });
+
+  // Send page view to GA
+  ReactGA.pageview(window.location.pathname);
+};
+
 Meteor.startup(() => {
   render(
-    <Router history={ browserHistory }>
+    <Router history={ browserHistory } onUpdate={ logPageView }>
       <Route path="/">
-        <Route name="login" path="/login" component={ Index } onEnter={ authRedirect } />
+        <Route name="login" path="login" component={ Index } onEnter={ authRedirect } />
         <IndexRoute component={ Index } />
         <Route component={ App }>
-          <Route name="recover-password" path="/recover-password" component={ RecoverPassword } onEnter={ authRedirect } />
-          <Route name="reset-password" path="/reset-password/:token" component={ ResetPassword } onEnter={ authRedirect } />
-          <Route name="signup" path="/signup" component={ Signup } onEnter={ authRedirect } />
+          <Route name="recover-password" path="recover-password" component={ RecoverPassword } onEnter={ authRedirect } />
+          <Route name="reset-password" path="reset-password/:token" component={ ResetPassword } onEnter={ authRedirect } />
+          <Route name="signup" path="signup" component={ Signup } onEnter={ authRedirect } />
 
-          <Route name="timeline" path="/timeline" component={ Timeline } />
-          <Route name="giveaway" path="/giveaway/:id" component={ Giveaway } />
-          <Route name="my-giveaways" path="/my-giveaways" component={ MyGiveaways } onEnter={ requireAuth } />
+          <Route name="timeline" path="timeline" component={ Timeline } />
+          <Route name="giveaway" path="giveaway/:id" component={ Giveaway } />
+          <Route name="my-giveaways" path="my-giveaways" component={ MyGiveaways } onEnter={ requireAuth } />
 
-          <Route name="communities" path="/communities" component={ Communities } />
-          <Route name="community" path="/community/:id" component={ Community } />
-          <Route name="my-communities" path="/my-communities" component={ MyCommunities } onEnter={ requireAuth } />
+          <Route name="communities" path="communities" component={ Communities } />
+          <Route name="community" path="community/:id" component={ Community } />
+          <Route name="my-communities" path="my-communities" component={ MyCommunities } onEnter={ requireAuth } />
 
-          <Route name="settings" path="/settings" component={ Settings } onEnter={ requireAuth } />
+          <Route name="settings" path="settings" component={ Settings } onEnter={ requireAuth } />
 
           <Route path="*" component={ NotFound } />
         </Route>

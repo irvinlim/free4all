@@ -201,10 +201,12 @@ export default class InsertBtnDialog extends React.Component {
       this.setState({ parentCatId: parentCat._id });
     };
     this.setChildCat = (e) => {
-      this.setState({childCatId: e.currentTarget.getAttribute("id")});
-      this.setState({childCatName: e.currentTarget.getAttribute("name")});
-      this.setState({childCatIcon: e.currentTarget.getAttribute("alt")});
-      this.setState({ isCatMenuOpen: false });
+      this.setState({
+        childCatId: e.currentTarget.getAttribute("id"),
+        childCatName: e.currentTarget.getAttribute("name"),
+        childCatIcon: e.currentTarget.getAttribute("alt"),
+        isCatMenuOpen: false
+      });
     };
 
     this.handleOpenCatMenu = (e) => {
@@ -566,7 +568,7 @@ render() {
               {this.state.lat ?
                 <Row>
                   <Col xs={12}>
-                    <LeafletMapPreview 
+                    <LeafletMapPreview
                       previewCoords={ { lat:this.state.lat, lng:this.state.lng } }
                       previewZoom={this.state.zoom} />
                   </Col>

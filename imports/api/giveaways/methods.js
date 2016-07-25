@@ -280,8 +280,7 @@ if (Meteor.isServer) {
 
       var fut = new Future();
 
-      // const path = '/portfolio/';
-      const path = '/giveaway/' + gaId + '/';
+      const path = '/giveaway/' + gaId;
 
       const options = {
        'ids': 'ga:' + Meteor.settings.public.GoogleAnalytics.profileId,

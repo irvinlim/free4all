@@ -3,14 +3,15 @@
     "Cloudinary": {
       "cloudName": "<CLOUD_NAME>"
     },
-    "Facebook":{
+    "Facebook": {
       "appId": "<APP_ID>"
     },
-    "Google":{
+    "Google": {
       "clientId": "<CLIENT_ID>"
     },
     "GoogleAnalytics": {
-      "profileId": "<GA_PROFILE_ID>"
+      "profileId": "<GA_PROFILE_ID>",
+      "trackingId": "<TRACKING_ID>"
     },
     "IVLE": {
       "apiKey": "<API_KEY>"
@@ -28,15 +29,15 @@
       "apiKey": "<API_KEY>",
       "apiSecret": "<API_SECRET>"
     },
-    "Facebook":{
+    "Facebook": {
       "appSecret": "<API_SECRET>"
     },
-    "Google":{
+    "Google": {
       "clientSecret": "<CLIENT_SECRET>"
     },
     "GoogleAnalytics": {
       "emailAddress": "<SERVICE_ACCOUNT_EMAIL>",
-      "keyId": "<SERVICE_ACCOUNT_KEY>"
+      "privateKey": "<PRIVATE_KEY_WITHOUT_PASSPHRASE>"
     },
     "kadira": {
       "appId": "<API_KEY>",

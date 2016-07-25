@@ -27,5 +27,6 @@ BrowserPolicy.content.allowImageOrigin( '*.fbcdn.net' );
 BrowserPolicy.content.allowImageOrigin( '*.akamaihd.net' );
 BrowserPolicy.content.allowImageOrigin( '*.googleusercontent.com' );
 
-// Temp
-BrowserPolicy.content.allowImageOrigin( 'lorempixel.com' );
+// Google Analytics
+BrowserPolicy.content.allowOriginForAll("www.google-analytics.com");
+BrowserPolicy.content.allowOriginForAll("cdn.mxpnl.com");

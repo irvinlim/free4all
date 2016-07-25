@@ -9,6 +9,8 @@ var gapi = new GAPI({
   scope: "https://www.googleapis.com/auth/analytics",
 }, function() {
   gapi.getToken(function(err, token) {
+    console.log("Google Analytics token: " + token);
+
     if (err) {
       console.log(err);
     } else {
