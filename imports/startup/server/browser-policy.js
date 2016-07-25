@@ -32,6 +32,7 @@ BrowserPolicy.content.allowImageOrigin( '*.googleusercontent.com' );
 
 // Google Analytics
 BrowserPolicy.content.allowOriginForAll( 'https://www.google-analytics.com' );
+BrowserPolicy.content.allowImageOrigin( 'https://stats.g.doubleclick.net' );
 
 // iubenda Privacy Policy
 BrowserPolicy.content.allowScriptOrigin( 'cdn.iubenda.com' );
