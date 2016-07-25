@@ -5,12 +5,15 @@ import { BrowserPolicy } from 'meteor/browser-policy-common';
 // Allow all content to be served from the current domain
 BrowserPolicy.content.allowSameOriginForAll();
 
+// Recommended settings
+BrowserPolicy.content.disallowEval();
+
 // Maps
 BrowserPolicy.content.allowImageOrigin( 'api.tiles.mapbox.com' );
 BrowserPolicy.content.allowImageOrigin( 'api.mapbox.com' );
 
 // Mapbox Geocoding
-BrowserPolicy.content.allowOriginForAll( 'api.tiles.mapbox.com' );
+BrowserPolicy.content.allowImageOrigin( 'api.tiles.mapbox.com' );
 
 // Fonts
 BrowserPolicy.content.allowStyleOrigin( 'fonts.googleapis.com' );
@@ -28,5 +31,11 @@ BrowserPolicy.content.allowImageOrigin( '*.akamaihd.net' );
 BrowserPolicy.content.allowImageOrigin( '*.googleusercontent.com' );
 
 // Google Analytics
-BrowserPolicy.content.allowOriginForAll("www.google-analytics.com");
-BrowserPolicy.content.allowOriginForAll("cdn.mxpnl.com");
+BrowserPolicy.content.allowOriginForAll( 'https://www.google-analytics.com' );
+
+// iubenda Privacy Policy
+BrowserPolicy.content.allowScriptOrigin( 'cdn.iubenda.com' );
+BrowserPolicy.content.allowStyleOrigin( 'cdn.iubenda.com' );
+BrowserPolicy.content.allowImageOrigin( 'cdn.iubenda.com' );
+BrowserPolicy.content.allowImageOrigin( 'www.iubenda.com' );
+BrowserPolicy.content.allowFrameOrigin( 'www.iubenda.com' );
