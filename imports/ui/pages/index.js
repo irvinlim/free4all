@@ -231,92 +231,87 @@ export class Index extends React.Component {
     };
 
     return (
-      <MuiThemeProvider muiTheme={ MuiTheme }>
-        <div id="main">
-          <Header location={ this.props.location } />
-          <div className="full-container">
-            <LeafletMap
-              gaId={ this.state.gaSelected }
-              infoBoxState={ this.state.infoBoxState }
-              markerOnClick={ gaId => this.selectGa(gaId) }
-              mapCenter={ this.state.mapCenter }
-              setMapCenter={ mapCenter => this.setState({ mapCenter }) }
-              mapZoom={ this.state.mapZoom }
-              setMapZoom={ mapZoom => this.setState({ mapZoom: mapZoom })}
-              setMapMaxZoom={ mapMaxZoom => this.setState({ mapMaxZoom: mapMaxZoom })}
-              setBounds={ bounds => this.mapBounds.set(bounds) }
-              openInsertDialog={ this.openInsertDialog.bind(this) }
-              isDraggableAdded={ this.state.isDraggableAdded }
-              stopDraggableAdded={ ()=>{this.setState({ isDraggableAdded: false })} }
-              showMarkers={ this.state.showMarkers }
-              addRGeoSpinner={ ()=>{this.setState({ rGeoLoading: true })} }
-              rmvRGeoSpinner={ ()=>{this.setState({ rGeoLoading: false })} }
-              isDbClickDisabled= { false }
-            />
-            <RefreshIndicator
-              size={40}
-              top={10}
-              left={ $(window).width() / 2.05 }
-              status={ this.state.rGeoLoading ? "loading" : "hide" }
-            />
-            <div id="map-boxes-container">
-              <MapInfoBox
-                gaId={ this.state.gaSelected }
-                boxState={ this.state.infoBoxState }
-                setBoxState={ this.setInfoBoxState.bind(this) }
-              />
-              <MapNearbyBox
-                gaId={ this.state.gaSelected }
-                boxState={ this.state.nearbyBoxState }
-                setBoxState={ this.setNearbyBoxState.bind(this) }
-                mapBounds={ this.mapBounds.get() }
-                nearbyOnClick={ clickNearbyGa }
-              />
-            </div>
-
-            <SelectHomeDialog
-              isHomeLocOpen={ this.state.isHomeLocOpen }
-              closeSelectHomeModal={ () => this.setState({ isHomeLocOpen: false }) }
-              setHomeLoc={this.setHomeLoc.bind(this)} />
-
-            <div id="map-floating-buttons" style={{ right: 20 + (this.state.nearbyBoxState > 0 ? $("#map-nearby-box").outerWidth() : 0) }}>
-
-              <GoToGeolocationButton
-                geolocationOnClick={ this.goToGeolocation.bind(this) } />
-
-              <GoToHomeButton
-                goToHomeLoc = { this.goToHomeLoc.bind(this) }
-                homeLocation = { this.state.homeLocation } />
-
-              { this.state.user ?
-              <InsertBtnDialog
-                isModalOpen={this.state.isModalOpen}
-                openModal={ ()=>{this.setState({ isModalOpen: true })} }
-                closeModal={ ()=>{this.setState({ isModalOpen: false })} }
-                latLng={this.state.latLngClicked}
-                locArr={this.state.locArr}
-                locName={this.state.locName}
-                addDraggable={ ()=>{this.setState({ isDraggableAdded: true })} }
-                stopDraggableAdded={ ()=>{this.setState({ isDraggableAdded: false })} }
-                hideMarkers={ ()=>{this.setState({ showMarkers: false })} }
-                resetLoc={ this.resetLoc.bind(this) }
-                mapCenter={ this.state.mapCenter }
-                user={ this.state.user }
-                zoom={ this.state.mapZoom } />
-              :
-              <div>
-                <IconButton
-                  tooltip="Login to add giveaways"
-                  style={{ zIndex: 1, position: "absolute" }} />
-                <FloatingActionButton disabled={true} >
-                  { IconsHelper.materialIcon("add", {color:"black"}) }
-                </FloatingActionButton>
-              </div>
-              }
-            </div>
-          </div>
+      <div className="full-container">
+        <LeafletMap
+          gaId={ this.state.gaSelected }
+          infoBoxState={ this.state.infoBoxState }
+          markerOnClick={ gaId => this.selectGa(gaId) }
+          mapCenter={ this.state.mapCenter }
+          setMapCenter={ mapCenter => this.setState({ mapCenter }) }
+          mapZoom={ this.state.mapZoom }
+          setMapZoom={ mapZoom => this.setState({ mapZoom: mapZoom })}
+          setMapMaxZoom={ mapMaxZoom => this.setState({ mapMaxZoom: mapMaxZoom })}
+          setBounds={ bounds => this.mapBounds.set(bounds) }
+          openInsertDialog={ this.openInsertDialog.bind(this) }
+          isDraggableAdded={ this.state.isDraggableAdded }
+          stopDraggableAdded={ ()=>{this.setState({ isDraggableAdded: false })} }
+          showMarkers={ this.state.showMarkers }
+          addRGeoSpinner={ ()=>{this.setState({ rGeoLoading: true })} }
+          rmvRGeoSpinner={ ()=>{this.setState({ rGeoLoading: false })} }
+          isDbClickDisabled= { false }
+        />
+        <RefreshIndicator
+          size={40}
+          top={10}
+          left={ $(window).width() / 2.05 }
+          status={ this.state.rGeoLoading ? "loading" : "hide" }
+        />
+        <div id="map-boxes-container">
+          <MapInfoBox
+            gaId={ this.state.gaSelected }
+            boxState={ this.state.infoBoxState }
+            setBoxState={ this.setInfoBoxState.bind(this) }
+          />
+          <MapNearbyBox
+            gaId={ this.state.gaSelected }
+            boxState={ this.state.nearbyBoxState }
+            setBoxState={ this.setNearbyBoxState.bind(this) }
+            mapBounds={ this.mapBounds.get() }
+            nearbyOnClick={ clickNearbyGa }
+          />
         </div>
-      </MuiThemeProvider>
+
+        <SelectHomeDialog
+          isHomeLocOpen={ this.state.isHomeLocOpen }
+          closeSelectHomeModal={ () => this.setState({ isHomeLocOpen: false }) }
+          setHomeLoc={this.setHomeLoc.bind(this)} />
+
+        <div id="map-floating-buttons" style={{ right: 20 + (this.state.nearbyBoxState > 0 ? $("#map-nearby-box").outerWidth() : 0) }}>
+
+          <GoToGeolocationButton
+            geolocationOnClick={ this.goToGeolocation.bind(this) } />
+
+          <GoToHomeButton
+            goToHomeLoc = { this.goToHomeLoc.bind(this) }
+            homeLocation = { this.state.homeLocation } />
+
+          { this.state.user ?
+          <InsertBtnDialog
+            isModalOpen={this.state.isModalOpen}
+            openModal={ ()=>{this.setState({ isModalOpen: true })} }
+            closeModal={ ()=>{this.setState({ isModalOpen: false })} }
+            latLng={this.state.latLngClicked}
+            locArr={this.state.locArr}
+            locName={this.state.locName}
+            addDraggable={ ()=>{this.setState({ isDraggableAdded: true })} }
+            stopDraggableAdded={ ()=>{this.setState({ isDraggableAdded: false })} }
+            hideMarkers={ ()=>{this.setState({ showMarkers: false })} }
+            resetLoc={ this.resetLoc.bind(this) }
+            mapCenter={ this.state.mapCenter }
+            user={ this.state.user }
+            zoom={ this.state.mapZoom } />
+          :
+          <div>
+            <IconButton
+              tooltip="Login to add giveaways"
+              style={{ zIndex: 1, position: "absolute" }} />
+            <FloatingActionButton disabled={true} >
+              { IconsHelper.materialIcon("add", {color:"black"}) }
+            </FloatingActionButton>
+          </div>
+          }
+        </div>
+      </div>
     );
   }
 }

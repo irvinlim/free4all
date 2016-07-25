@@ -72,27 +72,26 @@ const authRedirect = (nextState, replace) => {
 Meteor.startup(() => {
   render(
     <Router history={ browserHistory } onUpdate={ logPageView }>
-      <Route path="/">
-        <Route name="login" path="login" component={ Index } onEnter={ authRedirect } />
+      <Route path="/" component={ App }>
         <IndexRoute component={ Index } />
-        <Route component={ App }>
-          <Route name="recover-password" path="recover-password" component={ RecoverPassword } onEnter={ authRedirect } />
-          <Route name="reset-password" path="reset-password/:token" component={ ResetPassword } onEnter={ authRedirect } />
-          <Route name="signup" path="signup" component={ Signup } onEnter={ authRedirect } />
+        <Route name="login" path="login" component={ Index } onEnter={ authRedirect } />
 
-          <Route name="timeline" path="timeline" component={ Timeline } />
-          <Route name="giveaway" path="giveaway/:id" component={ Giveaway } />
-          <Route name="my-giveaways" path="my-giveaways" component={ MyGiveaways } onEnter={ requireAuth } />
+        <Route name="recover-password" path="recover-password" component={ RecoverPassword } onEnter={ authRedirect } />
+        <Route name="reset-password" path="reset-password/:token" component={ ResetPassword } onEnter={ authRedirect } />
+        <Route name="signup" path="signup" component={ Signup } onEnter={ authRedirect } />
 
-          <Route name="communities" path="communities" component={ Communities } />
-          <Route name="community" path="community/:id" component={ Community } />
-          <Route name="my-communities" path="my-communities" component={ MyCommunities } onEnter={ requireAuth } />
+        <Route name="timeline" path="timeline" component={ Timeline } />
+        <Route name="giveaway" path="giveaway/:id" component={ Giveaway } />
+        <Route name="my-giveaways" path="my-giveaways" component={ MyGiveaways } onEnter={ requireAuth } />
 
-          <Route name="settings" path="settings" component={ Settings } onEnter={ requireAuth } />
+        <Route name="communities" path="communities" component={ Communities } />
+        <Route name="community" path="community/:id" component={ Community } />
+        <Route name="my-communities" path="my-communities" component={ MyCommunities } onEnter={ requireAuth } />
 
-          <Route path="*" component={ NotFound } />
+        <Route name="settings" path="settings" component={ Settings } onEnter={ requireAuth } />
+
+        <Route path="*" component={ NotFound } />
         </Route>
-      </Route>
     </Router>,
     document.getElementById('react-root')
   );
