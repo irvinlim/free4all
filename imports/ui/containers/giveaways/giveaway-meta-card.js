@@ -6,6 +6,9 @@ import { Loading } from '../../components/loading';
 import { Giveaways } from '../../../api/giveaways/giveaways';
 import { GiveawayComments } from '../../../api/giveaway-comments/giveaway-comments';
 
+let cachedPageViews = new ReactiveVar( 0 );
+let hasCached = false;
+
 const composer = (props, onData) => {
   if (Meteor.subscribe('giveaway-by-id', props.gaId).ready()) {
     const ga = Giveaways.findOne(props.gaId);
@@ -22,12 +25,16 @@ const composer = (props, onData) => {
           if (Meteor.subscribe('comments-for-giveaway', props.gaId).ready()) {
             const commentCount = GiveawayComments.find({ giveawayId: props.gaId, isRemoved: { $ne: true } }).count();
 
-            Meteor.call('giveaways.getPageviews', props.gaId, function (error, pageViews) {
-              if (error)
-                pageViews = 0;
+            if (!hasCached)
+              Meteor.call('giveaways.getPageviews', props.gaId, function (error, pageViews) {
+                if (error)
+                  pageViews = 0;
 
-              onData(null, { ga, user, shareCount, commentCount, pageViews });
-            });
+                hasCached = true;
+                cachedPageViews.set(pageViews);
+              });
+
+            onData(null, { ga, user, shareCount, commentCount, pageViews: cachedPageViews.get() });
           }
         }
 
