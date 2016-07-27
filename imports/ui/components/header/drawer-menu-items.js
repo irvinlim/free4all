@@ -33,6 +33,7 @@ export class DrawerMenuItems extends React.Component {
       this.menuItems.push({ title: "Giveaways", href: "/manage/giveaways", icon: IconsHelper.icon("redeem") });
       this.menuItems.push({ title: "Comments", href: "/manage/comments", icon: IconsHelper.icon("comment") });
       this.menuItems.push({ title: "Categories", href: "/manage/categories", icon: IconsHelper.icon("style") });
+      this.menuItems.push({ title: "Parent Categories", href: "/manage/parent-categories", icon: IconsHelper.icon("layers") });
       this.menuItems.push({ title: "Status Types", href: "/manage/status-types", icon: IconsHelper.icon("traffic") });
     }
 
