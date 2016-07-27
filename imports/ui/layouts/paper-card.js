@@ -4,7 +4,7 @@ import Paper from 'material-ui/Paper';
 const PaperCard = ({ children, className }) => (
   <div className="flex-row">
     <div className="col col-xs-12 nopad">
-      <Paper className={"card " + className ? className : ""}>
+      <Paper className={"card " + (className ? className : "") }>
         { children }
       </Paper>
     </div>
