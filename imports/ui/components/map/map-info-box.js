@@ -15,7 +15,7 @@ export default class MapInfoBox extends React.Component {
   positionBoxes() {
     $(window).resize(function() {
       if (window.innerWidth >= 768)
-        $("#map-info-box").css('right', window.innerWidth - $("#map-info-box").outerWidth());
+        $("#map-info-box").css('right', $("#map-info-box").parent().innerWidth() - $("#map-info-box").outerWidth());
       else
         $("#map-info-box").css('right', "");
     });

@@ -3,7 +3,7 @@ import React from 'react';
 import Avatar from 'material-ui/Avatar';
 
 import * as Colors from 'material-ui/styles/colors';
-import { propExistsDeep } from './helper';
+import { nl2br, propExistsDeep } from './helper';
 import * as AvatarHelper from './avatar';
 import * as IconsHelper from './icons';
 
@@ -49,6 +49,13 @@ export const resolveGender = (gender) => {
     default:
       return "Unspecified";
   }
+};
+
+export const getBio = (user) => {
+  if (propExistsDeep(user, ['profile', 'bio']))
+    return nl2br(user.profile.bio);
+  else
+    return null;
 };
 
 // Avatar

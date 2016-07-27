@@ -29,6 +29,7 @@ import { MyCommunities } from '../../ui/pages/my-communities';
 import { MyGiveaways } from '../../ui/pages/my-giveaways';
 
 // Profile & Settings
+import { Profile } from '../../ui/pages/profile';
 import { Settings } from '../../ui/pages/settings';
 
 // Manage
@@ -114,6 +115,7 @@ Meteor.startup(() => {
           <Route name="status-types" path="status-types" component={ ManageStatusTypes } />
         </Route>
 
+        <Route name="profile" path="profile(/:userId)" component={ Profile } onEnter={ requireAuth } />
         <Route name="settings" path="settings" component={ Settings } onEnter={ requireAuth } />
 
         <Route path="*" component={ NotFound } />
