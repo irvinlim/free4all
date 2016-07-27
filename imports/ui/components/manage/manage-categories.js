@@ -8,7 +8,7 @@ import FlatButton from 'material-ui/FlatButton';
 import { SortableContainer, SortableElement, SortableHandle, arrayMove } from 'react-sortable-hoc';
 
 import { Categories } from '../../../api/categories/categories';
-import { insertCategory, updateCategory, removeCategory } from '../../../api/categories/methods';
+import { insertCategory, updateCategory, removeCategory, reorderCategory } from '../../../api/categories/methods';
 
 import * as Colors from 'material-ui/styles/colors';
 import * as UsersHelper from '../../../util/users';
@@ -124,46 +124,28 @@ export class ManageCategories extends React.Component {
       submitted: false,
     };
 
-    this.props.parentCategories.forEach(parentCat => {
-      this.state[`order-${parentCat._id}`] = [];
+    this.props.orderedCategories.forEach(({ parentCat }) => {
       this.state[`currentlyEditing-${parentCat._id}`] = null;
     });
   }
 
-  makeItems() {
-    const self = this;
-    const items = [];
-
-    this.props.parentCategories.forEach(parentCat => {
-      const children = [];
-      this.props.categories.forEach(cat => {
-        if (cat.parent !== parentCat._id)
-          return true;
-
-        children.push(cat._id);
-      });
-
-      const s = {};
-      s[`order-${parentCat._id}`] = children;
-      self.setState(s);
-    });
+  componentDidUpdate() {
+    console.log(this.props.orderedCategories.map(parentCat => parentCat.children.map(cat => Categories.findOne(cat).relativeOrder))[0]);
   }
 
-  componentWillMount() {
-    this.makeItems();
-  }
-
-  componentWillUpdate(nextProps, nextState) {
-    if (this.props.parentCategories != nextProps.parentCategories || this.props.categories != nextProps.categories)
-      this.makeItems();
-  }
-
-  onSortEnd(parentCatId) {
+  onSortEnd(parentCatIdx) {
     const self = this;
     return ({ oldIndex, newIndex }) => {
-      const s = {};
-      s[`order-${parentCatId}`] = arrayMove(self.state[`order-${parentCatId}`], oldIndex, newIndex)
-      self.setState(s);
+      if (oldIndex == newIndex)
+        return;
+
+      const oldIndexCatId = self.props.orderedCategories[parentCatIdx].children[oldIndex];
+      const newIndexCatId = self.props.orderedCategories[parentCatIdx].children[newIndex];
+      const newIndexCat = Categories.findOne(newIndexCatId);
+
+      console.log([ oldIndex, newIndex ]);
+
+      reorderCategory.call({ _id: oldIndexCatId, newIndex: newIndexCat.relativeOrder }, FormsHelper.bertAlerts);
     };
   }
 
@@ -192,7 +174,7 @@ export class ManageCategories extends React.Component {
       if (!catId) {
         const relativeOrder = Categories.findOne({}, { sort: { relativeOrder: -1 } }).relativeOrder + 1;
 
-        insertCategory.call({ name, iconClass, parentId, relativeOrder }, FormsHelper.bertAlerts("Category added."));
+        insertCategory.call({ name, iconClass, parent: parentId, relativeOrder }, FormsHelper.bertAlerts("Category added."));
       } else {
         updateCategory.call({ _id: catId, name, iconClass }, FormsHelper.bertAlerts("Category updated."));
       }
@@ -235,7 +217,7 @@ export class ManageCategories extends React.Component {
             <CardText>
               <div className="flex-row">
                 <div className="col col-xs-12">
-                  { this.props.parentCategories.map((parentCat, index) => (
+                  { this.props.orderedCategories.map(({ parentCat, children }, index) => (
                       <div className="sortable-list" key={ `parentCat-${index}` }>
                         <Subheader>{ parentCat.name }</Subheader>
 
@@ -243,8 +225,8 @@ export class ManageCategories extends React.Component {
                           self={this}
                           parentCat={ parentCat }
                           useDragHandle={true}
-                          items={ this.state[`order-${parentCat._id}`] }
-                          onSortEnd={ this.onSortEnd(parentCat._id) }
+                          items={ children }
+                          onSortEnd={ this.onSortEnd(index) }
                           lockToContainerEdges={true}
                           helperClass="sortable-active"
                           lockAxis="y"

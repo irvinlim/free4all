@@ -8,11 +8,23 @@ import { Categories } from '../../../api/categories/categories';
 
 const composer = (props, onData) => {
   if (Meteor.subscribe('all-categories').ready()) {
-    onData(null, {
-      parentCategories: ParentCategories.find(),
-      categories: Categories.find(),
-      props
+    const parentCategories = ParentCategories.find({}, { sort: { relativeOrder: 1 } }).fetch();
+    const categories = Categories.find({}, { sort: { relativeOrder: 1 } }).fetch();
+
+    const orderedCategories = [];
+    parentCategories.forEach(parentCat => {
+      const children = [];
+      categories.forEach(cat => {
+        if (cat.parent !== parentCat._id)
+          return true;
+
+        children.push(cat._id);
+      });
+
+      orderedCategories.push({ parentCat, children });
     });
+
+    onData(null, { orderedCategories, props });
   }
 };
 

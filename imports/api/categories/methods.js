@@ -27,7 +27,7 @@ export const updateCategory = new ValidatedMethod({
     const cat = Categories.findOne(category._id);
 
     if (!cat)
-      throw new Meteor.Error("categories.update.undefiendCategory", "No such category.");
+      throw new Meteor.Error("categories.update.undefinedCategory", "No such category.");
 
     if (!RolesHelper.modsOrAdmins(this.userId))
       throw new Meteor.Error("categories.update.notAuthorized", "Not authorized to update category.");
@@ -47,7 +47,7 @@ export const removeCategory = new ValidatedMethod({
     const cat = Categories.findOne(_id);
 
     if (!cat)
-      throw new Meteor.Error("categories.remove.undefiendCategory", "No such category.");
+      throw new Meteor.Error("categories.remove.undefinedCategory", "No such category.");
 
     if (!RolesHelper.onlyAdmins(this.userId))
       throw new Meteor.Error("categories.remove.notAuthorized", "Not authorized to remove category.");
@@ -56,3 +56,43 @@ export const removeCategory = new ValidatedMethod({
     return Categories.remove(_id);
   },
 });
+
+export const reorderCategory = new ValidatedMethod({
+  name: 'categories.reorder',
+  validate: new SimpleSchema({
+    _id: { type: String },
+    newIndex: { type: Number },
+  }).validator(),
+  run({ _id, newIndex }) {
+    const cat = Categories.findOne(_id);
+
+    if (!cat)
+      throw new Meteor.Error("categories.reorder.undefinedCategory", "No such category.");
+
+    const oldIndex = cat.relativeOrder;
+
+    if (oldIndex < 0 || newIndex < 0)
+      throw new Meteor.Error("categories.reorder.indexOutOfBounds", "Invalid index provided.");
+
+    // 1. Move category to smallest side (< 0)
+    return Categories.update(_id, { $set: { relativeOrder: -100 } }, () => {
+      let selector, modifier;
+
+      // 2. If oldIndex < newIndex, move everything from [oldIndex + 1, newIndex] to decrement by 1
+      //    If oldIndex > newIndex, move everything from [newIndex, oldIndex - 1] to increment by 1
+      if (oldIndex < newIndex) {
+        selector = { relativeOrder: { $gt: oldIndex, $lte: newIndex } };
+        modifier = { $inc: { relativeOrder: -1 } };
+      } else {
+        selector = { relativeOrder: { $gte: newIndex, $lt: oldIndex } };
+        modifier = { $inc: { relativeOrder: 1 } };
+      }
+
+      return Categories.update(selector, modifier, { multi: true }, () => {
+
+        // 3. Move category to newIndex
+        return Categories.update(_id, { $set: { relativeOrder: newIndex } });
+      });
+    });
+  }
+})
