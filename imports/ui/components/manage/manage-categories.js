@@ -129,10 +129,6 @@ export class ManageCategories extends React.Component {
     });
   }
 
-  componentDidUpdate() {
-    console.log(this.props.orderedCategories.map(parentCat => parentCat.children.map(cat => Categories.findOne(cat).relativeOrder))[0]);
-  }
-
   onSortEnd(parentCatIdx) {
     const self = this;
     return ({ oldIndex, newIndex }) => {
@@ -142,8 +138,6 @@ export class ManageCategories extends React.Component {
       const oldIndexCatId = self.props.orderedCategories[parentCatIdx].children[oldIndex];
       const newIndexCatId = self.props.orderedCategories[parentCatIdx].children[newIndex];
       const newIndexCat = Categories.findOne(newIndexCatId);
-
-      console.log([ oldIndex, newIndex ]);
 
       reorderCategory.call({ _id: oldIndexCatId, newIndex: newIndexCat.relativeOrder }, FormsHelper.bertAlerts);
     };
@@ -172,7 +166,8 @@ export class ManageCategories extends React.Component {
       const iconClass = this.state['cat-iconClass'];
 
       if (!catId) {
-        const relativeOrder = Categories.findOne({}, { sort: { relativeOrder: -1 } }).relativeOrder + 1;
+        const maxOrderCat = Categories.findOne({ parent: parentId }, { sort: { relativeOrder: -1 } });
+        const relativeOrder = maxOrderCat ? maxOrderCat.relativeOrder + 1 : 0;
 
         insertCategory.call({ name, iconClass, parent: parentId, relativeOrder }, FormsHelper.bertAlerts("Category added."));
       } else {
