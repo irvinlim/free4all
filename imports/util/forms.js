@@ -7,6 +7,7 @@ import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import DatePicker from 'material-ui/DatePicker';
+import { SketchPicker } from 'react-color';
 
 import { objToPairArray } from './helper';
 
@@ -70,7 +71,6 @@ const baseSelectField = ({ self, name, label, value, hintText, items, required, 
   return (
     <FormsySelect
       id={ "field-" + name }
-      ref={ name }
       name={ name }
       floatingLabelText={ label }
       fullWidth={true}
@@ -86,6 +86,20 @@ const baseSelectField = ({ self, name, label, value, hintText, items, required, 
 };
 
 export const makeSelectField = (options) => baseSelectField(options);
+
+const baseColourField = ({ self, name, label, value, hintText, items, required, style }) => {
+  return (
+    <SketchPicker
+      id={ "field-" + name }
+      name={ name }
+      fullWidth={true}
+      style={ style }
+      color={ self.state[name] }
+      onChangeComplete={ color => setNamedState(self, name, color ? color.hex : null) }
+      />
+  );
+};
+export const makeColourField = (options) => baseColourField(options);
 
 
 // Bert

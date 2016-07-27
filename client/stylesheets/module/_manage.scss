@@ -1,5 +1,7 @@
 @import '../common/mixins';
 
+.colour-preview { display: block; width: 16px; height: 16px; border: 1px solid #e0e0e0; margin-right: 5px; }
+
 .sortable-list-container { margin-bottom: 40px; }
 .sortable-list {
   margin-bottom: 40px;
@@ -13,7 +15,6 @@
   .sortable-row { border-bottom: 1px solid #e0e0e0; }
   .sortable-list-footer.flex-row { border-bottom: 0; }
 }
-
 
 .sortable-row {
   background-color: #fff; padding: 10px 0;

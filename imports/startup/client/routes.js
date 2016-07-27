@@ -34,6 +34,7 @@ import { Settings } from '../../ui/pages/settings';
 // Manage
 import { ManageCategories } from '../../ui/pages/manage/manage-categories';
 import { ManageParentCategories } from '../../ui/pages/manage/manage-parent-categories';
+import { ManageStatusTypes } from '../../ui/pages/manage/manage-status-types';
 
 const sub = Meteor.subscribe('user-data');
 
@@ -110,6 +111,7 @@ Meteor.startup(() => {
         <Route name="manage" path="manage" onEnter={ requireModsAdmins }>
           <Route name="categories" path="categories" component={ ManageCategories } />
           <Route name="parent-categories" path="parent-categories" component={ ManageParentCategories } />
+          <Route name="status-types" path="status-types" component={ ManageStatusTypes } />
         </Route>
 
         <Route name="settings" path="settings" component={ Settings } onEnter={ requireAuth } />
