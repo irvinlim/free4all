@@ -2,14 +2,9 @@ import React from 'react';
 import { Card, CardTitle, CardText, CardActions } from 'material-ui/Card';
 import { Accounts } from 'meteor/accounts-base';
 
-import TextField from 'material-ui/TextField';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
-import DatePicker from 'material-ui/DatePicker';
 import FlatButton from 'material-ui/FlatButton';
 import Avatar from 'material-ui/Avatar';
 import LinearProgress from 'material-ui/LinearProgress';
-
 import Formsy from 'formsy-react';
 
 import * as Colors from 'material-ui/styles/colors';

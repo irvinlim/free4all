@@ -2,20 +2,16 @@ import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import { Grid } from 'react-bootstrap';
 
-import FormSettings from '../containers/profile/form-settings';
+import ManageCategoriesComponent from '../../containers/manage/manage-categories';
 
-export class Settings extends React.Component {
+export class ManageCategories extends React.Component {
   render() {
     return (
-      <div id="page-settings" className="page-container">
+      <div id="page-manage-categories" className="page-container">
         <Grid>
           <div className="flex-row nopad">
             <div className="col col-xs-12">
-
-              <h1>Settings</h1>
-              <p>You may edit your settings here.</p>
-
-              <FormSettings />
+              <ManageCategoriesComponent />
             </div>
           </div>
         </Grid>

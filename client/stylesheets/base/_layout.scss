@@ -38,4 +38,7 @@ label[for] { font-weight: inherit; }
     &.nopad { padding: 0; margin: -15px 0; }
     &.somepad { padding: 18px; margin: -15px 0; }
   }
+  .col-left { justify-content: flex-start; }
+  .col-center { justify-content: center; }
+  .col-right { justify-content: flex-end; }
 }

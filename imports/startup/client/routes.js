@@ -9,6 +9,7 @@ import { NotFound } from '../../ui/pages/not-found';
 import { Bert } from 'meteor/themeteorchef:bert';
 
 import { logPageView } from '../../util/analytics';
+import * as RolesHelper from '../../util/roles';
 
 // Auth
 import { RecoverPassword } from '../../ui/pages/recover-password';
@@ -29,6 +30,11 @@ import { MyGiveaways } from '../../ui/pages/my-giveaways';
 
 // Profile & Settings
 import { Settings } from '../../ui/pages/settings';
+
+// Manage
+import { ManageCategories } from '../../ui/pages/manage/manage-categories';
+
+const sub = Meteor.subscribe('user-data');
 
 const alertNoAuth = (title) => {
   Meteor.setTimeout(function(){
@@ -60,6 +66,18 @@ const requireAuth = (nextState, replace) => {
   }
 };
 
+const requireModsAdmins = (nextState, replace) => {
+  if (!sub.ready())
+    return setTimeout(() => requireModsAdmins(nextState, replace), 100);
+
+  if (!RolesHelper.modsOrAdmins(Meteor.userId())) {
+    replace({
+      pathname: '/',
+      state: { nextPathname: nextState.location.pathname },
+    });
+  }
+};
+
 const authRedirect = (nextState, replace) => {
   if (Meteor.userId()) {
     replace({
@@ -87,6 +105,10 @@ Meteor.startup(() => {
         <Route name="communities" path="communities" component={ Communities } />
         <Route name="community" path="community/:id" component={ Community } />
         <Route name="my-communities" path="my-communities" component={ MyCommunities } onEnter={ requireAuth } />
+
+        <Route name="manage" path="manage" onEnter={ requireModsAdmins }>
+          <Route name="categories" path="categories" component={ ManageCategories } />
+        </Route>
 
         <Route name="settings" path="settings" component={ Settings } onEnter={ requireAuth } />
 

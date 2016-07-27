@@ -9,26 +9,29 @@ import DatePicker from 'material-ui/DatePicker';
 
 import { objToPairArray } from './helper';
 
-const baseTextField = ({ self, name, label, hintText, type, multi, required, validations, validationError, validationErrors }) => {
+const setNamedState = (self, name, value) => {
+  const s = {};
+  s[name] = value;
+  self.setState(s);
+};
+
+const baseTextField = ({ self, name, label, value, hintText, type, multi, required, underlineHide, style, validations, validationError, validationErrors }) => {
   return (
     <FormsyText
       type={ type }
       id={ "field-" + name }
-      ref={ name }
       name={ name }
       floatingLabelText={ label }
       fullWidth={true}
+      style={ style }
       multiLine={multi}
       value={ self.state[name] }
       required={ required }
+      underlineShow={ !underlineHide }
       validations={ validations }
       validationError={ validationError }
       validationErrors={ validationErrors }
-      onChange={ event => {
-        const s = {};
-        s[name] = event.target.value;
-        self.setState(s);
-      } } />
+      onBlur={ event => setNamedState(self, name, event.target.value) } />
   );
 };
 
@@ -37,14 +40,14 @@ export const makePasswordField = (options) => baseTextField(_.extend(options, { 
 export const makeMultiTextField = (options) => baseTextField(_.extend(options, { type: 'text', multi: true }));
 
 const defaultFormatDate = date => moment(date).format("D MMM YYYY");
-const baseDatePicker = ({ self, name, label, hintText, minDate, maxDate, formatDate, required, validations, validationError, validationErrors }) => {
+const baseDatePicker = ({ self, name, label, value, hintText, minDate, maxDate, formatDate, required, style, validations, validationError, validationErrors }) => {
   return (
     <FormsyDate
       id={ "field-" + name }
-      ref={ name }
       name={ name }
       floatingLabelText={ label }
       fullWidth={true}
+      style={ style }
       value={ self.state[name] }
       validations={ validations ? validations : required ? "isExisty" : null }
       validationError={ validationError }
@@ -52,18 +55,14 @@ const baseDatePicker = ({ self, name, label, hintText, minDate, maxDate, formatD
       minDate={ minDate }
       maxDate={ maxDate }
       formatDate={ formatDate }
-      onChange={ (event, date) => {
-        const s = {};
-        s[name] = date;
-        self.setState(s);
-      } } />
+      onBlur={ (event, date) => setNamedState(self, name, date) } />
   );
 };
 
 export const makeBirthdayDatePicker = (options) =>
   baseDatePicker(_.extend(options, { minDate: moment().subtract(100, 'years').toDate(), maxDate: new Date(), formatDate: defaultFormatDate }));
 
-const baseSelectField = ({ self, name, label, hintText, items, required, validations, validationError, validationErrors }) => {
+const baseSelectField = ({ self, name, label, value, hintText, items, required, style, validations, validationError, validationErrors }) => {
   const menuItem = (item, index) => <MenuItem key={ index } value={ item.value } primaryText={ item.label } />;
 
   return (
@@ -73,15 +72,12 @@ const baseSelectField = ({ self, name, label, hintText, items, required, validat
       name={ name }
       floatingLabelText={ label }
       fullWidth={true}
+      style={ style }
       value={ self.state[name] }
       validations={ validations ? validations : required ? "isExisty" : null }
       validationError={ validationError }
       validationErrors={ validationErrors }
-      onChange={ (event, payload, index) => {
-        const s = {};
-        s[name] = payload;
-        self.setState(s);
-      } }>
+      onBlur={ (event, payload, index) => setNamedState(self, name, payload) }>
       { objToPairArray(items, "value", "label").map(menuItem) }
     </FormsySelect>
   );
