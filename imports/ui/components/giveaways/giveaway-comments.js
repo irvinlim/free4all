@@ -36,7 +36,7 @@ const CommentRowDisplay = (self, comment, owner) => {
   return LayoutHelper.twoColumns(
     UsersHelper.getAvatar(user, 40, { margin: "0 auto", display: "block" }),
     <div className="comment-body">
-      <h5 className="comment-username">{ UsersHelper.getFullNameWithLabelIfEqual(user, owner, "Author") }</h5>
+      <h5 className="comment-username">{ UsersHelper.getUserLink(user, UsersHelper.getFullNameWithLabelIfEqual(user, owner, "Author")) }</h5>
       { GiveawaysHelper.commentBody(content) }
       <p className="timestamp small-text">
         { updatedAt ? "updated " + moment(updatedAt).fromNow() : moment(createdAt).fromNow() }

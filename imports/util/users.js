@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import Avatar from 'material-ui/Avatar';
+import { Link } from 'react-router';
 
 import * as Colors from 'material-ui/styles/colors';
 import { nl2br, propExistsDeep } from './helper';
@@ -17,6 +18,17 @@ const maybeGetUser = (userOrId) => {
 };
 
 // Name
+
+export const getUserLink = (user, content=null) => {
+  if (!content)
+    content = getFullName(user);
+
+  return (
+    <Link to={`/profile/${user._id}`}>
+      { content }
+    </Link>
+  );
+};
 
 export const getFullName = (user) => {
   user = maybeGetUser(user);

@@ -115,7 +115,7 @@ Meteor.startup(() => {
           <Route name="status-types" path="status-types" component={ ManageStatusTypes } />
         </Route>
 
-        <Route name="profile" path="profile(/:userId)" component={ Profile } onEnter={ requireAuth } />
+        <Route name="profile" path="profile(/:userId)" component={ Profile } />
         <Route name="settings" path="settings" component={ Settings } onEnter={ requireAuth } />
 
         <Route path="*" component={ NotFound } />

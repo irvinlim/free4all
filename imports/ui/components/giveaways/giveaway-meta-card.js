@@ -14,10 +14,12 @@ const AboutAuthor = ({ ga, user, shareCount }) => (
 
     <div style={{ margin: "20px 0 10px" }}>
       <div style={{ width: 84, display: "inline-block" }}>
-        { UsersHelper.getAvatar(user, 64, { margin: "0 auto", display: "block" }) }
+        { UsersHelper.getUserLink(user, UsersHelper.getAvatar(user, 64, { margin: "0 auto", display: "block" })) }
       </div>
       <div style={{ width: "calc(100% - 94px)", marginLeft: 10, display: "inline-block", verticalAlign: "top" }}>
-        <h4 style={{ marginTop: 10 }}>{ UsersHelper.getFullName(user) }</h4>
+        <h4 style={{ marginTop: 10 }}>
+          { UsersHelper.getUserLink(user) }
+        </h4>
         <h5>{ shareCount } { pluralizer(shareCount, "giveaway", "giveaways") } shared</h5>
       </div>
     </div>
