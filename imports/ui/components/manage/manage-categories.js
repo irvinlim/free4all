@@ -113,7 +113,7 @@ const SortableList = SortableContainer(({ self, parentCat, items }) => (
 
     <div className="sortable-list-body">
       {items.map((catId, index) =>
-        <SortableItem key={`cat-${index}`} index={index} cat={ Categories.findOne(catId) } parentCat={ parentCat } self={self} />
+        <SortableItem key={index} index={index} cat={ Categories.findOne(catId) } parentCat={ parentCat } self={self} />
       )}
       { self.state[`currentlyEditing-${parentCat._id}`] == "new" ?
         <EditRow self={self} parentCat={parentCat} cat={null} /> : null

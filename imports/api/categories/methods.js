@@ -81,10 +81,10 @@ export const reorderCategory = new ValidatedMethod({
       // 2. If oldIndex < newIndex, move everything from [oldIndex + 1, newIndex] to decrement by 1
       //    If oldIndex > newIndex, move everything from [newIndex, oldIndex - 1] to increment by 1
       if (oldIndex < newIndex) {
-        selector = { relativeOrder: { $gt: oldIndex, $lte: newIndex } };
+        selector = { parent: cat.parent, relativeOrder: { $gt: oldIndex, $lte: newIndex } };
         modifier = { $inc: { relativeOrder: -1 } };
       } else {
-        selector = { relativeOrder: { $gte: newIndex, $lt: oldIndex } };
+        selector = { parent: cat.parent, relativeOrder: { $gte: newIndex, $lt: oldIndex } };
         modifier = { $inc: { relativeOrder: 1 } };
       }
 
