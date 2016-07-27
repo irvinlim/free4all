@@ -5,6 +5,7 @@ import Divider from 'material-ui/Divider';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import { Scrollbars } from 'react-custom-scrollbars';
+import PaperCard from '../../layouts/paper-card';
 
 import * as GiveawaysHelper from '../../../util/giveaways';
 import * as UsersHelper from '../../../util/users';
@@ -70,7 +71,7 @@ export class GiveawayCommentsCard extends React.Component {
 
   render() {
     return (
-      <Paper className="giveaway giveaway-card">
+      <PaperCard className="giveaway">
         <div className="flex-row">
           <div className="col col-xs-12">
             <h3>Comments</h3>
@@ -81,7 +82,7 @@ export class GiveawayCommentsCard extends React.Component {
 
           </div>
         </div>
-      </Paper>
+      </PaperCard>
     );
   }
 }

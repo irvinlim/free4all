@@ -206,7 +206,7 @@ export class ManageCategories extends React.Component {
 
         <div className="col col-xs-12 nopad">
 
-          <Card>
+          <Card className="card">
             <CardTitle title="Manage Categories" subtitle="Material Icons are not supported for Category iconClass at the moment." />
 
             <CardText>

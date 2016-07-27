@@ -4,6 +4,7 @@ import Paper from 'material-ui/Paper';
 import Subheader from 'material-ui/Subheader';
 import FlatButton from 'material-ui/FlatButton';
 import { Scrollbars } from 'react-custom-scrollbars';
+import PaperCard from '../../layouts/paper-card';
 
 import * as Helper from '../../../util/helper';
 import * as GiveawaysHelper from '../../../util/giveaways';
@@ -79,7 +80,7 @@ const AllUpdates = ({ statusUpdates, owner }) => (
 );
 
 export const GiveawayStatusUpdatesCard = ({ ga, statusUpdates, statusTypes, latestOwnerUpdate, owner }) => (
-  <Paper className="giveaway giveaway-card">
+  <PaperCard className="giveaway">
     <div className="flex-row">
       <div className="col col-xs-12">
         <h3>Status Updates</h3>
@@ -92,5 +93,5 @@ export const GiveawayStatusUpdatesCard = ({ ga, statusUpdates, statusTypes, late
 
       </div>
     </div>
-  </Paper>
+  </PaperCard>
 );

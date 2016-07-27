@@ -3,6 +3,7 @@ import React from 'react';
 import Subheader from 'material-ui/Subheader';
 import Paper from 'material-ui/Paper';
 import { Link } from 'react-router';
+import PaperCard from '../../layouts/paper-card';
 
 import * as Colors from 'material-ui/styles/colors';
 import * as Helper from '../../../util/helper';
@@ -57,7 +58,7 @@ export class GiveawaySingleCard extends React.Component {
     const ga = this.props.ga;
 
     return (
-      <Paper className="giveaway giveaway-single giveaway-card">
+      <PaperCard className="giveaway giveaway-single">
         <div className="flex-row">
           <div className="col col-xs-12 col-sm-3">
             { GiveawaysHelper.makeAvatar(ga, 700) }
@@ -78,7 +79,7 @@ export class GiveawaySingleCard extends React.Component {
               : null }
           </div>
         </div>
-      </Paper>
+      </PaperCard>
     );
   }
 }

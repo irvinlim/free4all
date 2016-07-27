@@ -28,6 +28,15 @@ label[for] { font-weight: inherit; }
   .container { padding: 0; }
 }
 
+.card {
+  margin-bottom: 30px;
+  @include media-xs-only { margin-bottom: 10px; }
+
+  .flex-row:not(.nopad) {
+    padding: 15px 10px; // More padding because of Paper's edges
+  }
+}
+
 // Flexbox Grid
 .flex-row {
   padding: 15px 0;

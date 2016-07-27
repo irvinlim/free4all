@@ -2,13 +2,14 @@ import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
+import PaperCard from '../../layouts/paper-card';
 
 import * as UsersHelper from '../../../util/users';
 
 import ShareItWrapper from './shareit-wrapper';
 
 export const GiveawaySharingCard = ({ ga }) => (
-  <Paper className="giveaway giveaway-card">
+  <PaperCard className="giveaway">
     <div className="flex-row">
       <div className="col col-xs-12">
         <h3>Share</h3>
@@ -21,5 +22,5 @@ export const GiveawaySharingCard = ({ ga }) => (
         <ShareItWrapper ga={ga} />
       </div>
     </div>
-  </Paper>
+  </PaperCard>
 );

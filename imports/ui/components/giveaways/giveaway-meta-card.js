@@ -1,5 +1,6 @@
 import React from 'react';
 import Paper from 'material-ui/Paper';
+import PaperCard from '../../layouts/paper-card';
 
 import { pluralizer } from '../../../util/helper';
 import * as UsersHelper from '../../../util/users';
@@ -48,11 +49,11 @@ const MetaInfo = ({ ga, commentCount, pageViews }) => {
 }
 
 export const GiveawayMetaCard = (props) => (
-  <Paper className="giveaway giveaway-card">
+  <PaperCard className="giveaway">
     <div className="flex-row">
       <div className="col col-xs-12">
         { props.ga.userId == Meteor.userId() ? MetaInfo(props) : AboutAuthor(props) }
       </div>
     </div>
-  </Paper>
+  </PaperCard>
 );
