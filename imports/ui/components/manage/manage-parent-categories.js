@@ -209,17 +209,21 @@ export class ManageParentCategories extends React.Component {
 
             <CardText>
               <div className="sortable-list">
+              <div className="flex-row nopad">
+                <div className="col col-xs-12 nopad">
 
-                <SortableList
-                  self={this}
-                  useDragHandle={true}
-                  items={ this.props.parentCategories }
-                  onSortEnd={ this.onSortEnd.bind(this) }
-                  lockToContainerEdges={true}
-                  helperClass="sortable-active"
-                  lockAxis="y"
-                  lockOffset={0} />
+                  <SortableList
+                    self={this}
+                    useDragHandle={true}
+                    items={ this.props.parentCategories }
+                    onSortEnd={ this.onSortEnd.bind(this) }
+                    lockToContainerEdges={true}
+                    helperClass="sortable-active"
+                    lockAxis="y"
+                    lockOffset={0} />
 
+                  </div>
+                </div>
               </div>
             </CardText>
           </Card>
