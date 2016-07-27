@@ -80,7 +80,7 @@ export class Profile extends React.Component {
         <Grid>
           <div className="flex-row nopad">
             <div className="col col-xs-12">
-              <PaperCard>
+              <PaperCard className="profile">
                 <div className="profile">
                   <ProfileHeader userId={ this.props.params.userId ? this.props.params.userId : Meteor.userId() } />
 
