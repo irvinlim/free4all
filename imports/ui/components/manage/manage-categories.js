@@ -43,14 +43,18 @@ const ItemRow = ({ self, parentCat, cat }) => (
       { self.state[`currentlyEditing-${parentCat._id}`] ? null : <Handle /> }
     </div>
 
-    <div className="col col-xs-5">
-      { cat.name }
+    <div className="col col-xs-8 col-sm-9">
+      <div className="flex-row nopad">
+        <div className="col col-xs-12 col-sm-6">
+          { cat.name }
+        </div>
+        <div className="col col-xs-12 col-sm-6">
+          { IconsHelper.icon(cat.iconClass, { color: Colors.grey700, fontSize: 16, marginRight: 10 }) }
+          { cat.iconClass }
+        </div>
+      </div>
     </div>
-    <div className="col col-xs-4">
-      { IconsHelper.icon(cat.iconClass, { color: Colors.grey700, fontSize: 16, marginRight: 10 }) }
-      { cat.iconClass }
-    </div>
-    <div className="col col-xs-2 col-right">
+    <div className="col col-xs-3 col-sm-2 col-right">
       <IconButton className="row-action" onTouchTap={ self.handleSelectEdit.bind(self) } tooltip="Edit">
         { IconsHelper.icon("edit", { color: Colors.grey700, fontSize: 18 }) }
       </IconButton>
@@ -65,21 +69,25 @@ const EditRow = ({ self, parentCat, cat }) => (
   <Formsy.Form id={`edit-row-${parentCat}`} onValidSubmit={ self.handleSaveEdit(cat ? cat._id : null, parentCat ? parentCat._id : null) }>
     <div className="sortable-row flex-row" data-id={ cat ? cat._id : null } data-parent-id={ parentCat ? parentCat._id : null }>
 
-      <div className="col col-xs-5 col-xs-offset-1">
-        { FormsHelper.makeTextField({
-          self, name: "cat-name", required: true, style: { fontSize: 14 },
-          validationErrors: { isDefaultRequiredValue: "Please enter a category name." },
-        }) }
+      <div className="col col-xs-8 col-sm-9 col-xs-offset-1">
+        <div className="flex-row nopad">
+          <div className="col col-xs-12 col-sm-6">
+            { FormsHelper.makeTextField({
+              self, name: "cat-name", required: true, style: { fontSize: 14 },
+              validationErrors: { isDefaultRequiredValue: "Please enter a category name." },
+            }) }
+          </div>
+
+          <div className="col col-xs-12 col-sm-6">
+            { FormsHelper.makeTextField({
+              self, name: "cat-iconClass", required: true, style: { fontSize: 14 },
+              validationErrors: { isDefaultRequiredValue: "Please enter the className for the icon." },
+            }) }
+          </div>
+        </div>
       </div>
 
-      <div className="col col-xs-4">
-        { FormsHelper.makeTextField({
-          self, name: "cat-iconClass", required: true, style: { fontSize: 14 },
-          validationErrors: { isDefaultRequiredValue: "Please enter the className for the icon." },
-        }) }
-      </div>
-
-      <div className="col col-xs-2 col-right">
+      <div className="col col-xs-3 col-sm-2 col-right">
         <IconButton type="submit" className="row-action" tooltip="Save" formNoValidate>
           { IconsHelper.icon("save", { color: Colors.grey700, fontSize: 18 }) }
         </IconButton>
@@ -94,9 +102,13 @@ const EditRow = ({ self, parentCat, cat }) => (
 
 const SortableList = SortableContainer(({ self, parentCat, items }) => (
   <div className="sortable-list-table">
-    <div className="sortable-list-header flex-row">
-      <div className="col col-xs-5 col-xs-offset-1">Category Name</div>
-      <div className="col col-xs-4">IconClass</div>
+    <div className="sortable-list-header flex-row hidden-xs">
+      <div className="col col-xs-8 col-sm-9 col-xs-offset-1">
+        <div className="flex-row nopad">
+          <div className="col col-xs-12 col-sm-6">Category Name</div>
+          <div className="col col-xs-12 col-sm-6">IconClass</div>
+        </div>
+      </div>
     </div>
 
     <div className="sortable-list-body">
@@ -150,12 +162,14 @@ export class ManageCategories extends React.Component {
   }
 
   handleSelectEdit(event) {
+    event.preventDefault();
     const catId = $(event.target).closest(".sortable-row").data('id');
     const parentCatId = $(event.target).closest(".sortable-row").data('parent-id');
     this.selectEditRow(catId, parentCatId);
   }
 
   handleCancelEdit(event) {
+    event.preventDefault();
     const parentCatId = $(event.target).closest(".sortable-row").data('parent-id');
     this.selectEditRow(null, parentCatId);
   }
@@ -179,6 +193,7 @@ export class ManageCategories extends React.Component {
   }
 
   handleDelete(event) {
+    event.preventDefault();
     const _id = $(event.target).closest(".sortable-row").data('id');
     removeCategory.call({ _id }, FormsHelper.bertAlerts("Category removed."));
   }
@@ -210,8 +225,8 @@ export class ManageCategories extends React.Component {
             <CardTitle title="Manage Categories" subtitle="Material Icons are not supported for Category iconClass at the moment." />
 
             <CardText>
-              <div className="flex-row">
-                <div className="col col-xs-12">
+              <div className="flex-row nopad">
+                <div className="col col-xs-12 nopad">
                   { this.props.orderedCategories.map(({ parentCat, children }, index) => (
                       <div className="sortable-list" key={ `parentCat-${index}` }>
                         <Subheader>{ parentCat.name }</Subheader>

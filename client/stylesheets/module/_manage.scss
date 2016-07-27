@@ -7,8 +7,10 @@
 }
 
 .sortable-list-table {
-  .flex-row { border-bottom: 1px solid #e0e0e0; }
-  .sortable-list-header { border-top: 1px solid #e0e0e0; color: #9e9e9e; font-size: 12px; }
+  .flex-row { width: 100%; }
+  .sortable-list-header { color: #9e9e9e; font-size: 12px; }
+  .sortable-row:first-child, .sortable-list-header { border-top: 1px solid #e0e0e0; }
+  .sortable-row { border-bottom: 1px solid #e0e0e0; }
   .sortable-list-footer.flex-row { border-bottom: 0; }
 }
 
