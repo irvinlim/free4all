@@ -126,7 +126,7 @@ export class FormSettings extends React.Component {
               onSubmit={ (data, resetForm, invalidateForm) => this.setState({ submitProfile: true }, this.refs.profileSettings.validateForm) }
               onValidSubmit={ this.handleSaveProfile.bind(this) }>
               <Card className="form-box">
-                <CardTitle title="Profile" />
+                <CardTitle title="Update Profile" subtitle="We want to know more about you!" />
 
                 <CardText>
 

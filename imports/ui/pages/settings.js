@@ -11,10 +11,6 @@ export class Settings extends React.Component {
         <Grid>
           <div className="flex-row nopad">
             <div className="col col-xs-12">
-
-              <h1>Settings</h1>
-              <p>You may edit your settings here.</p>
-
               <FormSettings />
             </div>
           </div>
