@@ -1,4 +1,5 @@
 import React from 'react';
+import { Bert } from 'meteor/themeteorchef:bert';
 
 import { FormsyCheckbox, FormsyDate, FormsyRadio, FormsyRadioGroup, FormsySelect, FormsyText, FormsyTime, FormsyToggle } from 'formsy-material-ui/lib';
 
@@ -31,6 +32,7 @@ const baseTextField = ({ self, name, label, value, hintText, type, multi, requir
       validations={ validations }
       validationError={ validationError }
       validationErrors={ validationErrors }
+      onKeyPress={ event => (event.which || event.keyCode || 0) === 13 ? setNamedState(self, name, event.target.value) : null }
       onBlur={ event => setNamedState(self, name, event.target.value) } />
   );
 };
@@ -55,7 +57,7 @@ const baseDatePicker = ({ self, name, label, value, hintText, minDate, maxDate, 
       minDate={ minDate }
       maxDate={ maxDate }
       formatDate={ formatDate }
-      onBlur={ (event, date) => setNamedState(self, name, date) } />
+      onChange={ (event, date) => setNamedState(self, name, date) } />
   );
 };
 
@@ -77,10 +79,20 @@ const baseSelectField = ({ self, name, label, value, hintText, items, required, 
       validations={ validations ? validations : required ? "isExisty" : null }
       validationError={ validationError }
       validationErrors={ validationErrors }
-      onBlur={ (event, payload, index) => setNamedState(self, name, payload) }>
+      onChange={ (event, payload, index) => setNamedState(self, name, payload) }>
       { objToPairArray(items, "value", "label").map(menuItem) }
     </FormsySelect>
   );
 };
 
 export const makeSelectField = (options) => baseSelectField(options);
+
+
+// Bert
+export const bertAlerts = (msg="") => (error) => {
+  if (error) {
+    Bert.alert(error.reason, 'danger');
+  } else {
+    Bert.alert(msg.length ? msg : "Success.", 'success');
+  }
+};

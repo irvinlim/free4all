@@ -8,6 +8,7 @@ import FlatButton from 'material-ui/FlatButton';
 import { SortableContainer, SortableElement, SortableHandle, arrayMove } from 'react-sortable-hoc';
 
 import { Categories } from '../../../api/categories/categories';
+import { insertCategory, updateCategory, removeCategory } from '../../../api/categories/methods';
 
 import * as Colors from 'material-ui/styles/colors';
 import * as UsersHelper from '../../../util/users';
@@ -15,23 +16,31 @@ import * as IconsHelper from '../../../util/icons';
 import * as LayoutHelper from '../../../util/layout';
 import * as FormsHelper from '../../../util/forms';
 
+const makeState = (prop, value) => {
+  const s = {};
+  s[prop] = value;
+  return s;
+};
+
 const Handle = SortableHandle(() => (
   <IconButton tooltip="Drag to reorder" onTouchTap={ event => event.preventDefault() }>
     { IconsHelper.icon("menu", { color: Colors.grey700, fontSize: 18 }) }
   </IconButton>
 ));
 
-const SortableItem = SortableElement(({ self, cat }) => {
-  if (cat._id == self.state.currentlyEditing)
-    return <EditRow self={self} cat={cat} />;
+const SortableItem = SortableElement(({ self, parentCat, cat }) => {
+  if (!cat)
+    return null;
+  else if (cat._id == self.state[`currentlyEditing-${parentCat._id}`])
+    return <EditRow self={self} cat={cat} parentCat={parentCat} />;
   else
-    return <ItemRow self={self} cat={cat} />
+    return <ItemRow self={self} cat={cat} parentCat={parentCat} />;
 });
 
-const ItemRow = ({ self, cat }) => (
-  <div className="sortable-row flex-row" data-id={ cat._id }>
+const ItemRow = ({ self, parentCat, cat }) => (
+  <div className="sortable-row flex-row" data-id={ cat._id } data-parent-id={ parentCat._id }>
     <div className="col col-xs-1 col-center">
-      { self.state.currentlyEditing ? null : <Handle /> }
+      { self.state[`currentlyEditing-${parentCat._id}`] ? null : <Handle /> }
     </div>
 
     <div className="col col-xs-5">
@@ -52,9 +61,9 @@ const ItemRow = ({ self, cat }) => (
   </div>
 );
 
-const EditRow = ({ self, cat }) => (
-  <Formsy.Form id="edit-row" onValidSubmit={ self.handleSaveEdit.bind(self) }>
-    <div className="sortable-row flex-row" data-id={ cat ? cat._id : "new" }>
+const EditRow = ({ self, parentCat, cat }) => (
+  <Formsy.Form id={`edit-row-${parentCat}`} onValidSubmit={ self.handleSaveEdit(cat ? cat._id : null, parentCat ? parentCat._id : null) }>
+    <div className="sortable-row flex-row" data-id={ cat ? cat._id : null } data-parent-id={ parentCat ? parentCat._id : null }>
 
       <div className="col col-xs-5 col-xs-offset-1">
         { FormsHelper.makeTextField({
@@ -91,17 +100,17 @@ const SortableList = SortableContainer(({ self, parentCat, items }) => (
     </div>
 
     <div className="sortable-list-body">
-      {items.map((cat, index) =>
-        <SortableItem key={`cat-${index}`} index={index} cat={cat} self={self} />
+      {items.map((catId, index) =>
+        <SortableItem key={`cat-${index}`} index={index} cat={ Categories.findOne(catId) } parentCat={ parentCat } self={self} />
       )}
-      { self.state.currentlyEditing == "new" ?
-        <EditRow self={self} cat={null} /> : null
+      { self.state[`currentlyEditing-${parentCat._id}`] == "new" ?
+        <EditRow self={self} parentCat={parentCat} cat={null} /> : null
       }
     </div>
 
     <div className="sortable-list-footer flex-row">
       <div className="col col-xs-12 col-right">
-        <FlatButton label="Add New" onTouchTap={ self.handleAddNew.bind(self) } />
+        <FlatButton label="Add New" onTouchTap={ self.handleAddNew(parentCat._id) } />
       </div>
     </div>
   </div>
@@ -113,11 +122,11 @@ export class ManageCategories extends React.Component {
 
     this.state = {
       submitted: false,
-      currentlyEditing: null,
     };
 
     this.props.parentCategories.forEach(parentCat => {
       this.state[`order-${parentCat._id}`] = [];
+      this.state[`currentlyEditing-${parentCat._id}`] = null;
     });
   }
 
@@ -125,23 +134,13 @@ export class ManageCategories extends React.Component {
     const self = this;
     const items = [];
 
-    const makeState = (cat, props) => {
-      const s = {};
-      props.forEach(prop => {
-        s[`cat-${prop}-${cat._id}`] = cat[prop];
-      });
-      return s;
-    };
-
     this.props.parentCategories.forEach(parentCat => {
       const children = [];
       this.props.categories.forEach(cat => {
         if (cat.parent !== parentCat._id)
           return true;
 
-        self.setState(makeState(cat, ['name', 'iconClass']));
-
-        children.push(cat);
+        children.push(cat._id);
       });
 
       const s = {};
@@ -154,6 +153,11 @@ export class ManageCategories extends React.Component {
     this.makeItems();
   }
 
+  componentWillUpdate(nextProps, nextState) {
+    if (this.props.parentCategories != nextProps.parentCategories || this.props.categories != nextProps.categories)
+      this.makeItems();
+  }
+
   onSortEnd(parentCatId) {
     const self = this;
     return ({ oldIndex, newIndex }) => {
@@ -163,42 +167,60 @@ export class ManageCategories extends React.Component {
     };
   }
 
-  handleAddNew(event) {
-    this.setState({ currentlyEditing: "new" });
+  handleAddNew(parentCatId) {
+    return () => {
+      this.setState(makeState(`currentlyEditing-${parentCatId}`, "new"));
+    };
   }
 
   handleSelectEdit(event) {
-    const $row = $(event.target).closest(".sortable-row");
-    this.selectEditRow($row.data('id'));
+    const catId = $(event.target).closest(".sortable-row").data('id');
+    const parentCatId = $(event.target).closest(".sortable-row").data('parent-id');
+    this.selectEditRow(catId, parentCatId);
   }
 
   handleCancelEdit(event) {
-    this.selectEditRow(null);
+    const parentCatId = $(event.target).closest(".sortable-row").data('parent-id');
+    this.selectEditRow(null, parentCatId);
   }
 
-  handleSaveEdit(event) {
-    this.selectEditRow(null);
+  handleSaveEdit(catId, parentId) {
+    return () => {
+      const name = this.state['cat-name'];
+      const iconClass = this.state['cat-iconClass'];
+
+      if (!catId) {
+        const relativeOrder = Categories.findOne({}, { sort: { relativeOrder: -1 } }).relativeOrder + 1;
+
+        insertCategory.call({ name, iconClass, parentId, relativeOrder }, FormsHelper.bertAlerts("Category added."));
+      } else {
+        updateCategory.call({ _id: catId, name, iconClass }, FormsHelper.bertAlerts("Category updated."));
+      }
+
+      this.selectEditRow(null, parentId);
+    };
   }
 
   handleDelete(event) {
-    const $row = $(event.target).closest(".sortable-row");
-    this.selectEditRow($row.data('id'));
+    const _id = $(event.target).closest(".sortable-row").data('id');
+    removeCategory.call({ _id }, FormsHelper.bertAlerts("Category removed."));
   }
 
-  selectEditRow(id) {
+  selectEditRow(id, parentId) {
     const cat = Categories.findOne(id);
-    if (!cat)
+    if (!cat) {
+      this.setState(makeState(`currentlyEditing-${parentId}`, null));
       this.setState({
-        currentlyEditing: null,
         'cat-name': null,
         'cat-iconClass': null,
       });
-    else
+    } else {
+      this.setState(makeState(`currentlyEditing-${parentId}`, id));
       this.setState({
-        currentlyEditing: id,
         'cat-name': cat.name,
         'cat-iconClass': cat.iconClass
       });
+    }
   }
 
   render() {
@@ -208,14 +230,14 @@ export class ManageCategories extends React.Component {
         <div className="col col-xs-12 nopad">
 
           <Card>
-            <CardTitle title="Manage Categories" />
+            <CardTitle title="Manage Categories" subtitle="Material Icons are not supported for Category iconClass at the moment." />
 
             <CardText>
               <div className="flex-row">
                 <div className="col col-xs-12">
                   { this.props.parentCategories.map((parentCat, index) => (
                       <div className="sortable-list" key={ `parentCat-${index}` }>
-                        <h3>{ parentCat.name }</h3>
+                        <Subheader>{ parentCat.name }</Subheader>
 
                         <SortableList
                           self={this}
