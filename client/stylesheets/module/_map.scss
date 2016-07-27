@@ -59,6 +59,7 @@
     &.state-1 { // Peek at title
       top: calc(100% - 90px);
       h5.category { margin-bottom: 20px; }
+      .scrollbar-container > div { height: 90px !important; overflow: hidden !important; }
     }
 
     &.state-2 { // Show full

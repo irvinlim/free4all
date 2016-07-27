@@ -52,7 +52,7 @@ export default class MapInfoBox extends React.Component {
   render() {
     return (
       <div id="map-info-box" className={ "map-sidebar col-xs-12 col-sm-6 col-md-3 col-lg-3 state-" + this.props.boxState }>
-        <Scrollbars autoHide style={{ height: "100%",  }}>
+        <Scrollbars className="scrollbar-container" autoHide style={{ height: "100%" }}>
           <div className="map-sidebar-box">
             <GiveawayInfoboxContent gaId={ this.props.gaId } />
 
