@@ -17,6 +17,7 @@
 
 .sortable-row {
   background-color: #fff; padding: 10px 0;
+  .flex-row { width: 100%; }
   &.sortable-active { margin: 0; opacity: 0.5; }
 }
 

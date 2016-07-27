@@ -151,7 +151,7 @@ export class ManageCategories extends React.Component {
       const newIndexCatId = self.props.orderedCategories[parentCatIdx].children[newIndex];
       const newIndexCat = Categories.findOne(newIndexCatId);
 
-      reorderCategory.call({ _id: oldIndexCatId, newIndex: newIndexCat.relativeOrder }, FormsHelper.bertAlerts);
+      reorderCategory.call({ _id: oldIndexCatId, newIndex: newIndexCat.relativeOrder }, FormsHelper.bertAlerts("Categories reordered."));
     };
   }
 
