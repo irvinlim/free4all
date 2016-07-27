@@ -66,8 +66,6 @@ export const reorderParentCategory = new ValidatedMethod({
   run({ _id, newIndex }) {
     const parentCat = ParentCategories.findOne(_id);
 
-    console.log(parentCat);
-
     if (!parentCat)
       throw new Meteor.Error("parentCategories.reorder.undefinedParentCategory", "No such parent category.");
 

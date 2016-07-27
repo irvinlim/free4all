@@ -112,9 +112,10 @@ const SortableList = SortableContainer(({ self, parentCat, items }) => (
     </div>
 
     <div className="sortable-list-body">
-      {items.map((catId, index) =>
-        <SortableItem key={index} index={index} cat={ Categories.findOne(catId) } parentCat={ parentCat } self={self} />
-      )}
+      { items.map((catId, index) => {
+        const cat = Categories.findOne(catId);
+        return cat ? <SortableItem key={index} index={index} cat={ cat } parentCat={ parentCat } self={self} /> : null;
+      }) }
       { self.state[`currentlyEditing-${parentCat._id}`] == "new" ?
         <EditRow self={self} parentCat={parentCat} cat={null} /> : null
       }
@@ -228,7 +229,7 @@ export class ManageCategories extends React.Component {
               <div className="flex-row nopad">
                 <div className="col col-xs-12 nopad">
                   { this.props.orderedCategories.map(({ parentCat, children }, index) => (
-                      <div className="sortable-list" key={ `parentCat-${index}` }>
+                      <div className="sortable-list" key={index}>
                         <Subheader>{ parentCat.name }</Subheader>
 
                         <SortableList
