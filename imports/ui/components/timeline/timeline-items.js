@@ -56,7 +56,8 @@ const gridItemTile = (ga) => (
     className="giveaway giveaway-timeline-item"
     title={ ga.title }
     titleBackground='rgba(0, 0, 0, 0.55)'
-    subtitle={ GiveawaysHelper.descriptionFirstLine(ga) }>
+    subtitle={ GiveawaysHelper.descriptionFirstLine(ga) }
+    onTouchTap={ (event) => browserHistory.push('/giveaway/' + ga._id) }>
     { ga.avatarId ? photoAvatar(ga) : iconAvatar(ga) }
   </GridTile>
 );
