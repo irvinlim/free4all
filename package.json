@@ -50,7 +50,7 @@
   "dependencies": {
     "bootstrap": "^3.3.6",
     "fibers": "^1.0.13",
-    "formsy-material-ui": "^0.4.3",
+    "formsy-material-ui": "^0.5.0",
     "formsy-react": "^0.18.1",
     "gapitoken": "^0.1.5",
     "googleanalytics": "^0.3.7",
