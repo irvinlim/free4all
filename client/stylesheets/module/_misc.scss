@@ -10,3 +10,6 @@
 // Text wrapping
 [class^="lines-"], [class*=" lines-"] { display: block; }
 .lines-1 { white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+
+// Loading
+.loading-container { display: flex; width: 100%; justify-content: center; padding: 20px; }
