@@ -2,6 +2,7 @@
 *(pronounced free-fall)*
 
 [![Join the chat at https://gitter.im/irvinlim/free4all](https://badges.gitter.im/irvinlim/free4all.svg)](https://gitter.im/irvinlim/free4all?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Codeship Status](https://codeship.com/projects/05043f10-370b-0134-8d0e-1ed5eaddfb88/status?branch=master)](https://codeship.com/projects/165703)
 
 A web app that allows users to view and share locations in NUS with freebie giveaways, on a real-time map view.
 
