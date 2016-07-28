@@ -48,7 +48,7 @@ export default class MapInfoBox extends React.Component {
         self.props.setBoxState(0);
     });
 
-    this.positionBoxes();
+    setTimeout(this.positionBoxes, 500);
   }
 
   render() {
