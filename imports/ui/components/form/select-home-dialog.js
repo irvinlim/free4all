@@ -46,7 +46,7 @@ export default class SelectHomeDialog extends React.Component {
 
     return (
       <Dialog
-        title="View a community"
+        title="View Universities"
         titleStyle={customTitleStyle}
         modal={false}
         contentStyle={customContentStyle}
@@ -55,8 +55,8 @@ export default class SelectHomeDialog extends React.Component {
       >
       <Grid>
         <Row>
-          <Col xs={3} style={{textAlign:"center"}} onTouchTap={this.props.setHomeLoc.bind(this, "nus")}>
-            <svg viewBox="0 0 637.000000 244.000000" preserveAspectRatio="xMidYMid meet">
+          <Col xs={6} md={3} style={{textAlign:"center"}} onTouchTap={this.props.setHomeLoc.bind(this, "nus")}>
+            <svg className="schoolCommunity" viewBox="0 0 637.000000 244.000000" preserveAspectRatio="xMidYMid meet">
               <g transform="translate(0.000000,244.000000) scale(0.100000,-0.100000)"
               fill="#000000" stroke="none">
               <path d="M5099 2360 c-223 -20 -413 -93 -520 -200 -97 -96 -139 -205 -139
@@ -78,8 +78,8 @@ export default class SelectHomeDialog extends React.Component {
               </g>
             </svg>
           </Col>
-          <Col xs={3} style={{textAlign:"center"}} onTouchTap={this.props.setHomeLoc.bind(this, "ntu")}>
-            <svg viewBox="0 0 299.000000 118.000000" preserveAspectRatio="xMidYMid meet">
+          <Col xs={6} md={3} style={{textAlign:"center"}} onTouchTap={this.props.setHomeLoc.bind(this, "ntu")}>
+            <svg className="schoolCommunity" viewBox="0 0 299.000000 118.000000" preserveAspectRatio="xMidYMid meet">
               <g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)"
               fill="#000000" stroke="none">
               <path d="M140 1061 c0 -5 13 -11 29 -14 16 -4 46 -21 66 -38 l36 -32 -3 -343
@@ -105,8 +105,8 @@ export default class SelectHomeDialog extends React.Component {
               </g>
             </svg>
           </Col>
-          <Col xs={3} style={{textAlign:"center"}} onTouchTap={this.props.setHomeLoc.bind(this, "smu")}>
-            <svg viewBox="0 0 298.000000 110.000000" preserveAspectRatio="xMidYMid meet">
+          <Col xs={6} md={3} style={{textAlign:"center"}} onTouchTap={this.props.setHomeLoc.bind(this, "smu")}>
+            <svg className="schoolCommunity" viewBox="0 0 298.000000 110.000000" preserveAspectRatio="xMidYMid meet">
               <g transform="translate(0.000000,110.000000) scale(0.100000,-0.100000)"
               fill="#000000" stroke="none">
               <path d="M294 1081 c-155 -40 -225 -190 -155 -334 24 -50 100 -127 211 -214
@@ -132,8 +132,8 @@ export default class SelectHomeDialog extends React.Component {
               </g>
             </svg>
           </Col>
-          <Col xs={3} style={{textAlign:"center"}} onTouchTap={this.props.setHomeLoc.bind(this, "sutd")}>
-            <svg style={{width:"105%"}} className="schoolCommunity" width="383.000000pt" height="99.000000pt" viewBox="0 0 383.000000 99.000000" preserveAspectRatio="xMidYMid meet">
+          <Col xs={6} md={3} style={{textAlign:"center"}} onTouchTap={this.props.setHomeLoc.bind(this, "sutd")}>
+            <svg style={{width:"105%", height:"auto"}} width="383.000000pt" height="99.000000pt" viewBox="0 0 383.000000 99.000000" preserveAspectRatio="xMidYMid meet">
             <g transform="translate(0.000000,99.000000) scale(0.100000,-0.100000)"
             fill="#000000" stroke="none">
             <path d="M120 670 l0 -230 375 0 375 0 0 -145 0 -145 -375 0 -375 0 0 -40 0

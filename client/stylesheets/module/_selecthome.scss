@@ -4,4 +4,6 @@
   height: auto; width: 75%; cursor: pointer;
   & > g { @include transition-standard(fill 225ms); }
   &:hover > g { fill: #3F51B5; }
+  @include media-md-down { margin-bottom: 12%; }
+  @include media-md-up { margin-bottom: 0; }
 }
