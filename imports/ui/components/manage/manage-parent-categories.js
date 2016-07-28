@@ -33,11 +33,11 @@ const SortableItem = SortableElement(({ self, parentCat }) => {
 
 const ItemRow = ({ self, parentCat }) => (
   <div className="sortable-row flex-row" data-id={ parentCat._id }>
-    <div className="col col-xs-1 col-center">
+    <div className="col col-xs-2 col-sm-1 col-center">
       { self.state.currentlyEditing ? null : <Handle /> }
     </div>
 
-    <div className="col col-xs-8 col-sm-9">
+    <div className="col col-xs-7 col-sm-9">
       <div className="flex-row nopad">
         <div className="col col-xs-12 col-sm-6">
           { parentCat.name }
@@ -63,7 +63,7 @@ const EditRow = ({ self, parentCat }) => (
   <Formsy.Form id="edit-row" onValidSubmit={ self.handleSaveEdit(parentCat ? parentCat._id : null) }>
     <div className="sortable-row flex-row" data-id={ parentCat ? parentCat._id : null }>
 
-      <div className="col col-xs-8 col-sm-9 col-xs-offset-1">
+      <div className="col col-xs-7 col-sm-9 col-xs-offset-2 col-sm-offset-1">
         <div className="flex-row nopad">
           <div className="col col-xs-12 col-sm-6">
             { FormsHelper.makeTextField({

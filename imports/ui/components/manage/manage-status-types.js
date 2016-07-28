@@ -33,11 +33,11 @@ const SortableItem = SortableElement(({ self, statusType }) => {
 
 const ItemRow = ({ self, statusType }) => (
   <div className="sortable-row flex-row" data-id={ statusType._id }>
-    <div className="col col-xs-1 col-center">
+    <div className="col col-xs-2 col-sm-1 col-center">
       { self.state.currentlyEditing ? null : <Handle /> }
     </div>
 
-    <div className="col col-xs-8 col-sm-9">
+    <div className="col col-xs-7 col-sm-9">
       <div className="flex-row nopad">
         <div className="col col-xs-12 col-sm-6">
           { statusType.label }
@@ -63,7 +63,7 @@ const EditRow = ({ self, statusType }) => (
   <Formsy.Form id="edit-row" onValidSubmit={ self.handleSaveEdit(statusType ? statusType._id : null) }>
     <div className="sortable-row flex-row" data-id={ statusType ? statusType._id : null }>
 
-      <div className="col col-xs-8 col-sm-9 col-xs-offset-1">
+      <div className="col col-xs-12 col-sm-9 col-sm-offset-1">
         <div className="flex-row nopad">
           <div className="col col-xs-12 col-sm-6">
             { FormsHelper.makeTextField({
@@ -78,7 +78,7 @@ const EditRow = ({ self, statusType }) => (
         </div>
       </div>
 
-      <div className="col col-xs-3 col-sm-2 col-right">
+      <div className="col col-xs-12 col-sm-2 col-right">
         <IconButton type="submit" className="row-action" tooltip="Save" formNoValidate>
           { IconsHelper.icon("save", { color: Colors.grey700, fontSize: 18 }) }
         </IconButton>

@@ -76,7 +76,7 @@ export class Profile extends React.Component {
 
   render() {
     return (
-      <div id="page-profile" className="page-container">
+      <div id="page-profile" className="page-container" style={{ overflow: "hidden" }}>
         <Grid>
           <div className="flex-row nopad">
             <div className="col col-xs-12">
