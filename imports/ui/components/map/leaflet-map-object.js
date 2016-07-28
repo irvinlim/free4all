@@ -39,7 +39,8 @@ export default class LeafletMapObject {
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
       attribution: 'Imagery from <a href="http://mapbox.com/about/maps/">MapBox</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       id: mapID,
-      accessToken: accessToken
+      accessToken: accessToken,
+      detectRetina: true,
     }).addTo(this.map);
 
     this.map.addLayer(this.markerClusterGroup);
@@ -135,7 +136,10 @@ export default class LeafletMapObject {
   }
 
   addExtraTileLayer(mapURL){
-    this.extraTileLayer = L.tileLayer(mapURL).addTo(this.map);
+    this.extraTileLayer = L.tileLayer(mapURL, {
+      attribution: 'Imagery from <a href="http://mapbox.com/about/maps/">MapBox</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      detectRetina: true,
+    }).addTo(this.map);
   }
 
   removeExtraTileLayer(){
