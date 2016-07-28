@@ -15,27 +15,29 @@ import GiveawayComments from '../../containers/giveaways/giveaway-comments';
 import { insertComment } from '../../../api/giveaway-comments/methods';
 
 const AddComments = (self) => (
-  <div>
-    <Divider style={{ marginTop: 15 }} />
+  <div className="add-comment-form">
+    { LayoutHelper.threeColumns(
+        UsersHelper.getAvatar(Meteor.user(), 40, { margin: "6px auto", display: "block" }),
+        <TextField
+          id="add-comment-field"
+          name="add-comment"
+          value={ self.state.addCommentValue }
+          onChange={ event => self.setState({ addCommentValue: event.target.value }) }
+          multiLine={true}
+          fullWidth={true}
+          underlineShow={false}
+          hintText="Add a comment..."
+          hintStyle={{ fontSize: 14 }}
+          textareaStyle={{ fontSize: 14 }} />,
+        <FlatButton onTouchTap={ self.handleInsertComment.bind(self) } label="Post" style={{ margin: "6px auto" }} />,
+        40
+      ) }
+  </div>
+);
 
-    <div className="add-comment-form">
-      { LayoutHelper.threeColumns(
-          UsersHelper.getAvatar(Meteor.user(), 40, { margin: "6px auto", display: "block" }),
-          <TextField
-            id="add-comment-field"
-            name="add-comment"
-            value={ self.state.addCommentValue }
-            onChange={ event => self.setState({ addCommentValue: event.target.value }) }
-            multiLine={true}
-            fullWidth={true}
-            underlineShow={false}
-            hintText="Add a comment..."
-            hintStyle={{ fontSize: 14 }}
-            textareaStyle={{ fontSize: 14 }} />,
-          <FlatButton onTouchTap={ self.handleInsertComment.bind(self) } label="Post" style={{ margin: "6px auto" }} />,
-          40
-        ) }
-    </div>
+const LoginToAddComment = (self) => (
+  <div className="add-comment-form">
+    <em className="small-text">Login to add a comment!</em>
   </div>
 );
 
@@ -78,7 +80,9 @@ export class GiveawayCommentsCard extends React.Component {
 
             <GiveawayComments gaId={ this.props.gaId } showActions={true} />
 
-            { Meteor.user() ? AddComments(this) : null }
+            <Divider style={{ marginTop: 15 }} />
+
+            { Meteor.user() ? AddComments(this) : LoginToAddComment(this) }
 
           </div>
         </div>
