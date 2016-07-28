@@ -50,12 +50,12 @@ export const UserGiveaways = (props) => (
       <h3 style={{ margin:"20px 0px 10px" }}>Your Giveaways</h3>
 
       <div style={{ paddingRight: 15 }}>
-
         <Row>
           <Col xs={12}>
             <Toggle labelStyle= {{fontWeight:200}} label="Show all giveaways" toggled={ !props.showDateRange } onToggle={ props.handleAllUserGiveaways } />
           </Col>
         </Row>
+      </div>
 
         { props.showDateRange ?
         <div>
@@ -90,17 +90,6 @@ export const UserGiveaways = (props) => (
           :
         <div />
         }
-
-      <Row>
-        <Col xs={12} md={6}>
-        <Toggle
-        labelStyle= {{fontWeight:200}}
-        label="All giveaways"
-        onToggle={ props.handleAllUserGiveaways }
-        defaultToggled= { true }
-        />
-        </Col>
-      </Row>
 
     </Subheader>
     { props.giveaways
