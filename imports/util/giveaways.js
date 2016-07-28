@@ -137,7 +137,7 @@ export const descriptionTruncate = (ga) => {
 };
 
 // Avatar
-export const makeAvatar = (ga, size=64, style={}) => {
+export const makeAvatarLegacy = (ga, size=64, style={}) => {
   if (!ga)
     return null;
 
@@ -154,6 +154,16 @@ export const makeAvatar = (ga, size=64, style={}) => {
         <span>{ getCategoryIcon(ga, { color: Colors.grey50 }) }</span>
       </div>
     );
+};
+
+export const makeAvatar = (ga, size=64, style={}) => {
+  if (!ga)
+    return null;
+
+  if (ga.avatarId)
+    return AvatarHelper.makeAvatar(ga.avatarId, size, style);
+  else
+    return AvatarHelper.makeAvatarIcon(getCategoryIcon(ga, { color: Colors.grey50 }), getStatusColor(ga), size, style);
 };
 
 // Flags

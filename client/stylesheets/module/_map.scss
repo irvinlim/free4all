@@ -64,7 +64,7 @@
 
     &.state-2 { // Show full
       top: 0;
-      .photo-avatar { max-height: 350px; opacity: 1; }
+      .photo-avatar { max-height: 100%; max-width: 350px; margin: 0 auto; opacity: 1; }
     }
   }
 }

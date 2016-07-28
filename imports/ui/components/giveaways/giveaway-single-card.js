@@ -60,7 +60,9 @@ export class GiveawaySingleCard extends React.Component {
       <PaperCard className="giveaway giveaway-single">
         <div className="flex-row">
           <div className="col col-xs-12 col-sm-3">
-            { GiveawaysHelper.makeAvatar(ga, 700) }
+            <div className="avatar">
+              { GiveawaysHelper.makeAvatarLegacy(ga, 700) }
+            </div>
           </div>
           <div className="col col-xs-12 col-sm-9">
             <h3 className="title">{ ga.title }</h3>
