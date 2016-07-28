@@ -2,7 +2,6 @@ import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import Subheader from 'material-ui/Subheader';
 import Paper from 'material-ui/Paper';
-import { Link } from 'react-router';
 import PaperCard from '../../layouts/paper-card';
 
 import * as Colors from 'material-ui/styles/colors';
@@ -16,7 +15,7 @@ import { flagGiveaway } from '../../../api/giveaways/methods';
 let giveaway = null;
 
 const iconRow = (icon, content) => {
-  if (content && content.length)
+  if (content)
     return (
       <div className="info-row">
         <div className="info-row-icon">
@@ -73,6 +72,7 @@ export class GiveawaySingleCard extends React.Component {
             { !GiveawaysHelper.is_over(ga) ?
                 iconRow("info_outline", "Status: " + GiveawaysHelper.getLastOwnerStatusType(ga).label ) :
                 iconRow("info_outline", "Status: Ended" ) }
+            { iconRow("link", Helper.makeLink(ga.website, "Website")) }
 
             { Meteor.userId() && ga.userId !== Meteor.userId() ?
                 GiveawaysHelper.userHasFlagged(ga, Meteor.user()) ? hasFlagged(this) : flagCTA(this)

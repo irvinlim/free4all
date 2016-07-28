@@ -55,6 +55,11 @@ export const GiveawaysDataSchema = new SimpleSchema({
     type: String,
     label: 'Giveaway description',
   },
+  website: {
+    type: String,
+    label: 'URL to find more info about the giveaway',
+    optional: true
+  },
   startDateTime: {
     type: Date,
     label: 'Giveaway start date/time',

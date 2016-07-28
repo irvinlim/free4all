@@ -21,7 +21,7 @@ import { insertGiveaway } from '../../../api/giveaways/methods.js';
 import { StatusTypes } from '../../../api/status-types/status-types.js';
 
 import { geocode } from '../../../util/geocode.js';
-import { shortId } from '../../../util/helper.js';
+import { shortId, sanitizeURL } from '../../../util/helper.js';
 import * as IconsHelper from '../../../util/icons';
 
 export default class InsertBtnDialog extends React.Component {
@@ -39,6 +39,7 @@ export default class InsertBtnDialog extends React.Component {
       childCatIcon: "",
       title:"",
       description:"",
+      website:"",
       startDate: null,
       endDate: null,
       startTime: null,
@@ -172,6 +173,9 @@ export default class InsertBtnDialog extends React.Component {
     this.handleDescription = (e)  => {
       this.setState({description: e.target.value});
     };
+    this.handleWebsite = (e)  => {
+      this.setState({website: e.target.value});
+    };
     this.handleLocation = (e)  => {
       this.setState({location: e.target.value});
     };
@@ -243,22 +247,23 @@ export default class InsertBtnDialog extends React.Component {
       props.closeModal();
       props.stopDraggableAdded();
       props.resetLoc();
-      // console.log("state", this.state);
+
       let data = this.state;
       data.title = String(data.title);
       data.description = String(data.description);
+      data.website = sanitizeURL(data.website);
       data.location = String(data.location);
       data.lng = parseFloat(data.lng);
       data.lat = parseFloat(data.lat);
       data.userId = props.user._id;
       data.removeUserId = props.user._id;
       data.batchId = shortId.generate();
+
       if (data.tile){
         data.avatarId = data.tile.res.public_id;
         const imgUrlPre = data.tile.res.secure_url;
         data.imgUrl = imgUrlPre.split('upload')[0]+ 'upload/' + 'h_300,c_scale' + imgUrlPre.split('upload')[1];
       }
-      // console.log("state", data);
 
       let startHr= data.startTime.getHours();
       let startMin= data.startTime.getMinutes();
@@ -278,10 +283,10 @@ export default class InsertBtnDialog extends React.Component {
       }
 
       if (!data.recurring){
-        // console.log("one giveaway")
         const ga = {
           title: data.title,
           description: data.description,
+          website: data.website,
           startDateTime: startDateTime,
           endDateTime: endDateTime,
           location: data.location,
@@ -306,7 +311,6 @@ export default class InsertBtnDialog extends React.Component {
       } else {
         // how many days recurring
         let numberOfDays = moment(data.endDate).diff(moment(data.startDate),'days')+1;
-        // console.log("Recurring", numberOfDays, "days");
 
         for(let i = 0; i<numberOfDays; i++){
 
@@ -316,6 +320,7 @@ export default class InsertBtnDialog extends React.Component {
           const ga = {
             title: data.title,
             description: data.description,
+            website: data.website,
             startDateTime: newStartDateTime,
             endDateTime: newEndDateTime,
             location: data.location,
@@ -407,22 +412,32 @@ render() {
                     name="title"
                     fullWidth={true}
                     required
+                    floatingLabelText="Event Name"
                     hintText="What is name of the event?"
                     value={this.state.title}
                     onBlur={this.handleTitle} />
                 </Col>
                 <Col xs={12}>
-                <FormsyText
-                  name="description"
-                  floatingLabelText="Description"
-                  multiLine={true}
-                  fullWidth={true}
-                  rows={3}
-                  required
-                  hintText="What is the event about?"
-                  value={this.state.description}
-                  onBlur={this.handleDescription}
-                  />
+                  <FormsyText
+                    name="description"
+                    floatingLabelText="Description"
+                    multiLine={true}
+                    fullWidth={true}
+                    rows={3}
+                    required
+                    hintText="What is the event about?"
+                    value={this.state.description}
+                    onBlur={this.handleDescription}
+                    />
+                </Col>
+                <Col xs={12}>
+                  <FormsyText
+                    name="website"
+                    fullWidth={true}
+                    floatingLabelText="Website"
+                    hintText="Website URL"
+                    value={this.state.website}
+                    onBlur={this.handleWebsite} />
                 </Col>
               </Row>
 

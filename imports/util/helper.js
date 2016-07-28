@@ -1,6 +1,7 @@
 import React from 'react/react';
 import ReactDOMServer from 'react-dom/server';
 import { Meteor } from 'meteor/meteor';
+import Link from '../ui/layouts/link';
 
 import Divider from 'material-ui/Divider';
 const nl2brReact = require('react-nl2br');
@@ -14,10 +15,31 @@ export const error = msg => { if (process.env.NODE_ENV === "development") throw 
 export const errorIf = (x, msg) => { if (x && process.env.NODE_ENV === "development") throw new Error(msg); };
 
 // Strings
+export const sanitizeForXSS = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
 export const sanitizeStringSlug = (s) => s.replace(/[^a-zA-Z0-9 -_]/g, "");
 export const sanitizeHexColour = (s) => s.replace(/[^a-fA-F0-9#]/g, "");
+export const sanitizeURL = (s) => sanitizeForXSS(s);
 export const nl2br = s => nl2brReact(s);
 export const capitalizeFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1);
+
+// URLs
+export const makeURL = (s) => {
+  if (!s || !s.length)
+    return null;
+  else if (s.substr(0, 7) === "http://" || s.substr(0, 8) === "https://" || s.substr(0, 2) === "//")
+    return s;
+  else
+    return "http://" + s;
+};
+
+export const makeLink = (s, label) => {
+  const url = makeURL(s);
+
+  if (!url)
+    return null;
+  else
+    return (<Link to={url}>{label}</Link>);
+};
 
 // Arrays
 export const arrayContains = (arr, item) => arr && arr.length && arr.indexOf(item) >= 0;

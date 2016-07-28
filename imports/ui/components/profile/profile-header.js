@@ -4,7 +4,7 @@ import Chip from 'material-ui/Chip';
 import * as Colors from 'material-ui/styles/colors';
 import * as UsersHelper from '../../../util/users';
 
-const makeChip = (role) => {
+const makeChip = (role, index) => {
   let label;
 
   if (role == "moderator") {
@@ -16,7 +16,7 @@ const makeChip = (role) => {
   }
 
   return (
-    <Chip backgroundColor="#8595b7" labelStyle={{ fontSize: 12, textTransform: 'uppercase', color: "#fff", lineHeight: "24px", padding: "0 8px" }}>
+    <Chip key={index} backgroundColor="#8595b7" labelStyle={{ fontSize: 12, textTransform: 'uppercase', color: "#fff", lineHeight: "24px", padding: "0 8px" }}>
       { label }
     </Chip>
   );

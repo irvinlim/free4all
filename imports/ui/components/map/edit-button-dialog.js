@@ -22,7 +22,7 @@ import { StatusTypes } from '../../../api/status-types/status-types.js'
 import { Categories } from '../../../api/categories/categories.js';
 
 import { geocode } from '../../../util/geocode.js';
-import { shortId } from '../../../util/helper.js'
+import { shortId, sanitizeURL } from '../../../util/helper.js'
 
 import * as IconsHelper from '../../../util/icons';
 import * as ImagesHelper from '../../../util/images';
@@ -42,6 +42,7 @@ export default class EditBtnDialog extends React.Component {
       childCatIcon: "",
       title:"",
       description:"",
+      website:"",
       startDate: null,
       endDate: null,
       startTime: null,
@@ -186,6 +187,9 @@ export default class EditBtnDialog extends React.Component {
     this.handleDescription = (e)  => {
       this.setState({description: e.target.value});
     };
+    this.handleWebsite = (e)  => {
+      this.setState({website: e.target.value});
+    };
     this.handleLocation = (e)  => {
       this.setState({location: e.target.value});
     };
@@ -256,6 +260,7 @@ export default class EditBtnDialog extends React.Component {
       let data = this.state;
       data.title = String(data.title);
       data.description = String(data.description);
+      data.website = sanitizeURL(data.website);
       data.location = String(data.location);
       data.lng = parseFloat(data.lng);
       data.lat = parseFloat(data.lat);
@@ -282,6 +287,7 @@ export default class EditBtnDialog extends React.Component {
       const ga = {
         title: data.title,
         description: data.description,
+        website: data.website,
         startDateTime: startDateTime,
         endDateTime: endDateTime,
         location: data.location,
@@ -353,6 +359,7 @@ export default class EditBtnDialog extends React.Component {
       this.setState({
         title: gaEdit.title,
         description: gaEdit.description,
+        website: gaEdit.website,
         startDate: gaEdit.startDateTime,
         startTime: gaEdit.startDateTime,
         endDate: gaEdit.endDateTime,
@@ -439,23 +446,33 @@ export default class EditBtnDialog extends React.Component {
                       name="title"
                       fullWidth={true}
                       required
+                      floatingLabelText="Event Name"
                       hintText="What is name of the event?"
                       value={this.state.title}
                       onBlur={this.handleTitle} />
                   </Col>
                   <Col xs={12}>
-                  <FormsyText
-                    name="description"
-                    floatingLabelText="Description"
-                    multiLine={true}
-                    fullWidth={true}
-                    rows={3}
-                    required
-                    hintText="What is the event about?"
-                    value={this.state.description}
-                    onBlur={this.handleDescription}
-                    />
+                    <FormsyText
+                      name="description"
+                      floatingLabelText="Description"
+                      multiLine={true}
+                      fullWidth={true}
+                      rows={3}
+                      required
+                      hintText="What is the event about?"
+                      value={this.state.description}
+                      onBlur={this.handleDescription}
+                      />
                   </Col>
+                <Col xs={12}>
+                  <FormsyText
+                    name="website"
+                    fullWidth={true}
+                    floatingLabelText="Website"
+                    hintText="Website URL"
+                    value={this.state.website}
+                    onBlur={this.handleWebsite} />
+                </Col>
                 </Row>
 
                 <Row style={{ paddingTop: 21 }}>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Row, Col } from 'react-bootstrap';
-import { Link } from 'react-router';
 
+import * as Helper from '../../../util/helper';
 import * as IconsHelper from '../../../util/icons';
 import * as AvatarHelper from '../../../util/avatar';
 import * as GiveawaysHelper from '../../../util/giveaways';
@@ -42,6 +42,7 @@ const getContent = ({ giveaway }) => {
         { !GiveawaysHelper.is_over(giveaway) ?
             iconRow("info_outline", "Status: " + GiveawaysHelper.getLastOwnerStatusType(giveaway).label ) :
             iconRow("info_outline", "Status: Ended" ) }
+        { iconRow("link", Helper.makeLink(giveaway.website, "Website")) }
       </div>
     );
   }
