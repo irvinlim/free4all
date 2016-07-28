@@ -52,7 +52,7 @@ Meteor.publish('user-giveaways-within-date', function(startDateRange, endDateRan
   const findParams = {
     startDateTime:  { $gte: startDateRange, },
     endDateTime:    { $lt:  endDateRange, },
-    userId:         this.userId,,
+    userId:         this.userId,
     isRemoved: { $ne:  true },  // Must not be deleted (local deletion)
   };
 
