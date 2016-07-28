@@ -55,8 +55,8 @@ export default class SelectHomeDialog extends React.Component {
       >
       <Grid>
         <Row>
-          <Col xs={4} style={{textAlign:"center"}} onTouchTap={this.props.setHomeLoc.bind(this, "nus")}>
-            <svg className="schoolCommunity" viewBox="0 0 637.000000 244.000000" preserveAspectRatio="xMidYMid meet">
+          <Col xs={3} style={{textAlign:"center"}} onTouchTap={this.props.setHomeLoc.bind(this, "nus")}>
+            <svg viewBox="0 0 637.000000 244.000000" preserveAspectRatio="xMidYMid meet">
               <g transform="translate(0.000000,244.000000) scale(0.100000,-0.100000)"
               fill="#000000" stroke="none">
               <path d="M5099 2360 c-223 -20 -413 -93 -520 -200 -97 -96 -139 -205 -139
@@ -78,8 +78,8 @@ export default class SelectHomeDialog extends React.Component {
               </g>
             </svg>
           </Col>
-          <Col xs={4} style={{textAlign:"center"}} onTouchTap={this.props.setHomeLoc.bind(this, "ntu")}>
-            <svg className="schoolCommunity" viewBox="0 0 299.000000 118.000000" preserveAspectRatio="xMidYMid meet">
+          <Col xs={3} style={{textAlign:"center"}} onTouchTap={this.props.setHomeLoc.bind(this, "ntu")}>
+            <svg viewBox="0 0 299.000000 118.000000" preserveAspectRatio="xMidYMid meet">
               <g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)"
               fill="#000000" stroke="none">
               <path d="M140 1061 c0 -5 13 -11 29 -14 16 -4 46 -21 66 -38 l36 -32 -3 -343
@@ -105,8 +105,8 @@ export default class SelectHomeDialog extends React.Component {
               </g>
             </svg>
           </Col>
-          <Col xs={4} style={{textAlign:"center"}} onTouchTap={this.props.setHomeLoc.bind(this, "smu")}>
-            <svg className="schoolCommunity" viewBox="0 0 298.000000 110.000000" preserveAspectRatio="xMidYMid meet">
+          <Col xs={3} style={{textAlign:"center"}} onTouchTap={this.props.setHomeLoc.bind(this, "smu")}>
+            <svg viewBox="0 0 298.000000 110.000000" preserveAspectRatio="xMidYMid meet">
               <g transform="translate(0.000000,110.000000) scale(0.100000,-0.100000)"
               fill="#000000" stroke="none">
               <path d="M294 1081 c-155 -40 -225 -190 -155 -334 24 -50 100 -127 211 -214
@@ -130,6 +130,40 @@ export default class SelectHomeDialog extends React.Component {
               -47 -23 -68 -28 -130 -28 -85 0 -130 15 -185 65 -90 82 -105 160 -101 521 3
               268 3 268 27 287 13 10 34 19 47 19 24 0 35 20 12 21 -71 2 -310 3 -318 1z"/>
               </g>
+            </svg>
+          </Col>
+          <Col xs={3} style={{textAlign:"center"}} onTouchTap={this.props.setHomeLoc.bind(this, "sutd")}>
+            <svg style={{width:"105%"}} className="schoolCommunity" width="383.000000pt" height="99.000000pt" viewBox="0 0 383.000000 99.000000" preserveAspectRatio="xMidYMid meet">
+            <g transform="translate(0.000000,99.000000) scale(0.100000,-0.100000)"
+            fill="#000000" stroke="none">
+            <path d="M120 670 l0 -230 375 0 375 0 0 -145 0 -145 -375 0 -375 0 0 -40 0
+            -40 415 0 415 0 0 225 0 225 -342 1 c-189 1 -356 2 -373 3 l-30 1 0 145 0 145
+            365 3 c201 1 370 4 375 6 9 3 11 24 6 69 -1 4 -188 7 -416 7 l-415 0 0 -230z"/>
+            <path d="M1059 896 c-2 -2 -3 -189 -1 -415 l2 -411 415 0 415 0 0 415 0 415
+            -40 0 -40 0 0 -375 0 -375 -335 0 -335 0 0 375 0 375 -38 0 c-21 0 -41 -2 -43
+            -4z"/>
+            <path d="M1240 575 l0 -325 229 0 c143 0 231 4 233 10 2 5 2 152 0 325 l-3
+            315 -39 0 -40 0 0 -280 0 -280 -145 0 -145 0 0 280 0 280 -45 0 -45 0 0 -325z"/>
+            <path d="M1430 670 l0 -230 45 0 45 0 0 230 0 230 -45 0 -45 0 0 -230z"/>
+            <path d="M1992 858 l3 -41 185 -1 185 -1 3 -372 c2 -407 -1 -386 59 -375 l23
+            4 2 372 3 371 188 0 187 0 0 43 0 42 -421 0 -420 0 3 -42z"/>
+            <path d="M2930 858 l0 -43 375 3 375 3 0 -336 0 -335 -375 0 -375 0 0 -40 0
+            -40 415 0 415 0 0 415 0 415 -415 0 -415 0 0 -42z"/>
+            <path d="M310 670 l0 -40 319 0 319 0 4 28 c2 16 2 34 0 40 -3 9 -90 12 -323
+            12 l-319 0 0 -40z"/>
+            <path d="M1990 670 l0 -40 95 0 95 0 0 -279 0 -280 23 -3 c12 -2 32 -2 45 0
+            l22 4 0 319 0 319 -140 0 -140 0 0 -40z"/>
+            <path d="M2562 389 l3 -321 38 -3 37 -2 0 284 0 283 95 0 95 0 0 40 0 40 -135
+            0 -135 0 2 -321z"/>
+            <path d="M2930 670 l0 -40 280 0 280 0 0 -145 0 -145 -280 0 -280 0 0 -45 0
+            -45 325 0 325 0 0 230 0 230 -325 0 -325 0 0 -40z"/>
+            <path d="M2768 522 l-28 -3 0 -225 0 -224 45 0 45 0 0 228 c0 251 5 232 -62
+            224z"/>
+            <path d="M2930 483 l0 -43 230 0 230 0 0 43 0 42 -230 0 -230 0 0 -42z"/>
+            <path d="M1990 296 c0 -155 3 -225 11 -228 6 -2 26 -2 45 0 l34 4 0 224 0 224
+            -45 0 -45 0 0 -224z"/>
+            <path d="M120 295 l0 -45 325 0 325 0 0 45 0 45 -325 0 -325 0 0 -45z"/>
+            </g>
             </svg>
           </Col>
         </Row>
