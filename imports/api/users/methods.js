@@ -98,11 +98,11 @@ export const updateProfileFacebook = new ValidatedMethod({
     if (!user)
       return;
 
-    if (homeLocation && homeZoom)
-        Meteor.users.update({ _id: user._id }, { $set: {
-          'homeLocation': homeLocation,
-          'homeZoom': homeZoom,
-        } });
+    if(!user.homeCommunityId && homeLocation && homeZoom)
+      Meteor.users.update({ _id: user._id }, { $set: {
+        'homeLocation': homeLocation,
+        'homeZoom': homeZoom,
+      } });
 
     if (!propExistsDeep(user, ['profile', 'name'])) {
       let name = "";
@@ -156,11 +156,11 @@ export const updateProfileGoogle = new ValidatedMethod({
     if (!user)
       return;
 
-    if (homeLocation && homeZoom)
-        Meteor.users.update({ _id: user._id }, { $set: {
-          'homeLocation': homeLocation,
-          'homeZoom': homeZoom,
-        } });
+    if(!user.homeCommunityId && homeLocation && homeZoom)
+      Meteor.users.update({ _id: user._id }, { $set: {
+        'homeLocation': homeLocation,
+        'homeZoom': homeZoom,
+      } });
 
     if (!propExistsDeep(user, ['profile', 'name'])) {
       let name = "";
@@ -212,11 +212,11 @@ export const updateProfileIVLE = new ValidatedMethod({
     if (!user)
       return;
 
-    if (homeLocation && homeZoom)
-        Meteor.users.update({ _id: user._id }, { $set: {
-          'homeLocation': homeLocation,
-          'homeZoom': homeZoom,
-        } });
+    if(!user.homeCommunityId && homeLocation && homeZoom)
+      Meteor.users.update({ _id: user._id }, { $set: {
+        'homeLocation': homeLocation,
+        'homeZoom': homeZoom,
+      } });
 
     if (!propExistsDeep(user, ['profile', 'name']))
       if (propExistsDeep(user, ['services', 'ivle', 'name']))
