@@ -61,7 +61,7 @@ export class GiveawaySingleCard extends React.Component {
         <div className="flex-row">
           <div className="col col-xs-12 col-sm-3">
             <div className="avatar">
-              { GiveawaysHelper.makeAvatarLegacy(ga, 700) }
+              { GiveawaysHelper.makeAvatarLegacy(ga, 350) }
             </div>
           </div>
           <div className="col col-xs-12 col-sm-9">
