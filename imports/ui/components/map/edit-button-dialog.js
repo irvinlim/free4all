@@ -268,7 +268,7 @@ export default class EditBtnDialog extends React.Component {
       let endHr= data.endTime.getHours();
       let endMin= data.endTime.getMinutes();
 
-      let availableStatus = StatusTypes.findOne({relativeOrder: 10});
+      let availableStatus = StatusTypes.findOne({ relativeOrder: 0 });
 
       // check if no end date or earlier than start datetime
       let endDateTime = null;

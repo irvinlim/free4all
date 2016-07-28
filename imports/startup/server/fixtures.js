@@ -44,9 +44,9 @@ users.forEach(({ email, password, profile, roles }) => {
 
 // Default status types
 const default_status_types = [
-  { label: "Available", hexColour: "#57D224", relativeOrder: 10 },
-  { label: "Running Out", hexColour: "#FF9E30", relativeOrder: 20 },
-  { label: "Not Available", hexColour: "#DB184D", relativeOrder: 30 },
+  { label: "Available", hexColour: "#57D224", relativeOrder: 0 },
+  { label: "Running Out", hexColour: "#FF9E30", relativeOrder: 1 },
+  { label: "Not Available", hexColour: "#DB184D", relativeOrder: 2 },
 ];
 
 default_status_types.forEach(statusType => {
@@ -56,10 +56,10 @@ default_status_types.forEach(statusType => {
 
 // Default parent categories
 const default_parent_categories = [
-  { name: "Food & Drink", iconClass: 'local_dining', relativeOrder: 10 },
-  { name: "Coupons/Vouchers", iconClass: 'local_offer', relativeOrder: 20 },
-  { name: "Goodie Bags", iconClass: 'local_mall', relativeOrder: 30 },
-  { name: "Everything Else", iconClass: 'thumb_up', relativeOrder: 99 },
+  { name: "Food & Drink", iconClass: 'local_dining', relativeOrder: 0 },
+  { name: "Coupons/Vouchers", iconClass: 'local_offer', relativeOrder: 1 },
+  { name: "Goodie Bags", iconClass: 'local_mall', relativeOrder: 2 },
+  { name: "Everything Else", iconClass: 'thumb_up', relativeOrder: 3 },
 ];
 
 default_parent_categories.forEach(parentCat => {
@@ -69,10 +69,10 @@ default_parent_categories.forEach(parentCat => {
 
 // Default categories
 const default_categories = [
-  { name: "Pizza", iconClass: 'fa fae-pizza', relativeOrder: 10, parent: ParentCategories.findOne({ name: "Food & Drink" })._id },
-  { name: "Buffet", iconClass: 'restaurant', relativeOrder: 11, parent: ParentCategories.findOne({ name: "Food & Drink" })._id },
-  { name: "Ice Cream", iconClass: 'fa fae-popsicle', relativeOrder: 12, parent: ParentCategories.findOne({ name: "Food & Drink" })._id },
-  { name: "Coffee", iconClass: 'fa fa-coffee', relativeOrder: 13, parent: ParentCategories.findOne({ name: "Food & Drink" })._id },
+  { name: "Pizza", iconClass: 'fa fae-pizza', relativeOrder: 0, parent: ParentCategories.findOne({ name: "Food & Drink" })._id },
+  { name: "Buffet", iconClass: 'restaurant', relativeOrder: 1, parent: ParentCategories.findOne({ name: "Food & Drink" })._id },
+  { name: "Ice Cream", iconClass: 'fa fae-popsicle', relativeOrder: 2, parent: ParentCategories.findOne({ name: "Food & Drink" })._id },
+  { name: "Coffee", iconClass: 'fa fa-coffee', relativeOrder: 3, parent: ParentCategories.findOne({ name: "Food & Drink" })._id },
 ];
 
 default_categories.forEach(cat => {
