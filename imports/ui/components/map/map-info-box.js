@@ -31,6 +31,8 @@ export default class MapInfoBox extends React.Component {
     $("#map-info-box .close-button").click(event => {
       event.stopPropagation();
 
+      $("#map-info-box div").scrollTop(0);
+
       if (self.props.boxState == 1)
         self.props.setBoxState(0);
       else if (self.props.boxState == 2)
