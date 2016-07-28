@@ -5,17 +5,26 @@ import * as CategoriesHelper from '../../../util/categories';
 
 Meteor.publish('giveaway-by-id', function(gaId) {
   check(gaId, Match._id);
-  return Giveaways.find(gaId);
+  return Giveaways.find({
+    _id: gaId,
+    isRemoved: { $ne:  true },  // Must not be deleted (local deletion)
+  });
 });
 
 Meteor.publish('giveaways-by-user', function(userId) {
   check(userId, Match._id);
-  return Giveaways.find({ userId: userId });
+  return Giveaways.find({
+    userId: userId,
+    isRemoved: { $ne:  true },  // Must not be deleted (local deletion)
+  });
 });
 
 Meteor.publish('giveaways-by-users', function(userIds) {
   check(userIds, [Match._id]);
-  return Giveaways.find({ userId: {$in: userIds}});
+  return Giveaways.find({
+    userId: {$in: userIds},
+    isRemoved: { $ne:  true },  // Must not be deleted (local deletion)
+  });
 });
 
 Meteor.publish('giveaways-on-screen', function(date, mapBounds) {
@@ -43,8 +52,10 @@ Meteor.publish('user-giveaways-within-date', function(startDateRange, endDateRan
   const findParams = {
     startDateTime:  { $gte: startDateRange, },
     endDateTime:    { $lt:  endDateRange, },
-    userId:         this.userId,
+    userId:         this.userId,,
+    isRemoved: { $ne:  true },  // Must not be deleted (local deletion)
   };
+
   if(isAllGa)
     return Giveaways.find({userId: this.userId});
   else
@@ -60,8 +71,10 @@ Meteor.publish('users-giveaways-within-date', function(startDateRange, endDateRa
   const findParams = {
     startDateTime:  { $gte: startDateRange },
     endDateTime:    { $lt:  endDateRange },
-    userId:         { $in: userIds }
+    userId:         { $in: userIds },
+    isRemoved: { $ne:  true },  // Must not be deleted (local deletion)
   };
+
   if(isAllGa)
     return Giveaways.find({ userId: {$in: userIds}})
   else
