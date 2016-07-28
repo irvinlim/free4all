@@ -46,13 +46,6 @@ Communities.schema = new SimpleSchema({
   mapURL: {
     type: String,
     regEx: SimpleSchema.RegEx.Url,
-    autoValue: function(){
-      if(!this.isSet){
-        const id = Meteor.settings.public.MapBox.mapID;
-        const accessToken = Meteor.settings.public.MapBox.accessToken;
-        return "https://api.tiles.mapbox.com/v4/"+ id +"/{z}/{x}/{y}.png?access_token=" + accessToken;
-      }
-    },
     label: 'Mapbox studio style'
   },
   createdAt: {

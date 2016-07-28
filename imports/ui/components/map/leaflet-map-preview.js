@@ -19,14 +19,14 @@ export default class LeafletMapPreview extends React.Component{
 	componentWillReceiveProps(nextProps){
 
 		// Remove old marker if new one selected
-		if(this.marker) 
+		if(this.marker)
 			this.map.removeLayer(this.marker)
 
 		// Marker styles
 	    const css = { 'background-color': "#00bcd4", "font-size": "30px" }
 	    const iconHTML = '<i class="material-icons">add_location</i>'
 	    const icon = this.markerIcon("map-marker", css, {}, iconHTML)
-	    
+
 	    this.marker = L.marker(nextProps.previewCoords, { icon: icon, opacity: 1 })
 	    this.marker.addTo(this.map)
 
@@ -39,7 +39,7 @@ export default class LeafletMapPreview extends React.Component{
 	}
 
 	makeMap(elemId){
-		
+
 		let	mapID = Meteor.settings.public.MapBox.mapID,
         	accessToken = Meteor.settings.public.MapBox.accessToken;
 
@@ -54,12 +54,13 @@ export default class LeafletMapPreview extends React.Component{
 	    this.map.keyboard.disable();
 
 
-	    // Map icon, tile 
+	    // Map icon, tile
 	    L.Icon.Default.imagePath = 'packages/bevanhunt_leaflet/images';
 	    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
 	    	attribution: 'Imagery from <a href="http://mapbox.com/about/maps/">MapBox</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 	    	id: mapID,
-	    	accessToken: accessToken
+	    	accessToken: accessToken,
+        detectRetina: true,
 	    }).addTo(this.map)
 
 	}

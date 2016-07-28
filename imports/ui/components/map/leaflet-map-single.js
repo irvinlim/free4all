@@ -46,7 +46,8 @@ export default class LeafletMapSingle extends React.Component{
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
       attribution: 'Imagery from <a href="http://mapbox.com/about/maps/">MapBox</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       id: mapID,
-      accessToken: accessToken
+      accessToken: accessToken,
+      detectRetina: true,
     }).addTo(this.map);
 
     // Set coordinates
