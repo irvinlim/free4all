@@ -31,7 +31,7 @@ label[for] { font-weight: inherit; }
 }
 
 .card {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   @include media-xs-only { margin-bottom: 10px; }
 
   .flex-row:not(.nopad) {

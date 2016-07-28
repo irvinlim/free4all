@@ -3,7 +3,7 @@ import React from 'react';
 import * as Colors from 'material-ui/styles/colors';
 import * as UsersHelper from '../../../util/users';
 
-export const ProfileHeader = ({ user, shareCount, homeCommunity }) => (
+export const ProfileHeader = ({ user, shareCount, ratingPercent, homeCommunity }) => (
   <div className="profile-header flex-row">
     <div className="col-xs-4 col-sm-2">
       { UsersHelper.getAvatar(user, 240, { width: "100%", height: 'auto' }) }
@@ -14,6 +14,7 @@ export const ProfileHeader = ({ user, shareCount, homeCommunity }) => (
       <p style={{ color: Colors.grey600 }}>{ UsersHelper.getBio(user) }</p>
       <ul className="user-stats">
         <li><strong>{ shareCount }</strong> giveaways shared</li>
+        <li><strong>{ ratingPercent }%</strong> approval rating</li>
       </ul>
     </div>
   </div>

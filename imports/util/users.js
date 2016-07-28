@@ -19,12 +19,12 @@ const maybeGetUser = (userOrId) => {
 
 // Name
 
-export const getUserLink = (user, content=null) => {
+export const getUserLink = (user, content=null, style={}) => {
   if (!content)
     content = getFullName(user);
 
   return (
-    <Link to={`/profile/${user._id}`}>
+    <Link to={`/profile/${user._id}`} style={ style }>
       { content }
     </Link>
   );

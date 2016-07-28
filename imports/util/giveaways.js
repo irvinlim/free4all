@@ -1,6 +1,7 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 
+import { Giveaways } from '../api/giveaways/giveaways';
 import { ParentCategories } from '../api/parent-categories/parent-categories';
 import { Categories } from '../api/categories/categories';
 import { StatusTypes } from '../api/status-types/status-types';
@@ -54,6 +55,21 @@ export const countDownvotes = (ga) => ga.ratings && ga.ratings.downvotes ? ga.ra
 export const countTotalVotes = (ga) => ga.ratings ? (ga.ratings.upvotes ? ga.ratings.upvotes.length : 0) + (ga.ratings.downvotes ? ga.ratings.downvotes.length : 0) : 0;
 export const currentUserUpvoted = (ga) => ga.ratings && ga.ratings.upvotes ? ga.ratings.upvotes.filter(rating => rating.userId == Meteor.userId()).length > 0 : false;
 export const currentUserDownvoted = (ga) => ga.ratings && ga.ratings.downvotes ? ga.ratings.downvotes.filter(rating => rating.userId == Meteor.userId()).length > 0 : false;
+
+// User Ratings
+export const getRatingPercentageForUser = (user) => {
+  const userId = user._id ? user._id : user;
+  let totalUpvotes = 0, totalDownvotes = 0;
+  Giveaways.find({ userId: userId }).forEach(ga => {
+    totalUpvotes += countUpvotes(ga);
+    totalDownvotes += countDownvotes(ga);
+  });
+
+  if (totalUpvotes + totalDownvotes > 0)
+    return (( totalUpvotes / (totalUpvotes + totalDownvotes) ) * 100).toFixed(0);
+  else
+    return 0;
+};
 
 // Dates
 export const is_ongoing = (ga) => Helper.is_ongoing(ga.startDateTime, ga.endDateTime);

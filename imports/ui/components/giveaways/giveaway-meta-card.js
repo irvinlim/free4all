@@ -8,7 +8,7 @@ import * as IconsHelper from '../../../util/icons';
 import * as LayoutHelper from '../../../util/layout';
 import * as GiveawaysHelper from '../../../util/giveaways';
 
-const AboutAuthor = ({ ga, user, shareCount }) => (
+const AboutAuthor = ({ ga, user, shareCount, ratingPercent }) => (
   <div>
     <h3>About the Author</h3>
 
@@ -17,10 +17,11 @@ const AboutAuthor = ({ ga, user, shareCount }) => (
         { UsersHelper.getUserLink(user, UsersHelper.getAvatar(user, 64, { margin: "0 auto", display: "block" })) }
       </div>
       <div style={{ width: "calc(100% - 94px)", marginLeft: 10, display: "inline-block", verticalAlign: "top" }}>
-        <h4 style={{ marginTop: 10 }}>
-          { UsersHelper.getUserLink(user) }
+        <h4 style={{ marginTop: 0, fontWeight: 400 }}>
+          { UsersHelper.getUserLink(user, null, { color: "#4e4e4e" }) }
         </h4>
         <h5>{ shareCount } { pluralizer(shareCount, "giveaway", "giveaways") } shared</h5>
+        <h5>{ ratingPercent }% approval rating</h5>
       </div>
     </div>
   </div>

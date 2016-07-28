@@ -78,7 +78,7 @@ export class Profile extends React.Component {
     return (
       <div id="page-profile" className="page-container" style={{ overflow: "hidden" }}>
         <Grid>
-          <div className="flex-row nopad">
+          <div className="flex-row nopad" style={{ padding: "0 0 5px" }}>
             <div className="col col-xs-12">
               <PaperCard className="profile">
                 <div className="profile">
