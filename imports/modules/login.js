@@ -33,9 +33,13 @@ const facebookLogin = (options) => {
       if (options.failedLogin)
         options.failedLogin();
     } else {
+      const homeLocation = Session.get("homeLocation");
       Bert.alert('Logged in!', 'success');
 
-      updateProfileFacebook.call({ userId: Meteor.userId() });
+      if(homeLocation)
+        updateProfileFacebook.call({ userId: Meteor.userId(), homeLocation: homeLocation.coordinates, homeZoom: homeLocation.zoom });
+      else
+        updateProfileFacebook.call({ userId: Meteor.userId() });
 
       if (options.afterLogin)
         options.afterLogin();
@@ -51,9 +55,13 @@ const googleLogin = (options) => {
       if (options.failedLogin)
         options.failedLogin();
     } else {
+      const homeLocation = Session.get("homeLocation");
       Bert.alert('Logged in!', 'success');
 
-      updateProfileGoogle.call({ userId: Meteor.userId() });
+      if(homeLocation)
+        updateProfileGoogle.call({ userId: Meteor.userId(), homeLocation: homeLocation.coordinates, homeZoom: homeLocation.zoom });
+      else
+        updateProfileGoogle.call({ userId: Meteor.userId() });
 
       if (options.afterLogin)
         options.afterLogin();
@@ -69,9 +77,13 @@ const ivleLogin = (options) => {
       if (options.failedLogin)
         options.failedLogin();
     } else {
+      const homeLocation = Session.get("homeLocation");
       Bert.alert('Logged in!', 'success');
 
-      updateProfileIVLE.call({ userId: Meteor.userId() });
+      if(homeLocation)
+        updateProfileIVLE.call({ userId: Meteor.userId(), homeLocation: homeLocation.coordinates, homeZoom: homeLocation.zoom });
+      else
+        updateProfileIVLE.call({ userId: Meteor.userId() });
 
       if (options.afterLogin)
         options.afterLogin();

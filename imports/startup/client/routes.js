@@ -19,6 +19,7 @@ import { Signup } from '../../ui/pages/signup';
 // Timeline
 import { Timeline } from '../../ui/pages/timeline';
 import { Giveaway } from '../../ui/pages/giveaway';
+import { EditGiveaway } from '../../ui/pages/edit-giveaway';
 
 // Communities
 import { Community } from '../../ui/pages/community';
@@ -103,6 +104,7 @@ Meteor.startup(() => {
 
         <Route name="timeline" path="timeline" component={ Timeline } />
         <Route name="giveaway" path="giveaway/:id" component={ Giveaway } />
+        <Route name="edit-giveaway" path="giveaway/:id/edit" component={ EditGiveaway } />
         <Route name="my-giveaways" path="my-giveaways" component={ MyGiveaways } onEnter={ requireAuth } />
 
         <Route name="communities" path="communities" component={ Communities } />
