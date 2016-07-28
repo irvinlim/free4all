@@ -7,7 +7,7 @@ import { Giveaways } from '../../../api/giveaways/giveaways';
 import { GiveawayComments } from '../../../api/giveaway-comments/giveaway-comments';
 
 let cachedPageViews = new ReactiveVar( 0 );
-let hasCached = false;
+let cacheId = null;
 
 const composer = (props, onData) => {
   if (Meteor.subscribe('giveaway-by-id', props.gaId).ready()) {
@@ -25,12 +25,12 @@ const composer = (props, onData) => {
           if (Meteor.subscribe('comments-for-giveaway', props.gaId).ready()) {
             const commentCount = GiveawayComments.find({ giveawayId: props.gaId, isRemoved: { $ne: true } }).count();
 
-            if (!hasCached)
+            if (cacheId != props.gaId)
               Meteor.call('giveaways.getPageviews', props.gaId, function (error, pageViews) {
                 if (error)
                   pageViews = 0;
 
-                hasCached = true;
+                cacheId = props.gaId;
                 cachedPageViews.set(pageViews);
               });
 
