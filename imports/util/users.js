@@ -20,6 +20,11 @@ const maybeGetUser = (userOrId) => {
 // Name
 
 export const getUserLink = (user, content=null, style={}) => {
+  user = maybeGetUser(user);
+
+  if (!user)
+    return getFullName(user);
+
   if (!content)
     content = getFullName(user);
 
