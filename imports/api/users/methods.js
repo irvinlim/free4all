@@ -23,9 +23,10 @@ export const updateProfileSettings = new ValidatedMethod({
     gender: { type: String },
     birthday: { type: Date },
     bio: { type: String, optional: true },
+    website: { type: String, optional: true },
     avatarId: { type: String, optional: true },
   }).validator(),
-  run({ _id, name, gender, birthday, bio, avatarId }) {
+  run({ _id, name, gender, birthday, bio, website, avatarId }) {
     const user = Meteor.users.findOne(_id);
 
     if (!user)
@@ -42,6 +43,7 @@ export const updateProfileSettings = new ValidatedMethod({
         'profile.gender': gender,
         'profile.birthday': birthday,
         'profile.bio': bio,
+        'profile.website': website,
       }
     });
 

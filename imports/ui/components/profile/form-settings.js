@@ -44,6 +44,7 @@ export class FormSettings extends React.Component {
       gender: user.profile.gender,
       birthday: user.profile.birthday,
       bio: user.profile.bio,
+      website: user.profile.website,
 
       loadingFile: false,
       avatarId: null,
@@ -51,9 +52,9 @@ export class FormSettings extends React.Component {
   }
 
   handleSaveProfile(event) {
-    const { gender, name, birthday, bio, avatarId } = this.state;
+    const { gender, name, birthday, bio, website, avatarId } = this.state;
 
-    updateProfileSettings.call({ _id: Meteor.userId(), name, gender, birthday, bio, avatarId }, function(error) {
+    updateProfileSettings.call({ _id: Meteor.userId(), name, gender, birthday, bio, website, avatarId }, function(error) {
       if (error) {
         Bert.alert(error.reason, 'danger');
       } else {
@@ -163,8 +164,9 @@ export class FormSettings extends React.Component {
                     <div className="col col-xs-12 col-sm-8">
                       { FormsHelper.makeTextField({ self: this, name: "name", label: "Name", required: true, validationErrors: { isDefaultRequiredValue: err("Please enter your name.") } }) }
                       { FormsHelper.makeSelectField({ self: this, name: "gender", label: "Gender", required: true, validationError: err("Please enter your gender."), items: { Male: "Male", Female: "Female", Others: "Others" } }) }
-                      { FormsHelper.makeBirthdayDatePicker({ self: this, name: "birthday", label: "Birthday", required: true, validationError: err("Please enter your birthday.") }) }
+                      { FormsHelper.makeBirthdayDatePicker({ self: this, name: "birthday", label: "Birthday" }) }
                       { FormsHelper.makeMultiTextField({ self: this, name: "bio", label: "Bio", hintText: "Tell us a little about yourself." }) }
+                      { FormsHelper.makeUrlTextField({ self: this, name: "website", label: "Website", validationError: err("Please enter a valid URL.") }) }
                     </div>
                   </div>
 

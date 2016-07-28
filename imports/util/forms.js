@@ -41,6 +41,7 @@ const baseTextField = ({ self, name, label, value, hintText, type, multi, requir
 export const makeTextField = (options) => baseTextField(_.extend(options, { type: 'text', multi: false }));
 export const makePasswordField = (options) => baseTextField(_.extend(options, { type: 'password', multi: false }));
 export const makeMultiTextField = (options) => baseTextField(_.extend(options, { type: 'text', multi: true }));
+export const makeUrlTextField = (options) => baseTextField(_.extend(options, { type: 'url', multi: false }));
 
 const defaultFormatDate = date => moment(date).format("D MMM YYYY");
 const baseDatePicker = ({ self, name, label, value, hintText, minDate, maxDate, formatDate, required, style, validations, validationError, validationErrors }) => {
