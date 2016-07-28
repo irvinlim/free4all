@@ -22,12 +22,12 @@ Meteor.publish('giveaways-on-screen', function(date, mapBounds) {
   check(date, Date);
   check(mapBounds, Array);
 
-  const tomorrow = moment(date).add(1, 'd').toDate();
+  const nextWeek = moment(date).add(1, 'week').toDate();
   const findParams = {
     coordinates : {
       $geoWithin : { $box : mapBounds }
     },
-    startDateTime:  { $lte: tomorrow, },    // Must be ongoing/starting in the next 24 hours
+    startDateTime:  { $lte: nextWeek, },    // Must be ongoing/starting in the next 7 days
     endDateTime:    { $gt:  date, },        // Must not be over
     isRemoved:        { $ne:  true },       // Must not be deleted (local deletion)
   };
@@ -73,7 +73,7 @@ Meteor.publish('giveaways-search', function(props) {
 
   const { tab, offset, perPage, searchQuery, categoryId } = props;
   const now = new Date();
-  const tomorrow = moment(now).add(1, 'd').toDate();
+  const nextWeek = moment(now).add(1, 'week').toDate();
 
   const selector = {
     isRemoved: { $ne:  true },  // Must not be deleted (local deletion)
@@ -112,7 +112,7 @@ Meteor.publish('giveaways-search', function(props) {
       break;
 
     case "current":
-      selector.startDateTime = { $lte: tomorrow };  // Must be ongoing/starting in the next 24 hours
+      selector.startDateTime = { $lte: nextWeek };  // Must be ongoing/starting in the next 7 days
       selector.endDateTime = { $gt:  now };         // Must not be over
       break;
 
