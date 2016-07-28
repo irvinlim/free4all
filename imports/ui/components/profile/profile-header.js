@@ -2,17 +2,14 @@ import React from 'react';
 import Chip from 'material-ui/Chip';
 
 import * as Colors from 'material-ui/styles/colors';
-import * as IconsHelper from '../../../util/icons';
 import * as UsersHelper from '../../../util/users';
 
 const makeChip = (role) => {
-  let icon, label;
+  let label;
 
   if (role == "moderator") {
-    icon = "gavel";
     label = "Mod";
   } else if (role == "admin") {
-    icon = "android";
     label = "Admin";
   } else {
     return null;

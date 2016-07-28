@@ -39,3 +39,17 @@ export const linkGoogle = (options) => {
 export const linkIVLE = (options) => {
   linkAccount('ivle', IVLE, {}, updateProfileIVLE);
 };
+
+const unlinkAccount = (service) => {
+  Meteor.call('user.unlinkService', service, (err) => {
+    if (err) {
+      Bert.alert(`Could not unlink ${capitalizeFirstLetter(service)}.`, 'danger');
+    } else {
+      Bert.alert(`Successfully unlinked ${capitalizeFirstLetter(service)}.`, 'success');
+    }
+  });
+};
+
+export const unlinkFacebook = (options) => unlinkAccount('facebook');
+export const unlinkGoogle = (options) => unlinkAccount('google');
+export const unlinkIVLE = (options) => unlinkAccount('ivle');

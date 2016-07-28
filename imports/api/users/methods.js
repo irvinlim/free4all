@@ -353,10 +353,10 @@ if (Meteor.isServer) {
       else if (!user.services[service])
         throw new Meteor.Error(500, `${service} service not found for user.`);
 
-      delete services[service];
+      delete user.services[service];
 
       // Update user's services
-      Meteor.users.update(user._id, { $set: { services } });
+      Meteor.users.update(user._id, { $set: { services: user.services } });
     },
   });
 

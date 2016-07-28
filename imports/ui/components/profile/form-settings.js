@@ -14,7 +14,7 @@ import * as LayoutHelper from '../../../util/layout';
 import * as FormsHelper from '../../../util/forms';
 
 import { updateProfileSettings, updatePassword } from '../../../api/users/methods';
-import { linkFacebook, linkGoogle, linkIVLE } from '../../../modules/link-accounts';
+import { linkFacebook, linkGoogle, linkIVLE, unlinkFacebook, unlinkGoogle, unlinkIVLE } from '../../../modules/link-accounts';
 
 const uploadFileStyle = {
   cursor: 'pointer',
