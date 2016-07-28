@@ -91,7 +91,16 @@ export const UserGiveaways = (props) => (
         <div />
         }
 
-      </div>
+      <Row>
+        <Col xs={12} md={6}>
+        <Toggle
+        labelStyle= {{fontWeight:200}}
+        label="All giveaways"
+        onToggle={ props.handleAllUserGiveaways }
+        defaultToggled= { true }
+        />
+        </Col>
+      </Row>
 
     </Subheader>
     { props.giveaways

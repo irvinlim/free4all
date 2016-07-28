@@ -56,7 +56,7 @@ export default class EditBtnDialog extends React.Component {
       tile: null,
       avatarId: "",
       loadingFile: false,
-      gaId: "",
+      gaId: props.gaId,
       batchId: "",
     };
 

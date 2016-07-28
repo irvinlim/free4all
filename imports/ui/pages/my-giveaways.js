@@ -10,12 +10,14 @@ import RefreshIndicator from 'material-ui/RefreshIndicator';
 import LeafletMap from '../components/map/leaflet-map';
 import MapInfoBox from '../components/map/map-info-box';
 import MapUserBox from '../components/map/map-user-box';
-import { GoToGeolocationButton } from '../components/map/go-to-geolocation-button'
-import InsertBtnDialog from '../components/map/insert-button-dialog'
-import EditBtnDialog from '../components/map/edit-button-dialog'
+import { GoToGeolocationButton } from '../components/map/go-to-geolocation-button';
+import InsertBtnDialog from '../components/map/insert-button-dialog';
+import EditBtnDialog from '../components/map/edit-button-dialog';
 
 import * as LatLngHelper from '../../util/latlng';
 import * as IconsHelper from '../../util/icons';
+
+import { Giveaways } from '../../api/giveaways/giveaways';
 
 export class MyGiveaways extends React.Component {
   constructor(props) {
@@ -39,12 +41,13 @@ export class MyGiveaways extends React.Component {
       showMarkers: true,
       rGeoLoading: false,
       gaEdit: null,
-      showDateRange: true,
+      gaId: "",
+      showDateRange: false,
     };
 
     this.userUntilDate = new ReactiveVar( moment().set('hour', 0).set('minute',0).add(1,'w').toDate() );
     this.userFromDate = new ReactiveVar( moment().set('hour', 0).set('minute',0).toDate() );
-    this.isAllGa = new ReactiveVar( false );
+    this.isAllGa = new ReactiveVar( true );
 
     this.mapBounds = new ReactiveVar( null );
 
@@ -97,6 +100,17 @@ export class MyGiveaways extends React.Component {
       // Set current location
       self.setState({ geolocation: reactiveLatLng });
     })
+
+    if(this.props.params.id){
+      Meteor.subscribe('giveaway-by-id', this.props.params.id, function(){
+        const giveaway = Giveaways.findOne(self.props.params.id);
+        self.setState({
+          gaEdit: giveaway,
+          gaId: self.props.params.id,
+          isModalOpen: true,
+        })
+      })
+    }
 
   }
 
@@ -263,6 +277,7 @@ export class MyGiveaways extends React.Component {
           hideMarkers={ this.hideMarkers.bind(this) }
           resetLoc={ this.resetLoc.bind(this) }
           gaEdit={ this.state.gaEdit }
+          gaId={ this.state.gaId }
           mapCenter={ this.state.mapCenter }
         />
 

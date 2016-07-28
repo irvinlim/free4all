@@ -36,9 +36,10 @@ export default class MapUserBox extends React.Component {
     return (
       <div id="map-nearby-box" className={ "map-sidebar hidden-xs hidden-sm col-md-3 col-lg-3 state-" + this.props.boxState }>
         <Scrollbars autoHide style={{ height: "100%" }}>
-          <UserGiveaways 
-          mapBounds={ this.props.mapBounds } 
-          nearbyOnClick={ this.props.nearbyOnClick } 
+          <UserGiveaways
+          gaIdRoute={ this.props.gaIdRoute }
+          mapBounds={ this.props.mapBounds }
+          nearbyOnClick={ this.props.nearbyOnClick }
           userUntilDate={ this.props.userUntilDate }
           handleUserUntilDate={ this.props.handleUserUntilDate }
           userFromDate={ this.props.userFromDate }
