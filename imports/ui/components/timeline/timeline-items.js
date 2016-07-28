@@ -4,6 +4,7 @@ import { GridList, GridTile } from 'material-ui/GridList';
 import Paper from 'material-ui/Paper';
 import ReactList from 'react-list';
 import { browserHistory } from 'react-router';
+import PaperCard from '../../layouts/paper-card';
 
 import * as Colors from 'material-ui/styles/colors';
 import * as Helper from '../../../util/helper';
@@ -26,8 +27,8 @@ const iconAvatar = (ga) => (
 );
 
 const listItemRow = (ga) => (
-  <Paper key={ ga._id } style={{ marginBottom: 20 }} className="giveaway giveaway-timeline-item" onTouchTap={ (event) => browserHistory.push('/giveaway/' + ga._id) }>
-    <div className="flex-row">
+  <PaperCard key={ ga._id } style={{ marginBottom: 20 }} className="giveaway giveaway-timeline-item">
+    <div className="flex-row" onTouchTap={ (event) => browserHistory.push('/giveaway/' + ga._id) }>
       <div className="col nopad col-xs-4 col-sm-3">
           { ga.avatarId ? photoAvatar(ga) : iconAvatar(ga) }
       </div>
@@ -47,7 +48,7 @@ const listItemRow = (ga) => (
         </div>
       </div>
     </div>
-  </Paper>
+  </PaperCard>
 );
 
 const gridItemTile = (ga) => (
