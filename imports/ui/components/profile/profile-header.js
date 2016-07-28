@@ -36,7 +36,13 @@ export const ProfileHeader = ({ user, shareCount, ratingPercent, homeCommunity }
       { UsersHelper.getAvatar(user, 240, { width: "100%", height: 'auto' }) }
     </div>
     <div className="col-xs-8 col-sm-10">
-      <h1>{ UsersHelper.getFullName(user) } <span className="role-chips">{ user.roles.map(makeChip) }</span></h1>
+      <h1>
+        { UsersHelper.getFullName(user) }
+        { user.roles ?
+          <span className="role-chips">{ user.roles.map(makeChip) }</span> :
+          null
+        }
+      </h1>
       { homeCommunity ? <h5>{ homeCommunity.name }</h5> : null }
 
       <div className="social-links">
