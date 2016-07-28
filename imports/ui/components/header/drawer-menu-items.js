@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
 import { browserHistory } from 'react-router';
+import { Scrollbars } from 'react-custom-scrollbars';
 
 import Divider from 'material-ui/Divider';
 import Subheader from 'material-ui/Subheader';
@@ -59,34 +60,36 @@ export class DrawerMenuItems extends React.Component {
 
     return (
       <div id="drawer-menu-items">
-        { this.menuItems.map((item, index) => {
-          if (item.divider) {
-            return <Divider key={ 'menudivider' + index } />;
-          } else if (item.subheader && item.subheader.length) {
-            return <Subheader key={ 'menusubheader' + index }>{ item.subheader }</Subheader>;
-          } else {
-            const onClick = () => {
-              if (item.onClick)
-                item.onClick();
-              this.props.closeDrawer();
-            };
+        <Scrollbars autoHide style={{ height: "100%" }}>
+          { this.menuItems.map((item, index) => {
+            if (item.divider) {
+              return <Divider key={ 'menudivider' + index } />;
+            } else if (item.subheader && item.subheader.length) {
+              return <Subheader key={ 'menusubheader' + index }>{ item.subheader }</Subheader>;
+            } else {
+              const onClick = () => {
+                if (item.onClick)
+                  item.onClick();
+                this.props.closeDrawer();
+              };
 
-            const menuItem = (
-              <MenuItem
-                key={ 'menuitem'+index }
-                onTouchTap={ onClick }
-                primaryText={ item.title }
-                leftIcon={ item.icon }
-              />);
+              const menuItem = (
+                <MenuItem
+                  key={ 'menuitem'+index }
+                  onTouchTap={ onClick }
+                  primaryText={ item.title }
+                  leftIcon={ item.icon }
+                />);
 
-            if (!item.href)
-              return menuItem;
-            else
-              return (
-                <LinkContainer key={ 'menulink'+index } to={ item.href }>{ menuItem }</LinkContainer>
-              );
-          }
-        }) }
+              if (!item.href)
+                return menuItem;
+              else
+                return (
+                  <LinkContainer key={ 'menulink'+index } to={ item.href }>{ menuItem }</LinkContainer>
+                );
+            }
+          }) }
+        </Scrollbars>
       </div>
     );
   }

@@ -1,6 +1,6 @@
 import React from 'react';
 import Drawer from 'material-ui/Drawer';
-import DrawerMenuItems from '../../containers/drawer-menu-items.js';
+import DrawerMenuItems from '../../containers/drawer-menu-items';
 
 export default class DrawerNavigation extends React.Component {
   componentDidMount() {
