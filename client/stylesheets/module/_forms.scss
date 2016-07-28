@@ -19,6 +19,7 @@ form label.error {
 .insertDialog>div>div {
     width: 96% !important;
     margin: -60px auto !important;
+    overflow: hidden;
     >div>div{
       @include media-sm-up { max-height: 640px !important; }
       @include media-sm-down { max-height: 400px !important; }
