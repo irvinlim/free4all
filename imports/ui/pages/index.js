@@ -200,21 +200,16 @@ export class Index extends React.Component {
       case 'nus':
         coords = [1.2993372,103.777426];
         zoom = 16
-        Session.setPersistent('homeLocation', {coordinates: coords, zoom: zoom});
         this.setState({ mapZoom: zoom, mapCenter: coords, homeLocation: coords, homeZoom: zoom});
-        // TODO: go to the community route instead of setting mapcenter and zoom
         break;
       case 'ntu':
         coords = [1.3484298,103.6837826];
         zoom = 16
-        Session.setPersistent('homeLocation', {coordinates: coords, zoom: zoom});
         this.setState({ mapZoom: zoom, mapCenter: coords, homeLocation: coords, homeZoom: zoom});
-
         break;
       case 'smu':
         coords = [1.2969614,103.8513713];
         zoom = 18
-        Session.setPersistent('homeLocation', {coordinates: coords, zoom: zoom});
         this.setState({ mapZoom: zoom, mapCenter: coords, homeLocation: coords, homeZoom: zoom});
         break;
       default:
