@@ -42,7 +42,6 @@ service-configuration@1.0.10
 http@1.2.8
 accounts-google@1.0.10
 jparker:gravatar
-irvinlim:accounts-ivle
 meteorhacks:aggregate
 archive:jquery-dotdotdot
 monbro:mongodb-mapreduce-aggregation
@@ -51,3 +50,4 @@ meteorhacks:kadira
 kadira:debug
 u2622:persistent-session
 ongoworks:spiderable
+irvinlim:accounts-ivle

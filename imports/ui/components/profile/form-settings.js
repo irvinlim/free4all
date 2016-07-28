@@ -14,6 +14,7 @@ import * as LayoutHelper from '../../../util/layout';
 import * as FormsHelper from '../../../util/forms';
 
 import { updateProfileSettings, updatePassword } from '../../../api/users/methods';
+import { linkFacebook, linkGoogle, linkIVLE } from '../../../modules/link-accounts';
 
 const uploadFileStyle = {
   cursor: 'pointer',
@@ -99,6 +100,27 @@ export class FormSettings extends React.Component {
     });
   }
 
+  handleFacebook(event) {
+    if (UsersHelper.hasFacebookService(Meteor.user()))
+      unlinkFacebook();
+    else
+      linkFacebook();
+  }
+
+  handleGoogle(event) {
+    if (UsersHelper.hasGoogleService(Meteor.user()))
+      unlinkGoogle();
+    else
+      linkGoogle();
+  }
+
+  handleIVLE(event) {
+    if (UsersHelper.hasIVLEService(Meteor.user()))
+      unlinkIVLE();
+    else
+      linkIVLE();
+  }
+
   render() {
     const avatar = this.state.avatarUrl ?
       <Avatar className="avatar" size={240} src={ this.state.avatarUrl } /> :
@@ -109,7 +131,7 @@ export class FormSettings extends React.Component {
       </FlatButton>
     );
 
-    const user = this.props.user;
+    const user = Meteor.user();
 
     const err = (msg) => this.state.submitProfile ? msg : "";
     const erm = (msg) => this.state.submitPassword ? msg : "";
@@ -157,8 +179,8 @@ export class FormSettings extends React.Component {
           </div>
         </div>
 
-        <div className="flex-row">
-          { UsersHelper.hasPasswordService(user) ?
+        { UsersHelper.hasPasswordService(user) ?
+          <div className="flex-row">
             <div className="col col-xs-12 nopad">
               <Formsy.Form
                 id="passwordSettings"
@@ -180,9 +202,34 @@ export class FormSettings extends React.Component {
                   </CardActions>
                 </Card>
               </Formsy.Form>
-            </div> :
-            null
-          }
+            </div>
+          </div>
+          : null
+        }
+
+        <div className="flex-row">
+          <div className="col col-xs-12 nopad">
+            <Card className="form-box login">
+              <CardTitle title="OAuth Accounts" subtitle="Associate your external accounts for easy login." />
+
+              <CardText className="openid">
+                <FlatButton
+                  style={{ backgroundColor: "#395697", margin: "0 10px" }}
+                  label={ UsersHelper.hasFacebookService(user) ? "Unlink Facebook" : "Link Facebook" }
+                  icon={ IconsHelper.icon("fa fa-facebook-f") }
+                  onTouchTap={ this.handleFacebook } />
+                <FlatButton
+                  style={{ backgroundColor: "#e0492f", margin: "0 10px" }}
+                  label={ UsersHelper.hasGoogleService(user) ? "Unlink Google" : "Link Google" }
+                  icon={ IconsHelper.icon("fa fa-google") }
+                  onTouchTap={ this.handleGoogle } />
+                <FlatButton
+                  style={{ backgroundColor: "#ff8c00", margin: "0 10px" }}
+                  label={ UsersHelper.hasIVLEService(user) ? "Unlink NUS OpenID" : "Link NUS OpenID" }
+                  onTouchTap={ this.handleIVLE } />
+              </CardText>
+            </Card>
+          </div>
         </div>
 
       </div>

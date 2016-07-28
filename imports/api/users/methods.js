@@ -2,11 +2,15 @@ import { Meteor } from 'meteor/meteor';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { ValidatedMethod } from 'meteor/mdg:validated-method';
 import { Accounts } from 'meteor/accounts-base';
+import { Facebook } from 'meteor/facebook';
+import { Google } from 'meteor/google';
+import { IVLE } from 'meteor/irvinlim:ivle';
 
 import { Communities } from '../communities/communities';
-import { propExistsDeep } from '../../util/helper';
+import { arrayContains, propExistsDeep } from '../../util/helper';
 import { UsersSchema } from './users';
 
+import { capitalizeFirstLetter } from '../../util/helper';
 import * as UsersHelper from '../../util/users';
 import * as RolesHelper from '../../util/roles';
 
@@ -102,6 +106,10 @@ export const updateProfileFacebook = new ValidatedMethod({
     if (!propExistsDeep(user, ['profile', 'gender']))
       if (propExistsDeep(user, ['services', 'facebook', 'gender']))
         Meteor.users.update( { _id: user._id }, { $set: { 'profile.gender': UsersHelper.resolveGender(user.services.facebook.gender) } });
+
+    if (propExistsDeep(user.services.facebook.email))
+      if (!arrayContains(user.emails, user.services.facebook.email))
+        Meteor.users.update(user._id, { $push: { "emails": { address: user.services.facebook.email, verified: true } } });
   },
 });
 
@@ -136,6 +144,10 @@ export const updateProfileGoogle = new ValidatedMethod({
     if (!propExistsDeep(user, ['profile', 'gender']))
       if (propExistsDeep(user, ['services', 'google', 'gender']))
         Meteor.users.update( { _id: user._id }, { $set: { 'profile.gender': UsersHelper.resolveGender(user.services.google.gender) } });
+
+    if (propExistsDeep(user.services.google.email))
+      if (!arrayContains(user.emails, user.services.google.email))
+        Meteor.users.update(user._id, { $push: { "emails": { address: user.services.google.email, verified: true } } });
   },
 });
 
@@ -153,6 +165,10 @@ export const updateProfileIVLE = new ValidatedMethod({
     if (!propExistsDeep(user, ['profile', 'name']))
       if (propExistsDeep(user, ['services', 'ivle', 'name']))
         Meteor.users.update( { _id: user._id }, { $set: { 'profile.name': user.services.ivle.name } });
+
+    if (propExistsDeep(user.services.ivle.email))
+      if (!arrayContains(user.emails, user.services.ivle.email))
+        Meteor.users.update(user._id, { $push: { "emails": { address: user.services.ivle.email, verified: true } } });
   },
 });
 
@@ -215,3 +231,77 @@ export const setHomeCommunity = new ValidatedMethod({
     }});
   }
 });
+
+if (Meteor.isServer) {
+
+  // OAuth
+  Meteor.methods({
+    'users.addOauthCredentials': (token, secret, service) => {
+      check(token, String);
+      check(secret, String);
+      check(service, String);
+
+      const user = Meteor.user();
+
+      if (!user)
+        return;
+
+      const services = user.services;
+      let data = {};
+
+      // Retrieve service data
+      switch (service) {
+        case "facebook":
+          if (!services.facebook)
+            services.facebook = Facebook.retrieveCredential(token, secret).serviceData;
+          else
+            throw new Meteor.Error(500, `You already have a linked ${capitalizeFirstLetter(service)} account with email ${services.facebook.email}...`);
+          break;
+
+        case "google":
+          if (!services.google)
+            services.google = Google.retrieveCredential(token, secret).serviceData;
+          else
+            throw new Meteor.Error(500, `You already have a linked ${capitalizeFirstLetter(service)} account with email ${services.google.email}...`);
+          break;
+
+        case "ivle":
+          if (!services.ivle)
+            services.ivle = IVLE.retrieveCredential(token, secret).serviceData;
+          else
+            throw new Meteor.Error(500, `You already have a linked ${capitalizeFirstLetter(service)} account with email ${services.ivle.email}...`);
+          break;
+
+        default:
+          return;
+      }
+
+      // Check for existing user with ExternalService userId
+      const serviceSearch = {};
+      serviceSearch[`services.${service}.id`] = services[service].id;
+      const oldUser = Meteor.users.findOne(serviceSearch);
+
+      if (oldUser != null)
+        throw new Meteor.Error(500, `Your ${capitalizeFirstLetter(service)} account has already been assigned to another user.`);
+
+      // If clean, then update user's services
+      Meteor.users.update(user._id, { $set: { services } });
+    },
+
+    'user.unlinkService': (service) => {
+      check(service, String);
+      const user = Meteor.user();
+
+      if (!user)
+        return;
+      else if (!user.services[service])
+        throw new Meteor.Error(500, `${service} service not found for user.`);
+
+      delete services[service];
+
+      // Update user's services
+      Meteor.users.update(user._id, { $set: { services } });
+    },
+  });
+
+}

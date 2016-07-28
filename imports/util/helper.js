@@ -17,6 +17,10 @@ export const errorIf = (x, msg) => { if (x && process.env.NODE_ENV === "developm
 export const sanitizeStringSlug = (s) => s.replace(/[^a-zA-Z0-9 -_]/g, "");
 export const sanitizeHexColour = (s) => s.replace(/[^a-fA-F0-9#]/g, "");
 export const nl2br = s => nl2brReact(s);
+export const capitalizeFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1);
+
+// Arrays
+export const arrayContains = (arr, item) => arr && arr.length && arr.indexOf(item) >= 0;
 
 // Objects
 

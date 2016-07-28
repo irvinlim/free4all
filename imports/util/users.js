@@ -119,5 +119,5 @@ const hasService = (service) => (user) => propExistsDeep(user, ['services', serv
 export const hasPasswordService = hasService('password');
 export const hasFacebookService = hasService('facebook');
 export const hasGoogleService = hasService('google');
-export const hasIvleService = hasService('ivle');
+export const hasIVLEService = hasService('ivle');
 export const countServices = (user) => Object.size(user.services).length - propExistsDeep(user, ['services', 'resume']);
