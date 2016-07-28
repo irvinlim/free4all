@@ -19,7 +19,7 @@ const statusUpdateRow = (owner) => (su, index) => (
     { IconsHelper.materialIcon("lens", { color: su.statusType.hexColour, fontSize: 10 }) }
     </span>
     <span className="desc">
-      { UsersHelper.getFullNameWithLabelIfEqual(su.user, owner, "author") } marked this giveaway as { su.statusType.label }.
+      { su.statusType.label }: { UsersHelper.getUserLink(su.user, UsersHelper.getFullNameWithLabelIfEqual(su.user, owner, "author")) }
       <span className="timestamp small-text">{ moment(su.date).fromNow() }</span>
     </span>
   </div>
