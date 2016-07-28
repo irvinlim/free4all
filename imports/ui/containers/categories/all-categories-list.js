@@ -8,7 +8,11 @@ import { Meteor } from 'meteor/meteor';
 const composer = (props, onData) => {
   const subscription = Meteor.subscribe('all-categories');
   if (subscription.ready()) {
-    const allCategories = [ParentCategories.find().fetch(), Categories.find().fetch()];
+    const allCategories = [
+      ParentCategories.find({}, { sort: { relativeOrder: 1 } }).fetch(),
+      Categories.find({}, { sort: { relativeOrder: 1 } }).fetch()
+    ];
+
     onData(null, { allCategories, props});
   }
 };
