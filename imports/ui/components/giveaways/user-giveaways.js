@@ -48,49 +48,50 @@ export const UserGiveaways = (props) => (
   <List>
     <Subheader>
       <h3 style={{ margin:"20px 0px 10px" }}>Your Giveaways</h3>
-      { props.showDateRange ?
-      <div>
+
+      <div style={{ paddingRight: 15 }}>
+
         <Row>
-          <Col xs={12} md={2}>
-            <span>From</span>
-          </Col>
-          <Col xs={12} md={2}>
-            <DatePicker
-              id="fromDate"
-              value={ props.userFromDate }
-              onChange={ props.handleUserFromDate }
-              formatDate={ props.formatDate }
-              textFieldStyle={{ width:"105px", fontSize:"14px" }} />
+          <Col xs={12}>
+            <Toggle labelStyle= {{fontWeight:200}} label="Show all giveaways" toggled={ !props.showDateRange } onToggle={ props.handleAllUserGiveaways } />
           </Col>
         </Row>
 
-        <Row style={{paddingBottom:"10px"}}>
-          <Col xs={12} md={2}>
-            <span>Until</span>
-          </Col>
-          <Col xs={12} md={2}>
-            <DatePicker
-              id="toDate"
-              value={ props.userUntilDate }
-              onChange={ props.handleUserUntilDate }
-              formatDate={ props.formatDate }
-              textFieldStyle={{ width:"105px", fontSize:"14px" }} />
-          </Col>
-        </Row>
-        </div>
-        :
-      <div />
-      }
+        { props.showDateRange ?
+        <div>
+          <Row>
+            <Col xs={12} md={2}>
+              <span>From</span>
+            </Col>
+            <Col xs={12} md={2}>
+              <DatePicker
+                id="fromDate"
+                value={ props.userFromDate }
+                onChange={ props.handleUserFromDate }
+                formatDate={ props.formatDate }
+                textFieldStyle={{ width:"105px", fontSize:"14px" }} />
+            </Col>
+          </Row>
 
-      <Row>
-        <Col xs={12} md={6}>
-        <Toggle
-        labelStyle= {{fontWeight:200}}
-        label="All giveaways"
-        onToggle={ props.handleAllUserGiveaways }
-        />
-        </Col>
-      </Row>
+          <Row style={{paddingBottom:"10px"}}>
+            <Col xs={12} md={2}>
+              <span>Until</span>
+            </Col>
+            <Col xs={12} md={2}>
+              <DatePicker
+                id="toDate"
+                value={ props.userUntilDate }
+                onChange={ props.handleUserUntilDate }
+                formatDate={ props.formatDate }
+                textFieldStyle={{ width:"105px", fontSize:"14px" }} />
+            </Col>
+          </Row>
+          </div>
+          :
+        <div />
+        }
+
+      </div>
 
     </Subheader>
     { props.giveaways
