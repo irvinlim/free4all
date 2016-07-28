@@ -19,3 +19,11 @@
 .role-chips {
   display: inline-block; vertical-align: middle; margin-left: 10px;
 }
+
+.social-links {
+  margin-bottom: 5px;
+  a.social-link {
+    & { color: #c1c9da; }
+    &:hover { color: #8595b7; }
+  }
+}

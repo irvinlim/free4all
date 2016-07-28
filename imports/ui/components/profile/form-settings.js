@@ -45,6 +45,10 @@ export class FormSettings extends React.Component {
       birthday: user.profile.birthday,
       bio: user.profile.bio,
       website: user.profile.website,
+      facebookId: user.profile.facebookId,
+      twitterId: user.profile.twitterId,
+      instagramId: user.profile.instagramId,
+      googlePlusId: user.profile.googlePlusId,
 
       loadingFile: false,
       avatarId: null,
@@ -52,9 +56,9 @@ export class FormSettings extends React.Component {
   }
 
   handleSaveProfile(event) {
-    const { gender, name, birthday, bio, website, avatarId } = this.state;
+    const { gender, name, birthday, bio, website, avatarId, facebookId, twitterId, instagramId, googlePlusId } = this.state;
 
-    updateProfileSettings.call({ _id: Meteor.userId(), name, gender, birthday, bio, website, avatarId }, function(error) {
+    updateProfileSettings.call({ _id: Meteor.userId(), name, gender, birthday, bio, website, avatarId, facebookId, twitterId, instagramId, googlePlusId }, function(error) {
       if (error) {
         Bert.alert(error.reason, 'danger');
       } else {
@@ -166,7 +170,12 @@ export class FormSettings extends React.Component {
                       { FormsHelper.makeSelectField({ self: this, name: "gender", label: "Gender", required: true, validationError: err("Please enter your gender."), items: { Male: "Male", Female: "Female", Others: "Others" } }) }
                       { FormsHelper.makeBirthdayDatePicker({ self: this, name: "birthday", label: "Birthday" }) }
                       { FormsHelper.makeMultiTextField({ self: this, name: "bio", label: "Bio", hintText: "Tell us a little about yourself." }) }
+
                       { FormsHelper.makeUrlTextField({ self: this, name: "website", label: "Website", validationError: err("Please enter a valid URL.") }) }
+                      { FormsHelper.makeTextField({ self: this, name: "facebookId", label: "Facebook ID" }) }
+                      { FormsHelper.makeTextField({ self: this, name: "twitterId", label: "Twitter Username" }) }
+                      { FormsHelper.makeTextField({ self: this, name: "instagramId", label: "Instagram Username" }) }
+                      { FormsHelper.makeTextField({ self: this, name: "googlePlusId", label: "Google Plus Username" }) }
                     </div>
                   </div>
 

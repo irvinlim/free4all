@@ -24,9 +24,13 @@ export const updateProfileSettings = new ValidatedMethod({
     birthday: { type: Date },
     bio: { type: String, optional: true },
     website: { type: String, optional: true },
+    facebookId: { type: String, optional: true },
+    twitterId: { type: String, optional: true },
+    instagramId: { type: String, optional: true },
+    googlePlusId: { type: String, optional: true },
     avatarId: { type: String, optional: true },
   }).validator(),
-  run({ _id, name, gender, birthday, bio, website, avatarId }) {
+  run({ _id, name, gender, birthday, bio, website, facebookId, twitterId, instagramId, googlePlusId, avatarId }) {
     const user = Meteor.users.findOne(_id);
 
     if (!user)
@@ -44,6 +48,10 @@ export const updateProfileSettings = new ValidatedMethod({
         'profile.birthday': birthday,
         'profile.bio': bio,
         'profile.website': website,
+        'profile.facebookId': facebookId,
+        'profile.twitterId': twitterId,
+        'profile.instagramId': instagramId,
+        'profile.googlePlusId': googlePlusId,
       }
     });
 

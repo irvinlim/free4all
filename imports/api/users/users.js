@@ -36,6 +36,22 @@ UsersSchema.UserProfile = new SimpleSchema({
     regEx: SimpleSchema.RegEx.Url,
     optional: true
   },
+  facebookId: {
+    type: String,
+    optional: true
+  },
+  twitterId: {
+    type: String,
+    optional: true
+  },
+  instagramId: {
+    type: String,
+    optional: true
+  },
+  googlePlusId: {
+    type: String,
+    optional: true
+  },
   bio: {
     type: String,
     optional: true
