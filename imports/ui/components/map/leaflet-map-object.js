@@ -53,7 +53,7 @@ export default class LeafletMapObject {
       return Helper.error("addMarker: No id specified.");
 
     let css = {};
-    if (!Helper.is_over(ga.startDateTime, ga.endDateTime))
+    if (Helper.is_ongoing(ga.startDateTime, ga.endDateTime))
       css = { 'background-color': GiveawaysHelper.getStatusColor(ga) };
 
     const icon = this.markerIcon("map-marker", css, { "ga-id": id }, Helper.react2html(GiveawaysHelper.getCategoryIcon(ga)));

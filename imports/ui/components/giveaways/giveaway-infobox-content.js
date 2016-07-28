@@ -39,9 +39,7 @@ const getContent = ({ giveaway }) => {
         <p className="description">{ GiveawaysHelper.description(giveaway) }</p>
         { iconRow("date_range", GiveawaysHelper.compactDateRange(giveaway)) }
         { iconRow("location_on", giveaway.location ) }
-        { !GiveawaysHelper.is_over(giveaway) ?
-            iconRow("info_outline", "Status: " + GiveawaysHelper.getLastOwnerStatusType(giveaway).label ) :
-            iconRow("info_outline", "Status: Ended" ) }
+        { GiveawaysHelper.is_ongoing(giveaway) ? iconRow("info_outline", "Status: " + GiveawaysHelper.getLastOwnerStatusType(giveaway).label ) : null }
         { iconRow("link", Helper.makeLink(giveaway.website, "Website")) }
       </div>
     );

@@ -71,9 +71,7 @@ export class GiveawaySingleCard extends React.Component {
 
             { iconRow("date_range", GiveawaysHelper.dateRange(ga)) }
             { iconRow("location_on", ga.location ) }
-            { !GiveawaysHelper.is_over(ga) ?
-                iconRow("info_outline", "Status: " + GiveawaysHelper.getLastOwnerStatusType(ga).label ) :
-                iconRow("info_outline", "Status: Ended" ) }
+            { GiveawaysHelper.is_ongoing(ga) ? iconRow("info_outline", "Status: " + GiveawaysHelper.getLastOwnerStatusType(ga).label ) : null }
             { iconRow("link", Helper.makeLink(ga.website, "Website")) }
 
             { Meteor.userId() && ga.userId !== Meteor.userId() ?
