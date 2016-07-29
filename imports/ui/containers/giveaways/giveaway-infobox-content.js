@@ -9,6 +9,9 @@ import { Categories } from '../../../api/categories/categories';
 import { StatusTypes } from '../../../api/status-types/status-types';
 
 const composer = (props, onData) => {
+  if (!props.gaId)
+    return;
+
   if (Meteor.subscribe('giveaway-by-id', props.gaId).ready()) {
     const giveaway = Giveaways.findOne(props.gaId);
     onData(null, { giveaway });
