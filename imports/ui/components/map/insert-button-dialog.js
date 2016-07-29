@@ -282,69 +282,31 @@ export default class InsertBtnDialog extends React.Component {
         endDateTime = endDateTime > startDateTime ? endDateTime : startDateTime;
       }
 
-      if (!data.recurring){
-        const ga = {
-          title: data.title,
-          description: data.description,
-          website: data.website,
-          startDateTime: startDateTime,
-          endDateTime: endDateTime,
-          location: data.location,
-          coordinates: [data.lng, data.lat],
-          categoryId: data.childCatId,
-          tags: data.tags,
-          userId: data.userId,
-          batchId: data.batchId,
-          statusUpdates: [{ statusTypeId: availableStatus._id, date: new Date(), userId: data.userId }],
-          avatarId: data.avatarId,
-        }
-
-        const gaId = insertGiveaway.call(ga, (error)=>{
-          if (error) {
-            Bert.alert(error.reason, 'Error adding Giveaway');
-          } else {
-            this.setState(this.initialState);
-            Bert.alert('Giveaway Added!', 'success');
-          }
-        })
-
-      } else {
-        // how many days recurring
-        let numberOfDays = moment(data.endDate).diff(moment(data.startDate),'days')+1;
-
-        for(let i = 0; i<numberOfDays; i++){
-
-          let newStartDateTime = moment(startDateTime).add(i, 'days').toDate();
-          let newEndDateTime = moment(data.startDate).set('hour', endHr).set('minute',endMin).add(i, 'days').toDate();
-
-          const ga = {
-            title: data.title,
-            description: data.description,
-            website: data.website,
-            startDateTime: newStartDateTime,
-            endDateTime: newEndDateTime,
-            location: data.location,
-            coordinates: [data.lng, data.lat],
-            categoryId: data.childCatId,
-            tags: data.tags,
-            userId: data.userId,
-            batchId: data.batchId,
-            statusUpdates: [{ statusTypeId: availableStatus._id, date: new Date(), userId: data.userId }],
-            avatarId: data.avatarId,
-
-          }
-
-          const gaId = insertGiveaway.call(ga, (error)=>{
-            if (error) {
-              Bert.alert(error.reason, 'Error adding Giveaway');
-            } else {
-              this.setState(this.initialState);
-              Bert.alert('Giveaway Added!', 'success');
-            }
-          })
-
-        }
+      const ga = {
+        title: data.title,
+        description: data.description,
+        website: data.website,
+        startDateTime: startDateTime,
+        endDateTime: endDateTime,
+        location: data.location,
+        coordinates: [data.lng, data.lat],
+        categoryId: data.childCatId,
+        tags: data.tags,
+        userId: data.userId,
+        batchId: data.batchId,
+        statusUpdates: [{ statusTypeId: availableStatus._id, date: new Date(), userId: data.userId }],
+        avatarId: data.avatarId,
       }
+
+      const gaId = insertGiveaway.call(ga, (error)=>{
+        if (error) {
+          Bert.alert(error.reason, 'Error adding Giveaway');
+        } else {
+          this.setState(this.initialState);
+          Bert.alert('Giveaway Added!', 'success');
+        }
+      })
+
     }
   }
 
@@ -442,33 +404,23 @@ render() {
               </Row>
 
               <Row style={{ paddingTop: 21 }}>
-                <Col xs={12} md={8}>
+                <Col xs={12}>
                   <h2>When</h2>
                 </Col>
-                <Col xs={12} md={4}>
-                  <FormsyToggle
-                  className="toggle"
-                  label="Repeating event?"
-                  name="Recurring"
-                  labelStyle={this.labelStyle}
-                  onChange={this.handleRecurring}
-                  toggled={this.state.recurring} />
-                </Col>
-
-                <Col xs={12} md={8} sm={6}>
+                <Col xs={8} md={4}>
                   <FormsyDate
                     required
                     className="DatePicker"
                     name="dateStart"
                     formatDate={this.formatDate}
-                    floatingLabelText={ this.state.recurring ? "Start Date" : "Date" }
+                    floatingLabelText="Start Date"
                     autoOk={true}
                     textFieldStyle={this.dateTimeTextStyle}
                     minDate={new Date()}
                     onChange={this.handleStartDatePicker}
                     value={this.state.startDate} />
                 </Col>
-                <Col xs={6} md={2} sm={3}>
+                <Col xs={4} md={2}>
                   <FormsyTime
                     required
                     className="TimePicker"
@@ -480,23 +432,7 @@ render() {
                     onChange={this.handleChangeStartTimePicker12}
                     value={this.state.startTime} />
                 </Col>
-                <Col xs={6} md={2} sm={3} className={ this.state.recurring ? "displayNone" : "" }>
-                  <FormsyTime
-                    className="TimePicker"
-                    name="endTime"
-                    required
-                    pedantic={true}
-                    format="ampm"
-                    floatingLabelText="End Time"
-                    textFieldStyle={this.dateTimeTextStyle}
-                    onChange={this.handleChangeEndTimePicker12}
-                    value={this.state.endTime}
-                    defaultTime={ moment().set('minute', 0).toDate() } />
-                </Col>
-              </Row>
-
-              <Row className={ this.state.recurring ? "" : "displayNone" }>
-                <Col xs={12} md={8} sm={6}>
+                <Col xs={8} md={4}>
                   <FormsyDate
                     className="DatePicker"
                     name="dateEnd"
@@ -508,7 +444,7 @@ render() {
                     onChange={this.handleEndDatePicker}
                     value={this.state.endDate} />
                 </Col>
-                <Col xs={6} md={2} sm={3}>
+                <Col xs={4} md={2}>
                   <FormsyTime
                     className="TimePicker"
                     name="endTime"
