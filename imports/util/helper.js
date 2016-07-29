@@ -43,6 +43,7 @@ export const makeLink = (s, label) => {
 
 // Arrays
 export const arrayContains = (arr, item) => arr && arr.length && arr.indexOf(item) >= 0;
+export const arrayContainsObjectMatch = (arr, objKey, objVal) => arr && arr.length && arr.some(x => x[objKey] === objVal);
 
 // Objects
 

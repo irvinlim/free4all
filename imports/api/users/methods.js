@@ -7,7 +7,7 @@ import { Google } from 'meteor/google';
 import { IVLE } from 'meteor/irvinlim:ivle';
 
 import { Communities } from '../communities/communities';
-import { arrayContains, propExistsDeep } from '../../util/helper';
+import { arrayContainsObjectMatch, propExistsDeep } from '../../util/helper';
 import { UsersSchema } from './users';
 
 import { capitalizeFirstLetter } from '../../util/helper';
@@ -142,7 +142,7 @@ export const updateProfileFacebook = new ValidatedMethod({
         Meteor.users.update( { _id: user._id }, { $set: { 'profile.gender': UsersHelper.resolveGender(user.services.facebook.gender) } });
 
     if (propExistsDeep(user.services.facebook.email))
-      if (!arrayContains(user.emails, user.services.facebook.email))
+      if (!arrayContainsObjectMatch(user.emails, user.services.facebook.email))
         Meteor.users.update(user._id, { $push: { "emails": { address: user.services.facebook.email, verified: true } } });
   },
 });
@@ -204,7 +204,7 @@ export const updateProfileGoogle = new ValidatedMethod({
         Meteor.users.update( { _id: user._id }, { $set: { 'profile.gender': UsersHelper.resolveGender(user.services.google.gender) } });
 
     if (propExistsDeep(user.services.google.email))
-      if (!arrayContains(user.emails, user.services.google.email))
+      if (!arrayContainsObjectMatch(user.emails, user.services.google.email))
         Meteor.users.update(user._id, { $push: { "emails": { address: user.services.google.email, verified: true } } });
   },
 });
@@ -249,7 +249,7 @@ export const updateProfileIVLE = new ValidatedMethod({
         Meteor.users.update( { _id: user._id }, { $set: { 'profile.name': user.services.ivle.name } });
 
     if (propExistsDeep(user.services.ivle.email))
-      if (!arrayContains(user.emails, user.services.ivle.email))
+      if (!arrayContainsObjectMatch(user.emails, user.services.ivle.email))
         Meteor.users.update(user._id, { $push: { "emails": { address: user.services.ivle.email, verified: true } } });
   },
 });
