@@ -21,16 +21,9 @@ const giveawayRow = (touchTapHandler, editGa) => (ga) => (
       <span className="single-line" style={{ color: Colors.grey700 }}>{ ga.title }</span>
     }
     secondaryText={
-      <p>
-        <span className="location">Starting on: { moment(ga.startDateTime).format("ddd, Do MMM, h:mm a")}</span>
-        <br />
-        <span className="location">Ending on: { moment(ga.endDateTime).format("ddd, Do MMM, h:mm a")}</span>
-      </p>
+      <span>{ GiveawaysHelper.compactDateRange(ga) }<br/>{ ga.location }</span>
     }
-    leftAvatar={
-      ga.avatarId ? <Avatar src={ AvatarHelper.getUrl(ga.avatarId, 64) } />
-                  : <Avatar icon={ GiveawaysHelper.getCategoryIcon(ga) } backgroundColor={ GiveawaysHelper.getStatusColor(ga) } />
-    }
+    leftAvatar={ GiveawaysHelper.makeAvatar(ga, 40) }
     secondaryTextLines={2}
     onTouchTap={ touchTapHandler(ga) }
     rightIconButton={

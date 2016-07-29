@@ -58,7 +58,7 @@ export default class MapInfoBox extends React.Component {
     const ga = Giveaways.findOne(gaId);
 
     return (
-      <div id="map-info-box" className={ "map-sidebar col-xs-12 col-sm-6 col-md-3 col-lg-3 state-" + boxState }>
+      <div id="map-info-box" className={ `map-sidebar giveaway col-xs-12 col-sm-6 col-md-3 col-lg-3 state-${boxState}` }>
         <Scrollbars className="scrollbar-container" autoHide style={{ height: "100%" }}>
           <div className="map-sidebar-box">
             <GiveawayInfoboxContent gaId={ gaId } />
@@ -85,9 +85,11 @@ export default class MapInfoBox extends React.Component {
             <h3>Comments</h3>
             <GiveawayComments gaId={ gaId } showActions={false} />
 
-            <Link className="button" to={ "/giveaway/" + gaId }>
-              <FlatButton label="Post a Comment" />
-            </Link>
+            <div className="action-buttons">
+              <Link className="button" to={ "/giveaway/" + gaId }>
+                <FlatButton label="Post a Comment" />
+              </Link>
+            </div>
           </div>
         </Scrollbars>
 

@@ -16,9 +16,7 @@ const giveawayRow = (touchTapHandler) => (ga) => (
       <span className="single-line" style={{ color: Colors.grey700 }}>{ ga.title }</span>
     }
     secondaryText={
-      <p>
-        <span className="location">{ ga.location }</span>
-      </p>
+      <span>{ GiveawaysHelper.compactDateRange(ga) }<br/>{ ga.location }</span>
     }
     leftAvatar={ GiveawaysHelper.makeAvatar(ga, 40) }
     secondaryTextLines={2}
