@@ -13,3 +13,6 @@
 
 // Loading
 .loading-container { display: flex; width: 100%; justify-content: center; padding: 20px; }
+
+// Flex Button Container
+.action-buttons { display: flex; flex-direction: row; justify-content: center; align-items: center; }

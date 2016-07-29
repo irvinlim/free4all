@@ -16,7 +16,7 @@ import * as RolesHelper from '../../util/roles';
 
 // Profile settings
 export const updateProfileSettings = new ValidatedMethod({
-  name: 'users.updateProfileSettings',
+  name: 'user.updateProfileSettings',
   validate: new SimpleSchema({
     _id: { type: String },
     name: { type: String },
@@ -61,9 +61,26 @@ export const updateProfileSettings = new ValidatedMethod({
   }
 });
 
+export const resetAvatar = new ValidatedMethod({
+  name: 'user.resetAvatar',
+  validate: new SimpleSchema({
+    _id: { type: String }
+  }).validator(),
+  run({ _id }) {
+    const user = Meteor.users.findOne(_id);
+
+    if (!user)
+      throw new Meteor.Error("users.resetAvatar.undefinedUser", "No such user.");
+    else if (!RolesHelper.ownerOrModsOrAdmins(this.userId, user._id))
+      throw new Meteor.Error("users.resetAvatar.notAuthorized", "Not authorized to reset avatar.");
+
+    return Meteor.users.update(_id, { $unset: { 'profile.avatarId': true } });
+  }
+});
+
 // Intended for admins only
 export const setPassword = new ValidatedMethod({
-  name: 'users.setPassword',
+  name: 'user.setPassword',
   validate: new SimpleSchema({
     userId: { type: String },
     newpassword: { type: String },
@@ -86,7 +103,7 @@ export const setPassword = new ValidatedMethod({
 // Social logins
 
 export const updateProfileFacebook = new ValidatedMethod({
-  name: 'users.updateProfileFacebook',
+  name: 'user.updateProfileFacebook',
   validate: new SimpleSchema({
     userId: { type: String },
     homeLocation: {
@@ -148,7 +165,7 @@ export const updateProfileFacebook = new ValidatedMethod({
 });
 
 export const updateProfileGoogle = new ValidatedMethod({
-  name: 'users.updateProfileGoogle',
+  name: 'user.updateProfileGoogle',
   validate: new SimpleSchema({
     userId: { type: String },
     homeLocation: {
@@ -210,7 +227,7 @@ export const updateProfileGoogle = new ValidatedMethod({
 });
 
 export const updateProfileIVLE = new ValidatedMethod({
-  name: 'users.updateProfileIVLE',
+  name: 'user.updateProfileIVLE',
   validate: new SimpleSchema({
     userId: { type: String },
     homeLocation: {
@@ -257,7 +274,7 @@ export const updateProfileIVLE = new ValidatedMethod({
 // Community
 
 export const joinCommunity = new ValidatedMethod({
-  name: 'users.joinCommunity',
+  name: 'user.joinCommunity',
   validate: new SimpleSchema({
     commId:{ type: String },
     userId:{ type: String }
@@ -276,7 +293,7 @@ export const joinCommunity = new ValidatedMethod({
 });
 
 export const leaveCommunity = new ValidatedMethod({
-  name: 'users.leaveCommunity',
+  name: 'user.leaveCommunity',
   validate: new SimpleSchema({
     commId:{ type: String },
     userId:{ type: String }
@@ -295,7 +312,7 @@ export const leaveCommunity = new ValidatedMethod({
 });
 
 export const setHomeCommunity = new ValidatedMethod({
-  name: 'users.setHomeCommunity',
+  name: 'user.setHomeCommunity',
   validate: new SimpleSchema({
     community:{ type: Object, blackbox: true},
     userId:{ type: String },
@@ -318,7 +335,7 @@ if (Meteor.isServer) {
 
   // OAuth
   Meteor.methods({
-    'users.addOauthCredentials': (token, secret, service) => {
+    'user.addOauthCredentials': (token, secret, service) => {
       check(token, String);
       check(secret, String);
       check(service, String);

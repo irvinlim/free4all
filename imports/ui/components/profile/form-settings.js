@@ -13,7 +13,7 @@ import * as IconsHelper from '../../../util/icons';
 import * as LayoutHelper from '../../../util/layout';
 import * as FormsHelper from '../../../util/forms';
 
-import { updateProfileSettings, updatePassword } from '../../../api/users/methods';
+import { resetAvatar, updateProfileSettings, updatePassword } from '../../../api/users/methods';
 import { linkFacebook, linkGoogle, linkIVLE, unlinkFacebook, unlinkGoogle, unlinkIVLE } from '../../../modules/link-accounts';
 
 const uploadFileStyle = {
@@ -105,6 +105,19 @@ export class FormSettings extends React.Component {
     });
   }
 
+  handleResetAvatar(event) {
+    const self = this;
+
+    resetAvatar.call({ _id: Meteor.userId() }, function(error) {
+      if (error) {
+        Bert.alert(error.reason, 'danger');
+      } else {
+        Bert.alert('Profile updated.', 'success');
+        self.setState({ avatarUrl: UsersHelper.getAvatarUrl(Meteor.userId(), 240) });
+      }
+    });
+  }
+
   handleFacebook(event) {
     if (UsersHelper.hasFacebookService(Meteor.user()))
       unlinkFacebook();
@@ -127,11 +140,11 @@ export class FormSettings extends React.Component {
   }
 
   render() {
-    const avatar = this.state.avatarUrl ?
+    const UserAvatar = (props) => this.state.avatarUrl ?
       <Avatar className="avatar" size={240} src={ this.state.avatarUrl } /> :
       <Avatar className="avatar" size={240} icon={ IconsHelper.materialIcon("person", { color: Colors.grey50 }) } />;
-    const uploadButton = (
-      <FlatButton label="Upload New Picture" style={{ display: "block", margin: "0 auto" }}>
+    const UploadButton = (props) => (
+      <FlatButton label="Upload New Picture">
         <input type="file" style={ uploadFileStyle } onChange={ this.handleUpload.bind(this) } />
       </FlatButton>
     );
@@ -160,9 +173,13 @@ export class FormSettings extends React.Component {
                   <div className="flex-row">
                     <div className="col col-xs-12 col-sm-4">
                       <div className="avatar-upload" style={{ textAlign: "center" }}>
-                        { avatar }
+                        <UserAvatar />
                       </div>
-                      { uploadButton }
+
+                      <div className="action-buttons" style={{ marginTop: 15, flexDirection: 'column' }}>
+                        <UploadButton />
+                        <FlatButton label="Reset Picture" onTouchTap={ this.handleResetAvatar.bind(this) } />
+                      </div>
                     </div>
 
                     <div className="col col-xs-12 col-sm-8">
