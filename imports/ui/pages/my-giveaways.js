@@ -98,9 +98,10 @@ export class MyGiveaways extends React.Component {
       self.setState({ geolocation: reactiveLatLng });
     });
 
-    Meteor.subscribe('giveaway-by-id', paramId, function() {
-      self.handleParams();
-    });
+    if (this.props.params.id)
+      Meteor.subscribe('giveaway-by-id', this.props.params.id, function() {
+        self.handleParams();
+      });
   }
 
   componentDidUpdate() {
