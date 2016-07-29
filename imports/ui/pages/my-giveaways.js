@@ -224,22 +224,19 @@ export class MyGiveaways extends React.Component {
           showMarkers={ this.state.showMarkers }
           addRGeoSpinner={ this.addRGeoSpinner.bind(this) }
           rmvRGeoSpinner={ this.rmvRGeoSpinner.bind(this) }
-          isDbClickDisabled= { true }
-        />
+          isDbClickDisabled= { true } />
 
         <RefreshIndicator
-        size={40}
-        left={$(window).width()/2}
-        top={ 10}
-        status={ this.state.rGeoLoading ? "loading" : "hide" }
-        />
+          size={40}
+          left={$(window).width()/2}
+          top={ 10}
+          status={ this.state.rGeoLoading ? "loading" : "hide" } />
 
         <div id="map-boxes-container">
           <MapInfoBox
             gaId={ this.state.gaSelected }
             boxState={ this.state.infoBoxState }
-            setBoxState={ this.setInfoBoxState.bind(this) }
-          />
+            setBoxState={ this.setInfoBoxState.bind(this) } />
           <MapUserBox
             gaId={ this.state.gaSelected }
             boxState={ this.state.nearbyBoxState }
@@ -252,8 +249,7 @@ export class MyGiveaways extends React.Component {
             handleUserFromDate={ this.handleUserFromDate.bind(this) }
             handleAllUserGiveaways={ this.handleAllUserGiveaways.bind(this) }
             editGa={ editGa }
-            showDateRange={ this.state.showDateRange }
-          />
+            showDateRange={ this.state.showDateRange } />
         </div>
 
         <div id="map-floating-buttons" style={{ right: 20 + (this.state.nearbyBoxState > 0 ? $("#map-nearby-box").outerWidth() : 0) }}>
@@ -272,9 +268,8 @@ export class MyGiveaways extends React.Component {
           hideMarkers={ this.hideMarkers.bind(this) }
           resetLoc={ this.resetLoc.bind(this) }
           gaEdit={ this.state.gaEdit }
-          gaId={ this.state.gaId }
-          mapCenter={ this.state.mapCenter }
-        />
+          gaId={ this.state.gaSelected }
+          mapCenter={ this.state.mapCenter } />
 
       </div>
 

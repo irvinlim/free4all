@@ -251,7 +251,7 @@ export default class InsertBtnDialog extends React.Component {
       let data = this.state;
       data.title = String(data.title);
       data.description = String(data.description);
-      data.website = sanitizeURL(data.website);
+      data.website = data.website ? sanitizeURL(data.website) : "";
       data.location = String(data.location);
       data.lng = parseFloat(data.lng);
       data.lat = parseFloat(data.lat);
@@ -602,8 +602,7 @@ render() {
                   label={this.state.childCatName}
                   secondary={true}
                   onTouchTap={this.handleOpenCatMenu}
-                  icon={<FontIcon className={this.state.childCatIcon} />}
-                />
+                  icon={<FontIcon className={this.state.childCatIcon} />} />
                 <Col className="displayNone">
                 <FormsyText
                   name="childCatRequired"
@@ -615,8 +614,7 @@ render() {
                   setChildCat={this.setChildCat}
                   isCatMenuOpen={this.state.isCatMenuOpen}
                   anchorEl={this.state.anchorEl}
-                  closeCatMenu={this.handleCloseCatMenu}
-                />
+                  closeCatMenu={this.handleCloseCatMenu} />
                 </Col>
                 <Col xs={12} md={12} style={{paddingBottom: "28px"}}>
                   <TagsInput value={this.state.tags} onChange={this.handleTagsChange} />
@@ -627,9 +625,7 @@ render() {
                 <Col xs={12} md={8} >
                 <h2>Upload Image</h2>
                 </Col>
-                <Col xs={12} md={4}
-                style={{ paddingTop: 21 }}
-                >
+                <Col xs={12} md={4} style={{ paddingTop: 21 }} >
                   <RaisedButton
                   className="formBtn"
                   style={{minHeight:"41px"}}
@@ -655,16 +651,16 @@ render() {
                 </Col>
               </Row>
               <Row>
-                <Col>
+                <Col xs={12}>
                   {this.state.loadingFile?
-                    <LinearProgress mode="indeterminate" />
+                    <LinearProgress mode="indeterminate" id="LinearProgressEdit"/>
                     :
                     <div />
                   }
                 </Col>
               </Row>
               <Row>
-                <Col>
+                <Col xs={12}>
                 <div style={{
                   display: 'flex',
                   flexWrap: 'wrap',
@@ -688,16 +684,12 @@ render() {
                       <GridTile
                       key={this.state.tile.res.secure_url}
                       title={this.state.tile.files[0].name}
-                      cols={2}
-                      >
-                      <img
-                      src={this.state.tile.res.secure_url}
-                      />
+                      cols={2} >
+                        <img src={this.state.tile.res.secure_url} />
                       </GridTile>
                     </GridList>
                     :
-                    <GridList>
-                    </GridList>
+                    <div />
                   }
                   </div>
                 </Col>
