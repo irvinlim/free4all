@@ -78,6 +78,8 @@ export class GiveawaySingleCard extends React.Component {
   }
 
   handleFlagGiveaway(event) {
+    this.setState({ confirmFlagDialogOpen: false });
+
     flagGiveaway.call({ _id: this.props.ga._id, userId: Meteor.userId() }, function(error) {
       if (error) {
         Bert.alert(error.reason, 'danger');
@@ -130,7 +132,7 @@ export class GiveawaySingleCard extends React.Component {
         <ConfirmFlagDialog
           open={ this.state.confirmFlagDialogOpen }
           handleClose={ event => this.setState({ confirmFlagDialogOpen: false }) }
-          handleSubmit={ this.handleFlagGiveaway } />
+          handleSubmit={ this.handleFlagGiveaway.bind(this) } />
       </PaperCard>
     );
   }
