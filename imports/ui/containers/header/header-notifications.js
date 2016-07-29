@@ -1,7 +1,7 @@
 import { composeWithTracker } from 'react-komposer';
 import { Meteor } from 'meteor/meteor';
 import { HeaderNotifications } from '../../components/header/header-notifications';
-import { Loading } from '../../components/loading';
+import { LoadingWithProps } from '../../components/loading';
 
 const composer = (props, onData) => {
   if (!Meteor.userId()) {
@@ -14,4 +14,4 @@ const composer = (props, onData) => {
   }
 };
 
-export default composeWithTracker(composer, Loading)(HeaderNotifications);
+export default composeWithTracker(composer, LoadingWithProps({ size: 0.5, color: "#ced5e3", containerClassName: "loading-float" }))(HeaderNotifications);
