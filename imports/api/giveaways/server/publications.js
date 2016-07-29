@@ -38,7 +38,7 @@ Meteor.publish('giveaways-on-screen', function(date, mapBounds) {
     },
     startDateTime:  { $lte: nextWeek, },    // Must be ongoing/starting in the next 7 days
     endDateTime:    { $gt:  date, },        // Must not be over
-    isRemoved:        { $ne:  true },       // Must not be deleted (local deletion)
+    isRemoved:      { $ne:  true },         // Must not be deleted (local deletion)
   };
 
   return Giveaways.find(findParams);
@@ -53,11 +53,14 @@ Meteor.publish('user-giveaways-within-date', function(startDateRange, endDateRan
     startDateTime:  { $gte: startDateRange, },
     endDateTime:    { $lt:  endDateRange, },
     userId:         this.userId,
-    isRemoved: { $ne:  true },  // Must not be deleted (local deletion)
+    isRemoved:      { $ne:  true },  // Must not be deleted (local deletion)
   };
 
   if(isAllGa)
-    return Giveaways.find({userId: this.userId});
+    return Giveaways.find({
+      userId:     this.userId,
+      isRemoved: { $ne:  true }
+    });
   else
     return Giveaways.find(findParams);
 })
@@ -72,11 +75,14 @@ Meteor.publish('users-giveaways-within-date', function(startDateRange, endDateRa
     startDateTime:  { $gte: startDateRange },
     endDateTime:    { $lt:  endDateRange },
     userId:         { $in: userIds },
-    isRemoved: { $ne:  true },  // Must not be deleted (local deletion)
+    isRemoved:      { $ne:  true },  // Must not be deleted (local deletion)
   };
 
   if(isAllGa)
-    return Giveaways.find({ userId: {$in: userIds}})
+    return Giveaways.find({
+      userId:     { $in: userIds},
+      isRemoved:  { $ne:  true }
+    })
   else
     return Giveaways.find(findParams);
 })

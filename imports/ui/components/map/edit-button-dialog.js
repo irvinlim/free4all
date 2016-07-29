@@ -256,16 +256,22 @@ export default class EditBtnDialog extends React.Component {
       props.closeModal();
       props.stopDraggableAdded();
       props.resetLoc();
-      // console.log("state", this.state);
+
       let data = this.state;
       data.title = String(data.title);
       data.description = String(data.description);
-      data.website = sanitizeURL(data.website);
+      data.website = data.website ? sanitizeURL(data.website) : "";
       data.location = String(data.location);
       data.lng = parseFloat(data.lng);
       data.lat = parseFloat(data.lat);
       data.userId = String(Meteor.userId());
-      // console.log("state", data);
+      data.removeUserId = String(Meteor.userId());
+
+      if (data.tile){
+        data.avatarId = data.tile.res.public_id;
+        const imgUrlPre = data.tile.res.secure_url;
+        data.imgUrl = imgUrlPre.split('upload')[0]+ 'upload/' + 'h_300,c_scale' + imgUrlPre.split('upload')[1];
+      }
 
       let startHr= data.startTime.getHours();
       let startMin= data.startTime.getMinutes();
@@ -298,9 +304,7 @@ export default class EditBtnDialog extends React.Component {
         batchId: data.batchId,
         statusUpdates: [{ statusTypeId: availableStatus._id, date: new Date(), userId: data.userId }],
         avatarId: data.avatarId,
-        batchId: data.batchId,
       }
-
 
       updateGiveaway.call({_id:data.gaId, update:ga}, (error)=>{
         if (error) {
@@ -327,32 +331,21 @@ export default class EditBtnDialog extends React.Component {
 
     }
 
-    this.removeGiveawayGroup = () => {
-      props.closeModal();
-      props.stopDraggableAdded();
-      props.resetLoc();
-      removeGiveawayGroup.call({batchId: this.state.batchId}, (error)=>{
-        if (error) {
-          Bert.alert(error.reason, 'Error updating giveaway');
-        } else {
-          this.setState(this.initialState);
-          Bert.alert('Grouped Giveaways Deleted!', 'success');
-        }
-      })
-    }
-
   }
 
   componentWillReceiveProps(nextProps){
     const gaEdit = nextProps.gaEdit;
+    let gaEditTile = null
 
     if(gaEdit){
       // placeholder for grid tile text
-      let gaEditTile = {
-        files:[{name:""}],
-        res: {secure_url:""}
-      };
-      gaEditTile.res.secure_url = $.cloudinary.url(gaEdit.avatarId);
+      if(gaEdit.avatarId){
+        gaEditTile = {
+          files:[{name:""}],
+          res: {secure_url:""}
+        };
+        gaEditTile.res.secure_url = $.cloudinary.url(gaEdit.avatarId);
+      }
       const childCats = Categories.find().fetch();
       const childCat = childCats.find(cat => cat._id === gaEdit.categoryId);
 
@@ -408,12 +401,6 @@ export default class EditBtnDialog extends React.Component {
         secondary={true}
         disabled={!this.state.canSubmit}
         onTouchTap={this.removeGiveaway}
-        autoScrollBodyContent={true} />,
-      <FlatButton
-        label="Delete group"
-        secondary={true}
-        disabled={!this.state.canSubmit}
-        onTouchTap={this.removeGiveawayGroup}
         autoScrollBodyContent={true} />,
     ];
     return (
@@ -476,11 +463,11 @@ export default class EditBtnDialog extends React.Component {
                 </Row>
 
                 <Row style={{ paddingTop: 21 }}>
-                  <Col xs={12} md={8}>
+                  <Col xs={12}>
                     <h2>When</h2>
                   </Col>
 
-                  <Col xs={12} md={8} sm={6}>
+                  <Col xs={8} md={4}>
                     <FormsyDate
                       required
                       className="DatePicker"
@@ -493,7 +480,7 @@ export default class EditBtnDialog extends React.Component {
                       onChange={this.handleStartDatePicker}
                       value={this.state.startDate} />
                   </Col>
-                  <Col xs={6} md={2} sm={3}>
+                  <Col xs={4} md={2}>
                     <FormsyTime
                       required
                       className="TimePicker"
@@ -505,10 +492,7 @@ export default class EditBtnDialog extends React.Component {
                       onChange={this.handleChangeStartTimePicker12}
                       value={this.state.startTime} />
                   </Col>
-                </Row>
-
-                <Row>
-                  <Col xs={12} md={8} sm={6}>
+                  <Col xs={8} md={4}>
                     <FormsyDate
                       className="DatePicker"
                       name="dateEnd"
@@ -520,7 +504,7 @@ export default class EditBtnDialog extends React.Component {
                       onChange={this.handleEndDatePicker}
                       value={this.state.endDate} />
                   </Col>
-                  <Col xs={6} md={2} sm={3}>
+                  <Col xs={4} md={2}>
                     <FormsyTime
                       className="TimePicker"
                       name="endTime"
@@ -602,8 +586,7 @@ export default class EditBtnDialog extends React.Component {
                     label={this.state.childCatName}
                     secondary={true}
                     onTouchTap={this.handleOpenCatMenu}
-                    icon={<FontIcon className={this.state.childCatIcon} />}
-                  />
+                    icon={<FontIcon className={this.state.childCatIcon} />} />
                   <Col className="displayNone">
                     <FormsyText
                     name="childCatRequired"
@@ -655,7 +638,7 @@ export default class EditBtnDialog extends React.Component {
                   </Col>
                 </Row>
                 <Row>
-                  <Col>
+                  <Col xs={12}>
                     {this.state.loadingFile?
                       <LinearProgress mode="indeterminate" id="LinearProgress"/>
                       :
@@ -664,7 +647,7 @@ export default class EditBtnDialog extends React.Component {
                   </Col>
                 </Row>
                 <Row>
-                  <Col>
+                  <Col xs={12}>
                   <div style={{
                     display: 'flex',
                     flexWrap: 'wrap',
@@ -688,16 +671,12 @@ export default class EditBtnDialog extends React.Component {
                         <GridTile
                         key={this.state.tile.res.secure_url}
                         title={this.state.tile.files[0].name}
-                        cols={2}
-                        >
-                        <img
-                        src={this.state.tile.res.secure_url}
-                        />
+                        cols={2} >
+                          <img src={this.state.tile.res.secure_url} />
                         </GridTile>
                       </GridList>
                       :
-                      <GridList>
-                      </GridList>
+                      <div />
                     }
                     </div>
                   </Col>

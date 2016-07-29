@@ -46,7 +46,7 @@ export const removeGiveaway = new ValidatedMethod({
     _id: { type: String },
   }).validator(),
   run({ _id }) {
-    const giveaway = Giveaways.findOne(giveawayId);
+    const giveaway = Giveaways.findOne(_id);
 
     if (!this.userId)
       throw new Meteor.Error("giveaways.removeGiveaway.notLoggedIn", "Must be logged in to remove giveaway.");
@@ -75,7 +75,7 @@ export const removeGiveawayGroup = new ValidatedMethod({
     batchId: { type: String },
   }).validator(),
   run({ batchId }) {
-    const giveaways = Giveaways.find(batchId);
+    const giveaways = Giveaways.find({batchId: batchId});
 
     if (!this.userId)
       throw new Meteor.Error("giveaways.removeGiveawayGroup.notLoggedIn", "Must be logged in to remove giveaway.");
