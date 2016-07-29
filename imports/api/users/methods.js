@@ -379,6 +379,10 @@ if (Meteor.isServer) {
       else if (!user.services[service])
         throw new Meteor.Error(500, `${service} service not found for user.`);
 
+      const countServices = UsersHelper.countServices(user);
+      if (countServices < 2)
+        throw new Meteor.Error('user.unlinkService.cannotRemoveLastService', `Cannot unlink ${service}: last authentication method available.`);
+
       delete user.services[service];
 
       // Update user's services
