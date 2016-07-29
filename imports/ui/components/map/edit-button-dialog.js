@@ -27,6 +27,23 @@ import { shortId, sanitizeURL } from '../../../util/helper.js'
 import * as IconsHelper from '../../../util/icons';
 import * as ImagesHelper from '../../../util/images';
 
+const RemoveGiveawayDialog = ({ open, handleClose, handleSubmit }) => {
+  const actions = [
+    <FlatButton label="Cancel" onTouchTap={ handleClose } />,
+    <FlatButton label="Submit" onTouchTap={ handleSubmit } />,
+  ];
+
+  return (
+    <Dialog
+      title="Are you sure?"
+      open={ open }
+      actions={ actions }
+      onRequestClose={ handleClose }>
+      <p>Are you sure you would like to delete this giveaway?</p>
+    </Dialog>
+  );
+};
+
 export default class EditBtnDialog extends React.Component {
 
   constructor(props){
@@ -58,6 +75,7 @@ export default class EditBtnDialog extends React.Component {
       loadingFile: false,
       gaId: props.gaId,
       batchId: "",
+      removeGiveawayPromptOpen: false,
     };
 
     this.state = this.initialState;
@@ -316,21 +334,21 @@ export default class EditBtnDialog extends React.Component {
       })
     }
 
-    this.removeGiveaway = () => {
-      props.closeModal();
-      props.stopDraggableAdded();
-      props.resetLoc();
-      removeGiveaway.call({_id: this.state.gaId}, (error)=>{
-        if (error) {
-          Bert.alert(error.reason, 'Error updating giveaway');
-        } else {
-          this.setState(this.initialState);
-          Bert.alert('Giveaway Deleted!', 'success');
-        }
-      })
+  }
 
-    }
+  removeGiveaway(event) {
+    this.props.closeModal();
+    this.props.stopDraggableAdded();
+    this.props.resetLoc();
 
+    removeGiveaway.call({ _id: this.state.gaId }, error => {
+      if (error) {
+        Bert.alert(error.reason, 'Error updating giveaway');
+      } else {
+        this.setState(this.initialState);
+        Bert.alert('Giveaway Deleted!', 'success');
+      }
+    });
   }
 
   componentWillReceiveProps(nextProps){
@@ -400,7 +418,7 @@ export default class EditBtnDialog extends React.Component {
         label="Delete"
         secondary={true}
         disabled={!this.state.canSubmit}
-        onTouchTap={this.removeGiveaway}
+        onTouchTap={ event => this.setState({ removeGiveawayPromptOpen: true }) }
         autoScrollBodyContent={true} />,
     ];
     return (
@@ -686,6 +704,11 @@ export default class EditBtnDialog extends React.Component {
           </Paper>
 
         </Dialog>
+
+        <RemoveGiveawayDialog
+          open={ this.state.removeGiveawayPromptOpen }
+          handleClose={ event => this.setState({ removeGiveawayPromptOpen: false }) }
+          handleSubmit={ this.removeGiveaway.bind(this) } />
       </div>
     );
   }
