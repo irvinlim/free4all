@@ -112,12 +112,13 @@ export const updateProfileFacebook = new ValidatedMethod({
     if (!user)
       return;
 
-    if(!user.homeCommunityId && homeLocation)
+    if(!user.homeCommunityId && homeLocation){
       Meteor.users.update({ _id: user._id }, { $set: {
         'homeLocation': homeLocation,
         'homeZoom': homeZoom,
         'homeCommunityId': homeCommunityId,
       } });
+    }
 
     if (!propExistsDeep(user, ['profile', 'name'])) {
       let name = "";
@@ -173,12 +174,13 @@ export const updateProfileGoogle = new ValidatedMethod({
     if (!user)
       return;
 
-    if(!user.homeCommunityId && homeLocation && homeZoom)
+    if(!user.homeCommunityId && homeLocation){
       Meteor.users.update({ _id: user._id }, { $set: {
         'homeLocation': homeLocation,
         'homeZoom': homeZoom,
         'homeCommunityId': homeCommunityId,
       } });
+    }
 
     if (!propExistsDeep(user, ['profile', 'name'])) {
       let name = "";
@@ -234,12 +236,13 @@ export const updateProfileIVLE = new ValidatedMethod({
     if (!user)
       return;
 
-    if(!user.homeCommunityId && homeLocation && homeZoom)
+    if(!user.homeCommunityId && homeLocation){
       Meteor.users.update({ _id: user._id }, { $set: {
         'homeLocation': homeLocation,
         'homeZoom': homeZoom,
         'homeCommunityId': homeCommunityId,
       } });
+    }
 
     if (!propExistsDeep(user, ['profile', 'name']))
       if (propExistsDeep(user, ['services', 'ivle', 'name']))

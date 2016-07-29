@@ -4,7 +4,7 @@ import { Meteor } from 'meteor/meteor';
 import { Bert } from 'meteor/themeteorchef:bert';
 import { getInputValue } from './get-input-value';
 
-import { updateProfileFacebook, updateProfileGoogle, updateProfileIVLE } from '../api/users/methods';
+import { updateProfileFacebook, updateProfileGoogle, updateProfileIVLE, joinCommunity } from '../api/users/methods';
 
 const login = (options) => {
   const email = getInputValue(options.component.refs.emailAddress);
@@ -36,13 +36,15 @@ const facebookLogin = (options) => {
       const homeLocation = Session.get("homeLocation");
       Bert.alert('Logged in!', 'success');
 
-      if(homeLocation)
+      if(homeLocation && !Meteor.user().homeLocation){
+        joinCommunity.call({ userId: Meteor.userId(), commId: homeLocation.commId });
         updateProfileFacebook.call({
           userId: Meteor.userId(),
           homeLocation: homeLocation.coordinates,
           homeZoom: homeLocation.zoom,
           homeCommunityId: homeLocation.commId
         });
+      }
       else
         updateProfileFacebook.call({ userId: Meteor.userId() });
 
@@ -63,13 +65,15 @@ const googleLogin = (options) => {
       const homeLocation = Session.get("homeLocation");
       Bert.alert('Logged in!', 'success');
 
-      if(homeLocation)
+      if(homeLocation && !Meteor.user().homeLocation){
+        joinCommunity.call({ userId: Meteor.userId(), commId: homeLocation.commId });
         updateProfileGoogle.call({
           userId: Meteor.userId(),
           homeLocation: homeLocation.coordinates,
           homeZoom: homeLocation.zoom,
           homeCommunityId: homeLocation.commId
         });
+      }
       else
         updateProfileGoogle.call({ userId: Meteor.userId() });
 
@@ -90,13 +94,15 @@ const ivleLogin = (options) => {
       const homeLocation = Session.get("homeLocation");
       Bert.alert('Logged in!', 'success');
 
-      if(homeLocation)
+      if(homeLocation && !Meteor.user().homeLocation){
+        joinCommunity.call({ userId: Meteor.userId(), commId: homeLocation.commId });
         updateProfileIVLE.call({
           userId: Meteor.userId(),
           homeLocation: homeLocation.coordinates,
           homeZoom: homeLocation.zoom,
           homeCommunityId: homeLocation.commId
         });
+      }
       else
         updateProfileIVLE.call({ userId: Meteor.userId() });
 
