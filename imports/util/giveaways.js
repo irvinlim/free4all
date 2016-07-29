@@ -12,6 +12,9 @@ import * as Helper from './helper';
 import * as IconsHelper from './icons';
 import * as AvatarHelper from './avatar';
 
+// Check owner
+export const isCurrentUserOwner = (ga) => ga && Meteor.userId() && Meteor.userId() === ga.userId;
+
 // Category
 export const getCategory = (ga) => Categories.findOne(ga.categoryId);
 export const getParentCategory = (ga) => ParentCategories.findOne(getCategory(ga).parent);

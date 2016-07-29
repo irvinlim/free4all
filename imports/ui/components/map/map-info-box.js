@@ -8,7 +8,9 @@ import GiveawayInfoboxContent from '../../containers/giveaways/giveaway-infobox-
 import GiveawayRatings from '../../containers/giveaways/giveaway-ratings';
 import GiveawayComments from '../../containers/giveaways/giveaway-comments';
 
+import * as GiveawaysHelper from '../../../util/giveaways';
 import * as IconsHelper from '../../../util/icons';
+import { Giveaways } from '../../../api/giveaways/giveaways';
 
 export default class MapInfoBox extends React.Component {
 
@@ -48,31 +50,42 @@ export default class MapInfoBox extends React.Component {
         self.props.setBoxState(0);
     });
 
-    setTimeout(this.positionBoxes, 500);
+    setTimeout(this.positionBoxes, 1000);
   }
 
   render() {
+    const { gaId, boxState } = this.props;
+    const ga = Giveaways.findOne(gaId);
+
     return (
-      <div id="map-info-box" className={ "map-sidebar col-xs-12 col-sm-6 col-md-3 col-lg-3 state-" + this.props.boxState }>
+      <div id="map-info-box" className={ "map-sidebar col-xs-12 col-sm-6 col-md-3 col-lg-3 state-" + boxState }>
         <Scrollbars className="scrollbar-container" autoHide style={{ height: "100%" }}>
           <div className="map-sidebar-box">
-            <GiveawayInfoboxContent gaId={ this.props.gaId } />
+            <GiveawayInfoboxContent gaId={ gaId } />
 
-            <Link className="button" to={ "/giveaway/" + this.props.gaId }>
-              <FlatButton label="View Giveaway" style={{ display: "block", margin: "0 auto" }} />
-            </Link>
+            <div className="action-buttons">
+              <Link className="button" to={ "/giveaway/" + gaId }>
+                <FlatButton label="View Giveaway" style={{ display: "block", margin: "0 auto" }} />
+              </Link>
+
+              { GiveawaysHelper.isCurrentUserOwner(ga) ?
+                <Link className="button" to={ "/my-giveaways/" + gaId }>
+                  <FlatButton label="Edit Giveaway" style={{ display: "block", margin: "0 auto" }} />
+                </Link> : null
+              }
+            </div>
           </div>
 
           <div className="map-sidebar-box">
             <h3>User Reviews</h3>
-            <GiveawayRatings gaId={ this.props.gaId } />
+            <GiveawayRatings gaId={ gaId } />
           </div>
 
           <div className="map-sidebar-box">
             <h3>Comments</h3>
-            <GiveawayComments gaId={ this.props.gaId } showActions={false} />
+            <GiveawayComments gaId={ gaId } showActions={false} />
 
-            <Link className="button" to={ "/giveaway/" + this.props.gaId }>
+            <Link className="button" to={ "/giveaway/" + gaId }>
               <FlatButton label="Post a Comment" style={{ display: "block", margin: "0 auto" }} />
             </Link>
           </div>
@@ -84,7 +97,7 @@ export default class MapInfoBox extends React.Component {
 
         <div className="expand-button-infobox hidden-xs">
           <FloatingActionButton mini={true} backgroundColor="#647577" zDepth={ 0 }>
-            { IconsHelper.icon(this.props.boxState == 0 ? "keyboard_arrow_right" : "keyboard_arrow_left") }
+            { IconsHelper.icon(boxState == 0 ? "keyboard_arrow_right" : "keyboard_arrow_left") }
           </FloatingActionButton>
         </div>
       </div>
