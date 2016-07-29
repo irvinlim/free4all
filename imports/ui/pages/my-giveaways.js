@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { Bert } from 'meteor/themeteorchef:bert';
 import React from 'react';
+import { browserHistory } from 'react-router';
 import MuiTheme from '../layouts/mui-theme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
@@ -41,7 +42,7 @@ export class MyGiveaways extends React.Component {
       showMarkers: true,
       rGeoLoading: false,
       gaEdit: null,
-      gaId: "",
+      gaId: null,
       showDateRange: false,
     };
 
@@ -94,25 +95,26 @@ export class MyGiveaways extends React.Component {
       const reactiveLatLng = Geolocation.latLng();
       // Set current location
       self.setState({ geolocation: reactiveLatLng });
-    })
+    });
 
-    if(this.props.params.id){
-      Meteor.subscribe('giveaway-by-id', this.props.params.id, function(){
-        const giveaway = Giveaways.findOne(self.props.params.id);
-        self.setState({
-          gaEdit: giveaway,
-          gaId: self.props.params.id,
-          isModalOpen: true,
-        })
-      })
+
+    const paramId = this.props.params.id;
+    if (paramId) {
+      Meteor.subscribe('giveaway-by-id', paramId, function() {
+        const giveaway = Giveaways.findOne(paramId);
+        const handler = self.selectEditGa(giveaway);
+        handler();
+      });
     }
-
   }
 
   componentWillUnmount() {
     this.subscription && this.subscription.stop();
     this.autorunSub && this.autorunSub.stop();
     this.autorunGeo && this.autorunGeo.stop();
+  }
+
+  handleParams(paramId) {
   }
 
   goToGeolocation() {
@@ -122,6 +124,7 @@ export class MyGiveaways extends React.Component {
   closeModal() {
     this.setState({ isModalOpen: false });
   }
+
   openModal() {
     this.setState({ isModalOpen: true });
   }
@@ -194,16 +197,24 @@ export class MyGiveaways extends React.Component {
     this.showMarkers();
   }
 
+  selectEditGa(ga) {
+    const self = this;
+
+    return event => {
+      self.setState({ isModalOpen: ga ? true : false, gaEdit: ga }, () => {
+        if (ga)
+          browserHistory.push(`/my-giveaways/${ga._id}`);
+        else
+          browserHistory.push(`/my-giveaways`);
+      });
+    }
+  }
+
   render() {
     const clickNearbyGa = ga => event => {
       this.selectGa(ga._id);
       this.setState({ mapCenter: LatLngHelper.lnglat2latlng(ga.coordinates) });
       this.setState({ mapZoom: this.state.mapMaxZoom });
-    };
-
-    const editGa = ga => event => {
-      this.setState({ isModalOpen: true });
-      this.setState({ gaEdit: ga });
     };
 
     return (
@@ -248,7 +259,7 @@ export class MyGiveaways extends React.Component {
             handleUserUntilDate={ this.handleUserUntilDate.bind(this) }
             handleUserFromDate={ this.handleUserFromDate.bind(this) }
             handleAllUserGiveaways={ this.handleAllUserGiveaways.bind(this) }
-            editGa={ editGa }
+            editGa={ this.selectEditGa.bind(this) }
             showDateRange={ this.state.showDateRange } />
         </div>
 
@@ -259,7 +270,7 @@ export class MyGiveaways extends React.Component {
         <EditBtnDialog
           isModalOpen={ this.state.isModalOpen }
           openModal={ this.openModal.bind(this) }
-          closeModal={ this.closeModal.bind(this) }
+          closeModal={ (this.selectEditGa.bind(this))(null) }
           latLng={ this.state.latLngClicked }
           locArr={ this.state.locArr }
           locName={ this.state.locName }
