@@ -1,9 +1,13 @@
 @import "../common/_mixins";
 
 .schoolCommunity{
-  height: auto; width: 75%; cursor: pointer;
-  & > g { @include transition-standard(fill 225ms); }
-  &:hover > g { fill: #3F51B5; }
-  @include media-md-down { margin-bottom: 12%; }
+  background-color: #000000;
+  cursor: pointer;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  &:hover{ background-color: $primary-color}
+  @include transition-standard(background-color 225ms);
+  @include media-md-down { margin-bottom: 6%; }
   @include media-md-up { margin-bottom: 0; }
 }

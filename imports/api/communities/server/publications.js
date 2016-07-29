@@ -10,7 +10,7 @@ Meteor.publish('community-by-id', function(communityId) {
 
 Meteor.publish('communities-search', function(props) {
   check(props, Object);
-  
+
   const selector = {}
   const options = { fields: {} };
 
@@ -30,3 +30,7 @@ Meteor.publish('communities-search', function(props) {
 
   return Communities.find(selector, options);
 });
+
+Meteor.publish('featured-communities', function(){
+  return Communities.find({ feature: true });
+})

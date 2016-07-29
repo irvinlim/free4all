@@ -94,24 +94,29 @@ export const updateProfileFacebook = new ValidatedMethod({
       decimal: true,
       minCount: 2,
       maxCount: 2,
-      label: 'Array of coordinates in MongoDB style \[Lng, Lat\]',
       optional: true
     },
     homeZoom:{
       type: Number,
       optional: true
+    },
+    homeCommunityId:{
+      type: String,
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true
     }
   }).validator(),
-  run({ userId, homeLocation, homeZoom }) {
+  run({ userId, homeLocation, homeZoom, homeCommunityId }) {
     const user = Meteor.users.findOne(userId);
 
     if (!user)
       return;
 
-    if(!user.homeCommunityId && homeLocation && homeZoom)
+    if(!user.homeCommunityId && homeLocation)
       Meteor.users.update({ _id: user._id }, { $set: {
         'homeLocation': homeLocation,
         'homeZoom': homeZoom,
+        'homeCommunityId': homeCommunityId,
       } });
 
     if (!propExistsDeep(user, ['profile', 'name'])) {
@@ -128,9 +133,7 @@ export const updateProfileFacebook = new ValidatedMethod({
           name = user.services.facebook.last_name;
       }
 
-      console.log(homeLocation)
-      Meteor.users.update( { _id: user._id }, { $set: { 'profile.name': name }
-      });
+      Meteor.users.update( { _id: user._id }, { $set: { 'profile.name': name } });
     }
 
     if (!propExistsDeep(user, ['profile', 'gender']))
@@ -152,15 +155,19 @@ export const updateProfileGoogle = new ValidatedMethod({
       decimal: true,
       minCount: 2,
       maxCount: 2,
-      label: 'Array of coordinates in MongoDB style \[Lng, Lat\]',
       optional: true
     },
     homeZoom:{
       type: Number,
       optional: true
+    },
+    homeCommunityId:{
+      type: String,
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true
     }
   }).validator(),
-  run({ userId, homeLocation, homeZoom }) {
+  run({ userId, homeLocation, homeZoom, homeCommunityId }) {
     const user = Meteor.users.findOne(userId);
 
     if (!user)
@@ -170,6 +177,7 @@ export const updateProfileGoogle = new ValidatedMethod({
       Meteor.users.update({ _id: user._id }, { $set: {
         'homeLocation': homeLocation,
         'homeZoom': homeZoom,
+        'homeCommunityId': homeCommunityId,
       } });
 
     if (!propExistsDeep(user, ['profile', 'name'])) {
@@ -208,15 +216,19 @@ export const updateProfileIVLE = new ValidatedMethod({
       decimal: true,
       minCount: 2,
       maxCount: 2,
-      label: 'Array of coordinates in MongoDB style \[Lng, Lat\]',
       optional: true
     },
     homeZoom:{
       type: Number,
       optional: true
+    },
+    homeCommunityId:{
+      type: String,
+      regEx: SimpleSchema.RegEx.Id,
+      optional: true
     }
   }).validator(),
-  run({ userId, homeLocation, homeZoom }) {
+  run({ userId, homeLocation, homeZoom, homeCommunityId }) {
     const user = Meteor.users.findOne(userId);
 
     if (!user)
@@ -226,6 +238,7 @@ export const updateProfileIVLE = new ValidatedMethod({
       Meteor.users.update({ _id: user._id }, { $set: {
         'homeLocation': homeLocation,
         'homeZoom': homeZoom,
+        'homeCommunityId': homeCommunityId,
       } });
 
     if (!propExistsDeep(user, ['profile', 'name']))

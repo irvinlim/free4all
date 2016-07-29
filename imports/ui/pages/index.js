@@ -192,30 +192,19 @@ export class Index extends React.Component {
     });
   }
 
-  setHomeLoc(uniName){
-    let coords, zoom;
-    this.setState({ isHomeLocOpen: false });
-    switch(uniName){
-      case 'nus':
-        coords = [1.2993372,103.777426];
-        zoom = 16
-        break;
-      case 'ntu':
-        coords = [1.3484298,103.6837826];
-        zoom = 16
-        break;
-      case 'smu':
-        coords = [1.2969614,103.8513713];
-        zoom = 18
-        break;
-      case 'sutd':
-        coords = [1.3414995,103.9643371];
-        zoom = 18
-      default:
-        break;
-    }
-    this.setState({ mapZoom: zoom, mapCenter: coords, homeLocation: coords, homeZoom: zoom});
-    Session.setPersistent('homeLocation', {coordinates: coords, zoom: zoom});
+  setHomeLoc(community){
+    this.setState({
+      isHomeLocOpen: false,
+      mapZoom: community.zoom,
+      mapCenter: community.coordinates,
+      homeLocation: community.coordinates,
+      homeZoom: community.zoom
+    });
+    Session.setPersistent('homeLocation', {
+      coordinates: community.coordinates,
+      zoom: community.zoom,
+      commId: community._id
+    });
   }
 
 

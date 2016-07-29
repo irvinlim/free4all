@@ -60,6 +60,11 @@ Communities.schema = new SimpleSchema({
         this.unset();
       }
     }
+  },
+  feature:{
+    type: Boolean,
+    label: 'Shows in the index route dialog for home location selection',
+    defaultValue: false
   }
 });
 
