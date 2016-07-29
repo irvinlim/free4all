@@ -44,6 +44,7 @@ export class MyGiveaways extends React.Component {
       gaEdit: null,
       gaId: null,
       showDateRange: false,
+      paramId: null,
     };
 
     this.userUntilDate = new ReactiveVar( moment().set('hour', 0).set('minute',0).add(1,'w').toDate() );
@@ -97,15 +98,13 @@ export class MyGiveaways extends React.Component {
       self.setState({ geolocation: reactiveLatLng });
     });
 
+    Meteor.subscribe('giveaway-by-id', paramId, function() {
+      self.handleParams();
+    });
+  }
 
-    const paramId = this.props.params.id;
-    if (paramId) {
-      Meteor.subscribe('giveaway-by-id', paramId, function() {
-        const giveaway = Giveaways.findOne(paramId);
-        const handler = self.selectEditGa(giveaway);
-        handler();
-      });
-    }
+  componentDidUpdate() {
+    this.handleParams();
   }
 
   componentWillUnmount() {
@@ -114,7 +113,21 @@ export class MyGiveaways extends React.Component {
     this.autorunGeo && this.autorunGeo.stop();
   }
 
-  handleParams(paramId) {
+  handleParams() {
+    const self = this;
+    const paramId = this.props.params.id;
+
+    if (this.state.paramId != paramId) {
+      this.setState({ paramId }, () => {
+        if (paramId) {
+          const giveaway = Giveaways.findOne(paramId);
+          const handler = self.selectEditGa(giveaway);
+          handler();
+        } else {
+          (self.selectEditGa(null))();
+        }
+      });
+    }
   }
 
   goToGeolocation() {
