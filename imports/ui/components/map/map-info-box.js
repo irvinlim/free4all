@@ -65,12 +65,12 @@ export default class MapInfoBox extends React.Component {
 
             <div className="action-buttons">
               <Link className="button" to={ "/giveaway/" + gaId }>
-                <FlatButton label="View Giveaway" style={{ display: "block", margin: "0 auto" }} />
+                <FlatButton label="View Giveaway" />
               </Link>
 
               { GiveawaysHelper.isCurrentUserOwner(ga) ?
                 <Link className="button" to={ "/my-giveaways/" + gaId }>
-                  <FlatButton label="Edit Giveaway" style={{ display: "block", margin: "0 auto" }} />
+                  <FlatButton label="Edit Giveaway" />
                 </Link> : null
               }
             </div>
@@ -86,7 +86,7 @@ export default class MapInfoBox extends React.Component {
             <GiveawayComments gaId={ gaId } showActions={false} />
 
             <Link className="button" to={ "/giveaway/" + gaId }>
-              <FlatButton label="Post a Comment" style={{ display: "block", margin: "0 auto" }} />
+              <FlatButton label="Post a Comment" />
             </Link>
           </div>
         </Scrollbars>
