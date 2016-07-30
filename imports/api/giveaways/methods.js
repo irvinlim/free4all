@@ -274,37 +274,43 @@ if (Meteor.isServer) {
   });
 
   // Google Analytics
+
+  const getGaPageViewsFor = (path) => {
+    var fut = new Future();
+
+    const options = {
+     'ids': 'ga:' + Meteor.settings.public.GoogleAnalytics.profileId,
+      'start-date': '2005-01-01',
+      'end-date': 'today',
+      'dimensions': 'ga:pagePath',
+      'metrics': 'ga:pageviews',
+      'filters': 'ga:pagePath==' + path
+    };
+
+    GoogleAnalytics.get(options, function(err, entries) {
+      if (!err) {
+        let ret = 0;
+
+        if (propExistsDeep(entries, [0, 'metrics', 0, 'ga:pageviews']))
+          ret = entries[0].metrics[0]['ga:pageviews'];
+
+        fut['return'](ret);
+      }
+    });
+
+    // Wait for async to finish before returning the result
+    return fut.wait();
+  };
+
   Meteor.methods({
     'giveaways.getPageviews': function(gaId) {
       check(gaId, String);
-
-      var fut = new Future();
-
-      const path = '/giveaway/' + gaId;
-
-      const options = {
-       'ids': 'ga:' + Meteor.settings.public.GoogleAnalytics.profileId,
-        'start-date': '2005-01-01',
-        'end-date': 'today',
-        'dimensions': 'ga:pagePath',
-        'metrics': 'ga:pageviews',
-        'filters': 'ga:pagePath==' + path
-      };
-
-      GoogleAnalytics.get(options, function(err, entries) {
-        if (!err) {
-          let ret = 0;
-
-          if (propExistsDeep(entries, [0, 'metrics', 0, 'ga:pageviews']))
-            ret = entries[0].metrics[0]['ga:pageviews'];
-
-          fut['return'](ret);
-        }
-      });
-
-      // Wait for async to finish before returning the result
-      return fut.wait();
-    }
+      return getGaPageViewsFor('/giveaway/' + gaId);
+    },
+    'giveaways.getInfoboxOpens': function(gaId) {
+      check(gaId, String);
+      return getGaPageViewsFor('/modal/giveaway/infobox-open/' + gaId);
+    },
   });
 
 }

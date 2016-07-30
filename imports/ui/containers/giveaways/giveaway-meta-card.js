@@ -9,6 +9,7 @@ import { GiveawayComments } from '../../../api/giveaway-comments/giveaway-commen
 import * as GiveawaysHelper from '../../../util/giveaways';
 
 let cachedPageViews = new ReactiveVar( 0 );
+let cachedClicks = new ReactiveVar( 0 );
 let cacheId = null;
 
 const composer = (props, onData) => {
@@ -28,16 +29,24 @@ const composer = (props, onData) => {
           if (Meteor.subscribe('comments-for-giveaway', props.gaId).ready()) {
             const commentCount = GiveawayComments.find({ giveawayId: props.gaId, isRemoved: { $ne: true } }).count();
 
-            if (cacheId != props.gaId)
+            if (cacheId != props.gaId) {
               Meteor.call('giveaways.getPageviews', props.gaId, function (error, pageViews) {
                 if (error)
                   pageViews = 0;
 
-                cacheId = props.gaId;
                 cachedPageViews.set(pageViews);
-              });
 
-            onData(null, { ga, user, shareCount, ratingPercent, commentCount, pageViews: cachedPageViews.get() });
+                Meteor.call('giveaways.getInfoboxOpens', props.gaId, function (error, infoboxOpens) {
+                  if (error)
+                    infoboxOpens = pageViews;
+
+                  cacheId = props.gaId;
+                  cachedClicks.set(infoboxOpens + pageViews);
+                });
+              });
+            }
+
+            onData(null, { ga, user, shareCount, ratingPercent, commentCount, pageViews: cachedPageViews.get(), clicks: cachedClicks.get() });
           }
         }
 
