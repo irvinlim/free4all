@@ -73,6 +73,6 @@ Communities.attachSchema(Communities.schema);
 if (Meteor.isServer) {
   Communities._ensureIndex({
     'name': 'text',
-    'website': 'text',
+    'description': 'text',
   });
 }
