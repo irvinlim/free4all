@@ -131,9 +131,9 @@ export const updateProfileFacebook = new ValidatedMethod({
 
     if(!user.homeCommunityId && homeLocation){
       Meteor.users.update({ _id: user._id }, { $set: {
-        'homeLocation': homeLocation,
-        'homeZoom': homeZoom,
-        'homeCommunityId': homeCommunityId,
+        'profile.homeLocation': homeLocation,
+        'profile.homeZoom': homeZoom,
+        'profile.homeCommunityId': homeCommunityId,
       } });
     }
 
@@ -193,9 +193,9 @@ export const updateProfileGoogle = new ValidatedMethod({
 
     if(!user.homeCommunityId && homeLocation){
       Meteor.users.update({ _id: user._id }, { $set: {
-        'homeLocation': homeLocation,
-        'homeZoom': homeZoom,
-        'homeCommunityId': homeCommunityId,
+        'profile.homeLocation': homeLocation,
+        'profile.homeZoom': homeZoom,
+        'profile.homeCommunityId': homeCommunityId,
       } });
     }
 
@@ -255,9 +255,9 @@ export const updateProfileIVLE = new ValidatedMethod({
 
     if(!user.homeCommunityId && homeLocation){
       Meteor.users.update({ _id: user._id }, { $set: {
-        'homeLocation': homeLocation,
-        'homeZoom': homeZoom,
-        'homeCommunityId': homeCommunityId,
+        'profile.homeLocation': homeLocation,
+        'profile.homeZoom': homeZoom,
+        'profile.homeCommunityId': homeCommunityId,
       } });
     }
 
@@ -324,9 +324,9 @@ export const setHomeCommunity = new ValidatedMethod({
       return;
 
     Meteor.users.update({ _id: user._id }, {$set: {
-      'homeCommunityId': community._id,
-      'homeLocation': community.coordinates,
-      'homeZoom': community.zoom
+      'profile.homeCommunityId': community._id,
+      'profile.homeLocation': community.coordinates,
+      'profile.homeZoom': community.zoom
     }});
   }
 });

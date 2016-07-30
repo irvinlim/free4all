@@ -64,6 +64,23 @@ UsersSchema.UserProfile = new SimpleSchema({
     type: String,
     optional: true
   },
+  homeLocation: {
+    type: [Number],
+    decimal: true,
+    minCount: 2,
+    maxCount: 2,
+    label: 'Array of coordinates in MongoDB style \[Lng, Lat\]',
+    optional: true
+  },
+  homeZoom:{
+    type: Number,
+    optional: true
+  },
+  homeCommunityId: {
+    type: String,
+    regEx: SimpleSchema.RegEx.Id,
+    optional: true
+  }
 });
 
 UsersSchema.Data = new SimpleSchema({
@@ -119,23 +136,6 @@ UsersSchema.Data = new SimpleSchema({
   "communityIds.$":{
     type: String,
     regEx: SimpleSchema.RegEx.Id
-  },
-  homeLocation: {
-    type: [Number],
-    decimal: true,
-    minCount: 2,
-    maxCount: 2,
-    label: 'Array of coordinates in MongoDB style \[Lng, Lat\]',
-    optional: true
-  },
-  homeZoom:{
-    type: Number,
-    optional: true
-  },
-  homeCommunityId: {
-    type: String,
-    regEx: SimpleSchema.RegEx.Id,
-    optional: true
   }
 });
 
