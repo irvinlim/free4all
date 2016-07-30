@@ -245,7 +245,7 @@ export const setHomeCommunity = new ValidatedMethod({
     community:{ type: Object, blackbox: true },
     userId:{ type: String },
   }).validator(),
-  run({ insertOnly, community, userId }){
+  run({ community, userId }){
     const user = Meteor.users.findOne(userId);
 
     if (!user)

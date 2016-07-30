@@ -38,7 +38,7 @@ const MetaInfo = ({ ga, commentCount, pageViews }) => {
     <div>
       <h3>Statistics</h3>
 
-      { MetaStatsRow("eye", pageViews + " " + pluralizer(ratings, "page view", "page views")) }
+      { MetaStatsRow("eye", pageViews + " " + pluralizer(pageViews, "page view", "page views")) }
       { MetaStatsRow("star-o", ratings + " " + pluralizer(ratings, "rating", "ratings") + " in total") }
       { MetaStatsRow("comments", comments + " " + pluralizer(comments, "comment", "comments")) }
       { MetaStatsRow("bell-o", updates + " " + pluralizer(updates, "status update", "status updates")) }
