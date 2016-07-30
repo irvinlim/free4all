@@ -79,33 +79,35 @@ export class Profile extends React.Component {
     if (this.props.user)
       return (
         <PaperCard className="profile">
+          <div className="profile">
 
-          <ProfileHeader userId={ this.props.user._id } />
+            <ProfileHeader userId={ this.props.user._id } />
 
-          <div className="profile-map">
-            <LeafletMap
-              gaId={ this.state.gaSelected }
-              infoBoxState={ this.state.infoBoxState }
-              markerOnClick={ gaId => this.selectGa(gaId) }
-              mapCenter={ this.state.mapCenter }
-              setMapCenter={ mapCenter => this.setState({ mapCenter }) }
-              mapZoom={ this.state.mapZoom }
-              setMapZoom={ mapZoom => this.setState({ mapZoom: mapZoom })}
-              setMapMaxZoom={ mapMaxZoom => this.setState({ mapMaxZoom: mapMaxZoom })}
-              setBounds={ bounds => this.mapBounds.set(bounds) }
-              showMarkers={ true }
-              addRGeoSpinner={ ()=>{this.setState({ rGeoLoading: true })} }
-              rmvRGeoSpinner={ ()=>{this.setState({ rGeoLoading: false })} }
-              isDbClickDisabled= { false } />
-
-            <div id="map-boxes-container">
-              <MapInfoBox
+            <div className="profile-map">
+              <LeafletMap
                 gaId={ this.state.gaSelected }
-                boxState={ this.state.infoBoxState }
-                setBoxState={ this.setInfoBoxState.bind(this) } />
-            </div>
-          </div>
+                infoBoxState={ this.state.infoBoxState }
+                markerOnClick={ gaId => this.selectGa(gaId) }
+                mapCenter={ this.state.mapCenter }
+                setMapCenter={ mapCenter => this.setState({ mapCenter }) }
+                mapZoom={ this.state.mapZoom }
+                setMapZoom={ mapZoom => this.setState({ mapZoom: mapZoom })}
+                setMapMaxZoom={ mapMaxZoom => this.setState({ mapMaxZoom: mapMaxZoom })}
+                setBounds={ bounds => this.mapBounds.set(bounds) }
+                showMarkers={ true }
+                addRGeoSpinner={ ()=>{this.setState({ rGeoLoading: true })} }
+                rmvRGeoSpinner={ ()=>{this.setState({ rGeoLoading: false })} }
+                isDbClickDisabled= { false } />
 
+              <div id="map-boxes-container">
+                <MapInfoBox
+                  gaId={ this.state.gaSelected }
+                  boxState={ this.state.infoBoxState }
+                  setBoxState={ this.setInfoBoxState.bind(this) } />
+              </div>
+            </div>
+
+          </div>
         </PaperCard>
       );
 

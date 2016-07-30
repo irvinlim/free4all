@@ -2,12 +2,6 @@
 
 .profile.card { margin: 0; }
 
-.profile-header {
-  @include media-xs-only {
-    h1 { margin-top: 10px; font-size: 26px; }
-  }
-}
-
 .user-stats {
   list-style-type: none; padding: 0;
   li { margin-right: 20px; }
@@ -15,14 +9,26 @@
 
 .profile-map { height: 800px; position: relative; border-top: 1px solid #e0e0e0; overflow: hidden; }
 
-.role-chips {
-  display: inline-block; vertical-align: middle; margin-left: 10px;
-}
+.profile-header {
+  @include media-xs-only {
+    h1 { margin-top: 10px; font-size: 26px; }
+  }
 
-.social-links {
-  margin-bottom: 5px;
-  a.social-link {
-    & { color: #c1c9da; }
-    &:hover { color: #8595b7; }
+  .role-chips {
+    display: inline-block; vertical-align: middle; margin-left: 10px;
+  }
+
+  .social-links {
+    margin-bottom: 5px;
+    a.social-link {
+      color: #c1c9da;
+      &:hover { color: #8595b7; }
+    }
+  }
+
+  .community-display {
+    margin-right: 5px;
+    .material-icons { vertical-align: top; }
+    &:not(:last-child):after { padding-left: 5px; content: '\0000B7' }
   }
 }

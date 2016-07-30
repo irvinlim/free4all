@@ -30,7 +30,14 @@ const makeUrlIcon = (icon, url) => (
   </Link>
 );
 
-export const ProfileHeader = ({ user, shareCount, ratingPercent, homeCommunity }) => (
+const communityDisplay = (community, isHome=false) => (
+  <span className="community-display">
+    { isHome ? IconsHelper.icon("home", { color: "#9c9c9c", fontSize: "14px", marginRight: 3 }) : null }
+    { community.name }
+  </span>
+);
+
+export const ProfileHeader = ({ user, shareCount, ratingPercent, homeCommunity, userCommunities }) => (
   <div className="profile-header flex-row">
     <div className="col-xs-4 col-sm-2">
       { UsersHelper.getAvatar(user, 240, { width: "100%", height: 'auto' }) }
@@ -43,7 +50,11 @@ export const ProfileHeader = ({ user, shareCount, ratingPercent, homeCommunity }
           null
         }
       </h1>
-      { homeCommunity ? <h5>{ homeCommunity.name }</h5> : null }
+
+      <h5>
+        { homeCommunity ? communityDisplay(homeCommunity, true) : null }
+        { userCommunities.map(communityDisplay) }
+      </h5>
 
       <div className="social-links">
         { user.profile.website ? makeUrlIcon('fa fa-link', user.profile.website) : null }

@@ -8,6 +8,11 @@ Meteor.publish('community-by-id', function(communityId) {
   return Communities.find(communityId);
 });
 
+Meteor.publish('communities-by-id', function(communityIds) {
+  check(communityIds, Array);
+  return Communities.find({ _id: { $in: communityIds } });
+});
+
 Meteor.publish('communities-search', function(props) {
   check(props, Object);
 
@@ -33,4 +38,4 @@ Meteor.publish('communities-search', function(props) {
 
 Meteor.publish('featured-communities', function(){
   return Communities.find({ feature: true });
-})
+});

@@ -6,6 +6,7 @@ const userPublicFields = {
   emails: true,
   'services.facebook.id': true,
   'services.google.picture': true,
+  communityIds: true,
 };
 
 Meteor.publish('user-data', function() {
@@ -30,7 +31,5 @@ Meteor.publish('users-by-id', function(userIds) {
 
 Meteor.publish('userIds-by-commId', function(commId) {
   check(commId, Match._id);
-  return Meteor.users.find({communityIds: commId}, {
-    _id: true
-  });
+  return Meteor.users.find({ communityIds: commId }, { _id: true });
 });
