@@ -37,15 +37,9 @@ const setHomeCommHandler = (payload) => {
 const giveawayRow = (touchTapHandler, editGa) => (ga) => (
   <ListItem
     key={ ga._id }
-    primaryText={
-      <span className="single-line" style={{ color: Colors.grey700 }}>{ ga.title }</span>
-    }
+    primaryText={ga.title}
     secondaryText={
-      <p>
-        <span className="location">Starting on: { moment(ga.startDateTime).format("ddd, Do MMM, h:mm a")}</span>
-        <br />
-        <span className="location">Ending on: { moment(ga.endDateTime).format("ddd, Do MMM, h:mm a")}</span>
-      </p>
+      <p>{ GiveawaysHelper.compactDateRange(ga) }<br/>{ ga.location }</p>
     }
     leftAvatar={
       ga.avatarId ? <Avatar src={ AvatarHelper.getUrl(ga.avatarId, 64) } />

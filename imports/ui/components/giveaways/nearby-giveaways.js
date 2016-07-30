@@ -12,11 +12,9 @@ import * as Colors from 'material-ui/styles/colors';
 const giveawayRow = (touchTapHandler) => (ga) => (
   <ListItem
     key={ ga._id }
-    primaryText={
-      <span className="single-line" style={{ color: Colors.grey700 }}>{ ga.title }</span>
-    }
+    primaryText={ga.title}
     secondaryText={
-      <span>{ GiveawaysHelper.compactDateRange(ga) }<br/>{ ga.location }</span>
+      <p>{ GiveawaysHelper.compactDateRange(ga) }<br/>{ ga.location }</p>
     }
     leftAvatar={ GiveawaysHelper.makeAvatar(ga, 40) }
     secondaryTextLines={2}
