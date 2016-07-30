@@ -93,7 +93,7 @@ export class Timeline extends React.Component {
                   <Tab style={{ color: "#333" }} label="Past" onActive={ this.makeHandleSetTab("past").bind(this) } />
                   <Tab style={{ color: "#333" }} label="All-Time" onActive={ this.makeHandleSetTab("all-time").bind(this) } />
                   <Tab style={{ color: "#333" }} label="Search" onActive={ this.makeHandleSetTab("search").bind(this) }>
-                    <div id="timeline-search">
+                    <div className="search-box">
                       <div className="flex-row nopad">
                         <div className="col col-xs-12 col-sm-6">
                           <TextField
@@ -155,17 +155,17 @@ export class Timeline extends React.Component {
                   </IconButton>
                 </div>
 
-                </div>
+              </div>
 
-                <TimelineItems
-                  tab={ this.state.tab }
-                  offset={ this.state.offset }
-                  perPage={ this.state.perPage }
-                  sort={ this.state.sort }
-                  view={ this.state.view }
-                  categoryId={ this.state.categoryId }
-                  parentCategoryId={ this.state.parentCategoryId }
-                  searchQuery={ this.state.searchQuery } />
+              <TimelineItems
+                tab={ this.state.tab }
+                offset={ this.state.offset }
+                perPage={ this.state.perPage }
+                sort={ this.state.sort }
+                view={ this.state.view }
+                categoryId={ this.state.categoryId }
+                parentCategoryId={ this.state.parentCategoryId }
+                searchQuery={ this.state.searchQuery } />
 
               </div>
             </div>

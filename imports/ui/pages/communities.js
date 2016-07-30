@@ -43,7 +43,7 @@ export class Communities extends React.Component {
         <Grid>
 
         <div className="timeline-bar-top">
-          <div id="timeline-search">
+          <div className="search-box">
             <div className="flex-row nopad">
               <div className="col col-xs-12 col-sm-9">
                 <TextField
