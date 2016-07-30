@@ -67,14 +67,12 @@ export default class SelectHomeDialog extends React.Component {
 
   renderCommunity(community){
     return (
-      <Col xs={6} md={3} className="schoolCommunity"
-        style={{
-          minHeight:"99px",
-          MaskImage: 'url('+ ImagesHelper.getUrlScale(community.pictureId, 350) +')',
-          WebkitMaskImage: 'url('+ ImagesHelper.getUrlScale(community.pictureId, 350) +')',
-        }}
-        onTouchTap={this.props.setHomeLoc.bind(this, community)} >
-      </Col>
+      <div className="col col-xs-6 col-sm-3 schoolCommunity">
+        <img
+          src={ ImagesHelper.getUrlScale(community.pictureId, 350) }
+          onTouchTap={ this.props.setHomeLoc.bind(this, community) }
+          alt=""/>
+      </div>
     )
   }
 
@@ -90,9 +88,9 @@ export default class SelectHomeDialog extends React.Component {
         onRequestClose={this.handleClose.bind(this)}
       >
       <Grid>
-        <Row>
-        { this.state.featured ? this.renderCommunities() : <Loading /> }
-        </Row>
+        <div className="flex-row">
+          { this.state.featured ? this.renderCommunities() : <Loading /> }
+        </div>
       </Grid>
 
       </Dialog>

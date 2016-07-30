@@ -1,12 +1,9 @@
 @import "../common/_mixins";
 
 .schoolCommunity{
-  background-color: #000000;
-  cursor: pointer;
-  -webkit-mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  &:hover{ background-color: $primary-color}
+  display: flex; justify-content: center; align-items: center;
+  img { cursor: pointer; width: 100%; }
+  &:hover { opacity: 0.8; }
   @include transition-standard(background-color 225ms);
   @include media-md-down { margin-bottom: 6%; }
   @include media-md-up { margin-bottom: 0; }
