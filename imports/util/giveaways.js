@@ -61,7 +61,7 @@ export const currentUserDownvoted = (ga) => ga.ratings && ga.ratings.downvotes ?
 
 // User Ratings
 export const getRatingPercentageForUser = (user) => {
-  const userId = user._id ? user._id : user;
+  const userId = user && user._id ? user._id : user;
   let totalUpvotes = 0, totalDownvotes = 0;
   Giveaways.find({ userId: userId }).forEach(ga => {
     totalUpvotes += countUpvotes(ga);
