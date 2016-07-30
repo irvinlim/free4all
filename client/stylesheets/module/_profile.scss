@@ -9,7 +9,7 @@
 
 .profile-map { height: 800px; position: relative; border-top: 1px solid #e0e0e0; overflow: hidden; }
 
-.profile-header {
+.profile {
   @include media-xs-only {
     h1 { margin-top: 10px; font-size: 26px; }
   }
@@ -28,7 +28,7 @@
 
   .community-display {
     margin-right: 5px;
-    .material-icons { vertical-align: top; }
+    .material-icons { vertical-align: text-top; }
     &:not(:last-child):after { padding-left: 5px; content: '\0000B7' }
   }
 }

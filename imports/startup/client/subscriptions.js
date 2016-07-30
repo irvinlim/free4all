@@ -5,6 +5,7 @@ import { Meteor } from 'meteor/meteor';
 Meteor.subscribe('parent-categories');
 Meteor.subscribe('categories');
 Meteor.subscribe('status-types');
+Meteor.subscribe('all-communities');
 
 Tracker.autorun(function() {
   Meteor.subscribe('user-data');

@@ -140,3 +140,10 @@ UsersSchema.Data = new SimpleSchema({
 });
 
 Meteor.users.attachSchema(UsersSchema.Data);
+
+if (Meteor.isServer) {
+  Meteor.users._ensureIndex({
+    'profile.name': 'text',
+    'emails.address': 'text'
+  });
+}

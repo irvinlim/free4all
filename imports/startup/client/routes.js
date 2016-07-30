@@ -36,6 +36,7 @@ import { Settings } from '../../ui/pages/settings';
 import { ManageCategories } from '../../ui/pages/manage/manage-categories';
 import { ManageParentCategories } from '../../ui/pages/manage/manage-parent-categories';
 import { ManageStatusTypes } from '../../ui/pages/manage/manage-status-types';
+import { ManageUsers } from '../../ui/pages/manage/manage-users';
 
 const sub = Meteor.subscribe('user-data');
 
@@ -81,6 +82,18 @@ const requireModsAdmins = (nextState, replace) => {
   }
 };
 
+const requireAdmins = (nextState, replace) => {
+  if (!sub.ready())
+    return setTimeout(() => requireAdmins(nextState, replace), 100);
+
+  if (!RolesHelper.onlyAdmins(Meteor.userId())) {
+    replace({
+      pathname: '/',
+      state: { nextPathname: nextState.location.pathname },
+    });
+  }
+};
+
 const authRedirect = (nextState, replace) => {
   if (Meteor.userId()) {
     replace({
@@ -114,6 +127,7 @@ Meteor.startup(() => {
           <Route name="categories" path="categories" component={ ManageCategories } />
           <Route name="parent-categories" path="parent-categories" component={ ManageParentCategories } />
           <Route name="status-types" path="status-types" component={ ManageStatusTypes } />
+          <Route name="users" path="users" component={ ManageUsers } onEnter={ requireAdmins } />
         </Route>
 
         <Route name="profile" path="profile(/:userId)" component={ Profile } />

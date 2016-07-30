@@ -10,7 +10,7 @@ import { Communities } from '../communities/communities';
 import { arrayContainsObjectMatch, propExistsDeep } from '../../util/helper';
 import { UsersSchema } from './users';
 
-import { capitalizeFirstLetter } from '../../util/helper';
+import { capitalizeFirstLetter, arrayContains } from '../../util/helper';
 import * as UsersHelper from '../../util/users';
 import * as RolesHelper from '../../util/roles';
 
@@ -327,6 +327,52 @@ export const setHomeCommunity = new ValidatedMethod({
       'profile.homeCommunityId': community._id,
       'profile.homeLocation': community.coordinates,
       'profile.homeZoom': community.zoom
+    }});
+  }
+});
+
+// Roles
+
+// Only admins
+export const banUser = new ValidatedMethod({
+  name: 'user.banUser',
+  validate: new SimpleSchema({
+    userId:{  type: String },
+  }).validator(),
+  run({ userId }){
+    const user = Meteor.users.findOne(userId);
+
+    if (!user)
+      throw new Meteor.Error("users.banUser.undefinedUser", "No such user.");
+    else if (arrayContains(user.roles, 'banned'))
+      throw new Meteor.Error("users.banUser.alreadyBanned", "User alrady banned.");
+    else if (!RolesHelper.onlyAdmins(this.userId))
+      throw new Meteor.Error("users.banUser.notAuthorized", "Only admins can ban users.");
+
+    Meteor.users.update({ _id: user._id }, { $push: {
+      roles: 'banned'
+    }});
+  }
+});
+
+// Only admins
+export const unbanUser = new ValidatedMethod({
+  name: 'user.unbanUser',
+  validate: new SimpleSchema({
+    userId:{  type: String },
+  }).validator(),
+  run({ userId }){
+    const user = Meteor.users.findOne(userId);
+
+    if (!user)
+      throw new Meteor.Error("users.unbanUser.undefinedUser", "No such user.");
+    else if (arrayContains(user.roles, 'banned'))
+      throw new Meteor.Error("users.unbanUser.notBanned", "User isn't banned.");
+    else if (!RolesHelper.onlyAdmins(this.userId))
+      throw new Meteor.Error("users.unbanUser.notAuthorized", "Only admins can unban users.");
+
+    Meteor.users.update({ _id: user._id }, { $pull: {
+      roles: 'banned'
     }});
   }
 });

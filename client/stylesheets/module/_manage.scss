@@ -25,3 +25,8 @@
 .sortable-list-table, .sortable-row {
   .col { display: flex; align-items: center; }
 }
+
+#manage-users-items {
+  margin-top: 20px;
+  .manage-users-subtitle { font-weight: 400; }
+}

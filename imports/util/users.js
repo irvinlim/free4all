@@ -126,3 +126,6 @@ export const hasFacebookService = hasService('facebook');
 export const hasGoogleService = hasService('google');
 export const hasIVLEService = hasService('ivle');
 export const countServices = (user) => user ? Object.keys(user.services).filter(service => service != "resume").length : 0;
+
+// Admin-only methods
+export const adminGetFirstEmail = (user) => propExistsDeep(user, ['emails', 0, 'address']) ? user.emails[0].address : null;

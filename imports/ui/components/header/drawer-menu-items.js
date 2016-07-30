@@ -38,7 +38,7 @@ export class DrawerMenuItems extends React.Component {
       this.menuItems.push({ title: "Status Types", href: "/manage/status-types", icon: IconsHelper.icon("traffic") });
     }
 
-    if (RolesHelper.modsOrAdmins(Meteor.userId())) {
+    if (RolesHelper.onlyAdmins(Meteor.userId())) {
       this.menuItems.push({ title: "Users", href: "/manage/users", icon: IconsHelper.icon("supervisor_account") });
     }
 

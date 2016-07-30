@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link as ReactLink } from 'react-router';
+import FlatButton from 'material-ui/FlatButton';
 
 export default class Link extends React.Component {
   parseTo(to) {
@@ -24,3 +25,9 @@ export default class Link extends React.Component {
     }
   }
 }
+
+export const LinkButton = ({ to, ...rest }) => (
+  <Link to={to}>
+    <FlatButton {...rest} />
+  </Link>
+);

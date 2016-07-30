@@ -53,7 +53,7 @@ export const ProfileHeader = ({ user, shareCount, ratingPercent, homeCommunity, 
 
       <h5>
         { homeCommunity ? communityDisplay(homeCommunity, true) : null }
-        { userCommunities.map(communityDisplay) }
+        { userCommunities ? userCommunities.map(communityDisplay) : null }
       </h5>
 
       <div className="social-links">
