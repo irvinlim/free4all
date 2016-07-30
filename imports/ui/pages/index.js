@@ -103,9 +103,9 @@ export class Index extends React.Component {
       const user = Meteor.user();
       if (user && user.profile.homeLocation) {
         const homeLocation = user.profile.homeLocation;
-        const homeZoom = user.profile.homeLocation;
+        const homeZoom = user.profile.homeZoom;
         // homeLocation state is for goToHomeLocation Button
-        self.setState({ homeLocation: homeLocation, homeZoom: homeLocation });
+        self.setState({ homeLocation: homeLocation, homeZoom: homeZoom });
         // homeLocation session is for initial map center
         Session.setPersistent('homeLocation', { coordinates: homeLocation, zoom: homeZoom });
       }
