@@ -1,37 +1,14 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
-
 import { Grid } from 'react-bootstrap';
-import GiveawaySingleCard from '../containers/giveaways/giveaway-single-card';
-import GiveawayRatingsCard from '../containers/giveaways/giveaway-ratings-card';
-import GiveawayStatusUpdatesCard from '../containers/giveaways/giveaway-status-updates-card';
-import GiveawayCommentsCard from '../containers/giveaways/giveaway-comments-card';
-import GiveawayMetaCard from '../containers/giveaways/giveaway-meta-card';
-import GiveawayMapCard from '../containers/giveaways/giveaway-map-card';
-import GiveawaySharingCard from '../containers/giveaways/giveaway-sharing-card';
+import GiveawayComponent from '../containers/giveaways/giveaway';
 
 export class Giveaway extends React.Component {
   render() {
     return (
       <div id="page-giveaway-single" className="page-container">
         <Grid>
-          <div className="flex-row nopad">
-            <div className="col col-xs-12">
-              <GiveawaySingleCard gaId={ this.props.params.id } />
-            </div>
-          </div>
-          <div className="flex-row nopad">
-            <div className="col col-xs-12 col-sm-6">
-              <GiveawayMapCard gaId={ this.props.params.id } />
-              <GiveawayRatingsCard gaId={ this.props.params.id } />
-              <GiveawayCommentsCard gaId={ this.props.params.id } />
-            </div>
-            <div className="col col-xs-12 col-sm-6">
-              <GiveawayMetaCard gaId={ this.props.params.id } />
-              <GiveawaySharingCard gaId={ this.props.params.id } />
-              <GiveawayStatusUpdatesCard gaId={ this.props.params.id } />
-            </div>
-          </div>
+          <GiveawayComponent gaId={ this.props.params.id } />
         </Grid>
       </div>
     );
