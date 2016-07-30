@@ -430,7 +430,7 @@ export default class EditBtnDialog extends React.Component {
           bodyStyle={dialogStyle}
           actions={actionBtns}
           actionsContainerStyle={actionsContainerStyle}
-          modal={false}
+          modal={true}
           open={this.props.isModalOpen}
           onRequestClose={this.handleClose}
           autoScrollBodyContent={true}>

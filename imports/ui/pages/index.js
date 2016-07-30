@@ -101,11 +101,13 @@ export class Index extends React.Component {
     // Autorun check user authenticated
     this.autorunAuth = Tracker.autorun(function() {
       const user = Meteor.user();
-      if (user && user.homeLocation && user.homeZoom) {
+      if (user && user.profile.homeLocation) {
+        const homeLocation = user.profile.homeLocation;
+        const homeZoom = user.profile.homeLocation;
         // homeLocation state is for goToHomeLocation Button
-        self.setState({ homeLocation: user.homeLocation, homeZoom: user.homeZoom });
+        self.setState({ homeLocation: homeLocation, homeZoom: homeLocation });
         // homeLocation session is for initial map center
-        Session.setPersistent('homeLocation', { coordinates: user.homeLocation, zoom: user.homeZoom });
+        Session.setPersistent('homeLocation', { coordinates: homeLocation, zoom: homeZoom });
       }
       self.setState({ user });
     });

@@ -27,7 +27,7 @@ const leaveCommunityHandler = (payload) => {
 
 const setHomeCommHandler = (payload) => {
   Session.setPersistent('homeLocation', {
-    coordinates: payload.community.coordinates, 
+    coordinates: payload.community.coordinates,
     zoom: payload.community.zoom
   })
 
@@ -66,19 +66,19 @@ export const CommunityGiveaways = (props) => (
         <Col xs={12}>
           <div>{ props.community.description }</div>
           <div style={{marginTop:"-30px"}}>
-            { props.community.count + ' ' + Helper.pluralizer(props.community.count,"member", "members")} 
+            { props.community.count + ' ' + Helper.pluralizer(props.community.count,"member", "members")}
           </div>
         </Col>
       </Row>
       <Row>
         <Col xs={5} style={{padding: "0 0 0 15px"}}>
         { props.user ?
-           props.user.homeCommunityId && props.user.homeCommunityId == props.community._id ?
+           props.user.profile.homeCommunityId && props.user.profile.homeCommunityId == props.community._id ?
            <FlatButton
              label="Home"
              icon={ IconsHelper.materialIcon("home") } />
            :
-           <RaisedButton 
+           <RaisedButton
              style={{height: "48px"}}
              onTouchTap={ setHomeCommHandler.bind(this, { userId: props.user._id, community: props.community }) }
              primary={true}
@@ -90,9 +90,9 @@ export const CommunityGiveaways = (props) => (
               tooltip="Register to save home community!"
               tooltipPosition="bottom-right"
               style={{ zIndex: 1, position: "absolute", width:"75%" }} />
-            <RaisedButton 
+            <RaisedButton
               style={{height: "48px"}}
-              label="Set home" 
+              label="Set home"
               icon={ IconsHelper.materialIcon("home") }
               disabled={true} />
           </div>
@@ -102,16 +102,16 @@ export const CommunityGiveaways = (props) => (
         <Col xs={7}>
         { props.user ?
            props.user.communityIds && props.user.communityIds.indexOf(props.community._id) > -1 ?
-            <FlatButton 
+            <FlatButton
               onTouchTap={ leaveCommunityHandler.bind(this, { userId: props.user._id, commId: props.community._id} )}
-              label="Leave Community" 
+              label="Leave Community"
               className="leaveComm" />
             :
-            <RaisedButton 
+            <RaisedButton
               onTouchTap={ joinCommunityHandler.bind(this, { userId: props.user._id, commId: props.community._id} )}
-              style={{height: "48px"}} 
-              label="Join Community" 
-              className="joinComm" 
+              style={{height: "48px"}}
+              label="Join Community"
+              className="joinComm"
               primary={true} />
           :
           <div>
@@ -119,9 +119,9 @@ export const CommunityGiveaways = (props) => (
               tooltip="Register to join community!"
               tooltipPosition="bottom-right"
               style={{ zIndex: 1, position: "absolute", width:"75%" }} />
-            <RaisedButton 
+            <RaisedButton
               style={{height: "48px"}}
-              label="Join Community" 
+              label="Join Community"
               disabled={true} />
           </div>
         }
@@ -130,7 +130,7 @@ export const CommunityGiveaways = (props) => (
       <hr />
       <h3 style={{ margin:"20px 0px 10px" }}>{props.community.name} Giveaways</h3>
 
-      { props.showDateRange ? 
+      { props.showDateRange ?
       <div>
         <Row>
           <Col xs={12} md={2} style={{width: "42px", top: "1px"}}>
@@ -173,11 +173,11 @@ export const CommunityGiveaways = (props) => (
         </Col>
       </Row>
 
-  
+
     </Subheader>
-    { props.giveaways 
-      ? Helper.insertDividers(props.giveaways.map(giveawayRow(props.nearbyOnClick, props.editGa) )) 
-      : <div /> 
+    { props.giveaways
+      ? Helper.insertDividers(props.giveaways.map(giveawayRow(props.nearbyOnClick, props.editGa) ))
+      : <div />
     }
   </List>
 );

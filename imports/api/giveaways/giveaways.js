@@ -149,6 +149,14 @@ export const GiveawaysDataSchema = new SimpleSchema({
     label: 'Cloudinary public ID',
     optional: true
   },
+  excludedCommunityIds:{
+    type: Array,
+    optional: true
+  },
+  "excludedCommunityIds.$":{
+    type: String,
+    regEx: SimpleSchema.RegEx.Id
+  },
 });
 
 export const GiveawaysMetaSchema = new SimpleSchema({
