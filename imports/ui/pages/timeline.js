@@ -1,6 +1,7 @@
 import React from 'react';
 import { Grid } from 'react-bootstrap';
 import { Tabs, Tab } from 'material-ui/Tabs';
+import { browserHistory } from 'react-router';
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
@@ -10,6 +11,19 @@ import TimelineItems from '../containers/timeline/timeline-items';
 import { TimelineCategoriesListItems } from '../components/categories/timeline-categories-list-items';
 
 import * as IconsHelper from '../../util/icons';
+
+const tabToIndex = (tab) => {
+  switch (tab) {
+    case "current":
+      return 0;
+    case "past":
+      return 1;
+    case "all-time":
+      return 2;
+    case "search":
+      return 3;
+  }
+}
 
 export class Timeline extends React.Component {
   constructor(props) {
@@ -26,7 +40,7 @@ export class Timeline extends React.Component {
   }
 
   makeHandleSetTab(tab) {
-    return (event) => this.setState({ tab: tab });
+    return (event) => browserHistory.push(`/timeline/${tab}`);
   }
 
   handleSetCategory(event, key, payload) {
@@ -49,6 +63,19 @@ export class Timeline extends React.Component {
     return (event) => this.setState({ view: view });
   }
 
+  updateStateFromParams() {
+    if (this.state.tab !== this.props.params.tab)
+      this.setState({ tab: this.props.params.tab });
+  }
+
+  componentWillMount() {
+    this.updateStateFromParams();
+  }
+
+  componentDidUpdate() {
+    this.updateStateFromParams();
+  }
+
   render() {
     return (
       <div id="page-timeline" className="page-container">
@@ -59,6 +86,7 @@ export class Timeline extends React.Component {
               <div className="timeline-bar-top">
                 <Tabs
                   id="timeline-tabs"
+                  initialSelectedIndex={ tabToIndex(this.state.tab) }
                   tabItemContainerStyle={{ backgroundColor: "#90a4cf" }}
                   inkBarStyle={{ backgroundColor: "#3a4b6e" }}>
                   <Tab style={{ color: "#333" }} label="Current" onActive={ this.makeHandleSetTab("current").bind(this) } />

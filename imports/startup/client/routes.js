@@ -101,7 +101,7 @@ Meteor.startup(() => {
         <Route name="reset-password" path="reset-password/:token" component={ ResetPassword } onEnter={ authRedirect } />
         <Route name="signup" path="signup" component={ Signup } onEnter={ authRedirect } />
 
-        <Route name="timeline" path="timeline" component={ Timeline } />
+        <Route name="timeline" path="timeline(/:tab)" component={ Timeline } />
         <Route name="giveaway" path="giveaway/:id" component={ Giveaway } />
         <Route name="my-giveaways" path="my-giveaways" component={ MyGiveaways } onEnter={ requireAuth } />
         <Route name="edit-giveaway" path="my-giveaways/:id" component={ MyGiveaways } onEnter={ requireAuth } />
