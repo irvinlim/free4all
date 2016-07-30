@@ -1,6 +1,7 @@
 import * as Helper from '../../../util/helper';
 import * as LatLngHelper from '../../../util/latlng';
 import * as GiveawaysHelper from '../../../util/giveaways';
+import { logModalView } from '../../../util/analytics';
 
 export default class LeafletMapObject {
   constructor(elemId) {
@@ -95,6 +96,11 @@ export default class LeafletMapObject {
 
   markerOnClick(ga, callback) {
     return (event) => {
+      // Marker for giveaway is clicked
+
+      // Send modalView to GA
+      logModalView(`/giveaway/infobox-open/${ga._id}`);
+
       if (callback)
         callback(ga._id);
     };
