@@ -15,31 +15,30 @@ const users = [{
     name: "Admin User",
   },
   roles: ['admin'],
-  homeLocation: [1.2993372,103.777426],
+  homeLocation: [1.2993372,103.777426]
 }];
 
 users.forEach(({ email, password, profile, roles }) => {
-  const userExists = Meteor.users.findOne({ 'emails.address': email });
+  const adminUserExists = Meteor.users.findOne({ roles: 'admin' });
 
-  if (!userExists) {
+  if (!adminUserExists) {
     const userId = Accounts.createUser({ email, password, profile });
     Roles.addUsersToRoles(userId, roles);
+  }
+});
 
-    // Default communities
-    const default_communities = [
-      { name:"NUS", feature: true, description: "National University of Singapore", ownerId: userId, count:1, pictureId: "nuslogo_zx2viu_cckvxo", website: "http://nus.edu.sg", coordinates: [1.2993372,103.777426], zoom: 16, mapURL: "https://api.mapbox.com/styles/v1/leonmak/ciqri7cxi0004c3neujg0demt/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibGVvbm1hayIsImEiOiJkNzQ3YWVlZDczYjMxNjhhMjVhZWI4OWFkM2I2MWUwOCJ9.uL_x_vTDIse10HSvMb6XIg"},
-      { name:"NTU", feature: true, description: "Nanyang Technological University of Singapore", ownerId: userId, count:1, pictureId: "ntulogo_cbk4vh", website: "http://ntu.edu.sg", coordinates: [1.3484298,103.688698], zoom: 16, mapURL: "https://api.mapbox.com/styles/v1/leonmak/cilzxkl5400hrcglvjxu6qxpz/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibGVvbm1hayIsImEiOiJkNzQ3YWVlZDczYjMxNjhhMjVhZWI4OWFkM2I2MWUwOCJ9.uL_x_vTDIse10HSvMb6XIg"},
-      { name:"SMU", feature: true, description: "Singapore Management University", ownerId: userId, count:1, pictureId: "smulogo_xfitp3", website: "http://smu.edu.sg", coordinates: [1.2966231,103.8508909], zoom: 18, mapURL: "https://api.mapbox.com/styles/v1/leonmak/ciqri96i70002cbnhztwxix8a/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibGVvbm1hayIsImEiOiJkNzQ3YWVlZDczYjMxNjhhMjVhZWI4OWFkM2I2MWUwOCJ9.uL_x_vTDIse10HSvMb6XIg"},
-      { name:"SUTD", feature: true, description: "Singapore University of Technology & Design", ownerId: userId, count:1, pictureId: "sutd_logo_k1mwvy", website: "http://sutd.edu.sg", coordinates: [1.3414995,103.9643371], zoom: 18, mapURL: "https://api.mapbox.com/styles/v1/leonmak/ciqri96i70002cbnhztwxix8a/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibGVvbm1hayIsImEiOiJkNzQ3YWVlZDczYjMxNjhhMjVhZWI4OWFkM2I2MWUwOCJ9.uL_x_vTDIse10HSvMb6XIg"},
-    ];
+// Default communities
+const adminUserId = Meteor.users.findOne({ roles: 'admin' })._id;
+const default_communities = [
+  { name:"NUS", feature: true, description: "National University of Singapore", ownerId: adminUserId, count:1, pictureId: "nuslogo_zx2viu_cckvxo", website: "http://nus.edu.sg", coordinates: [1.2993372,103.777426], zoom: 16, mapURL: "https://api.mapbox.com/styles/v1/leonmak/ciqri7cxi0004c3neujg0demt/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibGVvbm1hayIsImEiOiJkNzQ3YWVlZDczYjMxNjhhMjVhZWI4OWFkM2I2MWUwOCJ9.uL_x_vTDIse10HSvMb6XIg"},
+  { name:"NTU", feature: true, description: "Nanyang Technological University of Singapore", ownerId: adminUserId, count:1, pictureId: "ntulogo_cbk4vh", website: "http://ntu.edu.sg", coordinates: [1.3484298,103.688698], zoom: 16, mapURL: "https://api.mapbox.com/styles/v1/leonmak/cilzxkl5400hrcglvjxu6qxpz/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibGVvbm1hayIsImEiOiJkNzQ3YWVlZDczYjMxNjhhMjVhZWI4OWFkM2I2MWUwOCJ9.uL_x_vTDIse10HSvMb6XIg"},
+  { name:"SMU", feature: true, description: "Singapore Management University", ownerId: adminUserId, count:1, pictureId: "smulogo_xfitp3", website: "http://smu.edu.sg", coordinates: [1.2966231,103.8508909], zoom: 18, mapURL: "https://api.mapbox.com/styles/v1/leonmak/ciqri96i70002cbnhztwxix8a/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibGVvbm1hayIsImEiOiJkNzQ3YWVlZDczYjMxNjhhMjVhZWI4OWFkM2I2MWUwOCJ9.uL_x_vTDIse10HSvMb6XIg"},
+  { name:"SUTD", feature: true, description: "Singapore University of Technology & Design", ownerId: adminUserId, count:1, pictureId: "sutd_logo_k1mwvy", website: "http://sutd.edu.sg", coordinates: [1.3414995,103.9643371], zoom: 18, mapURL: "https://api.mapbox.com/styles/v1/leonmak/ciqri96i70002cbnhztwxix8a/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibGVvbm1hayIsImEiOiJkNzQ3YWVlZDczYjMxNjhhMjVhZWI4OWFkM2I2MWUwOCJ9.uL_x_vTDIse10HSvMb6XIg"},
+];
 
-    default_communities.forEach(comm => {
-      if (!Communities.findOne({ 'name': comm.name })){
-        const commId = Communities.insert(comm);
-        Meteor.users.update(userId, { $push:{ communityIds: commId } });
-      }
-    });
-
+default_communities.forEach(comm => {
+  if (!Communities.findOne({ 'name': comm.name })){
+    Communities.insert(comm);
   }
 });
 
