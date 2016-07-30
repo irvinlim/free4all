@@ -80,8 +80,8 @@ export class ManageUsersItems extends React.Component {
     const self = this;
 
     const user = users[index];
-    const homeCommunity = user.homeCommunityId ? Communities.findOne(user.homeCommunityId) : null;
-    const userCommunities = user.communityIds ? Communities.find({ _id: { $in: user.communityIds.filter(x => x !== user.homeCommunityId) } }) : null;
+    const homeCommunity = user.profile.homeCommunityId ? Communities.findOne(user.profile.homeCommunityId) : null;
+    const userCommunities = user.communityIds ? Communities.find({ _id: { $in: user.communityIds.filter(x => x !== user.profile.homeCommunityId) } }) : null;
 
     return (
       <Card key={ key } style={{ marginBottom: 20 }} className="manage-users-item profile">

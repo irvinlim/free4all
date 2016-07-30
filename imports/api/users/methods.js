@@ -106,36 +106,12 @@ export const updateProfileFacebook = new ValidatedMethod({
   name: 'user.updateProfileFacebook',
   validate: new SimpleSchema({
     userId: { type: String },
-    homeLocation: {
-      type: [Number],
-      decimal: true,
-      minCount: 2,
-      maxCount: 2,
-      optional: true
-    },
-    homeZoom:{
-      type: Number,
-      optional: true
-    },
-    homeCommunityId:{
-      type: String,
-      regEx: SimpleSchema.RegEx.Id,
-      optional: true
-    }
   }).validator(),
-  run({ userId, homeLocation, homeZoom, homeCommunityId }) {
+  run({ userId }) {
     const user = Meteor.users.findOne(userId);
 
     if (!user)
       return;
-
-    if(!user.homeCommunityId && homeLocation){
-      Meteor.users.update({ _id: user._id }, { $set: {
-        'profile.homeLocation': homeLocation,
-        'profile.homeZoom': homeZoom,
-        'profile.homeCommunityId': homeCommunityId,
-      } });
-    }
 
     if (!propExistsDeep(user, ['profile', 'name'])) {
       let name = "";
@@ -168,36 +144,12 @@ export const updateProfileGoogle = new ValidatedMethod({
   name: 'user.updateProfileGoogle',
   validate: new SimpleSchema({
     userId: { type: String },
-    homeLocation: {
-      type: [Number],
-      decimal: true,
-      minCount: 2,
-      maxCount: 2,
-      optional: true
-    },
-    homeZoom:{
-      type: Number,
-      optional: true
-    },
-    homeCommunityId:{
-      type: String,
-      regEx: SimpleSchema.RegEx.Id,
-      optional: true
-    }
   }).validator(),
-  run({ userId, homeLocation, homeZoom, homeCommunityId }) {
+  run({ userId }) {
     const user = Meteor.users.findOne(userId);
 
     if (!user)
       return;
-
-    if(!user.homeCommunityId && homeLocation){
-      Meteor.users.update({ _id: user._id }, { $set: {
-        'profile.homeLocation': homeLocation,
-        'profile.homeZoom': homeZoom,
-        'profile.homeCommunityId': homeCommunityId,
-      } });
-    }
 
     if (!propExistsDeep(user, ['profile', 'name'])) {
       let name = "";
@@ -230,36 +182,12 @@ export const updateProfileIVLE = new ValidatedMethod({
   name: 'user.updateProfileIVLE',
   validate: new SimpleSchema({
     userId: { type: String },
-    homeLocation: {
-      type: [Number],
-      decimal: true,
-      minCount: 2,
-      maxCount: 2,
-      optional: true
-    },
-    homeZoom:{
-      type: Number,
-      optional: true
-    },
-    homeCommunityId:{
-      type: String,
-      regEx: SimpleSchema.RegEx.Id,
-      optional: true
-    }
   }).validator(),
-  run({ userId, homeLocation, homeZoom, homeCommunityId }) {
+  run({ userId }) {
     const user = Meteor.users.findOne(userId);
 
     if (!user)
       return;
-
-    if(!user.homeCommunityId && homeLocation){
-      Meteor.users.update({ _id: user._id }, { $set: {
-        'profile.homeLocation': homeLocation,
-        'profile.homeZoom': homeZoom,
-        'profile.homeCommunityId': homeCommunityId,
-      } });
-    }
 
     if (!propExistsDeep(user, ['profile', 'name']))
       if (propExistsDeep(user, ['services', 'ivle', 'name']))
@@ -314,16 +242,16 @@ export const leaveCommunity = new ValidatedMethod({
 export const setHomeCommunity = new ValidatedMethod({
   name: 'user.setHomeCommunity',
   validate: new SimpleSchema({
-    community:{ type: Object, blackbox: true},
+    community:{ type: Object, blackbox: true },
     userId:{ type: String },
   }).validator(),
-  run({ community, userId }){
+  run({ insertOnly, community, userId }){
     const user = Meteor.users.findOne(userId);
 
     if (!user)
       return;
 
-    Meteor.users.update({ _id: user._id }, {$set: {
+    Meteor.users.update({ _id: user._id }, { $set: {
       'profile.homeCommunityId': community._id,
       'profile.homeLocation': community.coordinates,
       'profile.homeZoom': community.zoom

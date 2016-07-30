@@ -6,9 +6,30 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 
+import { joinCommunity, setHomeCommunity } from '../../../api/users/methods';
 import { handleLogin, handleFacebookLogin, handleGoogleLogin, handleIVLELogin } from '../../../modules/login';
 
 import * as IconsHelper from '../../../util/icons';
+
+const updateHomeCommunityFromSession = () => {
+  const homeLocationSession = Session.get("homeLocation");
+
+  if (homeLocationSession && !Meteor.user().homeLocation) {
+    // Join community
+    joinCommunity.call({ userId: Meteor.userId(), commId: homeLocationSession.commId });
+
+    // Set as Home Community if not already set
+    if (homeLocationSession && !Meteor.user().profile.homeCommunityId)
+      setHomeCommunity.call({
+        userId: Meteor.userId(),
+        community: {
+          _id: homeLocationSession.commId,
+          coordinates: homeLocationSession.coordinates,
+          zoom: homeLocationSession.zoom,
+        },
+      });
+  }
+};
 
 export default class Login extends React.Component {
   constructor(props) {
@@ -43,6 +64,7 @@ export default class Login extends React.Component {
             self.setState({ errors: errorsObject });
           },
           afterLogin() {
+            updateHomeCommunityFromSession();
             self.props.closeLogin();
           },
         });
@@ -54,6 +76,7 @@ export default class Login extends React.Component {
 
     return (event) => handler({
         afterLogin() {
+          updateHomeCommunityFromSession();
           self.props.closeLogin();
         }
       });

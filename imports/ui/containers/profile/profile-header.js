@@ -16,12 +16,12 @@ const composer = (props, onData) => {
       const shareCount = Giveaways.find({ userId: props.userId }).count();
       const ratingPercent = GiveawaysHelper.getRatingPercentageForUser(user);
 
-      if (user.communityIds || user.homeCommunityId) {
-        const communityIdsUnion = _.union(user.communityIds, [ user.homeCommunityId ]);
+      if (user.communityIds || user.profile.homeCommunityId) {
+        const communityIdsUnion = _.union(user.communityIds, [ user.profile.homeCommunityId ]);
 
         if (Meteor.subscribe('communities-by-id', communityIdsUnion).ready()) {
-          const homeCommunity = Communities.findOne(user.homeCommunityId);
-          const userCommunities = Communities.find({ _id: { $in: user.communityIds } }).fetch().filter(comm => comm._id !== user.homeCommunityId);
+          const homeCommunity = Communities.findOne(user.profile.homeCommunityId);
+          const userCommunities = Communities.find({ _id: { $in: user.communityIds } }).fetch().filter(comm => comm._id !== user.profile.homeCommunityId);
 
           onData(null, { user, shareCount, ratingPercent, userCommunities, homeCommunity });
         }

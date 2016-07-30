@@ -12,7 +12,7 @@ const login = (options) => {
 
   Meteor.loginWithPassword(email, password, (error) => {
     if (error) {
-      Bert.alert(error.reason, 'warning');
+      Bert.alert(error.reason, 'danger');
 
       if (options.failedLogin)
         options.failedLogin();
@@ -28,25 +28,14 @@ const login = (options) => {
 const facebookLogin = (options) => {
   Meteor.loginWithFacebook({}, function(err){
     if (err) {
-      Bert.alert("Could not login with Facebook", 'warning');
+      Bert.alert("Could not login with Facebook.", 'danger');
 
       if (options.failedLogin)
         options.failedLogin();
     } else {
-      const homeLocation = Session.get("homeLocation");
       Bert.alert('Logged in!', 'success');
 
-      if(homeLocation && !Meteor.user().homeLocation){
-        joinCommunity.call({ userId: Meteor.userId(), commId: homeLocation.commId });
-        updateProfileFacebook.call({
-          userId: Meteor.userId(),
-          homeLocation: homeLocation.coordinates,
-          homeZoom: homeLocation.zoom,
-          homeCommunityId: homeLocation.commId
-        });
-      }
-      else
-        updateProfileFacebook.call({ userId: Meteor.userId() });
+      updateProfileFacebook.call({ userId: Meteor.userId() });
 
       if (options.afterLogin)
         options.afterLogin();
@@ -57,25 +46,14 @@ const facebookLogin = (options) => {
 const googleLogin = (options) => {
   Meteor.loginWithGoogle({}, function(err){
     if (err) {
-      Bert.alert("Could not login with Google", 'warning');
+      Bert.alert("Could not login with Google.", 'danger');
 
       if (options.failedLogin)
         options.failedLogin();
     } else {
-      const homeLocation = Session.get("homeLocation");
       Bert.alert('Logged in!', 'success');
 
-      if(homeLocation && !Meteor.user().homeLocation){
-        joinCommunity.call({ userId: Meteor.userId(), commId: homeLocation.commId });
-        updateProfileGoogle.call({
-          userId: Meteor.userId(),
-          homeLocation: homeLocation.coordinates,
-          homeZoom: homeLocation.zoom,
-          homeCommunityId: homeLocation.commId
-        });
-      }
-      else
-        updateProfileGoogle.call({ userId: Meteor.userId() });
+      updateProfileGoogle.call({ userId: Meteor.userId() });
 
       if (options.afterLogin)
         options.afterLogin();
@@ -86,25 +64,14 @@ const googleLogin = (options) => {
 const ivleLogin = (options) => {
   Meteor.loginWithIVLE({}, function(err){
     if (err) {
-      Bert.alert("Could not login with IVLE", 'warning');
+      Bert.alert("Could not login with IVLE.", 'danger');
 
       if (options.failedLogin)
         options.failedLogin();
     } else {
-      const homeLocation = Session.get("homeLocation");
       Bert.alert('Logged in!', 'success');
 
-      if(homeLocation && !Meteor.user().homeLocation){
-        joinCommunity.call({ userId: Meteor.userId(), commId: homeLocation.commId });
-        updateProfileIVLE.call({
-          userId: Meteor.userId(),
-          homeLocation: homeLocation.coordinates,
-          homeZoom: homeLocation.zoom,
-          homeCommunityId: homeLocation.commId
-        });
-      }
-      else
-        updateProfileIVLE.call({ userId: Meteor.userId() });
+      updateProfileIVLE.call({ userId: Meteor.userId() });
 
       if (options.afterLogin)
         options.afterLogin();
