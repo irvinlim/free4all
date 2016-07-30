@@ -10,12 +10,8 @@ const composer = (props, onData) => {
     const options = {};
 
     // Filter
-    if (props.role)
-      selector.role = props.role;
-
-    // Search
-    if (props.searchQuery)
-      selector.$text = { $search: props.searchQuery };
+    if (props.role !== 'all-roles')
+      selector.roles = props.role;
 
     // Sorting
     if (props.searchQuery && props.sort == "most-relevant")
