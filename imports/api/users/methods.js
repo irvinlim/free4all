@@ -259,9 +259,7 @@ export const setHomeCommunity = new ValidatedMethod({
   }
 });
 
-// Roles
-
-// Only admins
+// Admin methods
 export const banUser = new ValidatedMethod({
   name: 'user.banUser',
   validate: new SimpleSchema({
@@ -283,7 +281,6 @@ export const banUser = new ValidatedMethod({
   }
 });
 
-// Only admins
 export const unbanUser = new ValidatedMethod({
   name: 'user.unbanUser',
   validate: new SimpleSchema({
@@ -302,6 +299,25 @@ export const unbanUser = new ValidatedMethod({
     Meteor.users.update({ _id: user._id }, { $pull: {
       roles: 'banned'
     }});
+  }
+});
+
+export const deleteUser = new ValidatedMethod({
+  name: 'user.deleteUser',
+  validate: new SimpleSchema({
+    userId:{  type: String },
+  }).validator(),
+  run({ userId }){
+    const user = Meteor.users.findOne(userId);
+
+    if (!user)
+      throw new Meteor.Error("users.deleteUser.undefinedUser", "No such user.");
+    else if (userId === this.userId)
+      throw new Meteor.Error("users.deleteUser.cannotDeleteSelf", "Cannot delete current user.");
+    else if (!RolesHelper.onlyAdmins(this.userId))
+      throw new Meteor.Error("users.deleteUser.notAuthorized", "Only admins can delete users.");
+
+    Meteor.users.remove({ _id: user._id });
   }
 });
 

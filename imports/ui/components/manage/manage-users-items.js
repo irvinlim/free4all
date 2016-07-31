@@ -14,7 +14,7 @@ import * as IconsHelper from '../../../util/icons';
 import * as RolesHelper from '../../../util/roles';
 
 import { Communities } from '../../../api/communities/communities';
-import { banUser, unbanUser } from '../../../api/users/methods';
+import { banUser, unbanUser, deleteUser } from '../../../api/users/methods';
 
 let users = [];
 
@@ -43,12 +43,30 @@ const communityDisplay = (community, isHome=false) => (
   </span>
 );
 
+const DialogUser = ({ open, handleClose, handleSubmit, children }) => {
+  const actions = [
+    <FlatButton label="Cancel" onTouchTap={ handleClose } />,
+    <FlatButton label="Confirm" onTouchTap={ handleSubmit } />
+  ];
+
+  return (
+    <Dialog
+      title="Are you sure?"
+      open={ open }
+      actions={ actions }
+      onRequestClose={ handleClose }>
+      { children }
+    </Dialog>
+  );
+};
+
 export class ManageUsersItems extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       confirmBanDialogOpen: false,
+      confirmDeleteDialogOpen: false,
       confirmUser: null,
     };
   }
@@ -72,8 +90,29 @@ export class ManageUsersItems extends React.Component {
     });
   }
 
+  handleDeleteUser() {
+    const user = this.state.confirmUser;
+    const self = this;
+
+    if (!user)
+      return;
+
+    deleteUser.call({ userId: user._id }, (error) => {
+      if (error) {
+        Bert.alert(error.reason, 'danger');
+      } else {
+        Bert.alert("Successfully deleted user.", 'success');
+        self.handleCloseConfirmDeleteDialog();
+      }
+    });
+  }
+
   handleCloseConfirmBanDialog() {
     this.setState({ confirmBanDialogOpen: false, confirmUser: null });
+  }
+
+  handleCloseConfirmDeleteDialog() {
+    this.setState({ confirmDeleteDialogOpen: false, confirmUser: null });
   }
 
   renderItem(index, key) {
@@ -109,6 +148,7 @@ export class ManageUsersItems extends React.Component {
           <LinkButton label="View Profile" to={ `/profile/${user._id}` } />
           <LinkButton label="Edit Profile" to={ `/manage/users/${user._id}` } />
           <FlatButton label={ RolesHelper.isBanned(user._id) ? "Unban User" : "Ban User" } onTouchTap={ e => self.setState({ confirmBanDialogOpen: true, confirmUser: user }) } />
+          <FlatButton label="Delete User" onTouchTap={ e => this.setState({ confirmDeleteDialogOpen: true, confirmUser: user }) } />
         </CardActions>
       </Card>
     );
@@ -116,11 +156,6 @@ export class ManageUsersItems extends React.Component {
 
   render() {
     users = this.props.users;
-
-    const confirmBanDialogActions = [
-      <FlatButton label="Cancel" onTouchTap={ this.handleCloseConfirmBanDialog.bind(this) } />,
-      <FlatButton label="Confirm" onTouchTap={ this.handleBanUnbanUser.bind(this) } />
-    ];
 
     return (
       <div id="manage-users-items">
@@ -130,13 +165,20 @@ export class ManageUsersItems extends React.Component {
           type='variable'
         />
 
-        <Dialog
-          title="Are you sure?"
+        <DialogUser
           open={ this.state.confirmBanDialogOpen }
-          actions={ confirmBanDialogActions }
-          onRequestClose={ this.handleCloseConfirmBanDialog.bind(this) }>
+          handleClose={ this.handleCloseConfirmBanDialog.bind(this) }
+          handleSubmit={ this.handleBanUnbanUser.bind(this) }>
           <p>Are you sure you want to { RolesHelper.isBanned(this.state.confirmUser) ? "unban" : "ban" } this user?</p>
-        </Dialog>
+        </DialogUser>
+
+        <DialogUser
+          open={ this.state.confirmDeleteDialogOpen }
+          handleClose={ this.handleCloseConfirmDeleteDialog.bind(this) }
+          handleSubmit={ this.handleDeleteUser.bind(this) }>
+          <p>Are you sure you want to delete this user? This actions is <strong>irreversible</strong>!!!</p>
+          <p>Note that any recovery of the user will have to be done manually in the database.</p>
+        </DialogUser>
       </div>
     );
   }
