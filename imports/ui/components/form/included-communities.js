@@ -13,31 +13,36 @@ export default class IncludedCommunities extends React.Component {
 
   componentDidMount(){
     const self = this;
-    let communities = []
-      , homeCommunity = {label: "", value:""}
+    let communities
+      , homeCommunity
       , homeCommunityId = this.props.user.profile.homeCommunityId
       , communityIds = this.props.user.communityIds
-      , allCommunities = this.props.user.communityIds
+      , allCommunities = this.props.user.communityIds || []
 
-    if(communityIds.indexOf(homeCommunityId) == -1)
+    if(communityIds && communityIds.indexOf(homeCommunityId) == -1)
       allCommunities = communityIds.concat([homeCommunityId]);
 
     this.subscription = Tracker.autorun(function(){
       Meteor.subscribe('communities-by-id', allCommunities, function(){
-        if(communityIds)
-          communities = Communities.find({ _id: {$in: communityIds}}, {sort:{createdAt: 1}}).fetch();
+
+        if(communityIds){
+          const data = Communities.find({ _id: {$in: communityIds}}, {sort:{createdAt: 1}}).fetch();
+          communities = data.map(community => ({ value: community._id, label: community.name }))
+        }
+
         if(homeCommunityId && !self.props.edit){
           homeComm = Communities.findOne(homeCommunityId);
-          homeCommunity = { value: homeComm._id, label: homeComm.name };
+          homeCommunity = [{ value: homeComm._id, label: homeComm.name }];
         } else if (self.props.edit){
           homeCommunity = self.props.edit;
         }
 
-      const options = communities.map(community => ({ value: community._id, label: community.name }))
-      self.props.setOptVal(options, homeCommunity )
+      self.props.setOptVal(communities, homeCommunity )
 
       })
     })
+    // react-select default 'value' and 'option' value is undefined
+    this.props.setOptVal(communities, homeCommunity)
   }
 
   componentWillUnmount(){

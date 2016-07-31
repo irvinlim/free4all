@@ -254,7 +254,7 @@ export default class InsertBtnDialog extends React.Component {
       data.lat = parseFloat(data.lat);
       data.userId = props.user._id;
       data.removeUserId = props.user._id;
-      data.inclCommIds = data.commIdsVal.map(comm => comm.value)
+      data.inclCommIds = data.commIds ? data.commIdsVal.map(comm => comm.value) : [];
 
       if (data.tile){
         data.avatarId = data.tile.res.public_id;
@@ -597,7 +597,7 @@ render() {
                   </RaisedButton>
                 </Col>
               </Row>
-              <Row>
+              <Row style={{ paddingBottom: 21 }}>
                 <Col xs={12}>
                   {this.state.loadingFile?
                     <LinearProgress mode="indeterminate" id="LinearProgressEdit"/>
