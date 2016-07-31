@@ -25,11 +25,13 @@ const leaveCommunityHandler = (payload) => {
   leaveCommunity.call(payload);
 }
 
-const setHomeCommHandler = (payload) => {
+const setHomeCommHandler = (payload, commIds) => {
   Session.setPersistent('homeLocation', {
     coordinates: payload.community.coordinates,
     zoom: payload.community.zoom
   })
+  if(!commIds || commIds.indexOf(payload.community._id) > -1 )
+    joinCommunity.call({ userId: payload.userId, commId: payload.community._id })
 
   setHomeCommunity.call(payload);
 }
@@ -74,7 +76,7 @@ export const CommunityGiveaways = (props) => (
            :
            <RaisedButton
              style={{height: "48px"}}
-             onTouchTap={ setHomeCommHandler.bind(this, { userId: props.user._id, community: props.community }) }
+             onTouchTap={ setHomeCommHandler.bind(this, { userId: props.user._id, community: props.community }, props.user.communityIds) }
              primary={true}
              label="Set Home"
              icon={ IconsHelper.materialIcon("home") } />

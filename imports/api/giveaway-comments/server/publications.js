@@ -8,7 +8,7 @@ Meteor.publish('comments-for-giveaway', function(gaId) {
   const ga = Giveaways.findOne(gaId);
 
   // Don't publish comments for removed giveaways
-  if (ga.isRemoved)
+  if (ga && ga.isRemoved)
     return this.ready();
 
   // Publish all comments for this giveaway that are not removed.

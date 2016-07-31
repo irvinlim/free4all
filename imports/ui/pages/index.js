@@ -104,10 +104,11 @@ export class Index extends React.Component {
       if (user && user.profile.homeLocation) {
         const homeLocation = user.profile.homeLocation;
         const homeZoom = user.profile.homeZoom;
+        const commId = user.profile.homeCommunityId;
         // homeLocation state is for goToHomeLocation Button
         self.setState({ homeLocation: homeLocation, homeZoom: homeZoom });
         // homeLocation session is for initial map center
-        Session.setPersistent('homeLocation', { coordinates: homeLocation, zoom: homeZoom });
+        Session.setPersistent('homeLocation', { coordinates: homeLocation, zoom: homeZoom, commId: commId});
       }
       self.setState({ user });
     });
