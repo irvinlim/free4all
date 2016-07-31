@@ -38,3 +38,13 @@ form label.error {
   margin-bottom: 20px;
   @include media-xs-only { margin-bottom: 10px; }
 }
+
+.is-focused:not(.is-open) > .Select-control {
+  box-shadow: none !important;
+}
+
+.Select-control {
+  border-radius: 0 !important;
+  border: none !important;
+  border-bottom: 1px solid #ccc !important;
+}

@@ -11,6 +11,9 @@ import './reactga-config.js';
 import './subscriptions.js';
 import './routes.js';
 
+// React select styles
+import 'react-select/dist/react-select.css';
+
 // Bert Notifications
 Bert.defaults = {
   hideDelay: 2000,

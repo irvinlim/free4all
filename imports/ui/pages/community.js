@@ -40,6 +40,7 @@ export class Community extends React.Component {
       isAllGa: false,
       user: null,
       mapURL: null,
+      comm: null
     };
 
     this.userUntilDate = new ReactiveVar( moment().set('hour', 0).set('minute',0).add(1,'w').toDate() );
@@ -76,22 +77,23 @@ export class Community extends React.Component {
 
   componentDidMount() {
     const self = this;
-    
+
     this.autorunAuth = Tracker.autorun(function(){
       const user = Meteor.user();
-      self.setState({ user: user })
+      self.setState({ user })
     })
 
     this.autorunSub = Tracker.autorun(function () {
       Meteor.subscribe('community-by-id', self.props.params.id, function(){
         const comm = Communities.findOne(self.props.params.id);
+        self.setState({ comm })
 
         // setTimeout due to initial coords at nus
         Meteor.setTimeout(function(){
-          self.setState({ 
+          self.setState({
             mapCenter: comm.coordinates,
-            mapZoom: comm.zoom, 
-            mapURL: comm.mapURL 
+            mapZoom: comm.zoom,
+            mapURL: comm.mapURL
           })
         }, 100);
       });
@@ -217,7 +219,7 @@ export class Community extends React.Component {
           showMarkers={ this.state.showMarkers }
           addRGeoSpinner={ this.addRGeoSpinner.bind(this) }
           rmvRGeoSpinner={ this.rmvRGeoSpinner.bind(this) }
-          isDbClickDisabled= { true } 
+          isDbClickDisabled= { true }
           mapURL= { this.state.mapURL }
           removeMapURLState={()=>{ this.setState({mapURL: null})} } />
 
@@ -228,6 +230,7 @@ export class Community extends React.Component {
             setBoxState={ this.setInfoBoxState.bind(this) } />
 
           <MapCommunityBox
+            community={ this.state.comm }
             communityId={ this.props.params.id }
             isAllGa={ this.state.isAllGa }
             gaId={ this.state.gaSelected }

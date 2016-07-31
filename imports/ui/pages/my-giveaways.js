@@ -294,7 +294,8 @@ export class MyGiveaways extends React.Component {
           resetLoc={ this.resetLoc.bind(this) }
           gaEdit={ this.state.gaEdit }
           gaId={ this.state.gaSelected }
-          mapCenter={ this.state.mapCenter } />
+          mapCenter={ this.state.mapCenter }
+          mapZoom={ this.state.mapZoom } />
 
       </div>
 

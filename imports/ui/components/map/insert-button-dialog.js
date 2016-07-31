@@ -15,14 +15,14 @@ import { Grid, Row, Col } from 'react-bootstrap';
 import TagsInput from 'react-tagsinput';
 
 import AllCategoriesList from '../../containers/categories/all-categories-list';
+import IncludedCommunities from '../../components/form/included-communities';
 import LeafletMapPreview from './leaflet-map-preview';
-
-import { insertGiveaway } from '../../../api/giveaways/methods.js';
-import { StatusTypes } from '../../../api/status-types/status-types.js';
-
 import { geocode } from '../../../util/geocode.js';
 import { shortId, sanitizeURL } from '../../../util/helper.js';
 import * as IconsHelper from '../../../util/icons';
+
+import { insertGiveaway } from '../../../api/giveaways/methods.js';
+import { StatusTypes } from '../../../api/status-types/status-types.js';
 
 export default class InsertBtnDialog extends React.Component {
 
@@ -54,6 +54,8 @@ export default class InsertBtnDialog extends React.Component {
       avatarId: "",
       loadingFile: false,
       zoom: 1,
+      commIdsVal: [],
+      commIdsOpts: []
     };
 
     this.state = this.initialState;
@@ -204,7 +206,7 @@ export default class InsertBtnDialog extends React.Component {
     this.setParentCat = (parentCat) => {
       this.setState({ parentCatId: parentCat._id });
     };
-    this.setChildCat = (e) => {
+    this.setChildCat = e => {
       this.setState({
         childCatId: e.currentTarget.getAttribute("id"),
         childCatName: e.currentTarget.getAttribute("name"),
@@ -213,16 +215,12 @@ export default class InsertBtnDialog extends React.Component {
       });
     };
 
-    this.handleOpenCatMenu = (e) => {
+    this.handleOpenCatMenu = e => {
       e.preventDefault();
       this.setState({
         isCatMenuOpen: true,
         anchorEl: e.currentTarget,
       });
-    }
-
-    this.handleCloseCatMenu = (e) =>{
-      this.setState({isCatMenuOpen: false})
     }
 
     this.handleUpload = (e) => {
@@ -232,7 +230,6 @@ export default class InsertBtnDialog extends React.Component {
       tile.files= files;
 
       this.setState({ loadingFile: true });
-
 
       // upload files to root cloudinary folder
       Cloudinary.upload(files, {}, function(err, res) {
@@ -257,7 +254,7 @@ export default class InsertBtnDialog extends React.Component {
       data.lat = parseFloat(data.lat);
       data.userId = props.user._id;
       data.removeUserId = props.user._id;
-      data.batchId = shortId.generate();
+      data.inclCommIds = data.commIdsVal.map(comm => comm.value)
 
       if (data.tile){
         data.avatarId = data.tile.res.public_id;
@@ -293,9 +290,9 @@ export default class InsertBtnDialog extends React.Component {
         categoryId: data.childCatId,
         tags: data.tags,
         userId: data.userId,
-        batchId: data.batchId,
         statusUpdates: [{ statusTypeId: availableStatus._id, date: new Date(), userId: data.userId }],
         avatarId: data.avatarId,
+        inclCommIds: data.inclCommIds,
       }
 
       const gaId = insertGiveaway.call(ga, (error)=>{
@@ -533,31 +530,45 @@ render() {
                 </Col>
                 <Col xs={12} md={4} style={{ paddingTop: 21 }}>
                   <RaisedButton
-                  className="formBtn"
-                  style={{minHeight:"41px"}}
-                  label={this.state.childCatName}
-                  secondary={true}
-                  onTouchTap={this.handleOpenCatMenu}
-                  icon={<FontIcon className={this.state.childCatIcon} />} />
+                    className="formBtn"
+                    style={{minHeight:"41px"}}
+                    label={this.state.childCatName}
+                    secondary={true}
+                    onTouchTap={this.handleOpenCatMenu}
+                    icon={<FontIcon className={this.state.childCatIcon} />} />
+                  <AllCategoriesList
+                    setParentCat={this.setParentCat}
+                    setChildCat={this.setChildCat}
+                    isCatMenuOpen={this.state.isCatMenuOpen}
+                    anchorEl={this.state.anchorEl}
+                    closeCatMenu={ e =>{ this.setState({ isCatMenuOpen: false }) } } />
+                </Col>
                 <Col className="displayNone">
                 <FormsyText
                   name="childCatRequired"
                   value={this.state.childCatIcon}
                   required />
                 </Col>
-                <AllCategoriesList
-                  setParentCat={this.setParentCat}
-                  setChildCat={this.setChildCat}
-                  isCatMenuOpen={this.state.isCatMenuOpen}
-                  anchorEl={this.state.anchorEl}
-                  closeCatMenu={this.handleCloseCatMenu} />
-                </Col>
-                <Col xs={12} md={12} style={{paddingBottom: "28px"}}>
+                <Col xs={12} md={12}>
                   <TagsInput value={this.state.tags} onChange={this.handleTagsChange} />
                 </Col>
               </Row>
 
-              <Row>
+              <Row style={{ paddingTop: 21 }}>
+                <Col xs={12} >
+                  <h2>Communities</h2>
+                </Col>
+                <Col xs={12} >
+                  <IncludedCommunities
+                    user={ this.props.user }
+                    value={ this.state.commIdsVal }
+                    options={ this.state.commIdsOpt }
+                    setOptVal= { (opt,val) => { this.setState({ commIdsOpt:opt, commIdsVal:val })}}
+                    handleChange = { commIdsVal => { this.setState({ commIdsVal })} } />
+                </Col>
+              </Row>
+
+              <Row style={{ paddingTop: 21 }}>
                 <Col xs={12} md={8} >
                 <h2>Upload Image</h2>
                 </Col>

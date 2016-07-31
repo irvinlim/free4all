@@ -2,9 +2,9 @@
 
 .schoolCommunity{
   display: flex; justify-content: center; align-items: center;
-  img { cursor: pointer; width: 100%; }
+  img { cursor: pointer; width: 90%; }
   &:hover { opacity: 0.8; }
-  @include transition-standard(background-color 225ms);
+  @include transition-standard(opacity 225ms);
   @include media-md-down { margin-bottom: 6%; }
   @include media-md-up { margin-bottom: 0; }
 }

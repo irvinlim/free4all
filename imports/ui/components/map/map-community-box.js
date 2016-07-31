@@ -41,10 +41,12 @@ export default class MapCommunityBox extends React.Component {
       <div id="map-nearby-box" className={ "map-sidebar hidden-xs hidden-sm col-md-3 col-lg-3 state-" + this.props.boxState }>
         <Scrollbars autoHide style={{ height: "100%" }}>
 
-          <CommunityGiveaways 
+        {this.props.community ?
+          <CommunityGiveaways
+            community={ this.props.community }
             communityId={ this.props.communityId }
-            mapBounds={ this.props.mapBounds } 
-            nearbyOnClick={ this.props.nearbyOnClick } 
+            mapBounds={ this.props.mapBounds }
+            nearbyOnClick={ this.props.nearbyOnClick }
             userUntilDate={ this.props.userUntilDate }
             handleUserUntilDate={ this.props.handleUserUntilDate }
             userFromDate={ this.props.userFromDate }
@@ -54,6 +56,9 @@ export default class MapCommunityBox extends React.Component {
             isAllGa={ this.props.isAllGa }
             showDateRange={ this.props.showDateRange }
             user={this.props.user} />
+          :
+          <div />
+        }
 
         </Scrollbars>
 

@@ -65,23 +65,23 @@ Meteor.publish('user-giveaways-within-date', function(startDateRange, endDateRan
     return Giveaways.find(findParams);
 })
 
-Meteor.publish('users-giveaways-within-date', function(startDateRange, endDateRange, isAllGa, userIds){
+Meteor.publish('users-giveaways-within-date', function(startDateRange, endDateRange, isAllGa, commIdArr){
   check(startDateRange, Date);
   check(endDateRange, Date);
   check(isAllGa, Boolean);
-  check(userIds, Array);
+  check(commIdArr, Array);
 
   const findParams = {
     startDateTime:  { $gte: startDateRange },
     endDateTime:    { $lt:  endDateRange },
-    userId:         { $in: userIds },
+    inclCommIds:    { $in: commIdArr },
     isRemoved:      { $ne:  true },  // Must not be deleted (local deletion)
   };
 
   if(isAllGa)
     return Giveaways.find({
-      userId:     { $in: userIds},
-      isRemoved:  { $ne:  true }
+      inclCommIds:  { $in: commIdArr},
+      isRemoved:    { $ne:  true }
     })
   else
     return Giveaways.find(findParams);

@@ -7,45 +7,33 @@ import { Communities } from '../../../api/communities/communities';
 import * as LatLngHelper from '../../../util/latlng';
 
 const composer = (props, onData) => {
-  if(Meteor.subscribe('userIds-by-commId', props.communityId).ready()){
-    const users = Meteor.users.find({ communityIds: props.communityId}).fetch();
-    const userIds = users.map(user => user._id);
-    const community = Communities.findOne(props.communityId);
+
+    const communityIdArr = [props.communityId];
     let giveaways = [];
 
     if(!props.user)
       props.user = null;
 
-    if(Meteor.subscribe('users-giveaways-within-date', 
-      props.userFromDate, props.userUntilDate, props.isAllGa, userIds).ready()){
+    if(Meteor.subscribe('users-giveaways-within-date',
+      props.userFromDate, props.userUntilDate, props.isAllGa, communityIdArr).ready()){
       const findParams = {
         startDateTime:  { $gte: props.userFromDate },
         endDateTime:    {  $lt: props.userUntilDate },
-        userId:         {  $in: userIds }
+        inclCommIds:    {  $in: communityIdArr }
       };
       if(props.isAllGa)
-        giveaways = Giveaways.find({ userId: { $in: userIds } })
+        giveaways = Giveaways.find({ inclCommIds: { $in: communityIdArr } })
       else
         giveaways = Giveaways.find(findParams);
 
       onData(null, {
-        community: community,
         giveaways: giveaways,
         nearbyOnClick: props.nearbyOnClick,
         user: props.user,
       });
     } else {
       onData(null, {
-        community: community,
         giveaways: giveaways,
-        nearbyOnClick: props.nearbyOnClick,
-        user: props.user,
-      });
-    }
-  } else {
-      onData(null, {
-        community: [],
-        giveaways: [],
         nearbyOnClick: props.nearbyOnClick,
         user: props.user,
       });

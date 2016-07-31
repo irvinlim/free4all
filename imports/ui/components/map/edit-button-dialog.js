@@ -1,4 +1,5 @@
 import React from 'react';
+import Paper from 'material-ui/Paper';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -8,24 +9,22 @@ import { Bert } from 'meteor/themeteorchef:bert';
 import FontIcon from 'material-ui/FontIcon';
 import {GridList, GridTile} from 'material-ui/GridList';
 import LinearProgress from 'material-ui/LinearProgress';
-
 import Formsy from 'formsy-react';
-import Paper from 'material-ui/Paper';
 import { FormsyCheckbox, FormsyDate, FormsyRadio, FormsyRadioGroup, FormsySelect, FormsyText, FormsyTime, FormsyToggle } from 'formsy-material-ui/lib';
 import { Grid, Row, Col } from 'react-bootstrap';
-
-import AllCategoriesList from '../../containers/categories/all-categories-list.js'
 import TagsInput from 'react-tagsinput';
 
-import { updateGiveaway, removeGiveaway, removeGiveawayGroup } from '../../../api/giveaways/methods.js';
+import AllCategoriesList from '../../containers/categories/all-categories-list';
+import IncludedCommunities from '../../components/form/included-communities';
+import LeafletMapPreview from './leaflet-map-preview';
+import { geocode } from '../../../util/geocode.js';
+import { shortId, sanitizeURL } from '../../../util/helper.js';
+import * as IconsHelper from '../../../util/icons';
+
 import { StatusTypes } from '../../../api/status-types/status-types.js'
 import { Categories } from '../../../api/categories/categories.js';
+import { updateGiveaway, removeGiveaway, removeGiveawayGroup } from '../../../api/giveaways/methods.js';
 
-import { geocode } from '../../../util/geocode.js';
-import { shortId, sanitizeURL } from '../../../util/helper.js'
-
-import * as IconsHelper from '../../../util/icons';
-import * as ImagesHelper from '../../../util/images';
 
 const RemoveGiveawayDialog = ({ open, handleClose, handleSubmit }) => {
   const actions = [
@@ -74,8 +73,10 @@ export default class EditBtnDialog extends React.Component {
       avatarId: "",
       loadingFile: false,
       gaId: props.gaId,
-      batchId: "",
       removeGiveawayPromptOpen: false,
+      zoom: props.mapZoom,
+      commIdsVal: [],
+      commIdsOpts: [],
     };
 
     this.state = this.initialState;
@@ -284,6 +285,7 @@ export default class EditBtnDialog extends React.Component {
       data.lat = parseFloat(data.lat);
       data.userId = String(Meteor.userId());
       data.removeUserId = String(Meteor.userId());
+      data.inclCommIds = data.commIdsVal.map(comm => comm.value)
 
       if (data.tile){
         data.avatarId = data.tile.res.public_id;
@@ -319,9 +321,9 @@ export default class EditBtnDialog extends React.Component {
         categoryId: data.childCatId,
         tags: data.tags,
         userId: data.userId,
-        batchId: data.batchId,
         statusUpdates: [{ statusTypeId: availableStatus._id, date: new Date(), userId: data.userId }],
         avatarId: data.avatarId,
+        inclCommIds: data.inclCommIds,
       }
 
       updateGiveaway.call({_id:data.gaId, update:ga}, (error)=>{
@@ -385,7 +387,7 @@ export default class EditBtnDialog extends React.Component {
         childCatIcon: childCat.iconClass,
         avatarId: gaEdit.avatarId,
         gaId: gaEdit._id,
-        batchId: gaEdit.batchId,
+        commIdsVal: gaEdit.inclCommIds,
       });
     }
     if(nextProps.locArr.length>0){
@@ -592,6 +594,18 @@ export default class EditBtnDialog extends React.Component {
                       disabled={true} />
                   </Col>
                 </Row>
+              {this.state.lat ?
+                <Row>
+                  <Col xs={12}>
+                    <LeafletMapPreview
+                      previewCoords={ { lat:this.state.lat, lng:this.state.lng } }
+                      previewZoom={this.props.mapZoom} />
+                  </Col>
+                </Row>
+                :
+                <div />
+              }
+
 
                 <Row style={{ paddingTop: 21 }}>
                   <Col xs={12} md={8} >
@@ -619,18 +633,31 @@ export default class EditBtnDialog extends React.Component {
                     closeCatMenu={this.handleCloseCatMenu}
                   />
                   </Col>
-                  <Col xs={12} md={12} style={{paddingBottom: "28px"}}>
+                  <Col xs={12} md={12}>
                     <TagsInput value={this.state.tags} onChange={this.handleTagsChange} />
                   </Col>
                 </Row>
 
-                <Row>
+                <Row style={{ paddingTop: 21 }}>
+                  <Col xs={12} >
+                    <h2>Communities</h2>
+                  </Col>
+                  <Col xs={12} >
+                    <IncludedCommunities
+                      user={ Meteor.user() }
+                      value={ this.state.commIdsVal }
+                      options={ this.state.commIdsOpt }
+                      setOptVal= { (opt,val) => { this.setState({ commIdsOpt:opt, commIdsVal:val })}}
+                      handleChange = { commIdsVal => { this.setState({ commIdsVal })} }
+                      edit={ this.state.commIdsVal } />
+                  </Col>
+                </Row>
+
+                <Row style={{ paddingTop: 21 }}>
                   <Col xs={12} md={8} >
                   <h2>Upload Image</h2>
                   </Col>
-                  <Col xs={12} md={4}
-                  style={{ paddingTop: 21 }}
-                  >
+                  <Col xs={12} md={4} style={{ paddingTop: 21 }} >
                     <RaisedButton
                     className="formBtn"
                     style={{minHeight:"41px"}}

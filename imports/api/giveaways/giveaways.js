@@ -93,10 +93,6 @@ export const GiveawaysDataSchema = new SimpleSchema({
     label: 'Public ID of image avatar (Cloudinary)',
     optional: true,
   },
-  batchId: {
-    type: String,
-    label: 'Batch Id of recurring group'
-  },
   statusUpdates: {
     type: [StatusUpdatesSchema],
     label: 'Status updates for giveaway',
@@ -149,13 +145,14 @@ export const GiveawaysDataSchema = new SimpleSchema({
     label: 'Cloudinary public ID',
     optional: true
   },
-  excludedCommunityIds:{
+  inclCommIds:{
     type: Array,
     optional: true
   },
-  "excludedCommunityIds.$":{
+  "inclCommIds.$":{
     type: String,
-    regEx: SimpleSchema.RegEx.Id
+    regEx: SimpleSchema.RegEx.Id,
+    optional: true
   },
 });
 
