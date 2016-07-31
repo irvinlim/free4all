@@ -30,7 +30,6 @@ export default class IncludedCommunities extends React.Component {
           homeComm = Communities.findOne(homeCommunityId);
           homeCommunity = { value: homeComm._id, label: homeComm.name };
         } else if (self.props.edit){
-          console.log(self.props.edit)
           homeCommunity = self.props.edit;
         }
 

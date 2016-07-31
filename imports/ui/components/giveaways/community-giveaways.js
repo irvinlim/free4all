@@ -28,9 +28,11 @@ const leaveCommunityHandler = (payload) => {
 const setHomeCommHandler = (payload, commIds) => {
   Session.setPersistent('homeLocation', {
     coordinates: payload.community.coordinates,
-    zoom: payload.community.zoom
+    zoom: payload.community.zoom,
+    commId: payload.community._id
   })
-  if(!commIds || commIds.indexOf(payload.community._id) > -1 )
+
+  if(!commIds || commIds.indexOf(payload.community._id) == -1 )
     joinCommunity.call({ userId: payload.userId, commId: payload.community._id })
 
   setHomeCommunity.call(payload);
