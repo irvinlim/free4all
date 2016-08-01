@@ -44,10 +44,12 @@ const gridItemTile = (comm) => (
   <GridTile
     key={ comm._id }
     className="giveaway giveaway-timeline-item"
-    title={ comm.name }
+    title={ comm.name + ' - ' + comm.count + Helper.pluralizer(comm.count, " Member", " Members")}
     titleBackground='rgba(0, 0, 0, 0.55)'
-    onTouchTap={ (event) => browserHistory.push('/community/' + comm._id) }>
-    {comm.count}
+    onTouchTap={ (event) => browserHistory.push('/community/' + comm._id) }
+    style={{
+      background: 'url('+ ImagesHelper.getUrlScale(comm.pictureId, 350) +') no-repeat center center',
+      backgroundSize: '90% auto' }} >
   </GridTile>
 );
 
