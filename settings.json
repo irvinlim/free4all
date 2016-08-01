@@ -22,7 +22,8 @@
       "initialCoords": [ 1.2993826, 103.7760318 ],
       "initialZoom": 16
     },
-    "refresh_interval": 60000
+    "refresh_interval": 60000,
+    "logoImageId": "<CLOUDINARY_IMAGE_ID>"
   },
   "private": {
     "Cloudinary": {

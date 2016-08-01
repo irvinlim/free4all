@@ -90,10 +90,6 @@ export class Index extends React.Component {
     this.autorunGeo = Tracker.autorun(function() {
       const reactiveLatLng = Geolocation.latLng();
 
-      // Disabled initialize map center, if not geolocated yet
-      // if (!self.state.geolocation)
-      //   self.setState({ mapCenter: reactiveLatLng });
-
       // Set current location
       self.setState({ geolocation: reactiveLatLng });
     })
@@ -113,6 +109,7 @@ export class Index extends React.Component {
       self.setState({ user });
     });
 
+    // Autorun home location session variable
     this.autorunHome = Tracker.autorun(function(){
       let homeLoc = Session.get('homeLocation');
       if (homeLoc)

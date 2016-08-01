@@ -19,3 +19,7 @@
 
 #drawer-menu-items { font-weight: 300; height: calc(100% - 27px); }
 .iubenda-button { float: right; margin: 0 5px; }
+
+.menu-logo {
+  img { display: block; width: calc(100% - 20px); max-width: 150px; margin: 20px auto 10px; }
+}

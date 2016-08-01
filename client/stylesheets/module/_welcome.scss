@@ -1,0 +1,19 @@
+@import "../common/_mixins";
+
+.welcome-dialog {
+  @include media-xs-only {
+    .welcome-dialog-container { width: calc(100% - 20px) !important; }
+    .welcome-dialog-body { padding: 0 !important; }
+    .featured-communities .col { margin-bottom: 20px; }
+  }
+
+  h1 { margin-bottom: 20px; }
+  h1, p { text-align: center; }
+  img.free4all-logo { width: 100%; max-width: 250px; }
+
+  .featured-communities {
+    width: 100%; max-width: 800px;
+    span { display: block; }
+    span img { width: 100%; }
+  }
+}

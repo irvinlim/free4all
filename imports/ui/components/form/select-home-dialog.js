@@ -3,6 +3,7 @@ import Dialog from 'material-ui/Dialog';
 import IconButton from 'material-ui/IconButton';
 import FlatButton from 'material-ui/FlatButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
+import { Scrollbars } from 'react-custom-scrollbars';
 
 import { Communities } from '../../../api/communities/communities';
 import { Grid, Row, Col } from 'react-bootstrap';
@@ -10,15 +11,9 @@ import * as IconsHelper from '../../../util/icons';
 import * as ImagesHelper from '../../../util/images';
 import { Loading } from '../../components/loading';
 
-const customContentStyle = {
-  width: "93%",
-  maxWidth: "none"
-};
-
 const customTitleStyle = {
   color: "#FFFFFF",
   backgroundColor: "#3F51B5",
-  marginBottom: "33px",
   textTransform: "uppercase",
   fontWeight: 100,
   textAlign: "center",
@@ -34,8 +29,7 @@ export default class SelectHomeDialog extends React.Component {
     this.state = {
       open: false,
       featured: null,
-    }
-
+    };
   }
 
   handleOpen() {
@@ -67,31 +61,44 @@ export default class SelectHomeDialog extends React.Component {
 
   renderCommunity(community){
     return (
-      <div className="col col-xs-6 col-sm-3 schoolCommunity">
-        <img
-          src={ ImagesHelper.getUrlScale(community.pictureId, 350) }
-          onTouchTap={ this.props.setHomeLoc.bind(this, community) }
-          alt=""/>
+      <div key={community._id} className="col col-xs-6 col-sm-3 schoolCommunity">
+        <FlatButton
+          label={ ImagesHelper.makeScale(community.pictureId, 350) }
+          style={{ height: 50 }}
+          onTouchTap={ this.props.setHomeLoc.bind(this, community) } />
       </div>
-    )
+    );
   }
 
   render() {
 
     return (
       <Dialog
-        title="View Universities"
+        title="Welcome"
+        className="welcome-dialog"
+        bodyClassName="welcome-dialog-body"
+        contentClassName="welcome-dialog-container"
         titleStyle={customTitleStyle}
-        modal={false}
-        contentStyle={customContentStyle}
+        modal={true}
+        autoScrollBodyContent={true}
         open={this.state.open}
-        onRequestClose={this.handleClose.bind(this)}
-      >
-      <Grid>
-        <div className="flex-row">
-          { this.state.featured ? this.renderCommunities() : <Loading /> }
+        onRequestClose={this.handleClose.bind(this)}>
+
+        <div className="container" style={{ width: "100%" }}>
+          <div className="flex-row welcome-text">
+            <div className="col col-xs-12">
+              <p>{ ImagesHelper.makeScale(Meteor.settings.public.logoImageId, 250, "free4all-logo") }</p>
+              <h1>Welcome to Free4All!</h1>
+              <p>We collect and curate the best freebie giveaways on your school campus, be it free buffet lunches, goodie bags, ice cream, or anything under the sun.</p>
+              <p>Not only do we help people save money by finding them free meals, we also help to tackle food waste by helping events to clear unfinished food or giveaway items that would be otherwise thrown away.</p>
+              <p>To begin, select your university below:</p>
+            </div>
+          </div>
+
+          <div className="flex-row featured-communities">
+            { this.state.featured ? this.renderCommunities() : <Loading /> }
+          </div>
         </div>
-      </Grid>
 
       </Dialog>
     );

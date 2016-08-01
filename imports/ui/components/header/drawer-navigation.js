@@ -2,6 +2,8 @@ import React from 'react';
 import Drawer from 'material-ui/Drawer';
 import DrawerMenuItems from '../../containers/drawer-menu-items';
 
+import * as ImagesHelper from '../../../util/images';
+
 export default class DrawerNavigation extends React.Component {
   componentDidMount() {
     // iubenda Privacy Policy

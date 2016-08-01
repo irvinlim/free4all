@@ -11,6 +11,7 @@ import MenuItem from 'material-ui/MenuItem';
 import { getHandleLogout } from '../../../modules/logout';
 
 import * as IconsHelper from '../../../util/icons';
+import * as ImagesHelper from '../../../util/images';
 import * as RolesHelper from '../../../util/roles';
 
 export class DrawerMenuItems extends React.Component {
@@ -61,6 +62,10 @@ export class DrawerMenuItems extends React.Component {
     return (
       <div id="drawer-menu-items">
         <Scrollbars autoHide style={{ height: "100%" }}>
+          <div className="menu-logo">
+            { ImagesHelper.makeScale(Meteor.settings.public.logoImageId, 150, "free4all-logo") }
+          </div>
+
           { this.menuItems.map((item, index) => {
             if (item.divider) {
               return <Divider key={ 'menudivider' + index } />;
