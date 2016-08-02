@@ -21,10 +21,12 @@ const composer = (props, onData) => {
     else if (props.sort == "name-desc")
       options.sort = { 'profile.name': -1 };
 
-    onData(null, {
-      users: Meteor.users.find(selector, options).fetch(),
-      props: props,
-    });
+    if (Meteor.subscribe('all-communities').ready()) {
+      onData(null, {
+        users: Meteor.users.find(selector, options).fetch(),
+        props: props,
+      });
+    }
 
   }
 };

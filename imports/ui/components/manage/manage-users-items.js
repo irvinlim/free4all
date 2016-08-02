@@ -134,12 +134,12 @@ export class ManageUsersItems extends React.Component {
           }
           subtitle={
             <p className="manage-users-subtitle">
-              { UsersHelper.adminGetFirstEmail(user) }
-              <br/>
               <span className="user-communities-display">
                 { homeCommunity ? communityDisplay(homeCommunity, true) : null }
                 { userCommunities ? userCommunities.map(comm => communityDisplay(comm, false)) : null }
               </span>
+              <br/>
+              { UsersHelper.adminGetFirstEmail(user) }
             </p>
           }
           avatar={ UsersHelper.getAvatar(user, 80) }
