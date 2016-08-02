@@ -57,9 +57,7 @@ default_status_types.forEach(statusType => {
 // Default parent categories
 const default_parent_categories = [
   { name: "Food & Drink", iconClass: 'local_dining', relativeOrder: 0 },
-  { name: "Coupons/Vouchers", iconClass: 'local_offer', relativeOrder: 1 },
-  { name: "Goodie Bags", iconClass: 'local_mall', relativeOrder: 2 },
-  { name: "Everything Else", iconClass: 'thumb_up', relativeOrder: 3 },
+  { name: "Everything Else", iconClass: 'thumb_up', relativeOrder: 1 },
 ];
 
 default_parent_categories.forEach(parentCat => {
@@ -79,5 +77,3 @@ default_categories.forEach(cat => {
   if (!Categories.findOne({ 'name': cat.name }))
     Categories.insert(cat);
 });
-
-

@@ -13,7 +13,7 @@ const composer = (props, onData) => {
     const selector = {};
     const options = {};
 
-    if (props.tab == "all-time" || props.sort == "highest-rated") {
+    if (props.tab == "all-time" || props.tab == "search" && props.sort == "highest-rated") {
 
       // Get IDs for k-highest rated giveaways
       const netRatingOptions = _.extend(options, { sort: { value: -1 } });
