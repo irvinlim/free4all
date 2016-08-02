@@ -2,7 +2,7 @@ import React from 'react/react';
 
 const getCloudinary = (options) => {
   const { publicId } = options
-  return $.cloudinary.url(publicId, _.extend(options, { fetch_format: "auto" }));
+  return $.cloudinary.url(publicId, _.extend(options, { fetch_format: "auto", dpr: 2.0 }));
 };
 
 export const getUrl = (publicId, width=64, height=64, options={}) => getCloudinary(_.extend({ publicId, width, height, crop: 'fill' }, options));
