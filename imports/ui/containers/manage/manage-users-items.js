@@ -10,7 +10,12 @@ const composer = (props, onData) => {
     const options = {};
 
     // Filter
-    if (props.role !== 'all-roles')
+    if (props.role === 'no-role')
+      selector.$or = [
+        { roles: { $exists: false } },
+        { roles: { $size: 0 } }
+      ];
+    else if (props.role !== 'all-roles')
       selector.roles = props.role;
 
     // Sorting

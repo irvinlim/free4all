@@ -56,9 +56,12 @@ Meteor.publish('user-search', function(props) {
   // Filter by Role
   if (role != 'all-roles') {
     if (role === 'no-role')
-      selector.roles = { $size: 0 };
-    else
-      selector.roles = props.role;
+      selector.$or = [
+        { roles: { $exists: false } },
+        { roles: { $size: 0 } }
+      ];
+    else if (role !== 'all-roles')
+      selector.roles = role;
   }
 
   // Full-text search
