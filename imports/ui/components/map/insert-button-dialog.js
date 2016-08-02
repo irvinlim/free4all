@@ -254,7 +254,7 @@ export default class InsertBtnDialog extends React.Component {
       data.lat = parseFloat(data.lat);
       data.userId = props.user._id;
       data.removeUserId = props.user._id;
-      data.inclCommIds = data.commIds ? data.commIdsVal.map(comm => comm.value) : [];
+      data.inclCommIds = data.commIdsVal.length > 0 ? data.commIdsVal.map(comm => comm.value) : [];
 
       if (data.tile){
         data.avatarId = data.tile.res.public_id;
