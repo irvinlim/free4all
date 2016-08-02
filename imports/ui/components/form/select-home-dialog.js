@@ -64,7 +64,7 @@ export default class SelectHomeDialog extends React.Component {
       <div key={community._id} className="col col-xs-6 col-sm-3 schoolCommunity">
         <FlatButton
           label={ ImagesHelper.makeScale(community.pictureId, 350) }
-          style={{ height: 50, minHeight: "102px" }}
+          style={{ height: 100 }}
           onTouchTap={ this.props.setHomeLoc.bind(this, community) } />
       </div>
     );

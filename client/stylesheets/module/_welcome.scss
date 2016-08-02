@@ -4,7 +4,7 @@
   @include media-xs-only {
     .welcome-dialog-container { width: calc(100% - 20px) !important; }
     .welcome-dialog-body { padding: 0 !important; }
-    .featured-communities .col { margin-bottom: 20px; }
+    .featured-communities button { height: 70px !important; }
   }
 
   h1 { margin-bottom: 20px; margin-top: -12px }
