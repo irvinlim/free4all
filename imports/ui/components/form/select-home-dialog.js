@@ -64,7 +64,7 @@ export default class SelectHomeDialog extends React.Component {
       <div key={community._id} className="col col-xs-6 col-sm-3 schoolCommunity">
         <FlatButton
           label={ ImagesHelper.makeScale(community.pictureId, 350) }
-          style={{ height: 50 }}
+          style={{ height: 50, minHeight: "102px" }}
           onTouchTap={ this.props.setHomeLoc.bind(this, community) } />
       </div>
     );
@@ -85,19 +85,24 @@ export default class SelectHomeDialog extends React.Component {
         onRequestClose={this.handleClose.bind(this)}>
 
         <div className="container" style={{ width: "100%" }}>
-          <div className="flex-row welcome-text">
-            <div className="col col-xs-12">
+          <div className="flex-row welcome-text" style={{ paddingBottom: 0 }}>
+            <div className="col col-xs-12" >
               <p>{ ImagesHelper.makeScale(Meteor.settings.public.logoImageId, 250, "free4all-logo") }</p>
               <h1>Welcome to Free4All!</h1>
-              <p>We collect and curate the best freebie giveaways on your school campus, be it free buffet lunches, goodie bags, ice cream, or anything under the sun.</p>
-              <p>Not only do we help people save money by finding them free meals, we also help to tackle food waste by helping events to clear unfinished food or giveaway items that would be otherwise thrown away.</p>
-              <p>To begin, select your university below:</p>
+              <p>Find the best freebie giveaways on campus!</p>
+              <p style={{fontSize: "12px"}}>Be it free buffet lunches, goodie bags, ice cream, or more.</p>
+              <p>Help friends save money by sharing free food with them.</p>
+              <p style={{fontSize: "12px"}}>Tackle food waste by helping events to clear unfinished food!</p>
+              <p>Save giveaway items that would be otherwise thrown away!</p>
+              <h3 style={{paddingTop: "18px", textAlign: "center",}}>
+                To begin, select your university below:
+              </h3>
             </div>
           </div>
-
-          <div className="flex-row featured-communities">
+          <div className="flex-row featured-communities" style={{paddingTop: 0}}>
             { this.state.featured ? this.renderCommunities() : <Loading /> }
           </div>
+
         </div>
 
       </Dialog>

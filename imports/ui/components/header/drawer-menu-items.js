@@ -70,7 +70,10 @@ export class DrawerMenuItems extends React.Component {
             if (item.divider) {
               return <Divider key={ 'menudivider' + index } />;
             } else if (item.subheader && item.subheader.length) {
-              return <Subheader key={ 'menusubheader' + index }>{ item.subheader }</Subheader>;
+              if(item.subheader === 'FREE4ALL')
+                return <Subheader className="menu-logo-subheader" key={ 'menusubheader' + index }>{ item.subheader }</Subheader>;
+              else
+                return <Subheader key={ 'menusubheader' + index }>{ item.subheader }</Subheader>;
             } else {
               const onClick = () => {
                 if (item.onClick)
