@@ -5,6 +5,7 @@ import Paper from 'material-ui/Paper';
 import ReactList from 'react-list';
 import { Card, CardActions, CardText, CardHeader, CardTitle } from 'material-ui/Card';
 import PaperCard from '../../layouts/paper-card';
+import { List, ListItem } from 'material-ui/List';
 import Link, { LinkButton } from '../../layouts/link';
 import Chip from 'material-ui/Chip';
 import FlatButton from 'material-ui/FlatButton';
@@ -124,7 +125,7 @@ export class ManageUsersItems extends React.Component {
     const userCommunities = user.communityIds ? Communities.find({ _id: { $in: user.communityIds.filter(x => x !== user.profile.homeCommunityId) } }) : null;
 
     return (
-      <PaperCard key={ key } className="manage-users-item profile">
+      <Card key={ key } className="manage-users-item profile">
         <CardHeader
           title={
             <h3 style={{ marginTop: 0 }}>
@@ -133,25 +134,31 @@ export class ManageUsersItems extends React.Component {
             </h3>
           }
           subtitle={
-            <p className="manage-users-subtitle">
-              <span className="user-communities-display">
-                { homeCommunity ? communityDisplay(homeCommunity, true) : null }
-                { userCommunities ? userCommunities.map(comm => communityDisplay(comm, false)) : null }
-              </span>
-              <br/>
-              { UsersHelper.adminGetFirstEmail(user) }
-            </p>
+            <span className="user-communities-display">
+              { homeCommunity ? communityDisplay(homeCommunity, true) : null }
+              { userCommunities ? userCommunities.map(comm => communityDisplay(comm, false)) : null }
+            </span>
           }
           avatar={ UsersHelper.getAvatar(user, 80) }
+          actAsExpander={true}
+          showExpandableButton={true}
           />
 
-        <CardActions style={{ marginBottom: 10 }}>
+        <CardText expandable={true}>
+          <List>
+            <ListItem secondaryText="Last Login" primaryText={ UsersHelper.adminGetLastLoginDate(user) } leftIcon={ IconsHelper.icon("lock_open") } />
+            <ListItem secondaryText="Date Registered" primaryText={ UsersHelper.adminGetRegisteredDate(user) } insetChildren={true} />
+            <ListItem secondaryText="Primary Email" primaryText={ UsersHelper.adminGetFirstEmail(user) } leftIcon={ IconsHelper.icon("mail") } />
+          </List>
+        </CardText>
+
+        <CardActions>
           <LinkButton label="View Profile" to={ `/profile/${user._id}` } />
           <LinkButton label="Edit Profile" to={ `/manage/users/${user._id}` } />
           <FlatButton label={ RolesHelper.isBanned(user._id) ? "Unban User" : "Ban User" } onTouchTap={ e => self.setState({ confirmBanDialogOpen: true, confirmUser: user }) } />
           <FlatButton label="Delete User" onTouchTap={ e => this.setState({ confirmDeleteDialogOpen: true, confirmUser: user }) } />
         </CardActions>
-      </PaperCard>
+      </Card>
     );
   }
 
@@ -163,7 +170,7 @@ export class ManageUsersItems extends React.Component {
         <ReactList
           itemRenderer={ this.renderItem.bind(this) }
           length={ users.length }
-          type='uniform'
+          type='simple'
         />
 
         <DialogUser

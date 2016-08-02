@@ -129,3 +129,10 @@ export const countServices = (user) => user ? Object.keys(user.services).filter(
 
 // Admin-only methods
 export const adminGetFirstEmail = (user) => propExistsDeep(user, ['emails', 0, 'address']) ? user.emails[0].address : null;
+export const adminGetRegisteredDate = (user) => user && user.createdAt ? moment(user.createdAt).format('Do MMM YYYY') : null;
+export const adminGetLastLoginDate = (user) => {
+  if (propExistsDeep(user, ['services', 'resume', 'loginTokens']) && user.services.resume.loginTokens.length)
+    return moment(user.services.resume.loginTokens.reduce((p, x) => !p || x.when && moment(x.when).isAfter(p) ? x.when : p)).fromNow();
+  else
+    return "Never";
+};

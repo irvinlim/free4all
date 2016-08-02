@@ -1,10 +1,10 @@
 import React from 'react';
 import Paper from 'material-ui/Paper';
 
-const PaperCard = ({ children, className }) => (
+const PaperCard = ({ children, className, ...rest }) => (
   <div className="flex-row">
     <div className="col col-xs-12 nopad">
-      <Paper className={"card " + (className ? className : "") }>
+      <Paper className={"card " + (className ? className : "") } {...rest}>
         { children }
       </Paper>
     </div>
@@ -12,7 +12,7 @@ const PaperCard = ({ children, className }) => (
 );
 
 PaperCard.propTypes = {
-  children: React.PropTypes.element.isRequired,
+  children: React.PropTypes.node.isRequired,
 };
 
 export default PaperCard;
