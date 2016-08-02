@@ -7,7 +7,10 @@ import { Giveaways } from '../../../api/giveaways/giveaways';
 
 const composer = (props, onData) => {
   if (Meteor.subscribe('giveaways-search', props).ready()) {
+    const now = new Date();
+    const nextWeek = moment(now).add(1, 'week').toDate();
 
+    const selector = {};
     const options = {};
 
     if (props.tab == "all-time" || props.sort == "highest-rated") {
@@ -39,10 +42,13 @@ const composer = (props, onData) => {
 
       switch (props.tab) {
         case "current":
-          options.sort = { startDateTime: -1 }; // Sort by newest first
+          selector.startDateTime = { $lte: nextWeek };  // Must be ongoing/starting in the next 7 days
+          selector.endDateTime = { $gt:  now };         // Must not be over
+          options.sort = { startDateTime: -1 };         // Sort by newest first
           break;
         case "past":
-          options.sort = { endDateTime: -1 };   // Sort by most recently ended first
+          selector.endDateTime = { $lt:  now };         // Must be over
+          options.sort = { endDateTime: -1 };           // Sort by most recently ended first
           break;
         default: // Searching
           if (props.searchQuery && props.sort == "most-relevant")
@@ -55,7 +61,7 @@ const composer = (props, onData) => {
       }
 
       onData(null, {
-        giveaways: Giveaways.find({}, options).fetch(),
+        giveaways: Giveaways.find(selector, options).fetch(),
         props: props,
       });
 
