@@ -40,6 +40,9 @@ label[for] { font-weight: inherit; }
   }
 }
 
+// Necessary to remove floating scrollbars!!!
+.dialog > div > div { overflow: hidden; }
+
 // Flexbox Grid
 .flex-row {
   padding: 15px 0;

@@ -343,7 +343,7 @@ render() {
       </FloatingActionButton>
 
       <Dialog
-        className="insertDialog"
+        className="dialog insertDialog"
         title="Add a new Giveaway"
         titleStyle={titleStyle}
         bodyStyle={dialogStyle}

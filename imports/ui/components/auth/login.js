@@ -85,6 +85,7 @@ export default class Login extends React.Component {
   render() {
     return (
       <Dialog
+        className="dialog login-dialog"
         open={ this.props.open }
         onRequestClose={ this.props.closeLogin }
         contentStyle={{ maxWidth: 550 }}

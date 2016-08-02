@@ -75,7 +75,7 @@ export default class SelectHomeDialog extends React.Component {
     return (
       <Dialog
         title="Welcome"
-        className="welcome-dialog"
+        className="dialog welcome-dialog"
         bodyClassName="welcome-dialog-body"
         contentClassName="welcome-dialog-container"
         titleStyle={customTitleStyle}
