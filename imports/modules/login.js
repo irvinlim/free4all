@@ -16,11 +16,17 @@ const login = (options) => {
 
       if (options.failedLogin)
         options.failedLogin();
+
+      if (options.finishedLogin)
+        options.finishedLogin();
     } else {
       Bert.alert('Logged in!', 'success');
 
       if (options.afterLogin)
         options.afterLogin();
+
+      if (options.finishedLogin)
+        options.finishedLogin();
     }
   });
 };
@@ -32,6 +38,9 @@ const facebookLogin = (options) => {
 
       if (options.failedLogin)
         options.failedLogin();
+
+      if (options.finishedLogin)
+        options.finishedLogin();
     } else {
       Bert.alert('Logged in!', 'success');
 
@@ -39,6 +48,9 @@ const facebookLogin = (options) => {
 
       if (options.afterLogin)
         options.afterLogin();
+
+      if (options.finishedLogin)
+        options.finishedLogin();
     }
   });
 };
@@ -50,6 +62,9 @@ const googleLogin = (options) => {
 
       if (options.failedLogin)
         options.failedLogin();
+
+      if (options.finishedLogin)
+        options.finishedLogin();
     } else {
       Bert.alert('Logged in!', 'success');
 
@@ -57,6 +72,9 @@ const googleLogin = (options) => {
 
       if (options.afterLogin)
         options.afterLogin();
+
+      if (options.finishedLogin)
+        options.finishedLogin();
     }
   });
 };
@@ -68,6 +86,9 @@ const ivleLogin = (options) => {
 
       if (options.failedLogin)
         options.failedLogin();
+
+      if (options.finishedLogin)
+        options.finishedLogin();
     } else {
       Bert.alert('Logged in!', 'success');
 
@@ -75,6 +96,9 @@ const ivleLogin = (options) => {
 
       if (options.afterLogin)
         options.afterLogin();
+
+      if (options.finishedLogin)
+        options.finishedLogin();
     }
   });
 };
@@ -145,6 +169,8 @@ const validate = (options) => {
  *    - (function) setError(ref, msg)   A method to set an error message for a particular TextField specified by ref.
  *   Optional options:
  *    - (function) afterLogin           Callback method after authentication success.
+ *    - (function) failedLogin          Callback method after authentication failed.
+ *    - (function) finishedLogin        Callback method regardless whether authentication succeeded or failed.
  */
 export const handleLogin = (options) => {
   validate(options);

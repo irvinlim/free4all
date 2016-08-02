@@ -5,6 +5,7 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
+import { Loading } from '../loading';
 
 import { joinCommunity, setHomeCommunity } from '../../../api/users/methods';
 import { handleLogin, handleFacebookLogin, handleGoogleLogin, handleIVLELogin } from '../../../modules/login';
@@ -37,6 +38,7 @@ export default class Login extends React.Component {
 
     this.state = {
       errors: {},
+      loadingLogin: false,
     };
   }
 
@@ -67,6 +69,9 @@ export default class Login extends React.Component {
             updateHomeCommunityFromSession();
             self.props.closeLogin();
           },
+          finishedLogin() {
+
+          },
         });
       });
   }
@@ -74,12 +79,21 @@ export default class Login extends React.Component {
   socialLoginHandler(handler) {
     const self = this;
 
-    return (event) => handler({
+    return (event) => {
+      $(event.target).closest(".container-fluid").addClass('container-loading');
+      self.setState({ loadingLogin: true });
+
+      handler({
         afterLogin() {
           updateHomeCommunityFromSession();
           self.props.closeLogin();
-        }
+        },
+        finishedLogin() {
+          $(event.target).closest(".container-fluid").removeClass('container-loading');
+          self.setState({ loadingLogin: false });
+        },
       });
+    };
   }
 
   render() {
@@ -164,6 +178,8 @@ export default class Login extends React.Component {
               </Col>
             </Row>
           </Grid>
+
+          <Loading containerClassName="floating-loading" containerStyle={{ display: this.state.loadingLogin ? 'flex' : 'none' }} />
         </form>
       </Dialog>
     );
