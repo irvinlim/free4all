@@ -4,6 +4,7 @@ import { GridList, GridTile } from 'material-ui/GridList';
 import Paper from 'material-ui/Paper';
 import ReactList from 'react-list';
 import { Card, CardActions, CardText, CardHeader, CardTitle } from 'material-ui/Card';
+import PaperCard from '../../layouts/paper-card';
 import Link, { LinkButton } from '../../layouts/link';
 import Chip from 'material-ui/Chip';
 import FlatButton from 'material-ui/FlatButton';
@@ -123,7 +124,7 @@ export class ManageUsersItems extends React.Component {
     const userCommunities = user.communityIds ? Communities.find({ _id: { $in: user.communityIds.filter(x => x !== user.profile.homeCommunityId) } }) : null;
 
     return (
-      <Card key={ key } style={{ marginBottom: 20 }} className="manage-users-item profile">
+      <PaperCard key={ key } className="manage-users-item profile">
         <CardHeader
           title={
             <h3 style={{ marginTop: 0 }}>
@@ -144,13 +145,13 @@ export class ManageUsersItems extends React.Component {
           avatar={ UsersHelper.getAvatar(user, 80) }
           />
 
-        <CardActions>
+        <CardActions style={{ marginBottom: 10 }}>
           <LinkButton label="View Profile" to={ `/profile/${user._id}` } />
           <LinkButton label="Edit Profile" to={ `/manage/users/${user._id}` } />
           <FlatButton label={ RolesHelper.isBanned(user._id) ? "Unban User" : "Ban User" } onTouchTap={ e => self.setState({ confirmBanDialogOpen: true, confirmUser: user }) } />
           <FlatButton label="Delete User" onTouchTap={ e => this.setState({ confirmDeleteDialogOpen: true, confirmUser: user }) } />
         </CardActions>
-      </Card>
+      </PaperCard>
     );
   }
 
@@ -162,7 +163,7 @@ export class ManageUsersItems extends React.Component {
         <ReactList
           itemRenderer={ this.renderItem.bind(this) }
           length={ users.length }
-          type='variable'
+          type='uniform'
         />
 
         <DialogUser
