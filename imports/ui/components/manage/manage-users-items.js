@@ -137,7 +137,7 @@ export class ManageUsersItems extends React.Component {
               <br/>
               <span className="user-communities-display">
                 { homeCommunity ? communityDisplay(homeCommunity, true) : null }
-                { userCommunities ? userCommunities.map(communityDisplay) : null }
+                { userCommunities ? userCommunities.map(comm => communityDisplay(comm, false)) : null }
               </span>
             </p>
           }
