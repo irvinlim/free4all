@@ -68,7 +68,7 @@ export default class MapInfoBox extends React.Component {
                 <FlatButton label="View Giveaway" />
               </Link>
 
-              { GiveawaysHelper.isCurrentUserOwner(ga) ?
+              { GiveawaysHelper.ownerOrModsOrAdmins(ga) ?
                 <Link className="button" to={ "/my-giveaways/" + gaId }>
                   <FlatButton label="Edit Giveaway" />
                 </Link> : null

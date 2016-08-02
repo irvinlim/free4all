@@ -114,7 +114,7 @@ export class GiveawaySingleCard extends React.Component {
             { userHasFlagged ? <HasFlagged /> : null }
 
             <div className="action-buttons" style={{ justifyContent: 'flex-end' }}>
-              { GiveawaysHelper.isCurrentUserOwner(ga) ?
+            { GiveawaysHelper.ownerOrModsOrAdmins(ga) ?
                 <Link className="button" to={ "/my-giveaways/" + ga._id }>
                   <FlatButton label="Edit" />
                 </Link> : null

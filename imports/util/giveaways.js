@@ -10,10 +10,12 @@ import { GiveawayComments } from '../api/giveaway-comments/giveaway-comments';
 import * as Colors from 'material-ui/styles/colors';
 import * as Helper from './helper';
 import * as IconsHelper from './icons';
+import * as RolesHelper from './roles';
 import * as AvatarHelper from './avatar';
 
 // Check owner
 export const isCurrentUserOwner = (ga) => ga && Meteor.userId() && Meteor.userId() === ga.userId;
+export const ownerOrModsOrAdmins = (ga) => ga && Meteor.userId() && RolesHelper.ownerOrModsOrAdmins(Meteor.userId(), ga.userId);
 
 // Category
 export const getCategory = (ga) => Categories.findOne(ga.categoryId);
