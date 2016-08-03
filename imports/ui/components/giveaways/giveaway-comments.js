@@ -2,6 +2,7 @@ import React from 'react';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import { Scrollbars } from 'react-custom-scrollbars';
+import Store from '../../../startup/client/redux-store';
 
 import * as GiveawaysHelper from '../../../util/giveaways';
 import * as UsersHelper from '../../../util/users';
@@ -94,7 +95,15 @@ const CommentRowEditing = (self, { _id, content, user, createdAt, updatedAt }, o
 
 const NoComments = () => (
   <p>
-    <em>No comments yet. { Meteor.user() ? "Add yours?" : "Login to comment!" }</em>
+    <em>
+      <span>No comments yet. </span>
+      { Meteor.user() ?
+        "Add yours?" :
+        <span>
+          <a href="javascript:void(0);" onTouchTap={ () => Store.dispatch({ type: 'OPEN_LOGIN_DIALOG', message: "Login to leave a comment!" }) }>Login</a> to comment!
+        </span>
+      }
+    </em>
   </p>
 );
 
