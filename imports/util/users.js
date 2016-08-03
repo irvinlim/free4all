@@ -96,13 +96,13 @@ export const getAvatarUrl = (user, size=64) => {
     return AvatarHelper.getUrl(user.profile.avatarId, size);
   // Using Facebook Graph
   else if (propExistsDeep(user, ['services', 'facebook', 'id']))
-    return `https://graph.facebook.com/${user.services.facebook.id}/picture/?width=${size}&height=${size}`;
+    return `https://graph.facebook.com/${user.services.facebook.id}/picture/?width=${size*2}&height=${size*2}`;
   // Using Google+ profile picture (provided on first login)
   else if (propExistsDeep(user, ['services', 'google', 'picture']))
     return user.services.google.picture;
   // Using Gravatar
   else if (user.emails && user.emails.length)
-    return Gravatar.imageUrl(user.emails[0].address, { size: size, default: 'mm', secure: true });
+    return Gravatar.imageUrl(user.emails[0].address, { size: size*2, default: 'mm', secure: true });
   else
     return null;
 };
