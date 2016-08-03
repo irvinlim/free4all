@@ -16,7 +16,7 @@
 
   h1 { margin-bottom: 20px; margin-top: -12px }
   h1, p { text-align: center; }
-  img.free4all-logo { width: 60%; max-width: 250px; }
+  img.free4all-logo { width: 60%; max-width: 150px; }
 
   .down-arrow {
     margin-top: 30px;
@@ -31,6 +31,6 @@
   }
 
   .welcome-head {
-    height: 100%; display: flex; flex-direction: column; padding: 30px 15px 50px; justify-content: space-around;
+    height: 100%; display: flex; flex-direction: column; padding: 30px 15px 0; justify-content: space-around;
   }
 }

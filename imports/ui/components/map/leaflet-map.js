@@ -66,15 +66,6 @@ export default class LeafletMap extends React.Component {
 
     Meteor.setTimeout(zoomend.trigger, 500);
     Meteor.setTimeout(dragend.trigger, 500);
-
-    if(!self.props.isDbClickDisabled){
-      this.mapObject.registerEventHandler('dblclick', function(event) {
-        self.props.addRGeoSpinner();
-        rgeocode(Meteor.settings.public.MapBox.accessToken, event.latlng, self.props.openInsertDialog,
-          self.props.rmvRGeoSpinner);
-      });
-    }
-
   }
 
   removeDraggable() {
