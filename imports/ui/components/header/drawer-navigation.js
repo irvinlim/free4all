@@ -28,7 +28,7 @@ export default class DrawerNavigation extends React.Component {
   render() {
     return (
       <Drawer docked={ false } width={ 250 } open={ this.props.isOpen } onRequestChange={ isOpen => this.props.setDrawerOpen(isOpen) }>
-        <DrawerMenuItems closeDrawer={ this.props.closeDrawer } openLogin={ this.props.openLogin } />
+        <DrawerMenuItems closeDrawer={ this.props.closeDrawer } />
 
         <div className="iubenda-button">
           <a href="//www.iubenda.com/privacy-policy/7885534" className="iubenda-white iubenda-embed" title="Privacy Policy">Privacy Policy</a>
@@ -41,4 +41,4 @@ export default class DrawerNavigation extends React.Component {
 DrawerNavigation.propTypes = {
   isOpen: React.PropTypes.bool.isRequired,
   closeDrawer: React.PropTypes.func,
-}
+};

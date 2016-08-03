@@ -19,6 +19,10 @@ export class DrawerMenuItems extends React.Component {
     super(props);
   }
 
+  openLogin() {
+    this.context.store.dispatch({ type: 'OPEN_LOGIN_DIALOG' });
+  }
+
   constructMenuItems() {
     this.menuItems = [];
 
@@ -52,7 +56,7 @@ export class DrawerMenuItems extends React.Component {
       this.menuItems.push({ title: "Log Out", onClick: getHandleLogout(), icon: IconsHelper.icon("exit_to_app") });
     } else {
       this.menuItems.push({ divider: true });
-      this.menuItems.push({ title: "Log In", onClick: this.props.openLogin.bind(this), icon: IconsHelper.icon("lock") });
+      this.menuItems.push({ title: "Log In", onClick: this.openLogin.bind(this), icon: IconsHelper.icon("lock") });
     }
   }
 
@@ -106,4 +110,8 @@ export class DrawerMenuItems extends React.Component {
 DrawerMenuItems.propTypes = {
   closeDrawer: React.PropTypes.func,
   hasUser: React.PropTypes.object,
-}
+};
+
+DrawerMenuItems.contextTypes = {
+  store: React.PropTypes.object
+};

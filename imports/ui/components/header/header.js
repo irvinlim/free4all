@@ -70,8 +70,7 @@ export default class Header extends React.Component {
         <DrawerNavigation
           isOpen={ this.state.drawerOpen }
           closeDrawer={ this.closeDrawer.bind(this) }
-          setDrawerOpen={ this.setDrawerOpen.bind(this) }
-          openLogin={ this.openLogin.bind(this) } />
+          setDrawerOpen={ this.setDrawerOpen.bind(this) } />
       </div>
     );
   }
