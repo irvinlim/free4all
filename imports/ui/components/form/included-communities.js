@@ -14,7 +14,7 @@ export default class IncludedCommunities extends React.Component {
   componentDidMount(){
     const self = this;
     let communities
-      , homeCommunity
+      , prefilledCommunity
       , homeCommunityId = this.props.user.profile.homeCommunityId
       , communityIds = this.props.user.communityIds
       , allCommunities = this.props.user.communityIds || []
@@ -32,17 +32,21 @@ export default class IncludedCommunities extends React.Component {
 
         if(homeCommunityId && !self.props.edit){
           homeComm = Communities.findOne(homeCommunityId);
-          homeCommunity = [{ value: homeComm._id, label: homeComm.name }];
+          prefilledCommunity = [{ value: homeComm._id, label: homeComm.name }];
         } else if (self.props.edit){
-          homeCommunity = self.props.edit;
+          const includedComms =
+            Communities
+            .find({ _id: {$in: self.props.edit}}, {sort:{createdAt: 1}}).fetch()
+            .map(community => ({ value: community._id, label: community.name }));
+          prefilledCommunity = includedComms;
         }
 
-      self.props.setOptVal(communities, homeCommunity )
+      self.props.setOptVal(communities, prefilledCommunity );
 
       })
     })
     // react-select default 'value' and 'option' value is undefined
-    this.props.setOptVal(communities, homeCommunity)
+    this.props.setOptVal(communities, prefilledCommunity)
   }
 
   componentWillUnmount(){
