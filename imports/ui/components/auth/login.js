@@ -6,6 +6,7 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import { Loading } from '../loading';
+import { Alert } from 'react-bootstrap';
 
 import { joinCommunity, setHomeCommunity } from '../../../api/users/methods';
 import { handleLogin, handleFacebookLogin, handleGoogleLogin, handleIVLELogin } from '../../../modules/login';
@@ -106,6 +107,18 @@ export default class Login extends React.Component {
         autoScrollBodyContent={true}>
         <form ref="login" className="login" onSubmit={ this.handleSubmit }>
           <Grid fluid={true}>
+
+            { this.props.message ?
+                <Row>
+                  <Col>
+                    <Alert className="login-dialog-message" bsStyle="warning">
+                      { this.props.message }
+                    </Alert>
+                  </Col>
+                </Row>
+              : null
+            }
+
             <Row>
               <Col>
                 <h3 style={{ textAlign: 'center' }}>Login to Free4All</h3>

@@ -6,4 +6,6 @@
     button { color: #fff !important; @include transition(opacity 0.3s ease); }
     button:hover { opacity: 0.9; }
   }
+
+  .login-dialog-message { font-size: 14px; text-align: center; margin-bottom: 10px; }
 }

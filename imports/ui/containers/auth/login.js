@@ -4,7 +4,8 @@ import Login from '../../components/auth/login';
 
 const mapStateToProps = (state) => {
   return {
-    open: state.loginDialogOpen
+    open: state.loginDialogOpen,
+    message: state.loginDialogMessage
   };
 };
 
