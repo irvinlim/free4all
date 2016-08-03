@@ -280,7 +280,7 @@ export class Index extends React.Component {
             locArr={this.state.locArr}
             locName={this.state.locName}
             locNameFlag={this.state.locNameFlag}
-            rmvlocNameFlag={ ()=>{this.setState({ locNameFlag: false })} }
+            rmvlocNameFlag={ ()=>{this.setState({ locName: null, locNameFlag: false })} }
             addDraggable={ ()=>{this.setState({ isDraggableAdded: true })} }
             stopDraggableAdded={ ()=>{this.setState({ isDraggableAdded: false })} }
             hideMarkers={ ()=>{this.setState({ showMarkers: false })} }

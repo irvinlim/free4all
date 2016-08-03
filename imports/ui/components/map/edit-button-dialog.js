@@ -395,9 +395,13 @@ export default class EditBtnDialog extends React.Component {
         isOpen: nextProps.isModalOpen,
         lat: nextProps.latLng.lat,
         lng: nextProps.latLng.lng,
-        location: nextProps.locName,
         dataSource: nextProps.locArr,
       })
+    }
+    // Used locNameFlag to pass prop from rgeocode once
+    if(nextProps.locNameFlag && nextProps.locName){
+      this.setState({location: nextProps.locName});
+      this.props.rmvlocNameFlag();
     }
   }
 

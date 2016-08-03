@@ -37,6 +37,7 @@ export class MyGiveaways extends React.Component {
       isModalOpen: false,
       latLngClicked: {lat:"",lng:""},
       locName: "",
+      locNameFlag: false,
       locArr: [],
       isDraggableAdded: false,
       showMarkers: true,
@@ -187,7 +188,7 @@ export class MyGiveaways extends React.Component {
   }
 
   openEditDialog(features, coords, removeDraggable) {
-    this.setState({ isModalOpen: true });
+    this.setState({ isModalOpen: true, locNameFlag: true });
     this.setState({ latLngClicked: coords });
     let featuresArr = features.map((loc)=> {
       loc.text = loc.place_name;
@@ -288,6 +289,8 @@ export class MyGiveaways extends React.Component {
           latLng={ this.state.latLngClicked }
           locArr={ this.state.locArr }
           locName={ this.state.locName }
+          locNameFlag={this.state.locNameFlag}
+          rmvlocNameFlag={ ()=>{this.setState({ locName: null, locNameFlag: false })} }
           addDraggable={ this.addDraggable.bind(this) }
           stopDraggableAdded={ this.noAddDraggable.bind(this) }
           hideMarkers={ this.hideMarkers.bind(this) }
