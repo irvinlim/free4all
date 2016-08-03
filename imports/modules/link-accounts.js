@@ -11,7 +11,7 @@ import { updateProfileFacebook, updateProfileGoogle, updateProfileIVLE } from '.
 const linkAccount = (service, servicePackage, request, handler) => {
   servicePackage.requestCredential(request, (token) => {
     const secret = OAuth._retrieveCredentialSecret(token);
-    return Meteor.call("users.addOauthCredentials", token, secret, service, function(err, resp) {
+    return Meteor.call("user.addOauthCredentials", token, secret, service, function(err, resp) {
       if (err != null) {
         Bert.alert(`Could not link ${capitalizeFirstLetter(service)}.`, 'warning');
         throw new Meteor.Error(err.error, err.reason);
