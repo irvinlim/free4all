@@ -40,10 +40,10 @@ export default class InsertBtnDialog extends React.Component {
       title:"",
       description:"",
       website:"",
-      startDate: null,
-      endDate: null,
-      startTime: null,
-      endTime: null,
+      startDate: undefined,
+      endDate: undefined,
+      startTime: undefined,
+      endTime: undefined,
       lat: "",
       lng: "",
       location:"",
@@ -194,7 +194,7 @@ export default class InsertBtnDialog extends React.Component {
       this.setState({endDate: date});
     };
     this.handleChangeStartTimePicker12 = (e, date) => {
-      this.setState({startTime: date, endTime: date});
+      this.setState({startTime: date});
     };
     this.handleChangeEndTimePicker12 = (e, date) => {
       this.setState({endTime: date});
@@ -241,11 +241,7 @@ export default class InsertBtnDialog extends React.Component {
 
     this.submitForm = () => {
       event.preventDefault();
-      props.closeModal();
-      props.stopDraggableAdded();
-      props.resetLoc();
-
-      let data = this.state;
+      const data = Object.assign({}, this.state);
       data.title = String(data.title);
       data.description = String(data.description);
       data.website = data.website ? sanitizeURL(data.website) : "";
@@ -262,21 +258,22 @@ export default class InsertBtnDialog extends React.Component {
         data.imgUrl = imgUrlPre.split('upload')[0]+ 'upload/' + 'h_300,c_scale' + imgUrlPre.split('upload')[1];
       }
 
-      let startHr= data.startTime.getHours();
-      let startMin= data.startTime.getMinutes();
-      let startDateTime = moment(data.startDate).set('hour', startHr).set('minute',startMin).toDate();
-      let endHr= data.endTime.getHours();
-      let endMin= data.endTime.getMinutes();
+      let startHr       = data.startTime.getHours()
+        , startMin      = data.startTime.getMinutes()
+        , endHr         = data.endTime.getHours()
+        , endMin        = data.endTime.getMinutes()
+        , startDateTime = moment(data.startDate).set('hour', startHr).set('minute',startMin).toDate()
+        , endDateTime   = moment(data.endDate).set('hour', endHr).set('minute',endMin).toDate();
 
       let availableStatus = StatusTypes.findOne({ relativeOrder: 0 });
 
       // check if no end date or earlier than start datetime
-      let endDateTime = null;
-      if (data.endDate === null){
-        endDateTime = startDateTime;
-      } else {
-        endDateTime = moment(data.endDate).set('hour', endHr).set('minute',endMin).toDate();
-        endDateTime = endDateTime > startDateTime ? endDateTime : startDateTime;
+      if(startDateTime > endDateTime){
+        Meteor.setTimeout(function(){
+          Bert.alert('Start time is later than End time', 'danger');
+        },1000);
+        this.setState({ startTime: undefined, startDate: undefined, endTime: undefined, endDate: undefined})
+        return;
       }
 
       const ga = {
@@ -299,6 +296,10 @@ export default class InsertBtnDialog extends React.Component {
         if (error) {
           Bert.alert(error.reason, 'Error adding Giveaway');
         } else {
+          props.closeModal();
+          props.stopDraggableAdded();
+          props.resetLoc();
+
           this.setState(this.initialState);
           Bert.alert('Giveaway Added!', 'success');
         }
