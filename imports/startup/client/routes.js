@@ -120,7 +120,6 @@ Meteor.startup(() => {
       <Router history={ history } onUpdate={ logPageView }>
         <Route path="/" component={ App }>
           <IndexRoute component={ Index } />
-          <Route name="login" path="login" component={ Index } onEnter={ authRedirect } />
 
           <Route name="recover-password" path="recover-password" component={ RecoverPassword } onEnter={ authRedirect } />
           <Route name="reset-password" path="reset-password/:token" component={ ResetPassword } onEnter={ authRedirect } />

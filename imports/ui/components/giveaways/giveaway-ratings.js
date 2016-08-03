@@ -12,7 +12,7 @@ let store;
 const makeVoteClickHandler = (isUpvote, voted, gaId) => {
   return event => {
     if (!Meteor.userId())
-      store.dispatch({ type: 'OPEN_LOGIN_DIALOG', message: "Login to vote on a giveaway!" });
+      return store.dispatch({ type: 'OPEN_LOGIN_DIALOG', message: "Login to vote on a giveaway!" });
 
     let method = voted ? unvote : isUpvote ? voteUp : voteDown;
     method.call({ userId: Meteor.userId(), giveawayId: gaId });

@@ -51,9 +51,13 @@ export class Signup extends React.Component {
             </FormGroup>
             <Button type="submit" bsStyle="success">Sign Up</Button>
           </form>
-          <p>Already have an account? <Link to="/login">Log In</Link>.</p>
+          <p>Already have an account? <a href="javascript:void(0);" onTouchTap={ () => this.context.store.dispatch({ type: 'OPEN_LOGIN_DIALOG' }) }>Log In</a>.</p>
         </Col>
       </Row>
     </Grid>;
   }
 }
+
+Signup.contextTypes = {
+  store: React.PropTypes.object
+};

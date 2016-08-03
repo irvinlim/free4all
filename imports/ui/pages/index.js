@@ -128,7 +128,7 @@ export class Index extends React.Component {
         homeLocation: homeLoc.coordinates,
         mapZoom: homeLoc.zoom
       });
-    } else if (this.props.location.pathname !== "/login") {
+    } else {
       // Open dialog only if login dialog is not to be opened
       self.setState({ isHomeLocOpen: true });
     }
