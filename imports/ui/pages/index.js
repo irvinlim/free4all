@@ -37,6 +37,7 @@ export class Index extends React.Component {
       isModalOpen: false,
       latLngClicked: {lat:"",lng:""},
       locName: "",
+      locNameFlag: false,
       locArr: [],
       isDraggableAdded: false,
       showMarkers: true,
@@ -153,7 +154,7 @@ export class Index extends React.Component {
   }
 
   openInsertDialog(features, coords, removeDraggable) {
-    this.setState({ isModalOpen: true });
+    this.setState({ isModalOpen: true, locNameFlag: true });
     this.setState({ latLngClicked: coords });
     let featuresArr = features.map((loc)=> {
       loc.text = loc.place_name;
@@ -278,6 +279,8 @@ export class Index extends React.Component {
             latLng={this.state.latLngClicked}
             locArr={this.state.locArr}
             locName={this.state.locName}
+            locNameFlag={this.state.locNameFlag}
+            rmvlocNameFlag={ ()=>{this.setState({ locNameFlag: false })} }
             addDraggable={ ()=>{this.setState({ isDraggableAdded: true })} }
             stopDraggableAdded={ ()=>{this.setState({ isDraggableAdded: false })} }
             hideMarkers={ ()=>{this.setState({ showMarkers: false })} }
