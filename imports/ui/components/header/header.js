@@ -6,14 +6,13 @@ import AppBar from 'material-ui/AppBar';
 import HeaderProfile from '../../containers/header/header-profile';
 import HeaderNotifications from '../../containers/header/header-notifications';
 import DrawerNavigation from './drawer-navigation';
-import Login from '../auth/login';
+import Login from '../../containers/auth/login';
 
 export default class Header extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       drawerOpen: false,
-      loginOpen: false,
     };
   }
 
@@ -43,11 +42,11 @@ export default class Header extends React.Component {
   }
 
   openLogin(event) {
-    this.setState({ loginOpen: true });
+    this.context.store.dispatch({ type: 'OPEN_LOGIN_DIALOG' });
   }
 
   closeLogin(event) {
-    this.setState({ loginOpen: false });
+    this.context.store.dispatch({ type: 'CLOSE_LOGIN_DIALOG' });
   }
 
   appBarRight() {
@@ -55,7 +54,7 @@ export default class Header extends React.Component {
       <div id="header-right-buttons" style={{ position:'absolute', top:8, right:8 }}>
         <HeaderProfile openLogin={ this.openLogin.bind(this) } />
         <HeaderNotifications />
-        <Login open={ this.state.loginOpen } closeLogin={ this.closeLogin.bind(this) } />
+        <Login />
       </div>
     );
   }
@@ -77,3 +76,7 @@ export default class Header extends React.Component {
     );
   }
 }
+
+Header.contextTypes = {
+  store: React.PropTypes.object
+};

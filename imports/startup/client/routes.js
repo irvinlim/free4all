@@ -1,15 +1,23 @@
 import React from 'react';
-import { render } from 'react-dom';
-import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import { Meteor } from 'meteor/meteor';
-import { App } from '../../ui/layouts/app';
+import { render } from 'react-dom';
 
-import { Index } from '../../ui/pages/index';
-import { NotFound } from '../../ui/pages/not-found';
-import { Bert } from 'meteor/themeteorchef:bert';
+import { Router, Route, IndexRoute, browserHistory } from 'react-router';
+import { Provider } from 'react-redux';
+import { syncHistoryWithStore } from 'react-router-redux';
+import Store from './redux-store';
 
+// Functions
 import { logPageView } from '../../util/analytics';
 import * as RolesHelper from '../../util/roles';
+import { Bert } from 'meteor/themeteorchef:bert';
+
+// Layout
+import { App } from '../../ui/layouts/app';
+
+// Default pages
+import { Index } from '../../ui/pages/index';
+import { NotFound } from '../../ui/pages/not-found';
 
 // Auth
 import { RecoverPassword } from '../../ui/pages/recover-password';
@@ -103,39 +111,44 @@ const authRedirect = (nextState, replace) => {
   }
 };
 
+// Create an enhanced history that syncs navigation events with the store
+const history = syncHistoryWithStore(browserHistory, Store)
+
 Meteor.startup(() => {
   render(
-    <Router history={ browserHistory } onUpdate={ logPageView }>
-      <Route path="/" component={ App }>
-        <IndexRoute component={ Index } />
-        <Route name="login" path="login" component={ Index } onEnter={ authRedirect } />
+    <Provider store={ Store }>
+      <Router history={ history } onUpdate={ logPageView }>
+        <Route path="/" component={ App }>
+          <IndexRoute component={ Index } />
+          <Route name="login" path="login" component={ Index } onEnter={ authRedirect } />
 
-        <Route name="recover-password" path="recover-password" component={ RecoverPassword } onEnter={ authRedirect } />
-        <Route name="reset-password" path="reset-password/:token" component={ ResetPassword } onEnter={ authRedirect } />
-        <Route name="signup" path="signup" component={ Signup } onEnter={ authRedirect } />
+          <Route name="recover-password" path="recover-password" component={ RecoverPassword } onEnter={ authRedirect } />
+          <Route name="reset-password" path="reset-password/:token" component={ ResetPassword } onEnter={ authRedirect } />
+          <Route name="signup" path="signup" component={ Signup } onEnter={ authRedirect } />
 
-        <Route name="timeline" path="timeline(/:tab)" component={ Timeline } />
-        <Route name="giveaway" path="giveaway/:id" component={ Giveaway } />
-        <Route name="my-giveaways" path="my-giveaways" component={ MyGiveaways } onEnter={ requireAuth } />
-        <Route name="edit-giveaway" path="my-giveaways/:id" component={ MyGiveaways } onEnter={ requireAuth } />
+          <Route name="timeline" path="timeline(/:tab)" component={ Timeline } />
+          <Route name="giveaway" path="giveaway/:id" component={ Giveaway } />
+          <Route name="my-giveaways" path="my-giveaways" component={ MyGiveaways } onEnter={ requireAuth } />
+          <Route name="edit-giveaway" path="my-giveaways/:id" component={ MyGiveaways } onEnter={ requireAuth } />
 
-        <Route name="communities" path="communities" component={ Communities } />
-        <Route name="community" path="community/:id" component={ Community } />
-        <Route name="my-communities" path="my-communities" component={ MyCommunities } onEnter={ requireAuth } />
+          <Route name="communities" path="communities" component={ Communities } />
+          <Route name="community" path="community/:id" component={ Community } />
+          <Route name="my-communities" path="my-communities" component={ MyCommunities } onEnter={ requireAuth } />
 
-        <Route name="manage" path="manage" onEnter={ requireModsAdmins }>
-          <Route name="categories" path="categories" component={ ManageCategories } />
-          <Route name="parent-categories" path="parent-categories" component={ ManageParentCategories } />
-          <Route name="status-types" path="status-types" component={ ManageStatusTypes } />
-          <Route name="users" path="users" component={ ManageUsers } onEnter={ requireAdmins } />
-        </Route>
+          <Route name="manage" path="manage" onEnter={ requireModsAdmins }>
+            <Route name="categories" path="categories" component={ ManageCategories } />
+            <Route name="parent-categories" path="parent-categories" component={ ManageParentCategories } />
+            <Route name="status-types" path="status-types" component={ ManageStatusTypes } />
+            <Route name="users" path="users" component={ ManageUsers } onEnter={ requireAdmins } />
+          </Route>
 
-        <Route name="profile" path="profile(/:userId)" component={ Profile } />
-        <Route name="settings" path="settings" component={ Settings } onEnter={ requireAuth } />
+          <Route name="profile" path="profile(/:userId)" component={ Profile } />
+          <Route name="settings" path="settings" component={ Settings } onEnter={ requireAuth } />
 
-        <Route path="*" component={ NotFound } />
-        </Route>
-    </Router>,
+          <Route path="*" component={ NotFound } />
+          </Route>
+      </Router>
+    </Provider>,
     document.getElementById('react-root')
   );
 });

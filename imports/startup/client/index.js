@@ -16,7 +16,6 @@ import './reactga-config.js';
 
 import './subscriptions.js';
 import './routes.js';
-import './redux-store.js';
 
 // Bert Notifications
 Bert.defaults = {
