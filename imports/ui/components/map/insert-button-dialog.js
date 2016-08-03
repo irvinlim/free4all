@@ -1,4 +1,6 @@
+import { Meteor } from 'meteor/meteor';
 import React from 'react';
+import Store from '../../../startup/client/redux-store';
 import Paper from 'material-ui/Paper';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
@@ -136,6 +138,10 @@ export default class InsertBtnDialog extends React.Component {
     };
 
     this.handleOpen = () => {
+      // If not logged in, open login dialog instead
+      if (!Meteor.user())
+        return Store.dispatch({ type: 'OPEN_LOGIN_DIALOG', message: "Login to contribute a giveaway!" });
+
       props.openModal();
 
       let dateOnLoad = new Date();

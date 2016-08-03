@@ -271,7 +271,6 @@ export class Index extends React.Component {
             goToHomeLoc = { this.goToHomeLoc.bind(this) }
             homeLocation = { this.state.homeLocation } />
 
-          { this.state.user ?
           <InsertBtnDialog
             isModalOpen={this.state.isModalOpen}
             openModal={ ()=>{this.setState({ isModalOpen: true })} }
@@ -288,16 +287,6 @@ export class Index extends React.Component {
             mapCenter={ this.state.mapCenter }
             user={ this.state.user }
             zoom={ this.state.mapZoom } />
-          :
-          <div>
-            <IconButton
-              tooltip="Login to add giveaways"
-              style={{ zIndex: 1, position: "absolute" }} />
-            <FloatingActionButton disabled={true} >
-              { IconsHelper.materialIcon("add", {color:"black"}) }
-            </FloatingActionButton>
-          </div>
-          }
         </div>
       </div>
     );
