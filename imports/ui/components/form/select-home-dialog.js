@@ -19,7 +19,12 @@ const customTitleStyle = {
   textAlign: "center",
   letterSpacing: "2px",
   fontSize: "20px",
-}
+};
+
+const handleClickDown = (event) => {
+  const offset = $(".down-arrow").offset().top + $(".welcome-dialog-body").scrollTop();
+  $(".welcome-dialog-body").animate({ scrollTop: offset - 70 });
+};
 
 export default class SelectHomeDialog extends React.Component {
 
@@ -48,7 +53,7 @@ export default class SelectHomeDialog extends React.Component {
         { sort: { createdAt: 1 } }
       ).fetch();
       self.setState({ featured: communities });
-    })
+    });
   }
 
   componentWillReceiveProps(nextProps){
@@ -71,7 +76,6 @@ export default class SelectHomeDialog extends React.Component {
   }
 
   render() {
-
     return (
       <Dialog
         title="Welcome"
@@ -84,15 +88,19 @@ export default class SelectHomeDialog extends React.Component {
         open={this.state.open}
         onRequestClose={this.handleClose.bind(this)}>
 
+        <div className="welcome-head">
+          <p>{ ImagesHelper.makeScale(Meteor.settings.public.logoImageId, 250, "free4all-logo") }</p>
+          <h1>Welcome to Free4All!</h1>
+          <p className="down-arrow" onTouchTap={ handleClickDown }>{ IconsHelper.icon("arrow_downward") }</p>
+        </div>
+
         <div className="container" style={{ width: "100%" }}>
           <div className="flex-row welcome-text" style={{ paddingBottom: 0 }}>
             <div className="col col-xs-12" >
-              <p>{ ImagesHelper.makeScale(Meteor.settings.public.logoImageId, 250, "free4all-logo") }</p>
-              <h1>Welcome to Free4All!</h1>
-              <p>Find the best freebie giveaways on campus!</p>
-              <p style={{fontSize: "12px"}}>Be it free buffet lunches, goodie bags, ice cream, or more.</p>
+              <h3 style={{ textAlign: 'center', marginBottom: 30 }}>Find the best freebie giveaways on campus!</h3>
+              <p>Be it free buffet lunches, goodie bags, ice cream, or more.</p>
               <p>Help friends save money by sharing free food with them.</p>
-              <p style={{fontSize: "12px"}}>Tackle food waste by helping events to clear unfinished food!</p>
+              <p>Tackle food waste by helping events to clear unfinished food!</p>
               <p>Save giveaway items that would be otherwise thrown away!</p>
               <h3 style={{paddingTop: "18px", textAlign: "center",}}>
                 To begin, select your university below:

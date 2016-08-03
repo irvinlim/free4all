@@ -1,5 +1,12 @@
 @import "../common/_mixins";
 
+@include keyframes(arrowBob) {
+  0% { opacity: 0; top: -20px; }
+  33% { opacity: 1; top: 0; }
+  66% { opacity: 1; top: 0; }
+  100% { opacity: 0; top: 20px; }
+}
+
 .welcome-dialog {
   @include media-xs-only {
     .welcome-dialog-container { width: calc(100% - 20px) !important; }
@@ -9,11 +16,21 @@
 
   h1 { margin-bottom: 20px; margin-top: -12px }
   h1, p { text-align: center; }
-  img.free4all-logo { width: 100%; max-width: 250px; }
+  img.free4all-logo { width: 60%; max-width: 250px; }
+
+  .down-arrow {
+    margin-top: 30px;
+    @include media-sm-up { display: none; }
+    span.material-icons { color: #4f557b !important; font-size: 32px !important; @include animation(arrowBob 2s ease-in-out infinite); }
+  }
 
   .featured-communities {
     width: 100%; max-width: 800px;
     span { display: block; }
     span img { width: 100%; }
+  }
+
+  .welcome-head {
+    height: 100%; display: flex; flex-direction: column; padding: 30px 15px 50px; justify-content: space-around;
   }
 }
