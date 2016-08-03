@@ -424,7 +424,6 @@ export default class EditBtnDialog extends React.Component {
       <FlatButton
         label="Delete"
         secondary={true}
-        disabled={!this.state.canSubmit}
         onTouchTap={ event => this.setState({ removeGiveawayPromptOpen: true }) }
         autoScrollBodyContent={true} />,
     ];
