@@ -593,6 +593,8 @@ render() {
                   >
                   <input
                   type="file"
+                  accept="image/*"
+                  capture="camera"
                   style={{
                     cursor: 'pointer',
                     position: 'absolute',

@@ -671,6 +671,8 @@ export default class EditBtnDialog extends React.Component {
                     >
                     <input
                     type="file"
+                    accept="image/*"
+                    capture="camera"
                     style={{
                       cursor: 'pointer',
                       position: 'absolute',
