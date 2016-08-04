@@ -31,6 +31,15 @@ Meteor.publish('giveaways-on-screen', function(date, mapBounds) {
   check(date, Date);
   check(mapBounds, Array);
 
+  let commIds;
+
+  // Get user communities
+  if (this.userId) {
+    commIds = Meteor.users.findOne(this.userId).communityIds;
+  } else {
+    commIds = [ Session.get('homeLocation').commId ];
+  }
+
   const nextWeek = moment(date).add(1, 'week').toDate();
   const findParams = {
     coordinates : {
@@ -39,6 +48,7 @@ Meteor.publish('giveaways-on-screen', function(date, mapBounds) {
     startDateTime:  { $lte: nextWeek, },    // Must be ongoing/starting in the next 7 days
     endDateTime:    { $gt:  date, },        // Must not be over
     isRemoved:      { $ne:  true },         // Must not be deleted (local deletion)
+    inclCommIds:    { $elemMatch: { $in: commIds } }  // Must be in user's communities
   };
 
   return Giveaways.find(findParams);
@@ -74,13 +84,13 @@ Meteor.publish('users-giveaways-within-date', function(startDateRange, endDateRa
   const findParams = {
     startDateTime:  { $gte: startDateRange },
     endDateTime:    { $lt:  endDateRange },
-    inclCommIds:    { $in: commIdArr },
+    inclCommIds:    { $in:  commIdArr },
     isRemoved:      { $ne:  true },  // Must not be deleted (local deletion)
   };
 
   if(isAllGa)
     return Giveaways.find({
-      inclCommIds:  { $in: commIdArr},
+      inclCommIds:  { $in:  commIdArr },
       isRemoved:    { $ne:  true }
     })
   else
@@ -94,8 +104,18 @@ Meteor.publish('giveaways-search', function(props) {
   const now = new Date();
   const nextWeek = moment(now).add(1, 'week').toDate();
 
+  let commIds;
+
+  // Get user communities
+  if (this.userId) {
+    commIds = Meteor.users.findOne(this.userId).communityIds;
+  } else {
+    commIds = [ Session.get('homeLocation').commId ];
+  }
+
   const selector = {
     isRemoved: { $ne:  true },  // Must not be deleted (local deletion)
+    inclCommIds:    { $elemMatch: { $in: commIds } }  // Must be in user's communities
   };
 
   const options = {
