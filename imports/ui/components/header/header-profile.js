@@ -2,6 +2,7 @@ import React from 'react';
 import { browserHistory } from 'react-router';
 import IconButton from 'material-ui/IconButton';
 import Popover from 'material-ui/Popover';
+import Divider from 'material-ui/Divider';
 import { List, ListItem } from 'material-ui/List';
 import * as Colors from 'material-ui/styles/colors';
 
@@ -65,11 +66,12 @@ export class HeaderProfile extends React.Component {
           targetOrigin={{"horizontal":"right","vertical":"top"}}
           style={{ padding: '4px 0' }}>
           <List id="header-profile-popover">
-            <ListItem primaryText="My Giveaways" onTouchTap={ gotourl('/my-giveaways') } />
-            <ListItem primaryText="My Communities" onTouchTap={ gotourl('/my-communities') } />
-            <ListItem primaryText="Profile" onTouchTap={ gotourl('/profile') } />
-            <ListItem primaryText="Settings" onTouchTap={ gotourl('/settings') } />
-            <ListItem primaryText="Log Out" onTouchTap={ getHandleLogout() } />
+            <ListItem leftIcon={ IconsHelper.icon("person") } primaryText="Profile" innerDivStyle={{ fontSize: 13 }} onTouchTap={ gotourl('/profile') } />
+            <ListItem leftIcon={ IconsHelper.icon("folder_shared") } primaryText="My Giveaways" innerDivStyle={{ fontSize: 13 }} onTouchTap={ gotourl('/my-giveaways') } />
+            <ListItem leftIcon={ IconsHelper.icon("group") } primaryText="My Communities" innerDivStyle={{ fontSize: 13 }} onTouchTap={ gotourl('/my-communities') } />
+            <ListItem leftIcon={ IconsHelper.icon("settings") } primaryText="Settings" innerDivStyle={{ fontSize: 13 }} onTouchTap={ gotourl('/settings') } />
+            <Divider />
+            <ListItem leftIcon={ IconsHelper.icon("exit_to_app") } primaryText="Log Out" innerDivStyle={{ fontSize: 13 }} onTouchTap={ getHandleLogout() } />
           </List>
         </Popover>
       </div>
