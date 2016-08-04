@@ -247,15 +247,17 @@ export default class InsertBtnDialog extends React.Component {
 
     this.submitForm = () => {
       event.preventDefault();
+      this.setState({ canSubmit: false })
       const data = Object.assign({}, this.state);
+      const userId = Meteor.userId();
       data.title = String(data.title);
       data.description = String(data.description);
       data.website = data.website ? sanitizeURL(data.website) : "";
       data.location = String(data.location);
       data.lng = parseFloat(data.lng);
       data.lat = parseFloat(data.lat);
-      data.userId = props.user._id;
-      data.removeUserId = props.user._id;
+      data.userId = String(userId);
+      data.removeUserId = String(userId);
       data.inclCommIds = data.commIdsVal.map(comm => comm.value);
 
       if (data.tile){
@@ -301,6 +303,7 @@ export default class InsertBtnDialog extends React.Component {
       const gaId = insertGiveaway.call(ga, (error)=>{
         if (error) {
           Bert.alert(error.reason, 'Error adding Giveaway');
+          this.setState({ canSubmit: true });
         } else {
           props.closeModal();
           props.stopDraggableAdded();
@@ -571,7 +574,6 @@ render() {
                 </Col>
                 <Col xs={12} >
                   <IncludedCommunities
-                    user={ this.props.user }
                     value={ this.state.commIdsVal }
                     options={ this.state.commIdsOpt }
                     setOptVal= { (opt,val) => { this.setState({ commIdsOpt:opt, commIdsVal:val })}}
@@ -594,7 +596,6 @@ render() {
                   <input
                   type="file"
                   accept="image/*"
-                  capture="camera"
                   style={{
                     cursor: 'pointer',
                     position: 'absolute',

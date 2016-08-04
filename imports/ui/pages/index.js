@@ -45,7 +45,6 @@ export class Index extends React.Component {
       isHomeLocOpen: false,
       homeLocation: null,
       homeZoom: null,
-      user: null,
     };
 
     this.mapBounds = new ReactiveVar( null );
@@ -107,7 +106,6 @@ export class Index extends React.Component {
         // homeLocation session is for initial map center
         Session.setPersistent('homeLocation', { coordinates: homeLocation, zoom: homeZoom, commId: commId});
       }
-      self.setState({ user });
     });
 
     // Autorun home location session variable
@@ -285,7 +283,6 @@ export class Index extends React.Component {
             hideMarkers={ ()=>{this.setState({ showMarkers: false })} }
             resetLoc={ this.resetLoc.bind(this) }
             mapCenter={ this.state.mapCenter }
-            user={ this.state.user }
             zoom={ this.state.mapZoom } />
         </div>
       </div>

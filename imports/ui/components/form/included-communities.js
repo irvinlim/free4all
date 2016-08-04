@@ -15,9 +15,10 @@ export default class IncludedCommunities extends React.Component {
     const self = this;
     let communities
       , prefilledCommunity
-      , homeCommunityId = this.props.user.profile.homeCommunityId
-      , communityIds = this.props.user.communityIds
-      , allCommunities = this.props.user.communityIds || []
+      , user = Meteor.user()
+      , homeCommunityId = user.profile.homeCommunityId
+      , communityIds = user.communityIds
+      , allCommunities = user.communityIds || []
 
     if(communityIds && communityIds.indexOf(homeCommunityId) == -1)
       allCommunities = communityIds.concat([homeCommunityId]);
