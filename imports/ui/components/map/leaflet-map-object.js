@@ -45,7 +45,6 @@ export default class LeafletMapObject {
     }).addTo(this.map);
 
     this.map.addLayer(this.markerClusterGroup);
-    this.map.doubleClickZoom.disable();
     this.map.keyboard.disable();
   }
 
