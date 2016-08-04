@@ -6,7 +6,16 @@ import { Loading } from '../../components/loading';
 import { Giveaways } from '../../../api/giveaways/giveaways';
 
 const composer = (props, onData) => {
-  if (Meteor.subscribe('giveaways-search', props).ready()) {
+  let commIds = [];
+
+  // Pass user communities to publication function
+  if (Meteor.user()) {
+    commIds = Meteor.user().communityIds;
+  } else if (Session.get('homeLocation')) {
+    commIds = [ Session.get('homeLocation').commId ];
+  }
+
+  if (Meteor.subscribe('giveaways-search', { commIds, ...props }).ready()) {
     const now = new Date();
     const nextWeek = moment(now).add(1, 'week').toDate();
 

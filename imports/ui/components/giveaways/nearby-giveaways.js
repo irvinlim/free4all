@@ -25,8 +25,10 @@ const giveawayRow = (touchTapHandler) => (ga) => (
 export const NearbyGiveaways = (props) => (
   <List>
     <Subheader>
-      <h3 style={{ margin:"20px 0px 10px" }}>Nearby Giveaways</h3>
+      <h3 style={{ margin:"20px 0px 10px" }}>Available Giveaways</h3>
+      <h5 style={{ margin: "10px 0 20px", color: "#6d6d6d" }}>Only ongoing giveaways and giveaways up to 1 week in the future are displayed.</h5>
     </Subheader>
+    <Divider />
     { props.giveaways ? Helper.insertDividers(props.giveaways.map(giveawayRow(props.nearbyOnClick))) : <div /> }
   </List>
 );

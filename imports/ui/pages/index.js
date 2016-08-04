@@ -82,7 +82,16 @@ export class Index extends React.Component {
 
       // Re-subscribe every minute or if map center changed
       if (reactiveDateTime && reactiveMapBounds) {
-        self.subscription = Meteor.subscribe('giveaways-on-screen', reactiveDateTime, LatLngHelper.mongoBounds(reactiveMapBounds));
+
+        let commIds = [];
+
+        // Pass user communities to publication function
+        if (Meteor.user())
+          commIds = Meteor.user().communityIds;
+        else if (Session.get('homeLocation'))
+          commIds = [ Session.get('homeLocation').commId ];
+
+        self.subscription = Meteor.subscribe('giveaways-search', { tab: 'current', commIds });
       }
     });
 

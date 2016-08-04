@@ -31,15 +31,6 @@ Meteor.publish('giveaways-on-screen', function(date, mapBounds) {
   check(date, Date);
   check(mapBounds, Array);
 
-  let commIds;
-
-  // Get user communities
-  if (this.userId) {
-    commIds = Meteor.users.findOne(this.userId).communityIds;
-  } else {
-    commIds = [ Session.get('homeLocation').commId ];
-  }
-
   const nextWeek = moment(date).add(1, 'week').toDate();
   const findParams = {
     coordinates : {
@@ -100,21 +91,17 @@ Meteor.publish('users-giveaways-within-date', function(startDateRange, endDateRa
 Meteor.publish('giveaways-search', function(props) {
   check(props, Object);
 
-  const { tab, offset, perPage, searchQuery, categoryId } = props;
+  const { tab, searchQuery, categoryId } = props;
   const now = new Date();
   const nextWeek = moment(now).add(1, 'week').toDate();
 
-  let commIds;
+  let commIds = [];
 
-  // Get user communities
-  if (this.userId) {
-    commIds = Meteor.users.findOne(this.userId).communityIds;
-  } else {
-    commIds = [ Session.get('homeLocation').commId ];
-  }
+  if (props.commIds)
+    commIds = props.commIds;
 
   const selector = {
-    isRemoved: { $ne:  true },  // Must not be deleted (local deletion)
+    isRemoved:      { $ne:  true },  // Must not be deleted (local deletion)
     inclCommIds:    { $elemMatch: { $in: commIds } }  // Must be in user's communities
   };
 
