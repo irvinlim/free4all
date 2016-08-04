@@ -64,8 +64,9 @@ export class Timeline extends React.Component {
   }
 
   updateStateFromParams() {
-    if (this.state.tab !== this.props.params.tab)
-      this.setState({ tab: this.props.params.tab });
+    if (this.props.params.tab)
+      if (this.state.tab !== this.props.params.tab)
+        this.setState({ tab: this.props.params.tab });
   }
 
   componentWillMount() {
