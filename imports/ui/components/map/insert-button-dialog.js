@@ -468,11 +468,11 @@ render() {
               </Row>
 
               <Row style={{ paddingTop: 21 }}>
-                <Col xs={12} sm={6} md={8}>
+                <Col xs={12} md={8}>
                   <h2>Where</h2>
                 </Col>
 
-                <Col xs={12} sm={6} md={4} style={{ paddingTop: 21 }}>
+                <Col xs={12} md={4} style={{ paddingTop: 21 }}>
                   <RaisedButton
                     className="formBtn"
                     style={{minHeight:"41px"}}
