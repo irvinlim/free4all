@@ -47,6 +47,9 @@ export const getLastOwnerStatusType = (ga) => {
 }
 
 export const getStatusColor = (ga) => {
+  if (!is_ongoing(ga))
+    return "#89849b";
+
   const lastOwnerStatusType = getLastOwnerStatusType(ga);
   if (!lastOwnerStatusType) return null;
   return Helper.sanitizeHexColour(lastOwnerStatusType.hexColour);
