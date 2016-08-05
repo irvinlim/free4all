@@ -64,7 +64,7 @@ export default class InsertBtnDialog extends React.Component {
 
     this.handleAddLocation = () => {
       props.closeModal();
-      props.addDraggable();
+      props.addRGeoTriggerMarker();
       props.hideMarkers();
     }
 
@@ -143,6 +143,7 @@ export default class InsertBtnDialog extends React.Component {
         return Store.dispatch({ type: 'OPEN_LOGIN_DIALOG', message: "Login to contribute a giveaway!" });
 
       props.openModal();
+      props.closeMapBoxes();
 
       let dateOnLoad = new Date();
       dateOnLoad.setMinutes(0,0,0);
@@ -306,7 +307,6 @@ export default class InsertBtnDialog extends React.Component {
           this.setState({ canSubmit: true });
         } else {
           props.closeModal();
-          props.stopDraggableAdded();
           props.resetLoc();
 
           this.setState(this.initialState);

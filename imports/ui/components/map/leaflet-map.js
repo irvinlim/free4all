@@ -11,8 +11,7 @@ export default class LeafletMap extends React.Component {
     super(props);
 
     this.mapObject = null;
-
-    this.draggableMarker = null;
+    this.hiddenMarker = null;
   }
 
   componentDidMount() {
@@ -51,64 +50,60 @@ export default class LeafletMap extends React.Component {
 
   registerEventHandlers() {
     const self = this;
-    const zoomend = this.mapObject.registerEventHandler('zoomend', function(event) {
-      self.props.setMapCenter(this.getCenter());
-      self.props.setMapZoom(this.getZoom());
-      self.props.setMapMaxZoom(this.getMaxZoom());
-      self.props.setBounds(this.getBounds());
+    const zoomDragEnd = this.mapObject.registerEventHandler('zoomend dragend', function(event) {
+      const map = self.mapObject.map;
+      const center = map.getCenter();
+      self.props.setMapCenter(center);
+      self.props.setMapZoom(map.getZoom());
+      self.props.setMapMaxZoom(map.getMaxZoom());
+      self.props.setBounds(map.getBounds());
+      if(self.hiddenMarker)
+        self.hiddenMarker.setLatLng(center);
     });
-    const dragend = this.mapObject.registerEventHandler('dragend', function(event) {
-      self.props.setMapCenter(this.getCenter());
-      self.props.setMapZoom(this.getZoom());
-      self.props.setMapMaxZoom(this.getMaxZoom());
-      self.props.setBounds(this.getBounds());
-    });
-
-    Meteor.setTimeout(zoomend.trigger, 500);
-    Meteor.setTimeout(dragend.trigger, 500);
+    Meteor.setTimeout(zoomDragEnd.trigger, 500);
   }
 
-  removeDraggable() {
-    this.mapObject.map.removeLayer(this.draggableMarker);
-    this.draggableMarker = null;
+  removeHiddenMarker() {
+    this.mapObject.map.removeLayer(this.hiddenMarker);
+    this.hiddenMarker = null;
   }
 
   componentWillReceiveProps(nextProps) {
     const self = this;
+    const mapInstance = this.mapObject.map;
 
     // Add reverse geocode marker
-    if (nextProps.isDraggableAdded) {
+    if (nextProps.rGeoTrigger) {
 
       // To prevent repeated run on prop change
-      this.props.stopDraggableAdded();
+      this.props.rmvRGeoTrigger();
 
-      const css = { 'background-color': "#00bcd4", "font-size": "30px" };
-      const iconHTML = '<i class="material-icons">add_location</i>'
-      const icon = this.mapObject.markerIcon("map-marker", css, {}, iconHTML);
+      const css = { "display": "none" };
+      const invisibleIcon = this.mapObject.markerIcon("map-marker", css, {});
 
-      const marker = L.marker(nextProps.mapCenter, { icon: icon, draggable: 'true', opacity: 0.75 });
-      const popup = L.popup({ closeOnClick: true, className: 'dPopup' }).setContent('<p>Drag to select location!</p>');
+      const invisibleMarker = L.marker(nextProps.mapCenter, { icon: invisibleIcon });
+      const popup = L.popup({ closeOnClick: true, className: 'centerMarkerPopup' })
+        .setContent('<p>Drag to select location!</p>');
 
       // Remove previous marker if any
-      if(this.draggableMarker) self.removeDraggable();
-      this.mapObject.map.addLayer(marker);
-      this.draggableMarker = marker;
+      if(this.hiddenMarker) self.removeHiddenMarker();
+      mapInstance.addLayer(invisibleMarker);
+      this.hiddenMarker = invisibleMarker;
 
-      marker.bindPopup(popup).openPopup();
+      invisibleMarker.bindPopup(popup).openPopup();
 
-      marker.on('dragstart', function(event){
-        const marker = event.target;
-        marker.setOpacity(1);
+      mapInstance.addOneTimeEventListener('zoomstart dragstart', function(event){
+          mapInstance.removeLayer(popup);
       })
 
-      marker.on('dragend', function(event){
-        const marker = event.target;
-        const position = marker.getLatLng();
-        marker.setLatLng(position,{ draggable: 'true' }).update();
+      mapInstance.on('zoomend dragend', function rgeo(event){
+        const accessToken = Meteor.settings.public.MapBox.accessToken;
         nextProps.addRGeoSpinner();
-        rgeocode(Meteor.settings.public.MapBox.accessToken, position, self.props.openInsertDialog,
-          self.props.rmvRGeoSpinner, self.removeDraggable.bind(self));
-      });
+        const rmvRGeoListener = mapInstance.off.bind(this, 'zoomend dragend', rgeo);
+        Meteor.setTimeout(function(){
+          rgeocode(accessToken, mapInstance.getCenter(), nextProps.rmvRGeoSpinner, rmvRGeoListener, nextProps.setConfirmDialog);
+        },500);
+      })
     }
 
     // Hide or show map markers

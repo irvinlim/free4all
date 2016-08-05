@@ -83,17 +83,8 @@ export default class EditBtnDialog extends React.Component {
 
     this.handleAddLocation = () => {
       props.closeModal();
-      props.addDraggable();
-
+      props.addRGeoTriggerMarker();
       props.hideMarkers();
-
-      Bert.alert({
-        hideDelay: 8000,
-        title: 'Add Location',
-        message: 'Drag marker to select location!',
-        type: 'info',
-        icon: 'fa-map-marker'
-      });
     }
 
     this.geocodeInputLoc = (value) => {
@@ -167,6 +158,7 @@ export default class EditBtnDialog extends React.Component {
 
     this.handleOpen = () => {
       props.openModal();
+      props.closeMapBoxes();
 
       let dateOnLoad = new Date();
       hourNow = dateOnLoad.getHours();
@@ -331,7 +323,6 @@ export default class EditBtnDialog extends React.Component {
           this.setState({ canSubmit: true });
         } else {
           props.closeModal();
-          props.stopDraggableAdded();
           props.resetLoc();
 
           this.setState(this.initialState);

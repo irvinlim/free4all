@@ -5,12 +5,11 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import Header from '../components/header/header';
 import LeafletMap from '../components/map/leaflet-map';
-
+import ConfirmRGeo from '../components/map/confirm-rgeo';
 import MapInfoBox from '../components/map/map-info-box';
 import MapNearbyBox from '../components/map/map-nearby-box';
 import SelectHomeDialog from '../components/form/select-home-dialog';
 import GoToHomeButton from '../components/form/go-to-home-button';
-
 import { GoToGeolocationButton } from '../components/map/go-to-geolocation-button'
 import InsertBtnDialog from '../components/map/insert-button-dialog'
 import FloatingActionButton from 'material-ui/FloatingActionButton';
@@ -41,9 +40,11 @@ export class Index extends React.Component {
       locName: "",
       locNameFlag: false,
       locArr: [],
-      isDraggableAdded: false,
+      locAddress: "",
+      showRGeoMarker: false,
       showMarkers: true,
       rGeoLoading: false,
+      rGeoTrigger: false,
       isHomeLocOpen: false,
       homeLocation: null,
       homeZoom: null,
@@ -56,6 +57,8 @@ export class Index extends React.Component {
     this.autorunGeo = null;
     this.autorunHome = null;
     this.autorunAuth = null;
+
+    this.openInsertDialog = this.openInsertDialog.bind(this);
   }
 
   selectGa(gaId) {
@@ -161,32 +164,35 @@ export class Index extends React.Component {
     });
   }
 
-  openInsertDialog(features, coords, removeDraggable) {
-    this.setState({ isModalOpen: true, locNameFlag: true });
-    this.setState({ latLngClicked: coords });
-    let featuresArr = features.map((loc)=> {
+  openInsertDialog() {
+    this.setState({ isModalOpen: true, showRGeoMarker: false })
+
+    this.rmvRGeoListener && this.rmvRGeoListener();
+
+    this.showMarkers();
+  }
+
+  setConfirmDialog(features, coords, rmvRGeoListener){
+    this.rmvRGeoListener = rmvRGeoListener;
+
+    let locArr = features.map((loc)=> {
       loc.text = loc.place_name;
       loc.value = loc.place_name;
       return loc;
     });
 
-    const selectedLocName = featuresArr[0].text;
-    this.setState({ locArr: featuresArr });
-    this.setState({ locName: selectedLocName });
+    let locationText = locArr[0].text;
+    const strSplitIdx = locationText.indexOf(',');
+    const locName = locationText.substr(0, strSplitIdx);
+    const locAddress = locationText.substr(strSplitIdx + 1);
 
-    Bert.alert({
-      hideDelay: 6000,
-      title: 'Location Selected',
-      message: selectedLocName,
-      type: 'info',
-      style: 'growl-top-right',
-      icon: 'fa-map-marker'
+    this.setState({
+      locArr,
+      locName,
+      locAddress,
+      locNameFlag: true,
+      latLngClicked: coords
     });
-
-    if (removeDraggable)
-      removeDraggable();
-
-    this.showMarkers();
   }
 
   showMarkers() {
@@ -237,20 +243,21 @@ export class Index extends React.Component {
           setMapZoom={ mapZoom => this.setState({ mapZoom: mapZoom })}
           setMapMaxZoom={ mapMaxZoom => this.setState({ mapMaxZoom: mapMaxZoom })}
           setBounds={ bounds => this.mapBounds.set(bounds) }
-          openInsertDialog={ this.openInsertDialog.bind(this) }
-          isDraggableAdded={ this.state.isDraggableAdded }
-          stopDraggableAdded={ ()=>{this.setState({ isDraggableAdded: false })} }
           showMarkers={ this.state.showMarkers }
+          rGeoTrigger={ this.state.rGeoTrigger }
+          rmvRGeoTrigger={ ()=>{this.setState({ rGeoTrigger: false })} }
           addRGeoSpinner={ ()=>{this.setState({ rGeoLoading: true })} }
           rmvRGeoSpinner={ ()=>{this.setState({ rGeoLoading: false })} }
-          isDbClickDisabled= { false }
+          setConfirmDialog={this.setConfirmDialog.bind(this) }
         />
-        <RefreshIndicator
-          size={40}
-          top={10}
-          left={ $(window).width() / 2.05 }
-          status={ this.state.rGeoLoading ? "loading" : "hide" }
-        />
+        <div className="rGeoLoader">
+          <RefreshIndicator
+            size={40}
+            top={10}
+            left={ $(window).width() / 2 }
+            status={ this.state.rGeoLoading ? "loading" : "hide" }
+          />
+        </div>
         <div id="map-boxes-container">
           <MapInfoBox
             gaId={ this.state.gaSelected }
@@ -264,7 +271,16 @@ export class Index extends React.Component {
             mapBounds={ this.mapBounds.get() }
             nearbyOnClick={ clickNearbyGa }
           />
+          <ConfirmRGeo
+            latLng={ this.state.latLngClicked }
+            locArr={ this.state.locArr }
+            locAddress={ this.state.locAddress }
+            locName={ this.state.locName }
+            openInsertDialog={ this.openInsertDialog }
+          />
         </div>
+
+        { this.state.showRGeoMarker && <div className="centerMarker" /> }
 
         <SelectHomeDialog
           isHomeLocOpen={ this.state.isHomeLocOpen }
@@ -289,12 +305,12 @@ export class Index extends React.Component {
             locName={this.state.locName}
             locNameFlag={this.state.locNameFlag}
             rmvlocNameFlag={ ()=>{this.setState({ locName: null, locNameFlag: false })} }
-            addDraggable={ ()=>{this.setState({ isDraggableAdded: true })} }
-            stopDraggableAdded={ ()=>{this.setState({ isDraggableAdded: false })} }
+            addRGeoTriggerMarker={ ()=>{this.setState({ rGeoTrigger: true, showRGeoMarker: true })} }
             hideMarkers={ ()=>{this.setState({ showMarkers: false })} }
             resetLoc={ this.resetLoc.bind(this) }
             mapCenter={ this.state.mapCenter }
-            zoom={ this.state.mapZoom } />
+            zoom={ this.state.mapZoom }
+            closeMapBoxes={ ()=> { this.setState({ nearbyBoxState: 0, infoBoxState: 0 }) } } />
         </div>
       </div>
     );

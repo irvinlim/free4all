@@ -4,9 +4,9 @@ const geo = require('mapbox-geocoding');
 // Mapbox Geocoding
 let geoTimeout;
 export const geocode = (mapboxAccessToken, query, mapCenter, addState) => {
-	let url = 'https://api.tiles.mapbox.com/geocoding/v5/mapbox.places/' + encodeURIComponent(query) 
+	let url = 'https://api.tiles.mapbox.com/geocoding/v5/mapbox.places/' + encodeURIComponent(query)
 		+ '.json?proximity=' + mapCenter.lng + ',' + mapCenter.lat + '&access_token=' + mapboxAccessToken;
-	
+
 	if(geoTimeout) Meteor.clearTimeout(geoTimeout);
 
 	geoTimeout = Meteor.setTimeout( ()=>{
@@ -24,9 +24,9 @@ export const geocode = (mapboxAccessToken, query, mapCenter, addState) => {
 // https://api.mapbox.com/geocoding/v5/mapbox.places/-73.989,40.733.json
 // Mapbox Reverse Geocoding
 let rgeoTimeout;
-export const rgeocode = (mapboxAccessToken, latLng, openInsertDialog, rmvRGeoSpinner, removeDraggable) => {
-	if(!openInsertDialog) return;
-	let url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + latLng.lng +','+ latLng.lat 
+export const rgeocode = (mapboxAccessToken, latLng, rmvRGeoSpinner, rmvRGeoListener, setConfirmDialog) => {
+
+	let url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + latLng.lng +','+ latLng.lat
 		+ '.json?access_token=' + mapboxAccessToken + '&autocomplete=true';
 	if(rgeoTimeout) Meteor.clearTimeout(rgeoTimeout);
 
@@ -36,11 +36,11 @@ export const rgeocode = (mapboxAccessToken, latLng, openInsertDialog, rmvRGeoSpi
 				console.log( error );
 			} else {
 				let result = JSON.parse(response.content);
-				openInsertDialog(result.features, latLng, removeDraggable);
+        setConfirmDialog(result.features, latLng, rmvRGeoListener);
 				rgeoTimeout = null;
 				rmvRGeoSpinner();
 			}
-		}) 
+		})
 	}, 1000);
 
 }

@@ -49,6 +49,18 @@
   > div:not(.expand-button-nearbybox) { background-color: rgba(#fcfcfc, 0.9); @include transition-standard(opacity 375ms); }
 }
 
+#confirm-rgeo-box{
+  background-color: rgba(#fcfcfc, 0.9); z-index: 1000; pointer-events: auto !important;
+  h3 { text-align: center }
+  h5 { text-align: center }
+}
+
+.confirm-rgeo-btn{
+  position: absolute; left: 48%;
+}
+
+.rGeoLoader > div{ margin-left: -21px; }
+
 // Smaller-than-iPad devices
 @media (max-width:767px) {
   #map-info-box {
@@ -71,6 +83,8 @@
       .photo-avatar { max-height: 100%; max-width: 350px; margin: 0 auto; opacity: 1; }
     }
   }
+  .confirm-rgeo-btn{ left: 42%; }
+  .rGeoLoader > div{ margin-left: -45px; }
 }
 
 // iPad devices and up
@@ -127,7 +141,23 @@
   }
 }
 
-.dPopup{
-  bottom: 49px !important;
+.centerMarkerPopup{
+  bottom: 60px !important;
   transition: 0.2s;
+}
+
+.centerMarker{
+  position:absolute;
+  background:url("map-marker-icon.png") no-repeat;
+  top:50%;left:50%;
+  z-index:1;
+
+  /* offset */
+  margin-left:-32px;
+  margin-top:-64px;
+
+  /* size of marker image*/
+  height:64px;
+  width:64px;
+  cursor:pointer;
 }

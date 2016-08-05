@@ -1,5 +1,4 @@
 import { Meteor } from 'meteor/meteor';
-import { Bert } from 'meteor/themeteorchef:bert';
 import React from 'react';
 import { browserHistory } from 'react-router';
 import MuiTheme from '../layouts/mui-theme';
@@ -8,6 +7,7 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import IconButton from 'material-ui/IconButton';
 import RefreshIndicator from 'material-ui/RefreshIndicator';
 
+import ConfirmRGeo from '../components/map/confirm-rgeo';
 import LeafletMap from '../components/map/leaflet-map';
 import MapInfoBox from '../components/map/map-info-box';
 import MapUserBox from '../components/map/map-user-box';
@@ -39,9 +39,11 @@ export class MyGiveaways extends React.Component {
       locName: "",
       locNameFlag: false,
       locArr: [],
-      isDraggableAdded: false,
+      locAddress: "",
+      showRGeoMarker: false,
       showMarkers: true,
       rGeoLoading: false,
+      rGeoTrigger: false,
       gaEdit: null,
       gaId: null,
       showDateRange: false,
@@ -58,6 +60,8 @@ export class MyGiveaways extends React.Component {
     this.autorunSub = null;
     this.autorunGeo = null;
     this.autorunAuth = null;
+
+    this.openInsertDialog = this.openInsertDialog.bind(this);
   }
 
   selectGa(gaId) {
@@ -186,30 +190,35 @@ export class MyGiveaways extends React.Component {
     this.setState({ showDateRange: !this.state.showDateRange });
     this.isAllGa.set(!this.isAllGa.get());
   }
+  openInsertDialog() {
+    this.setState({ isModalOpen: true, showRGeoMarker: false })
 
-  openEditDialog(features, coords, removeDraggable) {
-    this.setState({ isModalOpen: true, locNameFlag: true });
-    this.setState({ latLngClicked: coords });
-    let featuresArr = features.map((loc)=> {
+    this.rmvRGeoListener && this.rmvRGeoListener();
+
+    this.showMarkers();
+  }
+
+  setConfirmDialog(features, coords, rmvRGeoListener){
+    this.rmvRGeoListener = rmvRGeoListener;
+
+    let locArr = features.map((loc)=> {
       loc.text = loc.place_name;
       loc.value = loc.place_name;
       return loc;
     });
-    const selectedLocName = featuresArr[0].text;
-    this.setState({ locArr: featuresArr });
-    this.setState({ locName: selectedLocName });
-    Bert.alert({
-      hideDelay: 6000,
-      title: 'Location Selected',
-      message: selectedLocName,
-      type: 'info',
-      style: 'growl-top-right',
-      icon: 'fa-map-marker'
+
+    let locationText = locArr[0].text;
+    const strSplitIdx = locationText.indexOf(',');
+    const locName = locationText.substr(0, strSplitIdx);
+    const locAddress = locationText.substr(strSplitIdx + 1);
+
+    this.setState({
+      locArr,
+      locName,
+      locAddress,
+      locNameFlag: true,
+      latLngClicked: coords
     });
-    if(removeDraggable){
-      removeDraggable();
-    }
-    this.showMarkers();
   }
 
   selectEditGa(ga) {
@@ -244,20 +253,21 @@ export class MyGiveaways extends React.Component {
           setMapZoom={ mapZoom => this.setState({ mapZoom: mapZoom })}
           setMapMaxZoom={ mapMaxZoom => this.setState({ mapMaxZoom: mapMaxZoom })}
           setBounds={ bounds => this.mapBounds.set(bounds) }
-          openInsertDialog={ this.openEditDialog.bind(this) }
-          isDraggableAdded={ this.state.isDraggableAdded }
-          stopDraggableAdded={ this.noAddDraggable.bind(this) }
           showMarkers={ this.state.showMarkers }
-          addRGeoSpinner={ this.addRGeoSpinner.bind(this) }
-          rmvRGeoSpinner={ this.rmvRGeoSpinner.bind(this) }
-          isDbClickDisabled= { true } />
-
-        <RefreshIndicator
-          size={40}
-          left={$(window).width()/2}
-          top={ 10}
-          status={ this.state.rGeoLoading ? "loading" : "hide" } />
-
+          rGeoTrigger={ this.state.rGeoTrigger }
+          rmvRGeoTrigger={ ()=>{this.setState({ rGeoTrigger: false })} }
+          addRGeoSpinner={ ()=>{this.setState({ rGeoLoading: true })} }
+          rmvRGeoSpinner={ ()=>{this.setState({ rGeoLoading: false })} }
+          setConfirmDialog={this.setConfirmDialog.bind(this) }
+        />
+        <div className="rGeoLoader">
+          <RefreshIndicator
+            size={40}
+            top={10}
+            left={ $(window).width() / 2 }
+            status={ this.state.rGeoLoading ? "loading" : "hide" }
+          />
+        </div>
         <div id="map-boxes-container">
           <MapInfoBox
             gaId={ this.state.gaSelected }
@@ -276,7 +286,17 @@ export class MyGiveaways extends React.Component {
             handleAllUserGiveaways={ this.handleAllUserGiveaways.bind(this) }
             editGa={ this.selectEditGa.bind(this) }
             showDateRange={ this.state.showDateRange } />
+          <ConfirmRGeo
+            latLng={ this.state.latLngClicked }
+            locArr={ this.state.locArr }
+            locAddress={ this.state.locAddress }
+            locName={ this.state.locName }
+            openInsertDialog={ this.openInsertDialog }
+          />
+
         </div>
+
+        { this.state.showRGeoMarker && <div className="centerMarker" /> }
 
         <div id="map-floating-buttons" style={{ right: 20 + (this.state.nearbyBoxState > 0 ? $("#map-nearby-box").outerWidth() : 0) }}>
           <GoToGeolocationButton geolocationOnClick={ this.goToGeolocation.bind(this) } />
@@ -291,14 +311,14 @@ export class MyGiveaways extends React.Component {
           locName={ this.state.locName }
           locNameFlag={this.state.locNameFlag}
           rmvlocNameFlag={ ()=>{this.setState({ locName: null, locNameFlag: false })} }
-          addDraggable={ this.addDraggable.bind(this) }
-          stopDraggableAdded={ this.noAddDraggable.bind(this) }
+          addRGeoTriggerMarker={ ()=>{this.setState({ rGeoTrigger: true, showRGeoMarker: true })} }
           hideMarkers={ this.hideMarkers.bind(this) }
           resetLoc={ this.resetLoc.bind(this) }
           gaEdit={ this.state.gaEdit }
           gaId={ this.state.gaSelected }
           mapCenter={ this.state.mapCenter }
-          mapZoom={ this.state.mapZoom } />
+          mapZoom={ this.state.mapZoom }
+          closeMapBoxes={ ()=> { this.setState({ nearbyBoxState: 0, infoBoxState: 0 }) } } />
 
       </div>
 
