@@ -23,7 +23,7 @@ const customTitleStyle = {
 
 const handleClickDown = (event) => {
   const offset = $(".down-arrow").offset().top + $(".welcome-dialog-body").scrollTop();
-  $(".welcome-dialog-body").animate({ scrollTop: offset - 70 });
+  $(".welcome-dialog-body").animate({ scrollTop: offset - 90 });
 };
 
 export default class SelectHomeDialog extends React.Component {

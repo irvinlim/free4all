@@ -21,6 +21,8 @@ import * as LatLngHelper from '../../util/latlng';
 import * as IconsHelper from '../../util/icons';
 import { Bert } from 'meteor/themeteorchef:bert';
 
+const isMobile = () => $(window).innerWidth() <= 992;
+
 export class Index extends React.Component {
   constructor(props) {
     super(props);
@@ -133,10 +135,9 @@ export class Index extends React.Component {
       self.setState({
         mapCenter: homeLoc.coordinates,
         homeLocation: homeLoc.coordinates,
-        mapZoom: homeLoc.zoom
+        mapZoom: isMobile() ? homeLoc.zoom - 1 : homeLoc.zoom
       });
     } else {
-      // Open dialog only if login dialog is not to be opened
       self.setState({ isHomeLocOpen: true });
     }
   }
@@ -156,7 +157,7 @@ export class Index extends React.Component {
   goToHomeLoc(){
     this.setState({
       mapCenter: this.state.homeLocation,
-      mapZoom: this.state.homeZoom
+      mapZoom: isMobile() ? this.state.homeZoom - 1 : this.state.homeZoom
     });
   }
 
@@ -203,11 +204,12 @@ export class Index extends React.Component {
   setHomeLoc(community){
     this.setState({
       isHomeLocOpen: false,
-      mapZoom: community.zoom,
+      mapZoom: isMobile() ? community.zoom - 1: community.zoom,   // Reduce by 1 for mobile
       mapCenter: community.coordinates,
       homeLocation: community.coordinates,
       homeZoom: community.zoom
     });
+
     Session.setPersistent('homeLocation', {
       coordinates: community.coordinates,
       zoom: community.zoom,
