@@ -28,7 +28,7 @@ export const GiveawayInfoboxContent = ({ giveaway }) => (
           <img src={ AvatarHelper.getUrl(giveaway.avatarId, 350) } />
         </div> :
         <div /> }
-      <h3>{ giveaway.title }</h3>
+      <h3 className="title">{ giveaway.title }</h3>
       <h5 className="category">{ GiveawaysHelper.categoryBreadcrumbs(giveaway) }</h5>
       <p className="description">{ GiveawaysHelper.description(giveaway) }</p>
       { iconRow("date_range", GiveawaysHelper.compactDateRange(giveaway)) }

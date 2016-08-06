@@ -34,7 +34,7 @@
   position: absolute; top: 0; left: 0; height: 100%; width: 100%; pointer-events: none;
   h3 { margin: 0 0 10px; }
 
-  .map-sidebar { height: 100%; padding: 0; pointer-events: auto; position: absolute; @include transition-standard(all 225ms); }
+  .map-sidebar { height: 100%; padding: 0; pointer-events: auto; position: absolute; @include transition-standard(all 450ms); }
   .map-sidebar-box { padding: 20px 20px 0; }
   .map-sidebar-box:last-child { padding-bottom: 10px; }
 }
@@ -54,6 +54,10 @@
   #map-info-box {
     max-width:none !important; background-color: #FFF; top: 100%; z-index: 1000;
     .photo-avatar { height: 100%; max-height: 0; overflow: hidden; opacity: 0; @include transition-standard(all 225ms); }
+
+    &:not(.state-2) {
+      h3.title { white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+    }
 
     // Close/expand behaviour
     &.state-1 { // Peek at title
