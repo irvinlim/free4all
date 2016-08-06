@@ -34,19 +34,19 @@
   position: absolute; top: 0; left: 0; height: 100%; width: 100%; pointer-events: none;
   h3 { margin: 0 0 10px; }
 
-  .map-sidebar { height: 100%; padding: 0; pointer-events: auto; position: absolute; @include transition-standard(all 450ms); }
+  .map-sidebar { height: 100%; padding: 0; pointer-events: auto; position: absolute; @include transition-standard(all 375ms); }
   .map-sidebar-box { padding: 20px 20px 0; }
   .map-sidebar-box:last-child { padding-bottom: 10px; }
 }
 
 // Sidebar boxes
 #map-info-box {
-  background-color: rgba(#fcfcfc, 0.9); max-width: 350px;
+  background-color: rgba(#fcfcfc, 0.9); max-width: 350px; left: 0;
 }
 
 #map-nearby-box {
-  max-width:350px; z-index: 1000;
-  > div:not(.expand-button-nearbybox) { background-color: rgba(#fcfcfc, 0.9); @include transition-standard(opacity 225ms); }
+  width:350px; z-index: 1000; right: 0;
+  > div:not(.expand-button-nearbybox) { background-color: rgba(#fcfcfc, 0.9); @include transition-standard(opacity 375ms); }
 }
 
 // Smaller-than-iPad devices
@@ -57,12 +57,12 @@
 
     &:not(.state-2) {
       h3.title { white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+      h5.category { margin-bottom: 20px; }
     }
 
     // Close/expand behaviour
     &.state-1 { // Peek at title
       top: calc(100% - 90px);
-      h5.category { margin-bottom: 20px; }
       .scrollbar-container > div { height: 90px !important; overflow: hidden !important; }
     }
 
@@ -81,9 +81,9 @@
   }
 
   // Close/expand behaviour
-  #map-info-box.state-0 { right: calc(100% + 50px) !important; opacity: 0; } // Hide to left, hide all the way
+  #map-info-box.state-0 { left: -150px !important; opacity: 0; } // Hide to left, hide all the way
   #map-nearby-box.state-0 { // Hide to right
-    left: calc(100% - 25px) !important;
+    right: -300px !important;
     > div:not(.expand-button-nearbybox) { opacity: 0; }
   }
 }
@@ -100,7 +100,7 @@
 // Floating action buttons
 #map-floating-buttons {
   position: fixed; bottom: 30px; width: 64px;
-  @include transition-standard(right 225ms);
+  @include transition-standard(right 375ms);
 
   // No nearby box for mobile
   @media (max-width:991px) { right: 20px !important; }

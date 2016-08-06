@@ -7,12 +7,6 @@ import UserGiveaways from '../../containers/giveaways/user-giveaways';
 import * as IconsHelper from '../../../util/icons';
 
 export default class MapUserBox extends React.Component {
-  positionBoxes() {
-    $(window).resize(function() {
-      $("#map-nearby-box").css('left', window.innerWidth - $("#map-nearby-box").outerWidth());
-    });
-    $(window).resize();
-  }
   formatDate(date) {
     return moment(date).format("ddd, D MMM YYYY");
   };
@@ -28,8 +22,6 @@ export default class MapUserBox extends React.Component {
       else
         self.props.setBoxState(0);
     });
-
-    this.positionBoxes();
   }
 
   render() {

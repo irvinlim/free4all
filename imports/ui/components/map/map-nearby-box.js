@@ -7,12 +7,6 @@ import NearbyGiveaways from '../../containers/giveaways/nearby-giveaways';
 import * as IconsHelper from '../../../util/icons';
 
 export default class MapNearbyBox extends React.Component {
-  positionBoxes() {
-    $(window).resize(function() {
-      $("#map-nearby-box").css('left', window.innerWidth - $("#map-nearby-box").outerWidth());
-    });
-    $(window).resize();
-  }
 
   componentDidMount() {
     const self = this;
@@ -25,8 +19,6 @@ export default class MapNearbyBox extends React.Component {
       else
         self.props.setBoxState(0);
     });
-
-    this.positionBoxes();
   }
 
   render() {

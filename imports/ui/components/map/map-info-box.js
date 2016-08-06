@@ -14,16 +14,6 @@ import { Giveaways } from '../../../api/giveaways/giveaways';
 
 export default class MapInfoBox extends React.Component {
 
-  positionBoxes() {
-    $(window).resize(function() {
-      if (window.innerWidth >= 768)
-        $("#map-info-box").css('right', $("#map-info-box").parent().innerWidth() - $("#map-info-box").outerWidth());
-      else
-        $("#map-info-box").css('right', "");
-    });
-    $(window).resize();
-  }
-
   componentDidMount() {
     const self = this;
     $("#map-info-box").click(event => {
@@ -49,8 +39,6 @@ export default class MapInfoBox extends React.Component {
       else
         self.props.setBoxState(0);
     });
-
-    setTimeout(this.positionBoxes, 1000);
   }
 
   render() {
