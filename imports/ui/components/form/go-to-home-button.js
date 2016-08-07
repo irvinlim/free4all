@@ -3,29 +3,22 @@ import IconButton from 'material-ui/IconButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import * as IconsHelper from '../../../util/icons';
 
-export default class GoToHomeButton extends React.Component {
-  constructor(props){
-    super(props);
-  }
+const GoToHomeButton = props => (
 
-  render(){
-    return(
-      this.props.homeLocation ?
-      <FloatingActionButton 
-        onTouchTap={ this.props.goToHomeLoc } >
-        { IconsHelper.materialIcon("home") }
-      </FloatingActionButton>
-      :
-      <div>
-        <IconButton
-        tooltip="Home Location not set"
-        style={{ zIndex: 1, position: "absolute" }} />
-        <FloatingActionButton disabled={true} >
-        { IconsHelper.materialIcon("home", {color:"black"}) }
-        </FloatingActionButton>
-      </div>
+  props.homeLocation ?
+  <FloatingActionButton
+    onTouchTap={ props.goToHomeLoc } >
+    { IconsHelper.materialIcon("home") }
+  </FloatingActionButton>
+  :
+  <div>
+    <IconButton
+      tooltip="Home Location not set"
+      style={{ zIndex: 1, position: "absolute" }} />
+    <FloatingActionButton disabled={true} >
+      { IconsHelper.materialIcon("home", {color:"black"}) }
+    </FloatingActionButton>
+  </div>
+)
 
-    )
-  }
-              
-}
+export default GoToHomeButton;

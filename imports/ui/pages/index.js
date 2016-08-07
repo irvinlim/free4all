@@ -10,7 +10,8 @@ import MapInfoBox from '../components/map/map-info-box';
 import MapNearbyBox from '../components/map/map-nearby-box';
 import SelectHomeDialog from '../components/form/select-home-dialog';
 import GoToHomeButton from '../components/form/go-to-home-button';
-import { GoToGeolocationButton } from '../components/map/go-to-geolocation-button'
+import InsertBtn from '../components/form/insert-button';
+import GoToGeolocationButton from '../components/map/go-to-geolocation-button'
 import InsertBtnDialog from '../components/map/insert-button-dialog'
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import IconButton from 'material-ui/IconButton';
@@ -164,6 +165,19 @@ export class Index extends React.Component {
     });
   }
 
+  handleOpen() {
+    // If not logged in, open login dialog instead
+    if (!Meteor.user())
+      return Store.dispatch({ type: 'OPEN_LOGIN_DIALOG', message: "Login to contribute a giveaway!" });
+
+    this.setState({
+      isModalOpen:true,
+      nearbyBoxState: 0,
+      infoBoxState: 0
+    });
+  }
+
+
   openInsertDialog() {
     this.setState({ isModalOpen: true, showRGeoMarker: false })
 
@@ -296,6 +310,9 @@ export class Index extends React.Component {
             goToHomeLoc = { this.goToHomeLoc.bind(this) }
             homeLocation = { this.state.homeLocation } />
 
+          <InsertBtn
+            handleOpen={ this.handleOpen.bind(this) } />
+
           <InsertBtnDialog
             isModalOpen={this.state.isModalOpen}
             openModal={ ()=>{this.setState({ isModalOpen: true })} }
@@ -309,8 +326,8 @@ export class Index extends React.Component {
             hideMarkers={ ()=>{this.setState({ showMarkers: false })} }
             resetLoc={ this.resetLoc.bind(this) }
             mapCenter={ this.state.mapCenter }
-            zoom={ this.state.mapZoom }
-            closeMapBoxes={ ()=> { this.setState({ nearbyBoxState: 0, infoBoxState: 0 }) } } />
+            zoom={ this.state.mapZoom } />
+
         </div>
       </div>
     );

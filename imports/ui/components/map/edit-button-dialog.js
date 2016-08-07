@@ -74,7 +74,6 @@ export default class EditBtnDialog extends React.Component {
       loadingFile: false,
       gaId: props.gaId,
       removeGiveawayPromptOpen: false,
-      zoom: props.mapZoom,
       commIdsVal: [],
       commIdsOpts: [],
     };
@@ -351,7 +350,6 @@ export default class EditBtnDialog extends React.Component {
   componentWillReceiveProps(nextProps){
     const gaEdit = nextProps.gaEdit;
     let gaEditTile = null
-
     if(gaEdit){
       // placeholder for grid tile text
       if(gaEdit.avatarId){
@@ -597,7 +595,7 @@ export default class EditBtnDialog extends React.Component {
                   <Col xs={12}>
                     <LeafletMapPreview
                       previewCoords={ { lat:this.state.lat, lng:this.state.lng } }
-                      previewZoom={this.props.mapZoom} />
+                      previewZoom={this.props.zoom} />
                   </Col>
                 </Row>
                 :

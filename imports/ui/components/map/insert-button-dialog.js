@@ -31,6 +31,9 @@ export default class InsertBtnDialog extends React.Component {
   constructor(props){
     super(props);
 
+    const startTime = new Date()
+        , endTime   = moment(startTime.setMinutes(0,0,0)).add(1,'h').toDate()
+
     this.initialState = {
       canSubmit: false,
       isOpen: props.isModalOpen,
@@ -44,8 +47,8 @@ export default class InsertBtnDialog extends React.Component {
       website:"",
       startDate: undefined,
       endDate: undefined,
-      startTime: undefined,
-      endTime: undefined,
+      startTime,
+      endTime,
       lat: "",
       lng: "",
       location:"",
@@ -135,24 +138,6 @@ export default class InsertBtnDialog extends React.Component {
 
     this.handleTagsChange = (tags) => {
       this.setState({tags})
-    };
-
-    this.handleOpen = () => {
-      // If not logged in, open login dialog instead
-      if (!Meteor.user())
-        return Store.dispatch({ type: 'OPEN_LOGIN_DIALOG', message: "Login to contribute a giveaway!" });
-
-      props.openModal();
-      props.closeMapBoxes();
-
-      let dateOnLoad = new Date();
-      dateOnLoad.setMinutes(0,0,0);
-      let date1hAfter = moment(dateOnLoad).add(1,'h').toDate();
-
-      this.setState({
-        startTime: dateOnLoad,
-        endTime: date1hAfter
-      })
     };
 
     this.handleClose = () => {
@@ -350,317 +335,310 @@ render() {
   ];
   return (
 
-    <div>
-      {/* + Button */}
-      <FloatingActionButton className="floatingButton" onTouchTap={this.handleOpen}>
-        { IconsHelper.materialIcon("add") }
-      </FloatingActionButton>
+    <Dialog
+      className="dialog insertDialog"
+      title="Add a new Giveaway"
+      titleStyle={titleStyle}
+      bodyStyle={dialogStyle}
+      actions={actionBtns}
+      actionsContainerStyle={actionsContainerStyle}
+      modal={true}
+      open={this.state.isOpen}
+      onRequestClose={this.handleClose}
+      autoScrollBodyContent={true}
+      autoDetectWindowHeight={false}>
 
-      <Dialog
-        className="dialog insertDialog"
-        title="Add a new Giveaway"
-        titleStyle={titleStyle}
-        bodyStyle={dialogStyle}
-        actions={actionBtns}
-        actionsContainerStyle={actionsContainerStyle}
-        modal={true}
-        open={this.state.isOpen}
-        onRequestClose={this.handleClose}
-        autoScrollBodyContent={true}
-        autoDetectWindowHeight={false}>
-
-        <Paper style={paperStyle}>
-          <Formsy.Form
-            className="add-giveaway-form"
-            onValid={this.enableButton}
-            onInvalid={this.disableButton}
-            onValidSubmit={this.submitForm}
-            onInvalidSubmit={this.notifyFormError}>
-              <Row>
-                <Col xs={12}>
-                  <h2>What</h2>
-                </Col>
-                <Col xs={12}>
-                  <FormsyText
-                    name="title"
-                    fullWidth={true}
-                    required
-                    floatingLabelText="Event Name"
-                    hintText="What is name of the event?"
-                    value={this.state.title}
-                    onBlur={this.handleTitle} />
-                </Col>
-                <Col xs={12}>
-                  <FormsyText
-                    name="description"
-                    floatingLabelText="Description"
-                    multiLine={true}
-                    fullWidth={true}
-                    rows={3}
-                    required
-                    hintText="What is the event about?"
-                    value={this.state.description}
-                    onBlur={this.handleDescription}
-                    />
-                </Col>
-                <Col xs={12}>
-                  <FormsyText
-                    name="website"
-                    fullWidth={true}
-                    floatingLabelText="Website"
-                    hintText="Website URL"
-                    value={this.state.website}
-                    onBlur={this.handleWebsite} />
-                </Col>
-              </Row>
-
-              <Row style={{ paddingTop: 21 }}>
-                <Col xs={12}>
-                  <h2>When</h2>
-                </Col>
-                <Col xs={8} md={4}>
-                  <FormsyDate
-                    required
-                    className="DatePicker"
-                    name="dateStart"
-                    formatDate={this.formatDate}
-                    floatingLabelText="Start Date"
-                    autoOk={true}
-                    textFieldStyle={this.dateTimeTextStyle}
-                    minDate={new Date()}
-                    onChange={this.handleStartDatePicker}
-                    value={this.state.startDate} />
-                </Col>
-                <Col xs={4} md={2}>
-                  <FormsyTime
-                    required
-                    className="TimePicker"
-                    name="startTime"
-                    pedantic={true}
-                    format="ampm"
-                    floatingLabelText="Start Time"
-                    textFieldStyle={this.dateTimeTextStyle}
-                    onChange={this.handleChangeStartTimePicker12}
-                    value={this.state.startTime} />
-                </Col>
-                <Col xs={8} md={4}>
-                  <FormsyDate
-                    className="DatePicker"
-                    name="dateEnd"
-                    formatDate={this.formatDate}
-                    floatingLabelText="End Date"
-                    autoOk={true}
-                    minDate={new Date()}
-                    textFieldStyle={this.dateTimeTextStyle}
-                    onChange={this.handleEndDatePicker}
-                    value={this.state.endDate} />
-                </Col>
-                <Col xs={4} md={2}>
-                  <FormsyTime
-                    className="TimePicker"
-                    name="endTime"
-                    required
-                    pedantic={true}
-                    format="ampm"
-                    floatingLabelText="End Time"
-                    textFieldStyle={this.dateTimeTextStyle}
-                    onChange={this.handleChangeEndTimePicker12}
-                    value={this.state.endTime}
-                    defaultTime={ moment().set('minute', 0).toDate() } />
-                </Col>
-              </Row>
-
-              <Row style={{ paddingTop: 21 }}>
-                <Col xs={12} md={8}>
-                  <h2>Where</h2>
-                </Col>
-
-                <Col xs={12} md={4} style={{ paddingTop: 21 }}>
-                  <RaisedButton
-                    className="formBtn"
-                    style={{minHeight:"41px"}}
-                    secondary={true}
-                    onTouchTap={this.handleAddLocation}
-                    label="Choose on Map"
-                    icon={ IconsHelper.materialIcon("add_location") } />
-                </Col>
-              </Row>
-
-              <Row>
-                <Col xs={12}>
-                  <AutoComplete
-                    name="location"
-                    hintText="Location of event"
-                    dataSource={this.state.dataSource}
-                    onUpdateInput={this.geocodeInputLoc}
-                    onNewRequest={this.handleLocationSelect}
-                    floatingLabelText="Location"
-                    fullWidth={true}
-                    openOnFocus={true}
-                    searchText={this.state.location}
-                    filter={AutoComplete.noFilter}/>
-                </Col>
-                <Col className="displayNone">
-                  <FormsyText
-                    name="lat"
-                    validations="isNumeric"
-                    validationError={numericError}
-                    hintText="Latitude"
-                    required
-                    floatingLabelText="Latitude"
-                    value={this.state.lat}
-                    onChange={this.handleLat}
-                    disabled={true} />
-                </Col>
-                <Col className="displayNone">
-                  <FormsyText
-                    name="lng"
-                    validations="isNumeric"
-                    validationError={numericError}
-                    hintText="Longitude"
-                    required
-                    floatingLabelText="Longitude"
-                    value={this.state.lng}
-                    onChange={this.handleLng}
-                    disabled={true} />
-                </Col>
-              </Row>
-
-              {this.state.lat ?
-                <Row>
-                  <Col xs={12}>
-                    <LeafletMapPreview
-                      previewCoords={ { lat:this.state.lat, lng:this.state.lng } }
-                      previewZoom={this.state.zoom} />
-                  </Col>
-                </Row>
-                :
-                <div />
-              }
-
-              <Row style={{ paddingTop: 21 }}>
-                <Col xs={12} md={8} >
-                  <h2>Categories</h2>
-                </Col>
-                <Col xs={12} md={4} style={{ paddingTop: 21 }}>
-                  <RaisedButton
-                    className="formBtn"
-                    style={{minHeight:"41px"}}
-                    label={this.state.childCatName}
-                    secondary={true}
-                    onTouchTap={this.handleOpenCatMenu}
-                    icon={<FontIcon className={this.state.childCatIcon} />} />
-                  <AllCategoriesList
-                    setParentCat={this.setParentCat}
-                    setChildCat={this.setChildCat}
-                    isCatMenuOpen={this.state.isCatMenuOpen}
-                    anchorEl={this.state.anchorEl}
-                    closeCatMenu={ e =>{ this.setState({ isCatMenuOpen: false }) } } />
-                </Col>
-                <Col className="displayNone">
+      <Paper style={paperStyle}>
+        <Formsy.Form
+          className="add-giveaway-form"
+          onValid={this.enableButton}
+          onInvalid={this.disableButton}
+          onValidSubmit={this.submitForm}
+          onInvalidSubmit={this.notifyFormError}>
+            <Row>
+              <Col xs={12}>
+                <h2>What</h2>
+              </Col>
+              <Col xs={12}>
                 <FormsyText
-                  name="childCatRequired"
-                  value={this.state.childCatIcon}
-                  required />
-                </Col>
-                <Col xs={12} md={12}>
-                  <TagsInput value={this.state.tags} onChange={this.handleTagsChange} />
-                </Col>
-              </Row>
+                  name="title"
+                  fullWidth={true}
+                  required
+                  floatingLabelText="Event Name"
+                  hintText="What is name of the event?"
+                  value={this.state.title}
+                  onBlur={this.handleTitle} />
+              </Col>
+              <Col xs={12}>
+                <FormsyText
+                  name="description"
+                  floatingLabelText="Description"
+                  multiLine={true}
+                  fullWidth={true}
+                  rows={3}
+                  required
+                  hintText="What is the event about?"
+                  value={this.state.description}
+                  onBlur={this.handleDescription}
+                  />
+              </Col>
+              <Col xs={12}>
+                <FormsyText
+                  name="website"
+                  fullWidth={true}
+                  floatingLabelText="Website"
+                  hintText="Website URL"
+                  value={this.state.website}
+                  onBlur={this.handleWebsite} />
+              </Col>
+            </Row>
 
-              <Row style={{ paddingTop: 21 }}>
-                <Col xs={12} >
-                  <h2>Communities</h2>
-                </Col>
-                <Col xs={12} >
-                  <IncludedCommunities
-                    value={ this.state.commIdsVal }
-                    options={ this.state.commIdsOpt }
-                    setOptVal= { (opt,val) => { this.setState({ commIdsOpt:opt, commIdsVal:val })}}
-                    handleChange = { commIdsVal => { this.setState({ commIdsVal })} } />
-                </Col>
-              </Row>
+            <Row style={{ paddingTop: 21 }}>
+              <Col xs={12}>
+                <h2>When</h2>
+              </Col>
+              <Col xs={8} md={4}>
+                <FormsyDate
+                  required
+                  className="DatePicker"
+                  name="dateStart"
+                  formatDate={this.formatDate}
+                  floatingLabelText="Start Date"
+                  autoOk={true}
+                  textFieldStyle={this.dateTimeTextStyle}
+                  minDate={new Date()}
+                  onChange={this.handleStartDatePicker}
+                  value={this.state.startDate} />
+              </Col>
+              <Col xs={4} md={2}>
+                <FormsyTime
+                  required
+                  className="TimePicker"
+                  name="startTime"
+                  pedantic={true}
+                  format="ampm"
+                  floatingLabelText="Start Time"
+                  textFieldStyle={this.dateTimeTextStyle}
+                  onChange={this.handleChangeStartTimePicker12}
+                  value={this.state.startTime} />
+              </Col>
+              <Col xs={8} md={4}>
+                <FormsyDate
+                  className="DatePicker"
+                  name="dateEnd"
+                  formatDate={this.formatDate}
+                  floatingLabelText="End Date"
+                  autoOk={true}
+                  minDate={new Date()}
+                  textFieldStyle={this.dateTimeTextStyle}
+                  onChange={this.handleEndDatePicker}
+                  value={this.state.endDate} />
+              </Col>
+              <Col xs={4} md={2}>
+                <FormsyTime
+                  className="TimePicker"
+                  name="endTime"
+                  required
+                  pedantic={true}
+                  format="ampm"
+                  floatingLabelText="End Time"
+                  textFieldStyle={this.dateTimeTextStyle}
+                  onChange={this.handleChangeEndTimePicker12}
+                  value={this.state.endTime}
+                  defaultTime={ moment().set('minute', 0).toDate() } />
+              </Col>
+            </Row>
 
-              <Row style={{ paddingTop: 21 }}>
-                <Col xs={12} md={8} >
-                <h2>Upload Image</h2>
-                </Col>
-                <Col xs={12} md={4} style={{ paddingTop: 21 }} >
-                  <RaisedButton
+            <Row style={{ paddingTop: 21 }}>
+              <Col xs={12} md={8}>
+                <h2>Where</h2>
+              </Col>
+
+              <Col xs={12} md={4} style={{ paddingTop: 21 }}>
+                <RaisedButton
                   className="formBtn"
                   style={{minHeight:"41px"}}
                   secondary={true}
-                  icon={ IconsHelper.materialIcon("backup") }
-                  label="Choose an Image"
-                  >
-                  <input
-                  type="file"
-                  accept="image/*"
-                  style={{
-                    cursor: 'pointer',
-                    position: 'absolute',
-                    top: 0,
-                    bottom: 0,
-                    right: 0,
-                    left: 0,
-                    width: '100%',
-                    opacity: 0,
-                    zIndex: 1,
-                  }}
-                  onChange={this.handleUpload} />
-                  </RaisedButton>
-                </Col>
-              </Row>
-              <Row style={{ paddingBottom: 21 }}>
-                <Col xs={12}>
-                  {this.state.loadingFile?
-                    <LinearProgress mode="indeterminate" id="LinearProgressEdit"/>
-                    :
-                    <div />
-                  }
-                </Col>
-              </Row>
+                  onTouchTap={this.handleAddLocation}
+                  label="Choose on Map"
+                  icon={ IconsHelper.materialIcon("add_location") } />
+              </Col>
+            </Row>
+
+            <Row>
+              <Col xs={12}>
+                <AutoComplete
+                  name="location"
+                  hintText="Location of event"
+                  dataSource={this.state.dataSource}
+                  onUpdateInput={this.geocodeInputLoc}
+                  onNewRequest={this.handleLocationSelect}
+                  floatingLabelText="Location"
+                  fullWidth={true}
+                  openOnFocus={true}
+                  searchText={this.state.location}
+                  filter={AutoComplete.noFilter}/>
+              </Col>
+              <Col className="displayNone">
+                <FormsyText
+                  name="lat"
+                  validations="isNumeric"
+                  validationError={numericError}
+                  hintText="Latitude"
+                  required
+                  floatingLabelText="Latitude"
+                  value={this.state.lat}
+                  onChange={this.handleLat}
+                  disabled={true} />
+              </Col>
+              <Col className="displayNone">
+                <FormsyText
+                  name="lng"
+                  validations="isNumeric"
+                  validationError={numericError}
+                  hintText="Longitude"
+                  required
+                  floatingLabelText="Longitude"
+                  value={this.state.lng}
+                  onChange={this.handleLng}
+                  disabled={true} />
+              </Col>
+            </Row>
+
+            {this.state.lat ?
               <Row>
                 <Col xs={12}>
-                <div style={{
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                  justifyContent: 'space-around',
-                }}>
-
-
-                {this.state.tile?
-                    <GridList
-                    cellHeight={300}
-                    cols={2}
-                    style={{
-                      width: '100%',
-                      height: 'auto',
-                      overflowY: 'auto',
-                      marginBottom: 24,
-                      paddingLeft:"15px",
-                      paddingRight:"15px"
-                    }}
-                    >
-                      <GridTile
-                      key={this.state.tile.res.secure_url}
-                      title={this.state.tile.files[0].name}
-                      cols={2} >
-                        <img src={this.state.tile.res.secure_url} />
-                      </GridTile>
-                    </GridList>
-                    :
-                    <div />
-                  }
-                  </div>
+                  <LeafletMapPreview
+                    previewCoords={ { lat:this.state.lat, lng:this.state.lng } }
+                    previewZoom={this.state.zoom} />
                 </Col>
               </Row>
+              :
+              <div />
+            }
 
-          </Formsy.Form>
-        </Paper>
+            <Row style={{ paddingTop: 21 }}>
+              <Col xs={12} md={8} >
+                <h2>Categories</h2>
+              </Col>
+              <Col xs={12} md={4} style={{ paddingTop: 21 }}>
+                <RaisedButton
+                  className="formBtn"
+                  style={{minHeight:"41px"}}
+                  label={this.state.childCatName}
+                  secondary={true}
+                  onTouchTap={this.handleOpenCatMenu}
+                  icon={<FontIcon className={this.state.childCatIcon} />} />
+                <AllCategoriesList
+                  setParentCat={this.setParentCat}
+                  setChildCat={this.setChildCat}
+                  isCatMenuOpen={this.state.isCatMenuOpen}
+                  anchorEl={this.state.anchorEl}
+                  closeCatMenu={ e =>{ this.setState({ isCatMenuOpen: false }) } } />
+              </Col>
+              <Col className="displayNone">
+              <FormsyText
+                name="childCatRequired"
+                value={this.state.childCatIcon}
+                required />
+              </Col>
+              <Col xs={12} md={12}>
+                <TagsInput value={this.state.tags} onChange={this.handleTagsChange} />
+              </Col>
+            </Row>
 
-      </Dialog>
-    </div>
+            <Row style={{ paddingTop: 21 }}>
+              <Col xs={12} >
+                <h2>Communities</h2>
+              </Col>
+              <Col xs={12} >
+                <IncludedCommunities
+                  value={ this.state.commIdsVal }
+                  options={ this.state.commIdsOpt }
+                  setOptVal= { (opt,val) => { this.setState({ commIdsOpt:opt, commIdsVal:val })}}
+                  handleChange = { commIdsVal => { this.setState({ commIdsVal })} } />
+              </Col>
+            </Row>
+
+            <Row style={{ paddingTop: 21 }}>
+              <Col xs={12} md={8} >
+              <h2>Upload Image</h2>
+              </Col>
+              <Col xs={12} md={4} style={{ paddingTop: 21 }} >
+                <RaisedButton
+                className="formBtn"
+                style={{minHeight:"41px"}}
+                secondary={true}
+                icon={ IconsHelper.materialIcon("backup") }
+                label="Choose an Image"
+                >
+                <input
+                type="file"
+                accept="image/*"
+                style={{
+                  cursor: 'pointer',
+                  position: 'absolute',
+                  top: 0,
+                  bottom: 0,
+                  right: 0,
+                  left: 0,
+                  width: '100%',
+                  opacity: 0,
+                  zIndex: 1,
+                }}
+                onChange={this.handleUpload} />
+                </RaisedButton>
+              </Col>
+            </Row>
+            <Row style={{ paddingBottom: 21 }}>
+              <Col xs={12}>
+                {this.state.loadingFile?
+                  <LinearProgress mode="indeterminate" id="LinearProgressEdit"/>
+                  :
+                  <div />
+                }
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12}>
+              <div style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                justifyContent: 'space-around',
+              }}>
+
+
+              {this.state.tile?
+                  <GridList
+                  cellHeight={300}
+                  cols={2}
+                  style={{
+                    width: '100%',
+                    height: 'auto',
+                    overflowY: 'auto',
+                    marginBottom: 24,
+                    paddingLeft:"15px",
+                    paddingRight:"15px"
+                  }}
+                  >
+                    <GridTile
+                    key={this.state.tile.res.secure_url}
+                    title={this.state.tile.files[0].name}
+                    cols={2} >
+                      <img src={this.state.tile.res.secure_url} />
+                    </GridTile>
+                  </GridList>
+                  :
+                  <div />
+                }
+                </div>
+              </Col>
+            </Row>
+
+        </Formsy.Form>
+      </Paper>
+
+    </Dialog>
     );
   }
 };

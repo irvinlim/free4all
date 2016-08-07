@@ -11,7 +11,7 @@ import ConfirmRGeo from '../components/map/confirm-rgeo';
 import LeafletMap from '../components/map/leaflet-map';
 import MapInfoBox from '../components/map/map-info-box';
 import MapUserBox from '../components/map/map-user-box';
-import { GoToGeolocationButton } from '../components/map/go-to-geolocation-button';
+import GoToGeolocationButton from '../components/map/go-to-geolocation-button';
 import InsertBtnDialog from '../components/map/insert-button-dialog';
 import EditBtnDialog from '../components/map/edit-button-dialog';
 
@@ -142,10 +142,6 @@ export class MyGiveaways extends React.Component {
 
   closeModal() {
     this.setState({ isModalOpen: false });
-  }
-
-  openModal() {
-    this.setState({ isModalOpen: true });
   }
 
   addDraggable() {
@@ -304,7 +300,6 @@ export class MyGiveaways extends React.Component {
 
         <EditBtnDialog
           isModalOpen={ this.state.isModalOpen }
-          openModal={ this.openModal.bind(this) }
           closeModal={ (this.selectEditGa.bind(this))(null) }
           latLng={ this.state.latLngClicked }
           locArr={ this.state.locArr }
@@ -317,7 +312,7 @@ export class MyGiveaways extends React.Component {
           gaEdit={ this.state.gaEdit }
           gaId={ this.state.gaSelected }
           mapCenter={ this.state.mapCenter }
-          mapZoom={ this.state.mapZoom }
+          zoom={ this.state.mapZoom }
           closeMapBoxes={ ()=> { this.setState({ nearbyBoxState: 0, infoBoxState: 0 }) } } />
 
       </div>
