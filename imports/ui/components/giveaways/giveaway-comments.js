@@ -77,7 +77,7 @@ const CommentActionsOwner = (self, comment) => (
     { middot }
     <a role="button" onTouchTap={ event => self.setState({ currentlyEditing: comment._id, editCommentValue: comment.content }) }>Edit</a>
     { middot }
-    <a role="button" onTouchTap={ event => self.handleRemoveComment(comment._id) }>Remove</a>
+    <a role="button" onTouchTap={ event => handleAction(removeComment, comment._id, 'Comment removed.') }>Remove</a>
   </span>
 );
 
@@ -85,7 +85,7 @@ const CommentActionsNonOwner = (self, comment) => (
   <span>
     { middot }
     { !GiveawaysHelper.userHasFlaggedComment(comment, Meteor.userId()) ?
-      <a role="button" onTouchTap={ event => self.handleFlagComment(comment._id) }>Flag</a> :
+      <a role="button" onTouchTap={ event => handleAction(flagComment, comment._id, 'Thanks for flagging, we will be reviewing this shortly.') }>Flag</a> :
       "Flagged"
     }
   </span>
@@ -106,9 +106,9 @@ const CommentActionsMod = (self, comment) => {
       <p className="timestamp small-text">
         flagged { flagCount } { pluralizer(flagCount, 'time', 'times') }
         { middot }
-        <a role="button" onTouchTap={ event => self.handleUnflagComment(comment._id) }>Unflag</a>
+        <a role="button" onTouchTap={ event => handleAction(unflagComment, comment._id, 'Successfully removed all flags.') }>Unflag</a>
         { middot }
-        <a role="button" onTouchTap={ event => self.handleUnflagComment(comment._id) } style={{ color: Colors.red700 }}>Delete comment</a>
+        <a role="button" onTouchTap={ event => handleAction(removeFlaggedComment, comment._id, 'Successfully removed flagged comment.') } style={{ color: Colors.red700 }}>Delete comment</a>
       </p>
     );
   else
@@ -152,6 +152,22 @@ const NoComments = () => (
   </p>
 );
 
+const handleAction = (action, _id, notification) => {
+  const userId = Meteor.userId();
+
+  if (!_id)
+    return false;
+
+  action.call({ _id, userId }, (error) => {
+    if (error) {
+      console.log(error);
+      Bert.alert(error.reason, 'danger');
+    } else {
+      Bert.alert(notification, 'success');
+    }
+  });
+};
+
 export class GiveawayComments extends React.Component {
 
   constructor(props) {
@@ -179,54 +195,6 @@ export class GiveawayComments extends React.Component {
         Bert.alert(error.reason, 'danger');
       } else {
         Bert.alert('Comment updated.', 'success');
-      }
-    });
-  }
-
-  handleRemoveComment(_id) {
-    const userId = Meteor.userId();
-
-    if (!_id)
-      return false;
-
-    removeComment.call({ _id, userId }, (error) => {
-      if (error) {
-        console.log(error);
-        Bert.alert(error.reason, 'danger');
-      } else {
-        Bert.alert('Comment removed.', 'success');
-      }
-    });
-  }
-
-  handleFlagComment(_id) {
-    const userId = Meteor.userId();
-
-    if (!_id)
-      return false;
-
-    flagComment.call({ _id, userId }, (error) => {
-      if (error) {
-        console.log(error);
-        Bert.alert(error.reason, 'danger');
-      } else {
-        Bert.alert('Thanks for flagging, we will be reviewing this shortly.', 'success');
-      }
-    });
-  }
-
-  handleUnflagComment(_id) {
-    const userId = Meteor.userId();
-
-    if (!_id)
-      return false;
-
-    unflagComment.call({ _id, userId }, (error) => {
-      if (error) {
-        console.log(error);
-        Bert.alert(error.reason, 'danger');
-      } else {
-        Bert.alert('Successfully removed all flags.', 'success');
       }
     });
   }

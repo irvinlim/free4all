@@ -16,6 +16,13 @@ Meteor.publish('user-data', function() {
 });
 
 // For public
+Meteor.publish('public-user-data', function() {
+  return Meteor.users.find({}, {
+    fields: userPublicFields,
+  });
+});
+
+// For public
 Meteor.publish('user-by-id', function(userId) {
   check(userId, Match._id);
   return Meteor.users.find(userId, {

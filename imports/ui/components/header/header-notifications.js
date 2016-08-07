@@ -61,7 +61,7 @@ export class HeaderNotifications extends React.Component {
         <div id="header-notifications">
           <Badge
             style={{ padding:0 }}
-            badgeStyle={{ height:20, width:20, backgroundColor: 'rgba(255, 255, 255, 0.65)', color:'#045d68' }}
+            badgeStyle={{ height: 20, width: 20, backgroundColor: 'rgba(255, 255, 255, 0.65)', color:'#045d68' }}
             badgeContent={ this.props.notificationCount }>
             <IconButton onTouchTap={ this.handleOnTouchTap.bind(this) } children={ IconsHelper.icon("notifications", { color: Colors.grey50 }) } />
           </Badge>
@@ -72,7 +72,7 @@ export class HeaderNotifications extends React.Component {
             onRequestClose={ this.handleRequestClose.bind(this) }
             anchorOrigin={{"horizontal":"right","vertical":"bottom"}}
             targetOrigin={{"horizontal":"right","vertical":"top"}}
-            style={{ maxWidth: 400, width: "calc(100% - 20px)", marginLeft: 10 }}>
+            style={{ maxWidth: 500, width: "calc(100% - 20px)", marginLeft: 10 }}>
             <NotificationsList
               notifications={ this.props.notifications }
               handleNotificationTouchTap={ this.handleNotificationTouchTap.bind(this) } />

@@ -5,6 +5,17 @@ import { aggregateUserNames } from '../../util/notifications';
 import * as RolesHelper from '../../util/roles';
 
 if (Meteor.isServer) {
+
+  const insertNotification = (userId, data) => {
+    return Herald.createNotification(userId, {
+      courier: 'notification',
+      data: {
+        ...data,
+        timestamp: new Date(),
+      }
+    });
+  };
+
   Meteor.methods({
 
     // notifGroupId is a unique ID that can group pushed notifications together
@@ -31,15 +42,7 @@ if (Meteor.isServer) {
         Herald.collection.remove({ userId, 'data.notifGroupId': notifGroupId, read: false });
 
         // Replace with new notification
-        Herald.createNotification(userId, {
-          courier: 'notification',
-          data: {
-            ...newData,
-            notifGroupId,
-            timestamp: new Date(),
-          }
-        });
-
+        insertNotification(userId, { ...newData, notifGroupId });
       });
     },
 
@@ -59,7 +62,7 @@ if (Meteor.isServer) {
       if (!giveaway)
         return;
 
-      Meteor.call('upsertNotifications', giveawayId, [ giveaway.userId ], (existingData) => {
+      Meteor.call('upsertNotifications', `commentedOnGiveaway-${giveawayId}`, [ giveaway.userId ], (existingData) => {
         const metadata = existingData ? existingData.data.metadata : null;
         const newUserIds = metadata ? metadata.userIds.filter(userId => userId !== commenterId) : [];
         newUserIds.unshift(commenterId);
@@ -98,7 +101,7 @@ if (Meteor.isServer) {
 
       const modsAdminsUserIds = RolesHelper.findModsOrAdmins().map(user => user._id);
 
-      Meteor.call('upsertNotifications', commentId, modsAdminsUserIds, (existingData) => {
+      Meteor.call('upsertNotifications', `flaggedComment-${commentId}`, modsAdminsUserIds, (existingData) => {
         const metadata = existingData ? existingData.metadata : null;
         const newUserIds = metadata ? metadata.userIds.filter(userId => userId !== flaggerId) : [];
         newUserIds.unshift(flaggerId);
@@ -132,11 +135,33 @@ if (Meteor.isServer) {
 
       const modsAdminsUserIds = RolesHelper.findModsOrAdmins().map(user => user._id);
 
-      Meteor.call('removeUnreadNotification', commentId, modsAdminsUserIds, (error, result) => {
+      Meteor.call('removeUnreadNotification', `flaggedComment-${commentId}`, modsAdminsUserIds, (error, result) => {
         if (error) {
           console.log("Error upserting notification in notifyModsFlaggedComment:");
           console.log(error);
         }
+      });
+    },
+
+    notifyRemovedFlaggedComment: (commentId) => {
+      check(commentId, Match._id);
+
+      const comment = GiveawayComments.findOne(commentId);
+      const giveaway = Giveaways.findOne(comment.giveawayId);
+
+      if (!comment || !giveaway)
+        return;
+
+      insertNotification(comment.userId, {
+        title: 'Comment deleted',
+        body: `Your comment on ${giveaway.title} was reported and removed by our moderators.`,
+        avatar: {
+          type: 'icon',
+          val: {
+            icon: 'flag',
+            color: '#d23726'
+          }
+        },
       });
     },
 

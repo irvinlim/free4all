@@ -7,10 +7,12 @@ const composer = (props, onData) => {
   if (!Meteor.userId()) {
     onData(null, {});
   } else if (Meteor.subscribe('notifications').ready()) {
-    onData(null, {
-      notifications: Herald.getNotifications({ user: Meteor.userId(), medium: 'onsite' }, { sort: { timestamp: -1 }, limit: 10 }).fetch(),
-      notificationCount: Herald.getNotifications({ user: Meteor.userId(), medium: 'onsite' }).count(),
-    });
+    if (Meteor.subscribe('public-user-data').ready()) {
+      onData(null, {
+        notifications: Herald.getNotifications({ user: Meteor.userId(), medium: 'onsite' }, { sort: { timestamp: -1 }, limit: 10 }).fetch(),
+        notificationCount: Herald.getNotifications({ user: Meteor.userId(), medium: 'onsite' }).count(),
+      });
+    }
   }
 };
 

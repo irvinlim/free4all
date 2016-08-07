@@ -145,7 +145,7 @@ export const unflagComment = new ValidatedMethod({
       $set: { flags: [] },
     });
 
-    // Remove notifications
+    // Remove loose notifications
     Meteor.call('unnotifyModsFlaggedComment', _id);
   },
 });
@@ -172,9 +172,12 @@ export const removeFlaggedComment = new ValidatedMethod({
       throw new Meteor.Error("giveawayComments.removeFlaggedComment.notAuthorized", "Not authorized to unflag comment.");
 
     // Update comment
-    return GiveawayComments.update(_id, { $set: { isRemoved: true, removeUserId: userId } });
+    GiveawayComments.update(_id, { $set: { isRemoved: true, removeUserId: userId } });
 
-    // Remove notifications
+    // Notify commenter
+    Meteor.call('notifyRemovedFlaggedComment', _id);
+
+    // Remove loose notifications
     Meteor.call('unnotifyModsFlaggedComment', _id);
   },
 });
