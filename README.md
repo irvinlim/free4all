@@ -42,7 +42,7 @@ Although not yet implemented, we also planned to send out timely mailing lists w
 - **Map Data:** [OpenStreetMap](http://www.openstreetmap.org/)
 
 ### Servers
-- **Hosting:** [Modulus](https://modulus.io/)
+- **Hosting:** [DigitalOcean](https://digitalocean.com/)
 - **Images:** [Cloudinary](https://cloudinary.com/)
 - **CDN:** [CloudFlare](https://www.cloudflare.com/)
 
