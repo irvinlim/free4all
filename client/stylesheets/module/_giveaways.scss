@@ -124,4 +124,5 @@
 .add-comment-form, .comment-row {
   padding: 12px 10px;
   &.comment-flagged { background-color: rgba(#480d13, 0.1); }
+  &.comment-removed { background-color: rgba(#666666, 0.1); }
 }

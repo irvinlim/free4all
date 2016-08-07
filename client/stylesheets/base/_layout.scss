@@ -8,13 +8,13 @@ html body {
 
   a { color: #2c567a; }
   strong { font-weight: 500; }
+  label { font-weight: inherit; }
 }
 
 html, html body { background-color: #eef0f3; height: 100%; }
 
 // Common elements
 a.button:hover { text-decoration: none; }
-label[for] { font-weight: inherit; }
 
 // Containers
 .full-container {

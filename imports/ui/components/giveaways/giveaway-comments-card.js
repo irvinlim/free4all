@@ -3,12 +3,15 @@ import { Meteor } from 'meteor/meteor';
 import Paper from 'material-ui/Paper';
 import Divider from 'material-ui/Divider';
 import TextField from 'material-ui/TextField';
+import Toggle from 'material-ui/Toggle';
 import FlatButton from 'material-ui/FlatButton';
 import { Scrollbars } from 'react-custom-scrollbars';
 import PaperCard from '../../layouts/paper-card';
 
+import * as Colors from 'material-ui/styles/colors';
 import * as GiveawaysHelper from '../../../util/giveaways';
 import * as UsersHelper from '../../../util/users';
+import * as RolesHelper from '../../../util/roles';
 import * as LayoutHelper from '../../../util/layout';
 
 import GiveawayComments from '../../containers/giveaways/giveaway-comments';
@@ -48,6 +51,7 @@ export class GiveawayCommentsCard extends React.Component {
 
     this.state = {
       addCommentValue: "",
+      showRemoved: false,
     };
   }
 
@@ -76,9 +80,21 @@ export class GiveawayCommentsCard extends React.Component {
       <PaperCard className="giveaway">
         <div className="flex-row">
           <div className="col col-xs-12">
-            <h3>Comments</h3>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <h3>Comments</h3>
+              {
+                RolesHelper.modsOrAdmins(Meteor.user()) ?
+                <Toggle
+                  label="Show removed comments"
+                  toggled={ this.state.showRemoved }
+                  onToggle={ event => this.setState({ showRemoved: !this.state.showRemoved }) }
+                  style={{ height: 20, display: 'block', fontSize: "12px", width: 200 }}
+                  labelStyle={{ textAlign: 'right', marginRight: 5, color: Colors.grey700 }} />
+                : null
+              }
+            </div>
 
-            <GiveawayComments gaId={ this.props.gaId } showActions={true} />
+            <GiveawayComments gaId={ this.props.gaId } showActions={true} showRemoved={ this.state.showRemoved } />
 
             <Divider style={{ marginTop: 15 }} />
 

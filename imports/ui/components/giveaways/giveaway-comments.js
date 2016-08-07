@@ -27,9 +27,11 @@ const CommentsList = (self, comments, owner) => (
 
 const CommentRow = (self, owner) => (comment, index) => {
   const isFlaggedAndMod = RolesHelper.modsOrAdmins(Meteor.user()) && GiveawaysHelper.countTotalFlags(comment) > 0;
+  const isRemovedAndMod = RolesHelper.modsOrAdmins(Meteor.user()) && comment.isRemoved === true;
+
   return (
     <div
-      className={`comment-row ${ isFlaggedAndMod ? 'comment-flagged' : '' }`}
+      className={`comment-row ${ isRemovedAndMod ? 'comment-removed' : isFlaggedAndMod ? 'comment-flagged' : '' }`}
       key={index}>
       { self.state.currentlyEditing && self.state.currentlyEditing == comment._id ?
         CommentRowEditing(self, comment, owner) :
@@ -48,17 +50,25 @@ const CommentRowDisplay = (self, comment, owner) => {
       <h5 className="comment-username">{ UsersHelper.getUserLink(user, UsersHelper.getFullNameWithLabelIfEqual(user, owner, "Author")) }</h5>
       { GiveawaysHelper.commentBody(content) }
 
-      <p className="timestamp small-text">
-        { updatedAt ? "updated " + moment(updatedAt).fromNow() : moment(createdAt).fromNow() }
-        { self.props.showActions && Meteor.userId() ?
-          user && user._id === Meteor.userId() ? CommentActionsOwner(self, comment) : CommentActionsNonOwner(self, comment) :
-          null
-        }
-      </p>
+      { comment.isRemoved !== true ? CommentActions(self, comment) : null }
 
       { RolesHelper.modsOrAdmins(Meteor.userId()) ? CommentActionsMod(self, comment) : null }
     </div>,
     40
+  );
+};
+
+const CommentActions = (self, comment) => {
+  const { _id, content, user, createdAt, updatedAt } = comment;
+  return (
+    <p className="timestamp small-text">
+      { updatedAt ? "updated " + moment(updatedAt).fromNow() : moment(createdAt).fromNow() }
+
+      { self.props.showActions && Meteor.userId() ?
+        user && user._id === Meteor.userId() ? CommentActionsOwner(self, comment) : CommentActionsNonOwner(self, comment) :
+        null
+      }
+    </p>
   );
 };
 
@@ -82,9 +92,16 @@ const CommentActionsNonOwner = (self, comment) => (
 );
 
 const CommentActionsMod = (self, comment) => {
+  const isRemoved = comment.isRemoved === true;
   const flagCount = GiveawaysHelper.countTotalFlags(comment);
 
-  if (flagCount > 0)
+  if (isRemoved)
+    return (
+      <p className="timestamp small-text">
+        deleted by { UsersHelper.getUserLink(comment.removeUserId) } { moment(comment.updatedAt).fromNow() }
+      </p>
+    );
+  else if (flagCount > 0)
     return (
       <p className="timestamp small-text">
         flagged { flagCount } { pluralizer(flagCount, 'time', 'times') }

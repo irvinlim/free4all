@@ -6,6 +6,7 @@ import { Loading } from '../../components/loading';
 import { Giveaways } from '../../../api/giveaways/giveaways';
 import { GiveawayComments } from '../../../api/giveaway-comments/giveaway-comments';
 
+import * as RolesHelper from '../../../util/roles';
 import * as GiveawaysHelper from '../../../util/giveaways';
 
 const composer = (props, onData) => {
@@ -14,12 +15,20 @@ const composer = (props, onData) => {
 
   if (Meteor.subscribe('comments-for-giveaway', props.gaId).ready()) {
     const ga = Giveaways.findOne(props.gaId);
-    const sortedComments = GiveawayComments.find({
+
+    // Query selector
+    const selector = {
       giveawayId: props.gaId,
       isRemoved: { $ne: true }
-    }, {
-      sort: { createdAt: -1 }
-    });
+    };
+
+    // Can show removed comments if you are a mod or admin
+    // Check prop for showRemoved
+    if (RolesHelper.modsOrAdmins(Meteor.user()) && props.showRemoved)
+      delete selector.isRemoved;
+
+    // Get sorted comments
+    const sortedComments = GiveawayComments.find(selector, { sort: { createdAt: -1 } });
 
     const users = [];
     sortedComments.forEach(comment => {
@@ -28,9 +37,10 @@ const composer = (props, onData) => {
 
     if (Meteor.subscribe('users-by-id', users).ready()) {
       const denormalizedComments = sortedComments.map(comment => {
-        return _.extend(comment, {
+        return {
+          ...comment,
           user: Meteor.users.findOne(comment.userId),
-        });
+        };
       });
 
       onData(null, {
