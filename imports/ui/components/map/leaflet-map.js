@@ -19,6 +19,7 @@ export default class LeafletMap extends React.Component {
     this.mapObject = new LeafletMapObject('main-map');
     this.observeChanges();
     this.registerEventHandlers();
+    this.setInitialMapCenterZoom();
   }
 
   resizeFullContainer() {
@@ -27,6 +28,11 @@ export default class LeafletMap extends React.Component {
       $('.full-container').css('height', window.innerHeight - $("#header").outerHeight());
     });
     $(window).resize();
+  }
+
+  setInitialMapCenterZoom(){
+    this.props.setMapCenter(this.mapObject.map.getCenter());
+    this.props.setMapZoom(this.mapObject.map.getZoom());
   }
 
   observeChanges() {
@@ -83,7 +89,7 @@ export default class LeafletMap extends React.Component {
 
       const invisibleMarker = L.marker(nextProps.mapCenter, { icon: invisibleIcon });
       const popup = L.popup({ closeOnClick: true, className: 'centerMarkerPopup' })
-        .setContent('<p>Drag to select location!</p>');
+        .setContent('<p>Drag the map to select location!</p>');
 
       // Remove previous marker if any
       if(this.hiddenMarker) self.removeHiddenMarker();

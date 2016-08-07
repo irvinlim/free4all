@@ -315,7 +315,6 @@ export class Index extends React.Component {
 
           <InsertBtnDialog
             isModalOpen={this.state.isModalOpen}
-            openModal={ ()=>{this.setState({ isModalOpen: true })} }
             closeModal={ ()=>{this.setState({ isModalOpen: false })} }
             latLng={this.state.latLngClicked}
             locArr={this.state.locArr}

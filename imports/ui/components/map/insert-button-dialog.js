@@ -136,9 +136,6 @@ export default class InsertBtnDialog extends React.Component {
       },
     };
 
-    this.handleTagsChange = (tags) => {
-      this.setState({tags})
-    };
 
     this.handleClose = () => {
       props.closeModal();
@@ -161,35 +158,8 @@ export default class InsertBtnDialog extends React.Component {
       return moment(date).format("dddd, Do MMM YYYY");
     };
 
-    this.handleTitle = (e)  => {
-      this.setState({title: e.target.value});
-    };
-    this.handleDescription = (e)  => {
-      this.setState({description: e.target.value});
-    };
-    this.handleWebsite = (e)  => {
-      this.setState({website: e.target.value});
-    };
     this.handleLocation = (e)  => {
       this.setState({location: e.target.value});
-    };
-    this.handleLat = (e)  => {
-      this.setState({lat: e.target.value});
-    };
-    this.handleLng = (e)  => {
-      this.setState({lng: e.target.value});
-    };
-    this.handleStartDatePicker = (e, date) => {
-      this.setState({startDate: date, endDate: date});
-    };
-    this.handleEndDatePicker = (e, date) => {
-      this.setState({endDate: date});
-    };
-    this.handleChangeStartTimePicker12 = (e, date) => {
-      this.setState({startTime: date});
-    };
-    this.handleChangeEndTimePicker12 = (e, date) => {
-      this.setState({endTime: date});
     };
     this.handleRecurring = (e,val) => {
       this.setState({recurring: val});
@@ -334,7 +304,6 @@ render() {
       onTouchTap={this.handleClose} />,
   ];
   return (
-
     <Dialog
       className="dialog insertDialog"
       title="Add a new Giveaway"
@@ -367,7 +336,7 @@ render() {
                   floatingLabelText="Event Name"
                   hintText="What is name of the event?"
                   value={this.state.title}
-                  onBlur={this.handleTitle} />
+                  onBlur={ e => this.setState({title: e.target.value}) } />
               </Col>
               <Col xs={12}>
                 <FormsyText
@@ -379,8 +348,7 @@ render() {
                   required
                   hintText="What is the event about?"
                   value={this.state.description}
-                  onBlur={this.handleDescription}
-                  />
+                  onBlur={ e => this.setState({description: e.target.value}) } />
               </Col>
               <Col xs={12}>
                 <FormsyText
@@ -389,7 +357,7 @@ render() {
                   floatingLabelText="Website"
                   hintText="Website URL"
                   value={this.state.website}
-                  onBlur={this.handleWebsite} />
+                  onBlur={ e => this.setState({website: e.target.value}) } />
               </Col>
             </Row>
 
@@ -407,7 +375,7 @@ render() {
                   autoOk={true}
                   textFieldStyle={this.dateTimeTextStyle}
                   minDate={new Date()}
-                  onChange={this.handleStartDatePicker}
+                  onChange={ (e, date) => this.setState({startDate: date, endDate: date}) }
                   value={this.state.startDate} />
               </Col>
               <Col xs={4} md={2}>
@@ -419,7 +387,7 @@ render() {
                   format="ampm"
                   floatingLabelText="Start Time"
                   textFieldStyle={this.dateTimeTextStyle}
-                  onChange={this.handleChangeStartTimePicker12}
+                  onChange={ (e, date) => this.setState({startTime: date}) }
                   value={this.state.startTime} />
               </Col>
               <Col xs={8} md={4}>
@@ -431,7 +399,7 @@ render() {
                   autoOk={true}
                   minDate={new Date()}
                   textFieldStyle={this.dateTimeTextStyle}
-                  onChange={this.handleEndDatePicker}
+                  onChange={ (e, date) => this.setState({endDate: date}) }
                   value={this.state.endDate} />
               </Col>
               <Col xs={4} md={2}>
@@ -443,7 +411,7 @@ render() {
                   format="ampm"
                   floatingLabelText="End Time"
                   textFieldStyle={this.dateTimeTextStyle}
-                  onChange={this.handleChangeEndTimePicker12}
+                  onChange={ (e, date) => this.setState({endTime: date}) }
                   value={this.state.endTime}
                   defaultTime={ moment().set('minute', 0).toDate() } />
               </Col>
@@ -484,23 +452,15 @@ render() {
                   name="lat"
                   validations="isNumeric"
                   validationError={numericError}
-                  hintText="Latitude"
                   required
-                  floatingLabelText="Latitude"
                   value={this.state.lat}
-                  onChange={this.handleLat}
                   disabled={true} />
-              </Col>
-              <Col className="displayNone">
                 <FormsyText
                   name="lng"
                   validations="isNumeric"
                   validationError={numericError}
-                  hintText="Longitude"
                   required
-                  floatingLabelText="Longitude"
                   value={this.state.lng}
-                  onChange={this.handleLng}
                   disabled={true} />
               </Col>
             </Row>
@@ -534,7 +494,7 @@ render() {
                   setChildCat={this.setChildCat}
                   isCatMenuOpen={this.state.isCatMenuOpen}
                   anchorEl={this.state.anchorEl}
-                  closeCatMenu={ e =>{ this.setState({ isCatMenuOpen: false }) } } />
+                  closeCatMenu={ e => this.setState({ isCatMenuOpen: false }) } />
               </Col>
               <Col className="displayNone">
               <FormsyText
@@ -543,7 +503,9 @@ render() {
                 required />
               </Col>
               <Col xs={12} md={12}>
-                <TagsInput value={this.state.tags} onChange={this.handleTagsChange} />
+                <TagsInput
+                  value={this.state.tags}
+                  onChange={ tags => this.setState({tags}) } />
               </Col>
             </Row>
 
@@ -555,8 +517,8 @@ render() {
                 <IncludedCommunities
                   value={ this.state.commIdsVal }
                   options={ this.state.commIdsOpt }
-                  setOptVal= { (opt,val) => { this.setState({ commIdsOpt:opt, commIdsVal:val })}}
-                  handleChange = { commIdsVal => { this.setState({ commIdsVal })} } />
+                  setOptVal= { (opt,val) => this.setState({ commIdsOpt:opt, commIdsVal:val }) }
+                  handleChange = { commIdsVal => this.setState({ commIdsVal }) } />
               </Col>
             </Row>
 

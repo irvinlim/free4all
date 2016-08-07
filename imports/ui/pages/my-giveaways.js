@@ -305,15 +305,15 @@ export class MyGiveaways extends React.Component {
           locArr={ this.state.locArr }
           locName={ this.state.locName }
           locNameFlag={this.state.locNameFlag}
-          rmvlocNameFlag={ ()=>{this.setState({ locName: null, locNameFlag: false })} }
-          addRGeoTriggerMarker={ ()=>{this.setState({ rGeoTrigger: true, showRGeoMarker: true })} }
+          rmvlocNameFlag={ ()=> this.setState({ locName: null, locNameFlag: false }) }
+          addRGeoTriggerMarker={ ()=> this.setState({ rGeoTrigger: true, showRGeoMarker: true }) }
           hideMarkers={ this.hideMarkers.bind(this) }
           resetLoc={ this.resetLoc.bind(this) }
-          gaEdit={ this.state.gaEdit }
-          gaId={ this.state.gaSelected }
           mapCenter={ this.state.mapCenter }
           zoom={ this.state.mapZoom }
-          closeMapBoxes={ ()=> { this.setState({ nearbyBoxState: 0, infoBoxState: 0 }) } } />
+          gaEdit={ this.state.gaEdit }
+          gaId={ this.state.gaSelected }
+          closeMapBoxes={ ()=> this.setState({ nearbyBoxState: 0, infoBoxState: 0 }) } />
 
       </div>
 
