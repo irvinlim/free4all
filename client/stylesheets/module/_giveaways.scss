@@ -121,4 +121,7 @@
   }
 }
 
-.add-comment-form, .comment-row { padding: 12px 0; }
+.add-comment-form, .comment-row {
+  padding: 12px 10px;
+  &.comment-flagged { background-color: rgba(#480d13, 0.1); }
+}
