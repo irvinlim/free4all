@@ -51,8 +51,6 @@ export class Index extends React.Component {
       homeZoom: null,
     };
 
-    this.mapBounds = new ReactiveVar( null );
-
     this.subscription = null;
     this.autorunSub = null;
     this.autorunGeo = null;
@@ -83,22 +81,18 @@ export class Index extends React.Component {
 
     // Autorun subscription
     this.autorunSub = Tracker.autorun(function () {
-      const reactiveDateTime = Chronos.currentTime(Meteor.settings.public.refresh_interval || 60000);
-      const reactiveMapBounds = self.mapBounds.get();
+      const reactiveUser = Meteor.user();
 
-      // Re-subscribe every minute or if map center changed
-      if (reactiveDateTime && reactiveMapBounds) {
+      // Re-subscribe if user changed
+      let commIds = [];
 
-        let commIds = [];
+      // Pass user communities to publication function
+      if (Meteor.user())
+        commIds = Meteor.user().communityIds;
+      else if (Session.get('homeLocation'))
+        commIds = [ Session.get('homeLocation').commId ];
 
-        // Pass user communities to publication function
-        if (Meteor.user())
-          commIds = Meteor.user().communityIds;
-        else if (Session.get('homeLocation'))
-          commIds = [ Session.get('homeLocation').commId ];
-
-        self.subscription = Meteor.subscribe('giveaways-search', { tab: 'current', commIds });
-      }
+      self.subscription = Meteor.subscribe('giveaways-search', { tab: 'current', commIds });
     });
 
     // Autorun track device location
@@ -256,7 +250,6 @@ export class Index extends React.Component {
           mapZoom={ this.state.mapZoom }
           setMapZoom={ mapZoom => this.setState({ mapZoom: mapZoom })}
           setMapMaxZoom={ mapMaxZoom => this.setState({ mapMaxZoom: mapMaxZoom })}
-          setBounds={ bounds => this.mapBounds.set(bounds) }
           showMarkers={ this.state.showMarkers }
           rGeoTrigger={ this.state.rGeoTrigger }
           rmvRGeoTrigger={ ()=>{this.setState({ rGeoTrigger: false })} }
@@ -282,7 +275,6 @@ export class Index extends React.Component {
             gaId={ this.state.gaSelected }
             boxState={ this.state.nearbyBoxState }
             setBoxState={ this.setNearbyBoxState.bind(this) }
-            mapBounds={ this.mapBounds.get() }
             nearbyOnClick={ clickNearbyGa }
           />
           <ConfirmRGeo

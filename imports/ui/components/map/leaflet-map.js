@@ -62,7 +62,6 @@ export default class LeafletMap extends React.Component {
       self.props.setMapCenter(center);
       self.props.setMapZoom(map.getZoom());
       self.props.setMapMaxZoom(map.getMaxZoom());
-      self.props.setBounds(map.getBounds());
       if(self.hiddenMarker)
         self.hiddenMarker.setLatLng(center);
     });
