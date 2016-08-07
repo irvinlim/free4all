@@ -71,7 +71,8 @@ export class HeaderNotifications extends React.Component {
             anchorEl={ this.state.anchorEl }
             onRequestClose={ this.handleRequestClose.bind(this) }
             anchorOrigin={{"horizontal":"right","vertical":"bottom"}}
-            targetOrigin={{"horizontal":"right","vertical":"top"}}>
+            targetOrigin={{"horizontal":"right","vertical":"top"}}
+            style={{ maxWidth: 400, width: "calc(100% - 20px)", marginLeft: 10 }}>
             <NotificationsList
               notifications={ this.props.notifications }
               handleNotificationTouchTap={ this.handleNotificationTouchTap.bind(this) } />

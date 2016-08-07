@@ -23,4 +23,6 @@ import '../../api/giveaway-comments/server/publications';
 import '../../api/communities/methods';
 import '../../api/communities/server/publications';
 
+import '../../api/notifications/methods';
+
 import './publications';

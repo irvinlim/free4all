@@ -1,7 +1,13 @@
 import React from 'react';
 import Avatar from 'material-ui/Avatar';
 
+import { Giveaways } from '../api/giveaways/giveaways';
+
 import * as IconsHelper from './icons';
+import * as UsersHelper from './users';
+import * as GiveawaysHelper from './giveaways';
+import { pluralizer } from './helper';
+import { getFullName } from './users';
 
 export const makeNotifAvatar = (avatar) => {
   const defaultAvatar = <Avatar icon={ IconsHelper.icon("priority_high") } />
@@ -12,14 +18,9 @@ export const makeNotifAvatar = (avatar) => {
   switch (avatar.type) {
     case "giveaway":
       const ga = Giveaways.findOne(avatar.val);
-      return ga.avatar && ga.avatar.url ?
-        <Avatar src={ ga.avatar.url } /> :
-        defaultAvatar;
+      return GiveawaysHelper.makeAvatar(ga, 40);
     case "user":
-      const user = Meteor.users.findOne(avatar.val);
-      return user.avatar && user.avatar.url ?
-        <Avatar src={ user.avatar.url } /> :
-        defaultAvatar;
+      return UsersHelper.getAvatar(avatar.val, 40);
     case "announcement":
       return <Avatar icon={ IconsHelper.icon("star_rate") } />;
     case "url":
@@ -28,3 +29,17 @@ export const makeNotifAvatar = (avatar) => {
       return defaultAvatar;
   }
 };
+
+export const aggregateUserNames = (userIds) => {
+  if (userIds.length === 0)
+    return "No one";
+
+  const userNames = userIds.map(getFullName);
+
+  if (userIds.length === 1)
+    return userNames[0];
+  else if (userIds.length === 2)
+    return `${userNames[0]} and ${userNames[1]}`;
+  else
+    return `${userNames[0]}, ${userNames[1]} and ${userIds.length - 2} ${pluralizer(userIds.length - 2, 'other', 'others')}`;
+}

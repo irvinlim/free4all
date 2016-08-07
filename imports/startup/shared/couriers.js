@@ -1,15 +1,15 @@
-Herald.addCourier('serviceAnnouncement', {
+Herald.addCourier('notification', {
   media: {
     onsite: {}
   },
 
+  // Object properties:
+  // - title
+  // - body
+  // - avatar: { type, url }
+  // - url
+  // - metadata: { ... }
   message: function () {
-    return {
-      title:      this.data.title,
-      body:       this.data.body,
-      timestamp:  this.timestamp,
-      avatar:     this.data.avatar,
-      url:        this.data.url,
-    }
+    return this.data;
   }
 });

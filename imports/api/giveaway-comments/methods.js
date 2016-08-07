@@ -25,7 +25,10 @@ export const insertComment = new ValidatedMethod({
       throw new Meteor.Error("giveawayComments.insertComment.undefinedGiveaway", "No such Giveaway found.");
 
     // Insert comment
-    return GiveawayComments.insert({ giveawayId, userId, content });
+    GiveawayComments.insert({ giveawayId, userId, content });
+
+    // Send notification to giveaway owner
+    Meteor.call('notifyCommentedOnGiveaway', giveawayId, userId);
   },
 });
 

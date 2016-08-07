@@ -17,7 +17,7 @@ const giveawayRow = (touchTapHandler) => (ga) => (
       <p>{ GiveawaysHelper.compactDateRange(ga) }<br/>{ ga.location }</p>
     }
     leftAvatar={ GiveawaysHelper.makeAvatar(ga, 40) }
-    secondaryTextLines={2}
+    secondaryTextLines={3}
     onTouchTap={ touchTapHandler(ga) }
   />
 );
