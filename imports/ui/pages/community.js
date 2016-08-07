@@ -10,7 +10,7 @@ import LeafletMap from '../components/map/leaflet-map';
 import MapInfoBox from '../components/map/map-info-box';
 import MapCommunityBox from '../components/map/map-community-box';
 
-import { GoToGeolocationButton } from '../components/map/go-to-geolocation-button'
+import GoToGeolocationButton from '../components/map/go-to-geolocation-button'
 import InsertBtnDialog from '../components/map/insert-button-dialog'
 import EditBtnDialog from '../components/map/edit-button-dialog'
 import FloatingActionButton from 'material-ui/FloatingActionButton';
