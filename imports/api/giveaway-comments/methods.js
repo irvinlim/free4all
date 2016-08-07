@@ -110,9 +110,12 @@ export const flagComment = new ValidatedMethod({
       });
 
     // Update comment
-    return GiveawayComments.update(_id, {
+    GiveawayComments.update(_id, {
       $push: { flags: { userId, date: new Date() } }
     });
+
+    // Notify all moderators
+    Meteor.call('notifyModsFlaggedComment', _id, userId);
   },
 });
 
@@ -138,8 +141,40 @@ export const unflagComment = new ValidatedMethod({
       throw new Meteor.Error("giveawayComments.unflagComment.notAuthorized", "Not authorized to unflag comment.");
 
     // Update comment
-    return GiveawayComments.update(_id, {
+    GiveawayComments.update(_id, {
       $set: { flags: [] },
     });
+
+    // Remove notifications
+    Meteor.call('unnotifyModsFlaggedComment', _id);
+  },
+});
+
+// Only mods/admins can remove flagged comments (will also clean up notifications).
+export const removeFlaggedComment = new ValidatedMethod({
+  name: 'giveawayComments.removeFlaggedComment',
+  validate: new SimpleSchema({
+    _id: { type: String },
+    userId: { type: String },
+  }).validator(),
+  run({ _id, userId }) {
+    const comment = GiveawayComments.findOne(_id);
+
+    if (!comment)
+      throw new Meteor.Error("giveawayComments.removeFlaggedComment.undefinedComment", "No such comment found.");
+
+    // Check authorized
+    const isAuthorized = Roles.userIsInRole(this.userId, ['moderator', 'admin']);
+
+    if (!this.userId || this.userId != userId)
+      throw new Meteor.Error("giveawayComments.removeFlaggedComment.notLoggedIn", "Must be logged in to unflag comment.");
+    else if (!isAuthorized)
+      throw new Meteor.Error("giveawayComments.removeFlaggedComment.notAuthorized", "Not authorized to unflag comment.");
+
+    // Update comment
+    return GiveawayComments.update(_id, { $set: { isRemoved: true, removeUserId: userId } });
+
+    // Remove notifications
+    Meteor.call('unnotifyModsFlaggedComment', _id);
   },
 });
