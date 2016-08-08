@@ -17,6 +17,9 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import IconButton from 'material-ui/IconButton';
 import RefreshIndicator from 'material-ui/RefreshIndicator';
 
+import Store from '../../startup/client/redux-store';
+import { joinCommunity, setHomeCommunity } from '../../api/users/methods';
+
 import * as LatLngHelper from '../../util/latlng';
 import * as IconsHelper from '../../util/icons';
 import { Bert } from 'meteor/themeteorchef:bert';
@@ -214,6 +217,18 @@ export class Index extends React.Component {
       coordinates: community.coordinates,
       zoom: community.zoom,
       commId: community._id
+    });
+
+    joinCommunity.call({ userId: Meteor.userId(), commId: community._id });
+
+    // Set as Home Community if not already set
+    setHomeCommunity.call({
+      userId: Meteor.userId(),
+      community: {
+        _id: community._id,
+        coordinates: community.coordinates,
+        zoom: community.zoom,
+      },
     });
   }
 

@@ -60,7 +60,7 @@ export default class InsertBtnDialog extends React.Component {
       loadingFile: false,
       zoom: 1,
       commIdsVal: [],
-      commIdsOpts: [],
+      commIdsOpt: [],
       removeGiveawayPromptOpen: false,
       gaId: null,
     };
@@ -68,7 +68,6 @@ export default class InsertBtnDialog extends React.Component {
     this.state = this.initialState;
 
     this.handleAddLocation = () => {
-      console.log(this.state.gaId)
       if(this.state.gaId)
         props.hideModal();
       else
@@ -277,7 +276,7 @@ componentWillReceiveProps(nextProps){
   if(this.props.isModalOpen !== nextProps.isModalOpen)
     this.setState({ isOpen: nextProps.isModalOpen })
 
-  if(this.props.latLng.lat !== nextProps.latLng.lat){
+  if(nextProps.locArr.length > 0 && this.props.latLng.lat !== nextProps.latLng.lat){
     let locationText = nextProps.locArr[0].text;
     const strSplitIdx = locationText.indexOf(',');
     const locName = locationText.substr(0, strSplitIdx);
