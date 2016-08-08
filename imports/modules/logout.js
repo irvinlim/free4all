@@ -9,9 +9,6 @@ export const getHandleLogout = (options) => (event) => {
     // Go to main page to avoid complicated checking of requireAuth
     browserHistory.push('/');
 
-    // Clear logged in user's homeLocation Session variable
-    Session.clearPersistent('homeLocation');
-
     if (options && options.callback)
       options.callback();
   });
