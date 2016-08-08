@@ -8,8 +8,10 @@ const composer = (props, onData) => {
     return;
 
   if (Meteor.subscribe('user-by-id', props.userId).ready()) {
-    const user = Meteor.users.findOne(props.userId);
-    onData(null, { user });
+    if (Meteor.subscribe('giveaways-by-user', props.userId).ready()) {
+      const user = Meteor.users.findOne(props.userId);
+      onData(null, { user });
+    }
   }
 };
 
