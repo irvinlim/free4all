@@ -32,7 +32,7 @@ a.button:hover { text-decoration: none; }
 }
 
 .card {
-  margin-bottom: 20px;
+  margin-bottom: 20px; overflow: hidden;
   @include media-xs-only { margin-bottom: 10px; }
 
   .flex-row:not(.nopad) {
