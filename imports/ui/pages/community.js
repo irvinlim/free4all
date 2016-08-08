@@ -12,7 +12,6 @@ import MapCommunityBox from '../components/map/map-community-box';
 
 import GoToGeolocationButton from '../components/map/go-to-geolocation-button'
 import InsertBtnDialog from '../components/map/insert-button-dialog'
-import EditBtnDialog from '../components/map/edit-button-dialog'
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import IconButton from 'material-ui/IconButton';
 import RefreshIndicator from 'material-ui/RefreshIndicator';

@@ -38,10 +38,7 @@ export class Index extends React.Component {
       mapMaxZoom: null,
       isModalOpen: false,
       latLngClicked: {lat:"",lng:""},
-      locName: "",
-      locNameFlag: false,
       locArr: [],
-      locAddress: "",
       showRGeoMarker: false,
       showMarkers: true,
       rGeoLoading: false,
@@ -171,12 +168,9 @@ export class Index extends React.Component {
     });
   }
 
-
   openInsertDialog() {
     this.setState({ isModalOpen: true, showRGeoMarker: false })
-
     this.rmvRGeoListener && this.rmvRGeoListener();
-
     this.showMarkers();
   }
 
@@ -189,16 +183,8 @@ export class Index extends React.Component {
       return loc;
     });
 
-    let locationText = locArr[0].text;
-    const strSplitIdx = locationText.indexOf(',');
-    const locName = locationText.substr(0, strSplitIdx);
-    const locAddress = locationText.substr(strSplitIdx + 1);
-
     this.setState({
       locArr,
-      locName,
-      locAddress,
-      locNameFlag: true,
       latLngClicked: coords
     });
   }
@@ -248,8 +234,8 @@ export class Index extends React.Component {
           mapCenter={ this.state.mapCenter }
           setMapCenter={ mapCenter => this.setState({ mapCenter }) }
           mapZoom={ this.state.mapZoom }
-          setMapZoom={ mapZoom => this.setState({ mapZoom: mapZoom })}
-          setMapMaxZoom={ mapMaxZoom => this.setState({ mapMaxZoom: mapMaxZoom })}
+          setMapZoom={ mapZoom => this.setState({ mapZoom })}
+          setMapMaxZoom={ mapMaxZoom => this.setState({ mapMaxZoom })}
           showMarkers={ this.state.showMarkers }
           rGeoTrigger={ this.state.rGeoTrigger }
           rmvRGeoTrigger={ ()=>{this.setState({ rGeoTrigger: false })} }
@@ -277,13 +263,12 @@ export class Index extends React.Component {
             setBoxState={ this.setNearbyBoxState.bind(this) }
             nearbyOnClick={ clickNearbyGa }
           />
-          <ConfirmRGeo
-            latLng={ this.state.latLngClicked }
-            locArr={ this.state.locArr }
-            locAddress={ this.state.locAddress }
-            locName={ this.state.locName }
-            openInsertDialog={ this.openInsertDialog }
-          />
+          { this.state.showRGeoMarker &&
+            <ConfirmRGeo
+              locArr={ this.state.locArr }
+              openInsertDialog={ this.openInsertDialog } />
+          }
+
         </div>
 
         { this.state.showRGeoMarker && <div className="centerMarker" /> }
@@ -293,10 +278,9 @@ export class Index extends React.Component {
           closeSelectHomeModal={ () => this.setState({ isHomeLocOpen: false }) }
           setHomeLoc={this.setHomeLoc.bind(this)} />
 
-        <div id="map-floating-buttons" style={{ right: 20 + (this.state.nearbyBoxState > 0 ? $("#map-nearby-box").outerWidth() : 0) }}>
-
-          <GoToGeolocationButton
-            geolocationOnClick={ this.goToGeolocation.bind(this) } />
+        <div id="map-floating-buttons"
+             style={{ right: 20 + (this.state.nearbyBoxState > 0 ? $("#map-nearby-box").outerWidth() : 0) }}>
+          <GoToGeolocationButton geolocationOnClick={ this.goToGeolocation.bind(this) } />
 
           <GoToHomeButton
             goToHomeLoc = { this.goToHomeLoc.bind(this) }
@@ -304,22 +288,19 @@ export class Index extends React.Component {
 
           <InsertBtn
             handleOpen={ this.handleOpen.bind(this) } />
-
-          <InsertBtnDialog
-            isModalOpen={this.state.isModalOpen}
-            closeModal={ ()=>{this.setState({ isModalOpen: false })} }
-            latLng={this.state.latLngClicked}
-            locArr={this.state.locArr}
-            locName={this.state.locName}
-            locNameFlag={this.state.locNameFlag}
-            rmvlocNameFlag={ ()=>{this.setState({ locName: null, locNameFlag: false })} }
-            addRGeoTriggerMarker={ ()=>{this.setState({ rGeoTrigger: true, showRGeoMarker: true })} }
-            hideMarkers={ ()=>{this.setState({ showMarkers: false })} }
-            resetLoc={ this.resetLoc.bind(this) }
-            mapCenter={ this.state.mapCenter }
-            zoom={ this.state.mapZoom } />
-
         </div>
+
+        <InsertBtnDialog
+          isModalOpen={ this.state.isModalOpen }
+          closeModal={ ()=> this.setState({ isModalOpen: false }) }
+          latLng={ this.state.latLngClicked }
+          locArr={ this.state.locArr }
+          addRGeoTriggerMarker={ ()=> this.setState({ rGeoTrigger: true, showRGeoMarker: true }) }
+          hideMarkers={ ()=> this.setState({ showMarkers: false }) }
+          resetLoc={ this.resetLoc.bind(this) }
+          mapCenter={ this.state.mapCenter }
+          zoom={ this.state.mapZoom } />
+
       </div>
     );
   }

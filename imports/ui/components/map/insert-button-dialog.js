@@ -12,18 +12,20 @@ import FontIcon from 'material-ui/FontIcon';
 import {GridList, GridTile} from 'material-ui/GridList';
 import LinearProgress from 'material-ui/LinearProgress';
 import Formsy from 'formsy-react';
-import { FormsyCheckbox, FormsyDate, FormsyRadio, FormsyRadioGroup, FormsySelect, FormsyText, FormsyTime, FormsyToggle } from 'formsy-material-ui/lib';
+import { FormsyDate, FormsyText, FormsyTime } from 'formsy-material-ui/lib';
 import { Grid, Row, Col } from 'react-bootstrap';
 import TagsInput from 'react-tagsinput';
 
 import AllCategoriesList from '../../containers/categories/all-categories-list';
 import IncludedCommunities from '../../components/form/included-communities';
+import RemoveGiveawayDialog from '../../components/form/remove-giveaway-dialog';
 import LeafletMapPreview from './leaflet-map-preview';
 import { geocode } from '../../../util/geocode.js';
 import { shortId, sanitizeURL } from '../../../util/helper.js';
 import * as IconsHelper from '../../../util/icons';
 
-import { insertGiveaway } from '../../../api/giveaways/methods.js';
+import { insertGiveaway, updateGiveaway, removeGiveaway } from '../../../api/giveaways/methods.js';
+import { Categories } from '../../../api/categories/categories.js';
 import { StatusTypes } from '../../../api/status-types/status-types.js';
 
 export default class InsertBtnDialog extends React.Component {
@@ -49,10 +51,8 @@ export default class InsertBtnDialog extends React.Component {
       endDate: undefined,
       startTime,
       endTime,
-      lat: "",
-      lng: "",
+      latLng: { lat: null, lng: null },
       location:"",
-      recurring: false,
       dataSource: [],
       isCatMenuOpen: false,
       tile: null,
@@ -60,13 +60,19 @@ export default class InsertBtnDialog extends React.Component {
       loadingFile: false,
       zoom: 1,
       commIdsVal: [],
-      commIdsOpts: []
+      commIdsOpts: [],
+      removeGiveawayPromptOpen: false,
+      gaId: null,
     };
 
     this.state = this.initialState;
 
     this.handleAddLocation = () => {
-      props.closeModal();
+      console.log(this.state.gaId)
+      if(this.state.gaId)
+        props.hideModal();
+      else
+        props.closeModal();
       props.addRGeoTriggerMarker();
       props.hideMarkers();
     }
@@ -91,8 +97,7 @@ export default class InsertBtnDialog extends React.Component {
 
     this.handleLocationSelect = (loc, idx) => {
       this.setState({
-        lat: loc.center[1],
-        lng: loc.center[0],
+        latLng: {lat: loc.center[1], lng: loc.center[0]},
         location: loc.place_name
       })
     };
@@ -104,9 +109,6 @@ export default class InsertBtnDialog extends React.Component {
     };
 
     this.styles = {
-      dialogStyle:{
-        backgroundColor: "rgb(224, 224, 224)",
-      },
       actionsContainerStyle:{
         backgroundColor: "rgb(224, 224, 224)",
       },
@@ -115,18 +117,12 @@ export default class InsertBtnDialog extends React.Component {
         margin: 'auto',
         padding: 20,
       },
-      gridStyle: {
-        width: "inherit"
-      },
       titleStyle: {
         fontWeight: 100,
         fontSize: "18px",
         textTransform: "uppercase",
         textAlign: "center",
         backgroundColor: "rgb(224, 224, 224)",
-      },
-      switchStyle: {
-        "marginBottom": "16",
       },
       submitStyle: {
         "marginTop": "32",
@@ -142,32 +138,10 @@ export default class InsertBtnDialog extends React.Component {
       this.setState({ isCatMenuOpen: false });
     };
 
-    this.enableButton = () => {
-      this.setState({ canSubmit: true });
-    };
-
-    this.disableButton = () => {
-      this.setState({ canSubmit: false });
-    };
-
-    this.notifyFormError = (model) => {
-      console.error('Form error:', model);
-    };
-
     this.formatDate = (date) => {
       return moment(date).format("dddd, Do MMM YYYY");
     };
 
-    this.handleLocation = (e)  => {
-      this.setState({location: e.target.value});
-    };
-    this.handleRecurring = (e,val) => {
-      this.setState({recurring: val});
-    };
-
-    this.setParentCat = (parentCat) => {
-      this.setState({ parentCatId: parentCat._id });
-    };
     this.setChildCat = e => {
       this.setState({
         childCatId: e.currentTarget.getAttribute("id"),
@@ -201,97 +175,179 @@ export default class InsertBtnDialog extends React.Component {
       });
     }
 
-    this.submitForm = () => {
-      event.preventDefault();
-      this.setState({ canSubmit: false })
-      const data = Object.assign({}, this.state);
-      const userId = Meteor.userId();
-      data.title = String(data.title);
-      data.description = String(data.description);
-      data.website = data.website ? sanitizeURL(data.website) : "";
-      data.location = String(data.location);
-      data.lng = parseFloat(data.lng);
-      data.lat = parseFloat(data.lat);
-      data.userId = String(userId);
-      data.removeUserId = String(userId);
-      data.inclCommIds = data.commIdsVal.map(comm => comm.value);
-
-      if (data.tile){
-        data.avatarId = data.tile.res.public_id;
-        const imgUrlPre = data.tile.res.secure_url;
-        data.imgUrl = imgUrlPre.split('upload')[0]+ 'upload/' + 'h_300,c_scale' + imgUrlPre.split('upload')[1];
-      }
-
-      let startHr       = data.startTime.getHours()
-        , startMin      = data.startTime.getMinutes()
-        , endHr         = data.endTime.getHours()
-        , endMin        = data.endTime.getMinutes()
-        , startDateTime = moment(data.startDate).set('hour', startHr).set('minute',startMin).toDate()
-        , endDateTime   = moment(data.endDate).set('hour', endHr).set('minute',endMin).toDate();
-
-      let availableStatus = StatusTypes.findOne({ relativeOrder: 0 });
-
-      // check if no end date or earlier than start datetime
-      if(startDateTime > endDateTime){
-        Meteor.setTimeout(function(){
-          Bert.alert('Start time is later than End time', 'danger');
-        },1000);
-        this.setState({ startTime: undefined, startDate: undefined, endTime: undefined, endDate: undefined})
-        return;
-      }
-
-      const ga = {
-        title: data.title,
-        description: data.description,
-        website: data.website,
-        startDateTime: startDateTime,
-        endDateTime: endDateTime,
-        location: data.location,
-        coordinates: [data.lng, data.lat],
-        categoryId: data.childCatId,
-        tags: data.tags,
-        userId: data.userId,
-        statusUpdates: [{ statusTypeId: availableStatus._id, date: new Date(), userId: data.userId }],
-        avatarId: data.avatarId,
-        inclCommIds: data.inclCommIds,
-      }
-
-      const gaId = insertGiveaway.call(ga, (error)=>{
-        if (error) {
-          Bert.alert(error.reason, 'Error adding Giveaway');
-          this.setState({ canSubmit: true });
-        } else {
-          props.closeModal();
-          props.resetLoc();
-
-          this.setState(this.initialState);
-          Bert.alert('Giveaway Added!', 'success');
-        }
-      })
-
-    }
+    this.submitForm = this.submitForm.bind(this);
   }
 
+submitForm() {
+  event.preventDefault();
+  this.setState({ canSubmit: false })
+  const data = Object.assign({}, this.state);
+  const userId = Meteor.userId();
+  data.title = String(data.title);
+  data.description = String(data.description);
+  data.website = data.website ? sanitizeURL(data.website) : "";
+  data.location = String(data.location);
+  data.userId = String(userId);
+  data.removeUserId = String(userId);
+  data.inclCommIds = data.commIdsVal.map(comm => comm.value);
+
+  if (data.tile){
+    data.avatarId = data.tile.res.public_id;
+    const imgUrlPre = data.tile.res.secure_url;
+    data.imgUrl = imgUrlPre.split('upload')[0]+ 'upload/' + 'h_300,c_scale' + imgUrlPre.split('upload')[1];
+  }
+
+  let startHr       = data.startTime.getHours()
+    , startMin      = data.startTime.getMinutes()
+    , endHr         = data.endTime.getHours()
+    , endMin        = data.endTime.getMinutes()
+    , startDateTime = moment(data.startDate).set('hour', startHr).set('minute',startMin).toDate()
+    , endDateTime   = moment(data.endDate).set('hour', endHr).set('minute',endMin).toDate();
+
+  let availableStatus = StatusTypes.findOne({ relativeOrder: 0 });
+
+  // check if no end date or earlier than start datetime
+  if(startDateTime > endDateTime){
+    Meteor.setTimeout(function(){
+      Bert.alert('Start time is later than End time', 'danger');
+    },1000);
+    this.setState({ startTime: undefined, startDate: undefined, endTime: undefined, endDate: undefined})
+    return;
+  }
+
+  const ga = {
+    title: data.title,
+    description: data.description,
+    website: data.website,
+    startDateTime: startDateTime,
+    endDateTime: endDateTime,
+    location: data.location,
+    coordinates: [data.latLng.lng, data.latLng.lat],
+    categoryId: data.childCatId,
+    tags: data.tags,
+    userId: data.userId,
+    statusUpdates: [{ statusTypeId: availableStatus._id, date: new Date(), userId: data.userId }],
+    avatarId: data.avatarId,
+    inclCommIds: data.inclCommIds,
+  }
+
+  if(this.state.gaId){
+    updateGiveaway.call({_id:data.gaId, update:ga}, (error)=>{
+      if (error) {
+        Bert.alert(error.reason, 'Error updating giveaway');
+        this.setState({ canSubmit: true });
+      } else {
+        this.props.closeModal();
+        this.props.resetLoc();
+
+        this.setState(this.initialState);
+        Bert.alert('Giveaway Updated!', 'success');
+      }
+    })
+  } else {
+    insertGiveaway.call(ga, (error)=>{
+      if (error) {
+        Bert.alert(error.reason, 'Error adding Giveaway');
+        this.setState({ canSubmit: true });
+      } else {
+        this.props.closeModal();
+        this.props.resetLoc();
+
+        this.setState(this.initialState);
+        Bert.alert('Giveaway Added!', 'success');
+      }
+    })
+  }
+}
+removeGiveaway(event) {
+  this.props.closeModal();
+  this.props.resetLoc();
+
+  removeGiveaway.call({ _id: this.state.gaId }, error => {
+    if (error) {
+      Bert.alert(error.reason, 'Error updating giveaway');
+    } else {
+      this.setState(this.initialState);
+      Bert.alert('Giveaway Deleted!', 'success');
+    }
+  });
+}
+
 componentWillReceiveProps(nextProps){
-  this.setState({
-    isOpen: nextProps.isModalOpen,
-    lat: nextProps.latLng.lat,
-    lng: nextProps.latLng.lng,
-    dataSource: nextProps.locArr,
-    zoom: nextProps.zoom,
-  })
-  // Used locNameFlag to pass prop from rgeocode once
-  if(nextProps.locNameFlag && nextProps.locName){
-    this.setState({location: nextProps.locName});
-    this.props.rmvlocNameFlag();
+  if(this.props.isModalOpen !== nextProps.isModalOpen)
+    this.setState({ isOpen: nextProps.isModalOpen })
+
+  if(this.props.latLng.lat !== nextProps.latLng.lat){
+    let locationText = nextProps.locArr[0].text;
+    const strSplitIdx = locationText.indexOf(',');
+    const locName = locationText.substr(0, strSplitIdx);
+    this.setState({
+      latLng: nextProps.latLng,
+      dataSource: nextProps.locArr,
+      location: locName,
+      zoom: nextProps.zoom
+    })
+  }
+
+  // if edit route
+  const gaEdit = nextProps.gaEdit;
+  let gaEditTile = null;
+  if(gaEdit && gaEdit !== this.props.gaEdit){
+    // placeholder for grid tile text
+    if(gaEdit.avatarId){
+      gaEditTile = {
+        files:[{name:""}],
+        res: {secure_url:""}
+      };
+      gaEditTile.res.secure_url = $.cloudinary.url(gaEdit.avatarId);
+    }
+    const childCats = Categories.find().fetch();
+    const childCat = childCats.find(cat => cat._id === gaEdit.categoryId);
+
+    this.setState({
+      title: gaEdit.title,
+      description: gaEdit.description,
+      website: gaEdit.website,
+      startDate: gaEdit.startDateTime,
+      startTime: gaEdit.startDateTime,
+      endDate: gaEdit.endDateTime,
+      endTime: gaEdit.endDateTime,
+      location: gaEdit.location,
+      latLng: { lng: gaEdit.coordinates[0], lat: gaEdit.coordinates[1] },
+      tags: gaEdit.tags,
+      tile: gaEditTile,
+      childCatId: gaEdit.categoryId,
+      childCatName: childCat.name,
+      childCatIcon: childCat.iconClass,
+      avatarId: gaEdit.avatarId,
+      gaId: gaEdit._id,
+      commIdsVal: gaEdit.inclCommIds,
+      zoom: nextProps.zoom,
+    });
   }
 }
 
 render() {
-  let { paperStyle, switchStyle, submitStyle, gridStyle, titleStyle, dialogStyle, actionsContainerStyle, toggle, labelStyle, textFieldStyle, imgInputStyle} = this.styles;
+  let { paperStyle, submitStyle, titleStyle, actionsContainerStyle, textFieldStyle} = this.styles;
   let { wordsError, numericError, urlError } = this.errorMessages;
-  const actionBtns = [
-    // Submit Button
+  const actionBtns = this.props.gaEdit ?
+  [
+    <FlatButton
+      label="Update"
+      primary={true}
+      disabled={!this.state.canSubmit}
+      onTouchTap={this.submitForm}
+      autoScrollBodyContent={true} />,
+    <FlatButton
+      label="Cancel"
+      primary={true}
+      onTouchTap={this.handleClose} />,
+    <FlatButton
+      label="Delete"
+      secondary={true}
+      onTouchTap={ event => this.setState({ removeGiveawayPromptOpen: true }) }
+      autoScrollBodyContent={true} />,
+  ]:[
     <FlatButton
       label="Submit"
       primary={true}
@@ -302,13 +358,14 @@ render() {
       label="Cancel"
       primary={true}
       onTouchTap={this.handleClose} />,
-  ];
+  ]
   return (
+    <div>
     <Dialog
       className="dialog insertDialog"
       title="Add a new Giveaway"
       titleStyle={titleStyle}
-      bodyStyle={dialogStyle}
+      bodyStyle={{ backgroundColor: "rgb(224, 224, 224)" }}
       actions={actionBtns}
       actionsContainerStyle={actionsContainerStyle}
       modal={true}
@@ -320,10 +377,10 @@ render() {
       <Paper style={paperStyle}>
         <Formsy.Form
           className="add-giveaway-form"
-          onValid={this.enableButton}
-          onInvalid={this.disableButton}
+          onValid={ ()=> this.setState({ canSubmit: true }) }
+          onInvalid={()=> this.setState({ canSubmit: false }) }
           onValidSubmit={this.submitForm}
-          onInvalidSubmit={this.notifyFormError}>
+          onInvalidSubmit={ model => console.error('Form error:', model) }>
             <Row>
               <Col xs={12}>
                 <h2>What</h2>
@@ -373,7 +430,6 @@ render() {
                   formatDate={this.formatDate}
                   floatingLabelText="Start Date"
                   autoOk={true}
-                  textFieldStyle={this.dateTimeTextStyle}
                   minDate={new Date()}
                   onChange={ (e, date) => this.setState({startDate: date, endDate: date}) }
                   value={this.state.startDate} />
@@ -386,7 +442,6 @@ render() {
                   pedantic={true}
                   format="ampm"
                   floatingLabelText="Start Time"
-                  textFieldStyle={this.dateTimeTextStyle}
                   onChange={ (e, date) => this.setState({startTime: date}) }
                   value={this.state.startTime} />
               </Col>
@@ -398,7 +453,6 @@ render() {
                   floatingLabelText="End Date"
                   autoOk={true}
                   minDate={new Date()}
-                  textFieldStyle={this.dateTimeTextStyle}
                   onChange={ (e, date) => this.setState({endDate: date}) }
                   value={this.state.endDate} />
               </Col>
@@ -410,7 +464,6 @@ render() {
                   pedantic={true}
                   format="ampm"
                   floatingLabelText="End Time"
-                  textFieldStyle={this.dateTimeTextStyle}
                   onChange={ (e, date) => this.setState({endTime: date}) }
                   value={this.state.endTime}
                   defaultTime={ moment().set('minute', 0).toDate() } />
@@ -453,24 +506,24 @@ render() {
                   validations="isNumeric"
                   validationError={numericError}
                   required
-                  value={this.state.lat}
+                  value={this.state.latLng.lat}
                   disabled={true} />
                 <FormsyText
                   name="lng"
                   validations="isNumeric"
                   validationError={numericError}
                   required
-                  value={this.state.lng}
+                  value={this.state.latLng.lng}
                   disabled={true} />
               </Col>
             </Row>
 
-            {this.state.lat ?
+            {this.state.latLng.lat ?
               <Row>
                 <Col xs={12}>
                   <LeafletMapPreview
-                    previewCoords={ { lat:this.state.lat, lng:this.state.lng } }
-                    previewZoom={this.state.zoom} />
+                    previewCoords={ this.state.latLng }
+                    previewZoom={ this.state.zoom } />
                 </Col>
               </Row>
               :
@@ -599,8 +652,11 @@ render() {
 
         </Formsy.Form>
       </Paper>
-
     </Dialog>
-    );
-  }
+    <RemoveGiveawayDialog
+      open={ this.state.removeGiveawayPromptOpen }
+      handleClose={ event => this.setState({ removeGiveawayPromptOpen: false }) }
+      handleSubmit={ this.removeGiveaway.bind(this) } />
+    </div>
+  )}
 };
