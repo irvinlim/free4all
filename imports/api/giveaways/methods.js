@@ -124,6 +124,9 @@ export const flagGiveaway = new ValidatedMethod({
     Giveaways.update(_id, {
       $push: { flags: { userId, date: new Date() } },
     });
+
+    // Notify all moderators
+    Meteor.call('notifyModsFlaggedGiveaway', _id, userId);
   },
 });
 

@@ -2,7 +2,10 @@ import { Giveaways } from '../giveaways/giveaways';
 import { GiveawayComments } from '../giveaway-comments/giveaway-comments';
 
 import { aggregateUserNames } from '../../util/notifications';
+import { pluralizer } from '../../util/helper';
 import * as RolesHelper from '../../util/roles';
+
+const modsAdminsUserIds = () => RolesHelper.findModsOrAdmins().map(user => user._id);
 
 if (Meteor.isServer) {
 
@@ -53,6 +56,48 @@ if (Meteor.isServer) {
       return Herald.collection.remove({ userId: { $in: userIds }, 'data.notifGroupId': notifGroupId, read: false });
     },
 
+    // Giveaways
+
+    notifyModsFlaggedGiveaway: (giveawayId, flaggerId) => {
+      check(giveawayId, Match._id);
+      check(flaggerId, Match._id);
+
+      const giveaway = Giveaways.findOne(giveawayId);
+
+      if (!giveaway)
+        return;
+
+      Meteor.call('upsertNotifications', `flaggedGiveaway-${giveawayId}`, modsAdminsUserIds(), (existingData) => {
+        const metadata = existingData ? existingData.metadata : null;
+        const newUserIds = metadata ? metadata.userIds.filter(userId => userId !== flaggerId) : [];
+        newUserIds.unshift(flaggerId);
+        const newUserNames = aggregateUserNames(newUserIds);
+
+        return {
+          title: `Giveaway requires review`,
+          body: `${newUserNames} ${pluralizer(newUserIds.length, 'has', 'have')} flagged ${giveaway.title}.`,
+          avatar: {
+            type: 'icon',
+            val: {
+              icon: 'flag',
+              color: '#d23726'
+            }
+          },
+          url: `/giveaway/${giveawayId}`,
+          metadata: {
+            userIds: newUserIds
+          },
+        };
+      }, (error, result) => {
+        if (error) {
+          console.log("Error upserting notification in notifyModsFlaggedGiveaway:");
+          console.log(error);
+        }
+      });
+    },
+
+    // Comments
+
     notifyCommentedOnGiveaway: (giveawayId, commenterId) => {
       check(giveawayId, Match._id);
       check(commenterId, Match._id);
@@ -99,9 +144,7 @@ if (Meteor.isServer) {
       if (!comment || !giveaway)
         return;
 
-      const modsAdminsUserIds = RolesHelper.findModsOrAdmins().map(user => user._id);
-
-      Meteor.call('upsertNotifications', `flaggedComment-${commentId}`, modsAdminsUserIds, (existingData) => {
+      Meteor.call('upsertNotifications', `flaggedComment-${commentId}`, modsAdminsUserIds(), (existingData) => {
         const metadata = existingData ? existingData.metadata : null;
         const newUserIds = metadata ? metadata.userIds.filter(userId => userId !== flaggerId) : [];
         newUserIds.unshift(flaggerId);
@@ -109,7 +152,7 @@ if (Meteor.isServer) {
 
         return {
           title: `Comment requires review`,
-          body: `${newUserNames} has flagged a comment on ${giveaway.title}.`,
+          body: `${newUserNames} ${pluralizer(newUserIds.length, 'has', 'have')} flagged a comment on ${giveaway.title}.`,
           avatar: {
             type: 'icon',
             val: {
@@ -133,9 +176,7 @@ if (Meteor.isServer) {
     unnotifyModsFlaggedComment: (commentId) => {
       check(commentId, Match._id);
 
-      const modsAdminsUserIds = RolesHelper.findModsOrAdmins().map(user => user._id);
-
-      Meteor.call('removeUnreadNotification', `flaggedComment-${commentId}`, modsAdminsUserIds, (error, result) => {
+      Meteor.call('removeUnreadNotification', `flaggedComment-${commentId}`, modsAdminsUserIds(), (error, result) => {
         if (error) {
           console.log("Error upserting notification in notifyModsFlaggedComment:");
           console.log(error);
