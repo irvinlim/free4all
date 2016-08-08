@@ -1,24 +1,22 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
+import Store from '../../startup/client/redux-store';
+
 import MuiTheme from '../layouts/mui-theme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import IconButton from 'material-ui/IconButton';
+import RefreshIndicator from 'material-ui/RefreshIndicator';
 
 import Header from '../components/header/header';
 import LeafletMap from '../components/map/leaflet-map';
 import ConfirmRGeo from '../components/map/confirm-rgeo';
 import MapInfoBox from '../components/map/map-info-box';
 import MapNearbyBox from '../components/map/map-nearby-box';
-import SelectHomeDialog from '../components/form/select-home-dialog';
 import GoToHomeButton from '../components/form/go-to-home-button';
 import InsertBtn from '../components/form/insert-button';
 import GoToGeolocationButton from '../components/map/go-to-geolocation-button'
 import InsertBtnDialog from '../components/map/insert-button-dialog'
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import IconButton from 'material-ui/IconButton';
-import RefreshIndicator from 'material-ui/RefreshIndicator';
-
-import Store from '../../startup/client/redux-store';
-import { joinCommunity, setHomeCommunity } from '../../api/users/methods';
 
 import * as LatLngHelper from '../../util/latlng';
 import * as IconsHelper from '../../util/icons';
@@ -46,7 +44,6 @@ export class Index extends React.Component {
       showMarkers: true,
       rGeoLoading: false,
       rGeoTrigger: false,
-      isHomeLocOpen: false,
       homeLocation: null,
       homeZoom: null,
       zoomBehaviour: true,    // true: zoom to mouse/finger, 'center': zoom to center of view
@@ -120,25 +117,16 @@ export class Index extends React.Component {
 
     // Autorun home location session variable
     this.autorunHome = Tracker.autorun(function(){
-      let homeLoc = Session.get('homeLocation');
+      const homeLoc = Session.get('homeLocation');
+
       if (homeLoc)
         self.setState({
           homeLocation: homeLoc.coordinates,
-          homeZoom: homeLoc.zoom
+          homeZoom: homeLoc.zoom,
+          mapCenter: homeLoc.coordinates,
+          mapZoom: isMobile() ? homeLoc.zoom - 1 : homeLoc.zoom
         });
     });
-
-    // Set initial map center for returning visitor, open dialog if not set
-    let homeLoc = Session.get('homeLocation');
-    if (homeLoc) {
-      self.setState({
-        mapCenter: homeLoc.coordinates,
-        homeLocation: homeLoc.coordinates,
-        mapZoom: isMobile() ? homeLoc.zoom - 1 : homeLoc.zoom
-      });
-    } else {
-      self.setState({ isHomeLocOpen: true });
-    }
   }
 
   componentWillUnmount() {
@@ -210,35 +198,6 @@ export class Index extends React.Component {
     });
   }
 
-  setHomeLoc(community){
-    this.setState({
-      isHomeLocOpen: false,
-      mapZoom: isMobile() ? community.zoom - 1: community.zoom,   // Reduce by 1 for mobile
-      mapCenter: community.coordinates,
-      homeLocation: community.coordinates,
-      homeZoom: community.zoom
-    });
-
-    Session.setPersistent('homeLocation', {
-      coordinates: community.coordinates,
-      zoom: community.zoom,
-      commId: community._id
-    });
-
-    joinCommunity.call({ userId: Meteor.userId(), commId: community._id });
-
-    // Set as Home Community if not already set
-    setHomeCommunity.call({
-      userId: Meteor.userId(),
-      community: {
-        _id: community._id,
-        coordinates: community.coordinates,
-        zoom: community.zoom,
-      },
-    });
-  }
-
-
   render() {
     const clickNearbyGa = ga => event => {
       this.selectGa(ga._id);
@@ -294,11 +253,6 @@ export class Index extends React.Component {
         </div>
 
         { this.state.showRGeoMarker && <div className="centerMarker" /> }
-
-        <SelectHomeDialog
-          isHomeLocOpen={ this.state.isHomeLocOpen }
-          closeSelectHomeModal={ () => this.setState({ isHomeLocOpen: false }) }
-          setHomeLoc={this.setHomeLoc.bind(this)} />
 
         <div id="map-floating-buttons"
              style={{ right: 20 + (this.state.nearbyBoxState > 0 ? $("#map-nearby-box").outerWidth() : 0) }}>

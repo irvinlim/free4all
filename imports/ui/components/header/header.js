@@ -7,6 +7,7 @@ import HeaderProfile from '../../containers/header/header-profile';
 import HeaderNotifications from '../../containers/header/header-notifications';
 import DrawerNavigation from './drawer-navigation';
 import Login from '../../containers/auth/login';
+import SelectHome from '../form/select-home';
 
 export default class Header extends React.Component {
   constructor(props) {
@@ -54,10 +55,13 @@ export default class Header extends React.Component {
           title="Free4All"
           onLeftIconButtonTouchTap={ this.openDrawer.bind(this) }
           iconElementRight={ this.appBarRight() } />
+
         <DrawerNavigation
           isOpen={ this.state.drawerOpen }
           closeDrawer={ this.closeDrawer.bind(this) }
           setDrawerOpen={ this.setDrawerOpen.bind(this) } />
+
+        <SelectHome />
       </div>
     );
   }
