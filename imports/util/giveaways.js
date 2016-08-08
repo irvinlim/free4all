@@ -13,6 +13,8 @@ import * as IconsHelper from './icons';
 import * as RolesHelper from './roles';
 import * as AvatarHelper from './avatar';
 
+const Linkify = require('react-linkify');
+
 // Check owner
 export const isCurrentUserOwner = (ga) => ga && Meteor.userId() && Meteor.userId() === ga.userId;
 export const ownerOrModsOrAdmins = (ga) => ga && Meteor.userId() && RolesHelper.ownerOrModsOrAdmins(Meteor.userId(), ga.userId);
@@ -126,8 +128,8 @@ export const compactDateRange = (ga) => {
 };
 
 // Text
-export const description = (ga) => ga.description.length ? Helper.nl2br(ga.description) : null;
-export const descriptionFirstLine = (ga) => ga.description ? ga.description.split("\n")[0] : "";
+export const description = (ga) => ga.description.length ? <Linkify>{ Helper.nl2br(ga.description) }</Linkify> : null;
+export const descriptionFirstLine = (ga) => ga.description ? <Linkify>{ ga.description.split("\n")[0] }</Linkify> : "";
 export const descriptionTruncate = (ga) => {
 
   // No description.
@@ -136,12 +138,12 @@ export const descriptionTruncate = (ga) => {
 
   // No need to truncate.
   if (ga.description.length <= 160)
-    return ga.description;
+    return <Linkify>{ ga.description }</Linkify>;
 
   const firstWords = ga.description.substr(0, 160).split(" ");
   firstWords.pop();
 
-  return firstWords.join(" ") + " ...";
+  return <Linkify>{ `${firstWords.join(" ")} ...` }</Linkify>;
 };
 
 // Avatar
