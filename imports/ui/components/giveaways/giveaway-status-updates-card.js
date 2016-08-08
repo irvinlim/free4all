@@ -1,5 +1,7 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
+import Store from '../../../startup/client/redux-store';
+
 import Paper from 'material-ui/Paper';
 import Subheader from 'material-ui/Subheader';
 import FlatButton from 'material-ui/FlatButton';
@@ -27,7 +29,7 @@ const statusUpdateRow = (owner) => (su, index) => (
 
 const statusTypeActionHandler = (giveawayId, statusTypeId) => (event) => {
   if (!Meteor.userId())
-    return;
+    return Store.dispatch({ type: 'OPEN_LOGIN_DIALOG', message: "Login to add a status update!" });
 
   pushStatusUpdate.call({ giveawayId, statusTypeId, userId: Meteor.userId() });
 };
