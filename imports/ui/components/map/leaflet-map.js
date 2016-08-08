@@ -127,9 +127,8 @@ export default class LeafletMap extends React.Component {
     }
 
     // Set scrollWheelZoom behaviour
-    if (nextProps.scrollWheelZoom !== undefined && nextProps.scrollWheelZoom !== this.mapObject.map.options.scrollWheelZoom) {
-      console.log(this.mapObject.map.options.scrollWheelZoom);
-      this.mapObject.map.options.scrollWheelZoom = nextProps.scrollWheelZoom;
+    if (nextProps.zoomBehaviour !== undefined && nextProps.zoomBehaviour !== this.mapObject.map.options.scrollWheelZoom) {
+      this.mapObject.map.options.scrollWheelZoom = nextProps.zoomBehaviour;
     }
 
   }

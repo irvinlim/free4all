@@ -49,7 +49,7 @@ export class Index extends React.Component {
       isHomeLocOpen: false,
       homeLocation: null,
       homeZoom: null,
-      scrollWheelZoom: true,
+      zoomBehaviour: true,    // true: zoom to mouse/finger, 'center': zoom to center of view
     };
 
     this.subscription = null;
@@ -176,7 +176,7 @@ export class Index extends React.Component {
     this.setState({ isModalOpen: true, showRGeoMarker: false })
     this.rmvRGeoListener && this.rmvRGeoListener();
     this.showMarkers();
-    this.setScrollWheelZoom(true);
+    this.setZoomBehaviour(true);
   }
 
   setConfirmDialog(features, coords, rmvRGeoListener){
@@ -198,8 +198,8 @@ export class Index extends React.Component {
     this.setState({ showMarkers: true });
   }
 
-  setScrollWheelZoom(value) {
-    this.setState({ scrollWheelZoom: value });
+  setZoomBehaviour(value) {
+    this.setState({ zoomBehaviour: value });
   }
 
   resetLoc() {
@@ -263,7 +263,7 @@ export class Index extends React.Component {
           addRGeoSpinner={ ()=>{this.setState({ rGeoLoading: true })} }
           rmvRGeoSpinner={ ()=>{this.setState({ rGeoLoading: false })} }
           setConfirmDialog={this.setConfirmDialog.bind(this) }
-          scrollWheelZoom={ this.state.scrollWheelZoom }
+          zoomBehaviour={ this.state.zoomBehaviour }
         />
         <div className="rGeoLoader">
           <RefreshIndicator
@@ -322,7 +322,7 @@ export class Index extends React.Component {
           resetLoc={ this.resetLoc.bind(this) }
           mapCenter={ this.state.mapCenter }
           zoom={ this.state.mapZoom }
-          setScrollWheelZoom={ this.setScrollWheelZoom.bind(this) } />
+          setZoomBehaviour={ this.setZoomBehaviour.bind(this) } />
 
       </div>
     );

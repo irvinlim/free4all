@@ -35,7 +35,7 @@ export default class LeafletMapObject {
     if (!mapID) mapID = "mapbox.streets";
 
     // Leaflet map
-    this.map = L.map(elemId, { zoomControl:false }).setView(initialCoords, initialZoom);
+    this.map = L.map(elemId, { zoomControl: false, touchZoom: 'center' }).setView(initialCoords, initialZoom);
 
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
       attribution: 'Imagery from <a href="http://mapbox.com/about/maps/">MapBox</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
