@@ -28,7 +28,8 @@ export const insertComment = new ValidatedMethod({
     GiveawayComments.insert({ giveawayId, userId, content });
 
     // Send notification to giveaway owner
-    Meteor.call('notifyCommentedOnGiveaway', giveawayId, userId);
+    if (ga.userId !== userId)
+      Meteor.call('notifyCommentedOnGiveaway', giveawayId, userId);
   },
 });
 
@@ -56,7 +57,7 @@ export const editComment = new ValidatedMethod({
       throw new Meteor.Error("giveawayComments.editComment.notAuthorized", "Not authorized to edit comment.");
 
     // Update comment
-    return GiveawayComments.update(_id, { $set: { content } });
+    GiveawayComments.update(_id, { $set: { content } });
   },
 });
 
@@ -83,7 +84,10 @@ export const removeComment = new ValidatedMethod({
       throw new Meteor.Error("giveawayComments.removeComment.notAuthorized", "Not authorized to remove comment.");
 
     // Update comment
-    return GiveawayComments.update(_id, { $set: { isRemoved: true, removeUserId: userId } });
+    GiveawayComments.update(_id, { $set: { isRemoved: true, removeUserId: userId } });
+
+    // Remove loose notifications
+    Meteor.call('unnotifyModsFlaggedComment', _id);
   },
 });
 
