@@ -49,6 +49,7 @@ export class Index extends React.Component {
       isHomeLocOpen: false,
       homeLocation: null,
       homeZoom: null,
+      scrollWheelZoom: true,
     };
 
     this.subscription = null;
@@ -175,6 +176,7 @@ export class Index extends React.Component {
     this.setState({ isModalOpen: true, showRGeoMarker: false })
     this.rmvRGeoListener && this.rmvRGeoListener();
     this.showMarkers();
+    this.setScrollWheelZoom(true);
   }
 
   setConfirmDialog(features, coords, rmvRGeoListener){
@@ -194,6 +196,10 @@ export class Index extends React.Component {
 
   showMarkers() {
     this.setState({ showMarkers: true });
+  }
+
+  setScrollWheelZoom(value) {
+    this.setState({ scrollWheelZoom: value });
   }
 
   resetLoc() {
@@ -257,6 +263,7 @@ export class Index extends React.Component {
           addRGeoSpinner={ ()=>{this.setState({ rGeoLoading: true })} }
           rmvRGeoSpinner={ ()=>{this.setState({ rGeoLoading: false })} }
           setConfirmDialog={this.setConfirmDialog.bind(this) }
+          scrollWheelZoom={ this.state.scrollWheelZoom }
         />
         <div className="rGeoLoader">
           <RefreshIndicator
@@ -314,7 +321,8 @@ export class Index extends React.Component {
           hideMarkers={ ()=> this.setState({ showMarkers: false }) }
           resetLoc={ this.resetLoc.bind(this) }
           mapCenter={ this.state.mapCenter }
-          zoom={ this.state.mapZoom } />
+          zoom={ this.state.mapZoom }
+          setScrollWheelZoom={ this.setScrollWheelZoom.bind(this) } />
 
       </div>
     );

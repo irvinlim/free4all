@@ -74,6 +74,7 @@ export default class InsertBtnDialog extends React.Component {
         props.closeModal();
       props.addRGeoTriggerMarker();
       props.hideMarkers();
+      props.setScrollWheelZoom('center');
     }
 
     this.geocodeInputLoc = (value) => {
