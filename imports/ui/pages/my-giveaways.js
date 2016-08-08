@@ -63,7 +63,7 @@ export class MyGiveaways extends React.Component {
   selectGa(gaId) {
     this.setState({
       gaSelected: gaId,
-      infoBoxState: 1,  // Bottom bar: peek title / Sidebar: show
+      infoBoxState: 2,  // Bottom bar: show full / Sidebar: show
     });
   }
 
