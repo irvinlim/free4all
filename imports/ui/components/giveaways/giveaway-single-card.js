@@ -87,12 +87,12 @@ const ModActions = ({ self }) => {
   const buttonsIfRemoved = <FlatButton label="Restore" onTouchTap={ event => self.setState({ confirmRestoreDialogOpen: true }) } />;
 
   const buttonsIfNotRemoved = [
-    <Link className="button" to={ "/my-giveaways/" + ga._id }><FlatButton label="Edit" /></Link>
+    <Link key="edit" className="button" to={ "/my-giveaways/" + ga._id }><FlatButton label="Edit" /></Link>
   ];
 
   if (countFlags > 0) {
-    buttonsIfNotRemoved.push(<FlatButton label="Unflag" onTouchTap={ event => handleAction(unflagGiveaway, ga._id, 'Successfully removed all flags.') } />);
-    buttonsIfNotRemoved.push(<FlatButton label="Delete" onTouchTap={ event => self.setState({ confirmRemoveDialogOpen: true }) } />);
+    buttonsIfNotRemoved.push(<FlatButton key="unflag" label="Unflag" onTouchTap={ event => handleAction(unflagGiveaway, ga._id, 'Successfully removed all flags.') } />);
+    buttonsIfNotRemoved.push(<FlatButton key="delete" label="Delete" onTouchTap={ event => self.setState({ confirmRemoveDialogOpen: true }) } />);
   }
 
   return (
