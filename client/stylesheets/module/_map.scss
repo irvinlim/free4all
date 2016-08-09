@@ -56,7 +56,10 @@
 }
 
 .confirm-rgeo-btn{
-  position: absolute; left: 48%;
+  position: absolute;
+  @include media-md-up{ left: 48%; }
+  @include media-md-down{ left: 46.5%; }
+  @include media-xs-only{ left: 42.5%; }
 }
 
 .rGeoLoader > div{ margin-left: -21px; }
@@ -83,8 +86,6 @@
       .photo-avatar { max-height: 100%; max-width: 350px; margin: 0 auto; opacity: 1; }
     }
   }
-  .confirm-rgeo-btn{ left: 42%; }
-  .rGeoLoader > div{ margin-left: -45px; }
 }
 
 // iPad devices and up
