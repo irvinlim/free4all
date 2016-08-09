@@ -39,7 +39,7 @@ if (Meteor.isServer) {
 
         // Find existing unread notification to modify
         const existingData = Herald.collection.findOne({ userId, 'data.notifGroupId': notifGroupId, read: false });
-        const newData = callback(existingData);
+        const newData = callback ? callback(existingData) : existingData;
 
         // Remove existing notification
         Herald.collection.remove({ userId, 'data.notifGroupId': notifGroupId, read: false });
@@ -91,6 +91,61 @@ if (Meteor.isServer) {
       }, (error, result) => {
         if (error) {
           console.log("Error upserting notification in notifyModsFlaggedGiveaway:");
+          console.log(error);
+        }
+      });
+    },
+
+    unnotifyModsFlaggedGiveaway: (giveawayId) => {
+      check(giveawayId, Match._id);
+
+      Meteor.call('removeUnreadNotification', `flaggedGiveaway-${giveawayId}`, modsAdminsUserIds(), (error, result) => {
+        if (error) {
+          console.log("Error removing notification in unnotifyModsFlaggedGiveaway:");
+          console.log(error);
+        }
+      });
+    },
+
+    notifyRemovedFlaggedGiveaway: (giveawayId) => {
+      check(giveawayId, Match._id);
+
+      const giveaway = Giveaways.findOne(giveawayId);
+
+      if (!giveaway)
+        return;
+
+      Meteor.call('upsertNotifications', `removedFlaggedGiveaway-${giveawayId}`, [ giveaway.userId ], (existingData) => {
+        return {
+          title: 'Giveaway removed',
+          body: `Your giveaway ${giveaway.title} was reported and removed by our moderators.`,
+          avatar: {
+            type: 'icon',
+            val: {
+              icon: 'flag',
+              color: '#d23726'
+            }
+          },
+        };
+      }, (error, result) => {
+        if (error) {
+          console.log("Error upserting notification in notifyRemovedFlaggedGiveaway:");
+          console.log(error);
+        }
+      });
+    },
+
+    unnotifyRemovedFlaggedGiveaway: (giveawayId) => {
+      check(giveawayId, Match._id);
+
+      const giveaway = Giveaways.findOne(giveawayId);
+
+      if (!giveaway)
+        return;
+
+      Meteor.call('removeUnreadNotification', `removedFlaggedGiveaway-${giveawayId}`, [ giveaway.userId ], (error, result) => {
+        if (error) {
+          console.log("Error removing notification in unnotifyRemovedFlaggedGiveaway:");
           console.log(error);
         }
       });
@@ -178,7 +233,7 @@ if (Meteor.isServer) {
 
       Meteor.call('removeUnreadNotification', `flaggedComment-${commentId}`, modsAdminsUserIds(), (error, result) => {
         if (error) {
-          console.log("Error upserting notification in notifyModsFlaggedComment:");
+          console.log("Error removing notification in unnotifyModsFlaggedComment:");
           console.log(error);
         }
       });

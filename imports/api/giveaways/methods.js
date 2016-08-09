@@ -6,6 +6,7 @@ import { ValidatedMethod } from 'meteor/mdg:validated-method';
 
 import { propExistsDeep } from '../../util/helper';
 import * as GiveawaysHelper from '../../util/giveaways';
+import * as RolesHelper from '../../util/roles';
 
 // CRUD
 
@@ -30,10 +31,15 @@ export const updateGiveaway = new ValidatedMethod({
   run({ _id, update }) {
     const giveaway = Giveaways.findOne(_id);
 
-    if (!this.userId)
-      throw new Meteor.Error("giveaways.updateGiveaway.notLoggedIn", "Must be logged in to update giveaway.");
-    else if (!giveaway)
+    if (!giveaway)
       throw new Meteor.Error("giveaways.updateGiveaway.undefinedGiveaway", "No such Giveaway found.");
+    else if (giveaway.isRemoved)
+      throw new Meteor.Error("giveaways.updateGiveaway.giveawayRemoved", "Cannot edit a removed giveaway.");
+
+    const isAuthorized = RolesHelper.ownerOrModsOrAdmins(this.userId, giveaway.userId);
+
+    if (!isAuthorized)
+      throw new Meteor.Error("giveaways.removeGiveaway.notAuthorized", "Not authorized to remove giveaway.");
 
     // Update giveaway
     Giveaways.update(_id, { $set: update });
@@ -44,16 +50,20 @@ export const removeGiveaway = new ValidatedMethod({
   name: 'giveaways.remove',
   validate: new SimpleSchema({
     _id: { type: String },
+    userId: { type: String },
   }).validator(),
-  run({ _id }) {
+  run({ _id, userId }) {
     const giveaway = Giveaways.findOne(_id);
 
-    if (!this.userId)
-      throw new Meteor.Error("giveaways.removeGiveaway.notLoggedIn", "Must be logged in to remove giveaway.");
-    else if (!giveaway)
+    if (!giveaway)
       throw new Meteor.Error("giveaways.removeGiveaway.undefinedGiveaway", "No such Giveaway found.");
     else if (giveaway.isRemoved)
       throw new Meteor.Error("giveaways.removeGiveaway.alreadyRemoved", "Giveaway already removed.");
+
+    const isAuthorized = this.userId === userId && RolesHelper.ownerOrModsOrAdmins(this.userId, giveaway.userId);
+
+    if (!isAuthorized)
+      throw new Meteor.Error("giveaways.removeGiveaway.notAuthorized", "Not authorized to remove giveaway.");
 
     // Update removed flag, removeUser ID and removeDate
     Giveaways.update({
@@ -66,34 +76,43 @@ export const removeGiveaway = new ValidatedMethod({
         removeDate: new Date()
       }
     });
+
+    // Remove loose notifications
+    Meteor.call('unnotifyModsFlaggedGiveaway', _id);
   },
 });
 
-export const removeGiveawayGroup = new ValidatedMethod({
-  name: 'giveaways.removeGroup',
+export const restoreGiveaway = new ValidatedMethod({
+  name: 'giveaways.restore',
   validate: new SimpleSchema({
-    batchId: { type: String },
+    _id: { type: String },
+    userId: { type: String },
   }).validator(),
-  run({ batchId }) {
-    const giveaways = Giveaways.find({batchId: batchId});
+  run({ _id, userId }) {
+    const giveaway = Giveaways.findOne(_id);
 
-    if (!this.userId)
-      throw new Meteor.Error("giveaways.removeGiveawayGroup.notLoggedIn", "Must be logged in to remove giveaway.");
-    else if (!giveaways.count())
-      throw new Meteor.Error("giveaways.removeGiveawayGroup.undefinedGiveaway", "No such Giveaway found.");
+    if (!giveaway)
+      throw new Meteor.Error("giveaways.restoreGiveaway.undefinedGiveaway", "No such Giveaway found.");
+    else if (!giveaway.isRemoved)
+      throw new Meteor.Error("giveaways.restoreGiveaway.isNotRemoved", "Cannot restore a giveaway that is not removed.");
 
-    // Update removed flag, removeUser ID and removedDate.
-    // Don't update giveaways that have already been previously removed.
+    const isAuthorized = this.userId === userId && RolesHelper.modsOrAdmins(this.userId, giveaway.userId);
+
+    if (!isAuthorized)
+      throw new Meteor.Error("giveaways.restoreGiveaway.notAuthorized", "Not authorized to restore giveaway.");
+
+    // Update removed flag, removeUser ID and removeDate
     Giveaways.update({
-      batchId: batchId,
-      isRemoved: { $ne: true }
+      _id: _id,
+      isRemoved: true
     }, {
       $set: {
-        isRemoved: true,
-        removeUserId: this.userId,
-        removeDate: new Date()
-      }
+        isRemoved: false
+      },
     });
+
+    // Unnotify author
+    Meteor.call('unnotifyRemovedFlaggedGiveaway', _id);
   },
 });
 
@@ -142,17 +161,57 @@ export const unflagGiveaway = new ValidatedMethod({
     if (!giveaway)
       throw new Meteor.Error("giveaways.unflagGiveaway.undefinedGiveaway", "No such Giveaway found.");
 
-    const isAuthorized = Roles.userIsInRole(this.userId, ['moderator', 'admin']);
+    const isAuthorized = this.userId === userId && RolesHelper.modsOrAdmins(this.userId, giveaway.userId);
 
-    if (!this.userId || this.userId != userId)
-      throw new Meteor.Error("giveaways.unflagGiveaway.notLoggedIn", "Must be logged in to unflag giveaway.");
-    else if (!isAuthorized)
+    if (!isAuthorized)
       throw new Meteor.Error("giveaways.unflagGiveaway.notAuthorized", "Not authorized to unflag giveaway.");
 
     // Clear all flags
     Giveaways.update(_id, {
       $set: { flags: [] },
     });
+
+    // Remove loose notifications
+    Meteor.call('unnotifyModsFlaggedGiveaway', _id);
+  },
+});
+
+export const removeFlaggedGiveaway = new ValidatedMethod({
+  name: 'giveaways.removeFlaggedGiveaway',
+  validate: new SimpleSchema({
+    _id: { type: String },
+    userId: { type: String },
+  }).validator(),
+  run({ _id, userId }) {
+    const giveaway = Giveaways.findOne(_id);
+
+    if (!giveaway)
+      throw new Meteor.Error("giveaways.removeFlaggedGiveaway.undefinedGiveaway", "No such Giveaway found.");
+    else if (giveaway.isRemoved)
+      throw new Meteor.Error("giveaways.removeFlaggedGiveaway.alreadyRemoved", "Giveaway already removed.");
+
+    const isAuthorized = this.userId === userId && RolesHelper.modsOrAdmins(this.userId, giveaway.userId);
+
+    if (!isAuthorized)
+      throw new Meteor.Error("giveaways.removeFlaggedGiveaway.notAuthorized", "Not authorized to remove flagged giveaway.");
+
+    // Update removed flag, removeUser ID and removeDate
+    Giveaways.update({
+      _id: _id,
+      isRemoved: { $ne: true }
+    }, {
+      $set: {
+        isRemoved: true,
+        removeUserId: this.userId,
+        removeDate: new Date()
+      }
+    });
+
+    // Notify author
+    Meteor.call('notifyRemovedFlaggedGiveaway', _id);
+
+    // Remove loose notifications
+    Meteor.call('unnotifyModsFlaggedGiveaway', _id);
   },
 });
 

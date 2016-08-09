@@ -171,9 +171,9 @@ export const removeFlaggedComment = new ValidatedMethod({
     const isAuthorized = Roles.userIsInRole(this.userId, ['moderator', 'admin']);
 
     if (!this.userId || this.userId != userId)
-      throw new Meteor.Error("giveawayComments.removeFlaggedComment.notLoggedIn", "Must be logged in to unflag comment.");
+      throw new Meteor.Error("giveawayComments.removeFlaggedComment.notLoggedIn", "Must be logged in to remove flagged comment.");
     else if (!isAuthorized)
-      throw new Meteor.Error("giveawayComments.removeFlaggedComment.notAuthorized", "Not authorized to unflag comment.");
+      throw new Meteor.Error("giveawayComments.removeFlaggedComment.notAuthorized", "Not authorized to removeFlagged comment.");
 
     // Update comment
     GiveawayComments.update(_id, { $set: { isRemoved: true, removeUserId: userId } });

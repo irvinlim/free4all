@@ -2,13 +2,20 @@ import { Meteor } from 'meteor/meteor';
 import { Giveaways, GiveawayNetRatings } from '../giveaways';
 
 import * as CategoriesHelper from '../../../util/categories';
+import * as RolesHelper from '../../../util/roles';
 
 Meteor.publish('giveaway-by-id', function(gaId) {
   check(gaId, Match._id);
-  return Giveaways.find({
+
+  const selector = {
     _id: gaId,
     isRemoved: { $ne:  true },  // Must not be deleted (local deletion)
-  });
+  };
+
+  if (RolesHelper.modsOrAdmins(this.userId))
+    delete selector.isRemoved;
+
+  return Giveaways.find(selector);
 });
 
 Meteor.publish('giveaways-by-user', function(userId) {
