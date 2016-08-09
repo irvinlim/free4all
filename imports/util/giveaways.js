@@ -187,3 +187,48 @@ export const countTotalFlags = (ga) => ga.flags ? ga.flags.length : 0;
 export const commentBody = (content) => content.length ? Helper.nl2br(content) : null;
 export const userHasFlaggedComment = userHasFlagged;
 export const countTotalComments = (ga) => GiveawayComments.find({ giveawayId: ga._id }).count();
+
+// Notifications
+const isThreholdCrossed = (votes) => {
+  if(votes == null) return false;
+  if(votes <= 5){
+    return true;
+  } else {
+    votes /= 10;
+    const triggerValues = [1,2,5];
+    while(votes >= 1){
+      if(triggerValues.indexOf(votes) > -1)
+        return true
+      votes /= 10;
+    }
+  }
+  return false;
+}
+
+export const notifyVote = (voteType, ga, userId) => {
+  let upvotes   = null
+    , downvotes = null
+
+  switch(voteType){
+    case 'voteUp' :
+      upvotes = countUpvotes(ga) + 1;
+      downvotes = currentUserDownvoted(ga) ? countDownvotes(ga) - 1 : countDownvotes(ga);
+      if(isThreholdCrossed(upvotes))
+        Meteor.call('notifyVotesChange', ga.title, ga._id, ga.userId, upvotes, downvotes);
+      break;
+    case 'voteDown' :
+      upvotes = currentUserUpvoted(ga) ? countUpvotes(ga) - 1 : countUpvotes(ga);
+      downvotes = countDownvotes(ga) - 1;
+      if(isThreholdCrossed(downvotes))
+        Meteor.call('notifyVotesChange', ga.title, ga._id, ga.userId, upvotes, downvotes);
+      break;
+    case 'unvote':
+      upvotes = currentUserUpvoted(ga) ? countUpvotes(ga) - 1 : countUpvotes(ga);
+      downvotes = currentUserDownvoted(ga) ? countDownvotes(ga) - 1 : countDownvotes(ga);
+      if(isThreholdCrossed(upvotes) || isThreholdCrossed(downvotes))
+        Meteor.call('notifyVotesChange', ga.title, ga._id, ga.userId, upvotes, downvotes);
+      break;
+    default:
+      break;
+  }
+}

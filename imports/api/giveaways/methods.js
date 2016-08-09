@@ -273,6 +273,8 @@ export const voteUp = new ValidatedMethod({
     Giveaways.update(giveawayId, {
       $push: { 'ratings.upvotes': { userId, date: new Date() } },
       $pull: { 'ratings.downvotes': { userId } }
+    }, function(){
+      GiveawaysHelper.notifyVote('voteUp', giveaway, userId);
     });
   },
 });
@@ -296,6 +298,8 @@ export const voteDown = new ValidatedMethod({
     Giveaways.update(giveawayId, {
       $push: { 'ratings.downvotes': { userId, date: new Date() } },
       $pull: { 'ratings.upvotes': { userId } }
+    }, function(){
+      GiveawaysHelper.notifyVote('voteDown', giveaway, userId);
     });
   },
 });
@@ -321,6 +325,8 @@ export const unvote = new ValidatedMethod({
         'ratings.upvotes': { userId },
         'ratings.downvotes': { userId },
       }
+    }, function(){
+      GiveawaysHelper.notifyVote('unvote', giveaway, userId);
     });
   },
 });

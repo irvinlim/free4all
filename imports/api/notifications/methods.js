@@ -261,5 +261,31 @@ if (Meteor.isServer) {
       });
     },
 
+    // Ratings
+
+    notifyVotesChange: (gaTitle, gaId, userId, upvotes, downvotes) => {
+      check(gaTitle, String);
+      check(gaId, Match._id);
+      check(userId, Match._id);
+      check(upvotes, Number);
+      check(downvotes, Number);
+      Meteor.call('upsertNotifications', `votesChange-${gaId}`, [userId], (existingData) => {
+        return {
+          title: 'Recent Votes',
+          body: `Your giveaway ${gaTitle} has recently received ${upvotes} ${pluralizer(upvotes,'upvote', 'upvotes')}
+           and ${downvotes} ${pluralizer(downvotes,'downvote', 'downvotes')}`,
+          avatar: {
+            type: 'icon',
+          },
+          url: `/giveaway/${gaId}`,
+        };
+      }, (error, result) => {
+        if (error) {
+          console.log("Error upserting notification in notifyVotesChange:");
+          console.log(error);
+        }
+      });
+    }
+
   });
 }
