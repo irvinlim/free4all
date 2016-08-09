@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router';
-import { Grid, Row, Col, FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -106,59 +105,59 @@ export default class Login extends React.Component {
         contentStyle={{ maxWidth: 550 }}
         autoScrollBodyContent={true}>
         <form ref="login" className="login" onSubmit={ this.handleSubmit }>
-          <Grid fluid={true}>
+          <div className="container-fluid">
 
             { this.props.message ?
-                <Row>
-                  <Col>
+                <div className="flex-row">
+                  <div className="col col-xs-12 nopad">
                     <Alert className="login-dialog-message" bsStyle="warning">
                       { this.props.message }
                     </Alert>
-                  </Col>
-                </Row>
+                  </div>
+                </div>
               : null
             }
 
-            <Row>
-              <Col>
+            <div className="flex-row">
+              <div className="col col-xs-12 nopad">
                 <h3 style={{ textAlign: 'center' }}>Login to Free4All</h3>
-              </Col>
-            </Row>
-            <Row className="openid" style={{ marginBottom: 10 }}>
-              <Col xs={12} sm={4} smOffset={0}>
+              </div>
+            </div>
+
+            <div className="flex-row nopad openid" style={{ marginBottom: 10 }}>
+              <div className="col col-xs-12 col-sm-4">
                 <FlatButton
                   style={{ width: "100%", backgroundColor: "#ff8c00", marginBottom: 10 }}
-                  labelColor="#ffffff"
                   label="NUS OpenID"
                   onTouchTap={ this.socialLoginHandler(handleIVLELogin) } />
-              </Col>
-              <Col xs={12} sm={4} smOffset={0}>
+              </div>
+              <div className="col col-xs-12 col-sm-4">
                 <FlatButton
                   style={{ width: "100%", backgroundColor: "#395697", marginBottom: 10 }}
-                  labelColor="#ffffff"
                   label="Facebook"
                   icon={ IconsHelper.icon("fa fa-facebook-f") }
                   onTouchTap={ this.socialLoginHandler(handleFacebookLogin) } />
-              </Col>
-              <Col xs={12} sm={4} smOffset={0}>
+              </div>
+              <div className="col col-xs-12 col-sm-4">
                 <FlatButton
                   style={{ width: "100%", backgroundColor: "#e0492f", marginBottom: 10 }}
-                  labelColor="#ffffff"
                   label="Google"
                   icon={ IconsHelper.icon("fa fa-google") }
                   onTouchTap={ this.socialLoginHandler(handleGoogleLogin) } />
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={12}>
+              </div>
+            </div>
+
+            <div className="flex-row">
+              <div className="col col-xs-12 nopad">
                 <div className="divider-with-text">
                   <hr />
                   <span>OR</span>
                 </div>
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={12} sm={6}>
+              </div>
+            </div>
+
+            <div className="flex-row nopad">
+              <div className="col col-xs-12 col-sm-6">
                 <TextField
                   type="email"
                   ref="emailAddress"
@@ -175,22 +174,22 @@ export default class Login extends React.Component {
                   errorText={ this.state.errors.password }
                   fullWidth={true}
                 />
-              </Col>
-              <Col xs={12} sm={6}>
+              </div>
+              <div className="col col-xs-12 col-sm-6">
                 <p style={{ fontSize: 13, textAlign: 'right', marginTop: 20 }}>
                   Not yet a member? <Link to="/signup" onTouchTap={ this.props.closeLogin }>Sign up</Link>
                 </p>
                 <p style={{ fontSize: 13, textAlign: 'right' }}>
                   <Link to="/recover-password" onTouchTap={ this.props.closeLogin }>Forgot Password?</Link>
                 </p>
-              </Col>
-            </Row>
-            <Row style={{ marginTop: 20 }}>
-              <Col xs={6} xsOffset={3} sm={3} smOffset={9}>
+              </div>
+            </div>
+            <div className="flex-row nopad" style={{ marginTop: 20 }}>
+              <div className="col col-xs-6 col-xs-offset-3 col-sm-3 col-sm-offset-9">
                 <RaisedButton type="submit" style={{ width: "100%" }} primary={true} label="Login" />
-              </Col>
-            </Row>
-          </Grid>
+              </div>
+            </div>
+          </div>
 
           <Loading containerClassName="floating-loading" containerStyle={{ display: this.state.loadingLogin ? 'flex' : 'none' }} />
         </form>
