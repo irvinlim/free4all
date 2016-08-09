@@ -41,6 +41,7 @@ export default class LeafletMapSingle extends React.Component{
 
     this.map = L.map(this.elemId, { zoomControl: false }).setView(initialCoords, initialZoom);
     this.map.keyboard.disable();
+    this.map.scrollWheelZoom.disable();
 
     // Map icon, tile
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
