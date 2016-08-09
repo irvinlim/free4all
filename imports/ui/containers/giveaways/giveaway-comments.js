@@ -9,22 +9,22 @@ import { GiveawayComments } from '../../../api/giveaway-comments/giveaway-commen
 import * as RolesHelper from '../../../util/roles';
 import * as GiveawaysHelper from '../../../util/giveaways';
 
-const composer = (props, onData) => {
-  if (!props.gaId)
+const composer = ({ gaId, showRemoved, showActions }, onData) => {
+  if (!gaId)
     return;
 
-  if (Meteor.subscribe('comments-for-giveaway', props.gaId).ready()) {
-    const ga = Giveaways.findOne(props.gaId);
+  if (Meteor.subscribe('comments-for-giveaway', gaId).ready()) {
+    const ga = Giveaways.findOne(gaId);
 
     // Query selector
     const selector = {
-      giveawayId: props.gaId,
+      giveawayId: gaId,
       isRemoved: { $ne: true }
     };
 
     // Can show removed comments if you are a mod or admin
     // Check prop for showRemoved
-    if (RolesHelper.modsOrAdmins(Meteor.user()) && props.showRemoved)
+    if (RolesHelper.modsOrAdmins(Meteor.user()) && showRemoved)
       delete selector.isRemoved;
 
     // Get sorted comments
@@ -47,7 +47,7 @@ const composer = (props, onData) => {
         ga: ga,
         comments: denormalizedComments,
         owner: Meteor.users.findOne(ga.userId),
-        showActions: props.showActions,
+        showActions: showActions,
       });
     }
   }
