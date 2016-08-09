@@ -31,7 +31,7 @@ const makeUrlIcon = (icon, url) => (
 );
 
 const communityDisplay = (community, isHome=false) => (
-  <span className="community-display">
+  <span key={community._id} className="community-display">
     { isHome ? IconsHelper.icon("home", { color: "#9c9c9c", fontSize: "14px", marginRight: 3 }) : null }
     { community.name }
   </span>
