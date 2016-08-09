@@ -2,9 +2,6 @@ import '../../api/users/users';
 import '../../api/users/methods';
 import '../../api/users/server/publications';
 
-import '../../api/documents/methods';
-import '../../api/documents/server/publications';
-
 import '../../api/parent-categories/methods';
 import '../../api/parent-categories/server/publications';
 
