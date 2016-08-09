@@ -16,10 +16,10 @@ const composer = (props, onData) => {
   if (Meteor.subscribe('giveaway-by-id', props.gaId).ready()) {
     const ga = Giveaways.findOne(props.gaId);
 
-    if (Meteor.subscribe('user-by-id', ga.userId).ready()) {
+    if (ga && Meteor.subscribe('user-by-id', ga.userId).ready()) {
       const user = Meteor.users.findOne({ _id: ga.userId });
 
-      if (Meteor.subscribe('giveaways-by-user', ga.userId).ready()) {
+      if (user && Meteor.subscribe('giveaways-by-user', ga.userId).ready()) {
         const shareCount = Giveaways.find({ userId: ga.userId }).count();
         const ratingPercent = GiveawaysHelper.getRatingPercentageForUser(user);
 

@@ -11,6 +11,10 @@ import * as GiveawaysHelper from '../../../util/giveaways';
 const composer = (props, onData) => {
   if (Meteor.subscribe('giveaway-by-id', props.gaId).ready()) {
     const ga = Giveaways.findOne(props.gaId);
+
+    if (!ga)
+      return;
+
     const sortedStatusUpdates = GiveawaysHelper.getSortedStatusUpdates(ga);
     const latestOwnerUpdate = GiveawaysHelper.getLastOwnerStatus(ga);
 
