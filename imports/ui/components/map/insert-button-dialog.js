@@ -9,11 +9,11 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import AutoComplete from 'material-ui/AutoComplete';
 import { Bert } from 'meteor/themeteorchef:bert';
 import FontIcon from 'material-ui/FontIcon';
-import {GridList, GridTile} from 'material-ui/GridList';
+import { GridList, GridTile } from 'material-ui/GridList';
 import LinearProgress from 'material-ui/LinearProgress';
 import Formsy from 'formsy-react';
 import { FormsyDate, FormsyText, FormsyTime } from 'formsy-material-ui/lib';
-import { Grid, Row, Col } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import TagsInput from 'react-tagsinput';
 
 import AllCategoriesList from '../../containers/categories/all-categories-list';

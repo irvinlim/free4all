@@ -6,7 +6,6 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import { Scrollbars } from 'react-custom-scrollbars';
 
 import { Communities } from '../../../api/communities/communities';
-import { Grid, Row, Col } from 'react-bootstrap';
 import * as IconsHelper from '../../../util/icons';
 import * as ImagesHelper from '../../../util/images';
 import { Loading } from '../../components/loading';

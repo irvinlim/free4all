@@ -1,6 +1,5 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
-import { Grid } from 'react-bootstrap';
 import PaperCard from '../../layouts/paper-card';
 import Link from '../../layouts/link';
 

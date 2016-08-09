@@ -1,6 +1,5 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
-import { Grid } from 'react-bootstrap';
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
@@ -29,7 +28,7 @@ export class ManageUsers extends React.Component {
   render() {
     return (
       <div id="page-manage-users" className="page-container">
-        <Grid>
+        <div className="container">
           <div className="flex-row nopad">
             <div className="col col-xs-12">
 
@@ -92,7 +91,7 @@ export class ManageUsers extends React.Component {
 
             </div>
           </div>
-        </Grid>
+        </div>
       </div>
     );
   }

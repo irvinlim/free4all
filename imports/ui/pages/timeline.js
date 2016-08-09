@@ -1,5 +1,4 @@
 import React from 'react';
-import { Grid } from 'react-bootstrap';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import { browserHistory } from 'react-router';
 import TextField from 'material-ui/TextField';
@@ -80,7 +79,7 @@ export class Timeline extends React.Component {
   render() {
     return (
       <div id="page-timeline" className="page-container">
-        <Grid>
+        <div className="container">
           <div className="flex-row nopad">
             <div className="col col-xs-12">
 
@@ -170,7 +169,7 @@ export class Timeline extends React.Component {
 
               </div>
             </div>
-          </Grid>
+          </div>
         </div>
     );
   }
