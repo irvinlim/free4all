@@ -336,8 +336,7 @@ render() {
       label="Update"
       primary={true}
       disabled={!this.state.canSubmit}
-      onTouchTap={this.submitForm}
-      autoScrollBodyContent={true} />,
+      onTouchTap={this.submitForm} />,
     <FlatButton
       label="Cancel"
       primary={true}
@@ -345,15 +344,13 @@ render() {
     <FlatButton
       label="Delete"
       secondary={true}
-      onTouchTap={ event => this.setState({ removeGiveawayPromptOpen: true }) }
-      autoScrollBodyContent={true} />,
+      onTouchTap={ event => this.setState({ removeGiveawayPromptOpen: true }) } />,
   ]:[
     <FlatButton
       label="Submit"
       primary={true}
       disabled={!this.state.canSubmit}
-      onTouchTap={this.submitForm}
-      autoScrollBodyContent={true} />,
+      onTouchTap={this.submitForm} />,
     <FlatButton
       label="Cancel"
       primary={true}
