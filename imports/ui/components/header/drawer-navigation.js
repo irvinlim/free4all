@@ -27,7 +27,7 @@ export default class DrawerNavigation extends React.Component {
 
   render() {
     return (
-      <Drawer docked={ false } width={ 250 } open={ this.props.isOpen } onRequestChange={ isOpen => this.props.setDrawerOpen(isOpen) }>
+      <Drawer docked={ false } width={ 250 } open={ this.props.isOpen } onRequestChange={ isOpen => this.props.setDrawerOpen(isOpen) } containerStyle={{'overflow': 'hidden'}}>
         <DrawerMenuItems closeDrawer={ this.props.closeDrawer } />
 
         <div className="iubenda-button">
