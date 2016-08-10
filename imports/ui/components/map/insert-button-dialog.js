@@ -362,7 +362,7 @@ render() {
       className="dialog insertDialog"
       title="Add a new Giveaway"
       titleStyle={titleStyle}
-      bodyStyle={{ backgroundColor: "rgb(224, 224, 224)" }}
+      bodyStyle={{ width:"105%", padding:"0 5% 0 0", backgroundColor: "rgb(224, 224, 224)" }}
       actions={actionBtns}
       actionsContainerStyle={actionsContainerStyle}
       modal={true}
@@ -475,7 +475,6 @@ render() {
               <Col xs={12} md={4} style={{ paddingTop: 21 }}>
                 <RaisedButton
                   className="formBtn"
-                  style={{minHeight:"41px"}}
                   secondary={true}
                   onTouchTap={this.handleAddLocation}
                   label="Choose on Map"
@@ -534,7 +533,6 @@ render() {
               <Col xs={12} md={4} style={{ paddingTop: 21 }}>
                 <RaisedButton
                   className="formBtn"
-                  style={{minHeight:"41px"}}
                   label={this.state.childCatName}
                   secondary={true}
                   onTouchTap={this.handleOpenCatMenu}
@@ -579,7 +577,6 @@ render() {
               <Col xs={12} md={4} style={{ paddingTop: 21 }} >
                 <RaisedButton
                 className="formBtn"
-                style={{minHeight:"41px"}}
                 secondary={true}
                 icon={ IconsHelper.materialIcon("backup") }
                 label="Choose an Image"

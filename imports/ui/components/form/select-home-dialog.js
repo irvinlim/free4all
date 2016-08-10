@@ -89,7 +89,6 @@ export default class SelectHomeDialog extends React.Component {
 
         <div className="welcome-head">
           <p>{ ImagesHelper.makeScale(Meteor.settings.public.logoImageId, 250, "free4all-logo") }</p>
-          <h1>Welcome to Free4All!</h1>
           <p className="down-arrow" onTouchTap={ handleClickDown }>{ IconsHelper.icon("arrow_downward") }</p>
         </div>
 

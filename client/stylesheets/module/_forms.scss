@@ -26,12 +26,14 @@ form label.error {
     }
 }
 
-.formBtn > button {
-    height: 41px !important;
-}
-
-.formBtn > button > div > div {
+.formBtn {
+  min-height: 41px; min-width: 207px !important;
+  > button {
     height: 42px !important;
+    div > div {
+      height: 42px !important;
+    }
+  }
 }
 
 .form-box {
