@@ -263,7 +263,7 @@ removeGiveaway(event) {
   this.props.closeModal();
   this.props.resetLoc();
 
-  removeGiveaway.call({ _id: this.state.gaId }, error => {
+  removeGiveaway.call({ _id: this.state.gaId, userId: Meteor.userId() }, error => {
     if (error) {
       Bert.alert(error.reason, 'Error updating giveaway');
     } else {
