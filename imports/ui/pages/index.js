@@ -56,6 +56,7 @@ export class Index extends React.Component {
     this.autorunAuth = null;
 
     this.openInsertDialog = this.openInsertDialog.bind(this);
+    this.resetEventHandlers = null;
   }
 
   selectGa(gaId) {
@@ -162,13 +163,13 @@ export class Index extends React.Component {
 
   openInsertDialog() {
     this.setState({ isModalOpen: true, showRGeoMarker: false })
-    this.rmvRGeoListener && this.rmvRGeoListener();
     this.showMarkers();
     this.setZoomBehaviour(true);
+    this.resetEventHandlers && this.resetEventHandlers();
   }
 
-  setConfirmDialog(features, coords, rmvRGeoListener){
-    this.rmvRGeoListener = rmvRGeoListener;
+  setConfirmDialog(features, coords, resetEventHandlers){
+    this.resetEventHandlers = this.resetEventHandlers || resetEventHandlers;
 
     let locArr = features.map((loc)=> {
       loc.text = loc.place_name;
@@ -218,10 +219,10 @@ export class Index extends React.Component {
           setMapMaxZoom={ mapMaxZoom => this.setState({ mapMaxZoom })}
           showMarkers={ this.state.showMarkers }
           rGeoTrigger={ this.state.rGeoTrigger }
-          rmvRGeoTrigger={ ()=>{this.setState({ rGeoTrigger: false })} }
-          addRGeoSpinner={ ()=>{this.setState({ rGeoLoading: true })} }
-          rmvRGeoSpinner={ ()=>{this.setState({ rGeoLoading: false })} }
-          setConfirmDialog={this.setConfirmDialog.bind(this) }
+          rmvRGeoTrigger={ ()=> this.setState({ rGeoTrigger: false }) }
+          addRGeoSpinner={ ()=> this.setState({ rGeoLoading: true }) }
+          rmvRGeoSpinner={ ()=> this.setState({ rGeoLoading: false }) }
+          setConfirmDialog={ this.setConfirmDialog.bind(this) }
           zoomBehaviour={ this.state.zoomBehaviour }
         />
         <div className="rGeoLoader">

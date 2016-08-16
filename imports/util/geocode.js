@@ -24,11 +24,11 @@ export const geocode = (mapboxAccessToken, query, mapCenter, addState) => {
 // https://api.mapbox.com/geocoding/v5/mapbox.places/-73.989,40.733.json
 // Mapbox Reverse Geocoding
 let rgeoTimeout;
-export const rgeocode = (mapboxAccessToken, latLng, rmvRGeoSpinner, rmvRGeoListener, setConfirmDialog) => {
-
+export const rgeocode = (mapboxAccessToken, mapInstance, rmvRGeoSpinner, setConfirmDialog, resetEventHandlers) => {
+  if(rgeoTimeout) Meteor.clearTimeout(rgeoTimeout);
+  let latLng = mapInstance.getCenter();
 	let url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + latLng.lng +','+ latLng.lat
 		+ '.json?access_token=' + mapboxAccessToken + '&autocomplete=true';
-	if(rgeoTimeout) Meteor.clearTimeout(rgeoTimeout);
 
 	rgeoTimeout = Meteor.setTimeout( ()=>{
 		HTTP.get(url,{},function( error, response ) {
@@ -36,7 +36,7 @@ export const rgeocode = (mapboxAccessToken, latLng, rmvRGeoSpinner, rmvRGeoListe
 				console.log( error );
 			} else {
 				let result = JSON.parse(response.content);
-        setConfirmDialog(result.features, latLng, rmvRGeoListener);
+        setConfirmDialog(result.features, latLng, resetEventHandlers);
 				rgeoTimeout = null;
 				rmvRGeoSpinner();
 			}

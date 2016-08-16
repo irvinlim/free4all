@@ -20,6 +20,7 @@ export default class LeafletMap extends React.Component {
     this.observeChanges();
     this.registerEventHandlers();
     this.setInitialMapCenterZoom();
+    this.accessToken = Meteor.settings.public.MapBox.accessToken;
   }
 
   resizeFullContainer() {
@@ -73,6 +74,11 @@ export default class LeafletMap extends React.Component {
     this.hiddenMarker = null;
   }
 
+  reRegisterEventHandlers() {
+    this.mapObject.map.off('zoomend dragend'); // remove all event listeners
+    this.registerEventHandlers(); // add back default zoom drag end listeneres
+  }
+
   componentWillReceiveProps(nextProps) {
     const self = this;
     const mapInstance = this.mapObject.map;
@@ -97,17 +103,13 @@ export default class LeafletMap extends React.Component {
 
       invisibleMarker.bindPopup(popup).openPopup();
 
-      mapInstance.addOneTimeEventListener('zoomstart dragstart', function(event){
+      mapInstance.once('zoomstart dragstart', function(event){
           mapInstance.removeLayer(popup);
       })
 
-      mapInstance.on('zoomend dragend', function rgeo(event){
-        const accessToken = Meteor.settings.public.MapBox.accessToken;
+      mapInstance.on('zoomend dragend', function(event){
         nextProps.addRGeoSpinner();
-        const rmvRGeoListener = mapInstance.off.bind(this, 'zoomend dragend', rgeo);
-        Meteor.setTimeout(function(){
-          rgeocode(accessToken, mapInstance.getCenter(), nextProps.rmvRGeoSpinner, rmvRGeoListener, nextProps.setConfirmDialog);
-        },500);
+        rgeocode(self.accessToken, mapInstance, nextProps.rmvRGeoSpinner, nextProps.setConfirmDialog, self.reRegisterEventHandlers.bind(self));
       })
     }
 
