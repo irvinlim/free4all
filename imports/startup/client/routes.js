@@ -135,6 +135,7 @@ Meteor.startup(() => {
           <Route name="my-communities" path="my-communities" component={ MyCommunities } onEnter={ requireAuth } />
 
           <Route name="manage" path="manage" onEnter={ requireModsAdmins }>
+            <IndexRoute component={ ManageCategories } />
             <Route name="categories" path="categories" component={ ManageCategories } />
             <Route name="parent-categories" path="parent-categories" component={ ManageParentCategories } />
             <Route name="status-types" path="status-types" component={ ManageStatusTypes } />
